@@ -43,7 +43,7 @@ password is never displayed, stored or logged.
 | `CLEAN.ACCOUNT` | empty the account's scratch files |
 | `UPDATE.ACCOUNTS` | refresh the account's VOC |
 | `APPEND.SD.PATH` | put SD on your PATH, or take it off |
-| `LISTU`, `LOGOUT ALL`, `LOGOUT` another session | [Sessions and locks](06a-sessions-and-locks.html) |
+| `LISTU`, `LOGOUT ALL` | [Sessions and locks](06a-sessions-and-locks.html) |
 | `LIST.READU`, `LIST.LOCKS`, `LOCK`, `CLEAR.LOCKS`, `UNLOCK` | [Sessions and locks](06a-sessions-and-locks.html) |
 | anything on the deny list | managed mode only — [Managed mode](15-managed-mode.html) |
 
@@ -58,7 +58,8 @@ GLOBAL`, `DELETE.CATALOG` of a global entry), and the commands that are the SD
 Core for Linux server's — see [Managed mode](15-managed-mode.html).
 
 **`LOGOUT` on its own needs nothing** — it ends your own session, like
-`QUIT`. **`sh` needs nothing either**; see
+`QUIT` — **and nor does `LOGOUT` *n***, because every session on a Solo
+computer runs as `sduser`. **`sh` needs nothing either**; see
 [Operating system access](06b-operating-system-access.html). **Nor does
 `SET.PASSWORD`** for your own account password — it asks for the current one
 instead; see [The account and its passwords](05-account-types.html).

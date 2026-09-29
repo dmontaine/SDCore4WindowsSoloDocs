@@ -1,35 +1,27 @@
 Title: Sessions and Locks
-Subtitle: Seeing who is logged in, ending a session that will not end itself, and inspecting or forcing the locks a session holds.
+Subtitle: Seeing who is signed in, ending a session that will not end itself, and inspecting or forcing the locks a session holds.
 
-These are the verbs for looking at the machine as a whole and intervening in it:
-**whose sessions are running, what they are holding, and how to take either
-away.** Every one of them is SDSYS's.
-
-> **This document is separate so that it can be withheld.** It links to
-> nothing outside the administrator set. Where a user-set page is worth naming,
-> it is named in words.
+These are the verbs for looking at SD as a whole and intervening in it:
+**which sessions are running, what they are holding, and how to take either
+away.** Most need `ADMIN` first; the table at the end says which.
 
 SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **Every listing on this page was produced by running it**, on SD Core for
-> Windows W1.0-0. The lock listings come from a program that took the locks
-> first and then ran the verb against itself, because a lock nobody holds is not
-> something a listing can show.
+> **The listings on this page were produced by running the verbs on the
+> multiuser SD Core for Windows**, whose code for them Solo shares apart from
+> the gates. Paths are shown as they read on a Solo computer.
 
 ## Two things are not on this page, on purpose
 
 **A programmer needs to understand locks without being able to force one**, so
-the *user* documentation keeps the part of the subject that is theirs: what a
-task lock is against a database lock, and `release`, which gives back locks your
-own session holds and needs no privilege at all. The same goes for `status`,
-`phantom`, `pstat`, `pdebug` and `pdump` — a programmer's view of their own
-processes.
+the User set keeps that part of the subject: what a task lock is against a
+database lock, and `release`, which gives back locks your own session holds.
+The same goes for `status`, `phantom`, `pstat`, `pdebug` and `pdump` — a
+programmer's view of their own processes.
 
-**This page is the other half**: the verbs that see and act across the machine.
-
-## Who is logged in: `listu`
+## Who is signed in: `listu`
 
 ```
 listu {no.page} {lptr {n}}
@@ -38,9 +30,9 @@ listu {no.page} {lptr {n}}
 ```
 :listu
   User  Pid          Puid  Login time    Origin : Username
-    12  1789               27 Aug 13:14  : don
-    19  1808               27 Aug 13:53  : don
-*   27  1828               27 Aug 13:59  : don
+    12  1789               27 Aug 13:14  : sduser
+    19  1808               27 Aug 13:53  : sduser
+*   27  1828               27 Aug 13:59  : sduser
 ```
 
 | | |
@@ -50,23 +42,18 @@ listu {no.page} {lptr {n}}
 | **`Pid`** | the Windows process id |
 | **`Puid`** | the user number of the **parent**, filled in for a phantom and blank otherwise |
 | **`Origin`** | where the session came from |
-| **`Username`** | the **Windows** account the session runs as, not the SD account it is in |
-
-**`Username` is the column that matters for permission.** Almost every control
-on this page is keyed to the Windows identity, not to the SD account — so two
-sessions showing different accounts but the same username are, as far as
-`logout` is concerned, the same person's.
+| **`Username`** | always `sduser` on a Solo computer |
 
 **`Origin` is blank for a local session and that is not a fault.** It reports
 an address or a device name, and a console or piped session has neither. It
-reads `Phantom` for a phantom and an IP address for a network client.
-
-`SDNet` is also among the values it can print, and you will not see it: SDNet
-was removed from this port, so nothing can open the kind of session that would
-report it.
+reads `Phantom` for a phantom and an IP address for a network client — the API,
+or ssh.
 
 **`(logout pending)`** after the name means somebody has asked that session to
 end and it has not gone. See below.
+
+**`sd -u`**, from a PowerShell window, lists the same sessions without an SD
+session of your own.
 
 ## Ending a session: `logout`
 
@@ -80,18 +67,12 @@ logout all              end every session but this one
 another name, which is worth knowing before typing it intending to list
 something.
 
-```
-:logout 999
-Only administrators can logout processes running with other usernames
-```
+**`logout n` needs no `ADMIN`.** SD lets a session end any session running
+under the same user name, and on a Solo computer every session is `sduser`.
+**`logout all` needs `ADMIN`.** It leaves your own session alone.
 
-**A session may end only sessions running under the same Windows account**
-unless it is elevated. The refusal above came from an unelevated session, and
-user 999 does not exist — **the privilege test happens before the number is
-looked up**, so this message does not tell you whether the user was real.
-
-**`logout all`** is stricter still: elevated **and** run from the `SDSYS`
-account. It leaves your own session alone.
+**`sd -k n`** and **`sd -k all`**, from a PowerShell window, do the same from
+outside SD.
 
 ### When a session will not end
 
@@ -108,13 +89,13 @@ is the usual one — is refused while it is there. **Recovery is not another
 sd -cleanup
 ```
 
-run elevated, and a restart of the SD service if that does not take it.
+from a PowerShell window — no elevation needed — and `sd -stop` then
+`sd -start` if that does not take it.
 
 **Confirm the session is actually dead before clearing it.** `pstat` *n*
 answers *(Not responding)* for a session with nothing behind it — it asks the
 process and waits about four seconds — and that is the difference between a dead
-entry and a busy one. `pstat` is a programmer verb and is documented in the user
-set.
+entry and a busy one.
 
 ## What is locked: `list.readu`
 
@@ -127,37 +108,27 @@ list.readu {user.no} {detail} {wait} {no.page} {lptr {n}}
 There are no active file, read or update locks held by any user
 ```
 
-That answer is about the **whole system**, not about you. With locks held:
+That answer is about **every session**, not only yours. With locks held:
 
 ```
 User File Path........................... Type Id..............................
-  23    1 /cygdrive/c/ProgramData/SD/user RU   R1
-          _accounts/don/ZZLK31A
-  19    4 /cygdrive/c/ProgramData/SD/user RU   zzlock31
-          _accounts/don/voc
-  23    1 /cygdrive/c/ProgramData/SD/user RL   R2
-          _accounts/don/ZZLK31A
+  23    1 /cygdrive/c/Users/you/SDCoreSol RU   R1
+          o/user_accounts/sduser/ZZLK31A
+  23    1 /cygdrive/c/Users/you/SDCoreSol RL   R2
+          o/user_accounts/sduser/ZZLK31A
 ```
 
 | | |
 |---|---|
-| **`User`** | the SD user number holding it — `listu` turns that into a person |
+| **`User`** | the SD user number holding it — `listu` turns that into a session |
 | **`File`** | SD's internal file number, and **this is the number `unlock` wants** |
 | **`Path`** | wrapped over as many lines as it needs, in POSIX form |
 | **`Type`** | `RU` update · `RL` read · `FX` exclusive file lock · `SX` shared file lock · `WAIT` a session waiting for one |
 | **`Id`** | the record id; blank for a file lock |
 
-A file lock has no id:
-
-```
-User File Path........................... Type Id..............................
-  23    1 /cygdrive/c/ProgramData/SD/user FX
-          _accounts/don/ZZLK31A
-```
-
-**The PATH is the POSIX one and that is not a display fault.** SD holds file
-paths internally in `/cygdrive/c/...` form on this port. It names the same place
-as `C:\ProgramData\SD\...`.
+**The path is the POSIX one and that is not a display fault.** SD holds file
+paths internally in `/cygdrive/c/...` form. It names the same place as
+`C:\Users\you\SDCoreSolo\...`.
 
 ### The keywords
 
@@ -169,10 +140,9 @@ Record lock limit (NUMLOCKS) = 100, Current = 0, Peak = 2
 There are no active file, read or update locks held by any user
 ```
 
-**`Peak` is the one to watch.** `Current` describes this instant, which is
-rarely the instant that mattered. A peak near the limit is how you find out
+**`Peak` is the one to watch.** A peak near the limit is how you find out
 `NUMLOCKS` needs raising **before** a program fails with the lock table full.
-`config` reports the configured limit.
+`config` reports the configured limit — see [Configuration](16-configuration.html).
 
 **A user number** restricts the listing to one session. **`wait`** adds the
 sessions *waiting* for a lock, as `WAIT` rows — left out by default, so the
@@ -181,11 +151,8 @@ plain listing shows the cause of a hold-up and not its victims. **Ask for
 
 ### A lock outliving its session
 
-The `19 … RU zzlock31` row above is real, and it is a lock on a record in an
-account's `voc` file left behind by a session that was killed while holding it.
 **A dead session's locks are not released**, any more than its user-table entry
 is, and everything wanting that record waits for a process that is not there.
-
 **Take the user number to `pstat`.** *(Not responding)* means clear the session
 rather than wait for it.
 
@@ -212,10 +179,9 @@ and with lock 5 held by user 16, `*` marking your own session:
 :list.locks
  0:       1:       2:       3:       4:       5: 16*   6:       7:
  8:       9:      10:      11:      12:      13:      14:      15:
-16:      17:      18:      19:      20:      21:      22:      23:
 ```
 
-*(64 numbers over eight rows; the rest are blank and are cut here.)*
+*(64 numbers over eight rows; the rest are cut here.)*
 
 ### `lock` waits unless you tell it not to
 
@@ -259,18 +225,11 @@ unlock file n {user n} filelock
 unlock tasklock n {n …}
 ```
 
-**This is the only verb that takes somebody else's lock, and it needs an
-elevated session** — having the verb is not enough:
-
-```
-:unlock
-Command requires administrator privileges
-```
+**This is the only verb that takes another session's lock.**
 
 **It names a file by number, not by name** — the `File` column of `list.readu`.
-That is deliberate: the lock is on a file the machine has open, which may not be
-in your VOC at all and may be reached under different names in different
-accounts.
+That is deliberate: the lock is on a file SD has open, which may not be in your
+VOC at all.
 
 | | |
 |---|---|
@@ -278,11 +237,11 @@ accounts.
 | **`user`** *n* | restrict to one session's locks |
 | **`all`** | every record lock matching, rather than named ids |
 | **`filelock`** | the file lock, which cannot be combined with record ids |
-| **`tasklock`** *n* | force a task lock, including one held by another process |
+| **`tasklock`** *n* | force a task lock, including one held by another session |
 
 **A file number or a user number is compulsory** — *Either a file number or a
-user number must be specified* — so there is no `unlock` that means *everything
-on the machine*.
+user number must be specified* — so there is no `unlock` that means
+*everything*.
 
 > **Unlocking is not free and SD cannot make it so.** A lock is a promise its
 > holder is relying on. Forcing one open while its owner is alive lets two
@@ -292,24 +251,25 @@ on the machine*.
 
 ### `unlock tasklock` is the only way back from a killed holder
 
-**Task locks are released when a session ends normally.** They are not part of
-any file, so nothing has to be written back.
+**Task locks are released when a session ends normally.**
 
 > **`sd -cleanup` does not give them back, and that is a defect.** It releases
 > a dead session's record locks and file locks and leaves its task locks held,
 > by a user number nothing is behind, until SD itself is restarted.
 > `list.locks` shows the number with an owner and `clear.locks` refuses it
-> because it is not yours. **`unlock tasklock` *n*, elevated, is the way out** —
-> that is what the forced form is for. It is recorded in the project's fix
-> lists.
+> because it is not yours. **`unlock tasklock` *n*** is the way out.
 
-## Who has these verbs
+## Which need `ADMIN`
 
-**All of them are SDSYS's**, so an ordinary account does not have the names
-at all — being SDSYS is the whole of the gate, for every verb on this page,
-including `unlock` and `logout` against another Windows account's session.
+| | |
+|---|---|
+| **need `ADMIN`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock` |
+| **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd -u`, `sd -k`, `sd -cleanup` |
+
+Without it they answer *Command requires administrator privileges*. See
+[Administrator commands](06-administrator-commands.html).
 
 ## See also
 
 [Administrator commands](06-administrator-commands.html) ·
-[Operating System Access](06b-operating-system-access.html).
+[Operating system access](06b-operating-system-access.html).
