@@ -31,8 +31,8 @@ SD started cannot collect passwords by pretending to be SD.
 **A client that sends a password in clear is refused** with *"Cleartext login
 is no longer supported; this server requires SCRAM authentication"*.
 
-**A wrong password is refused.** Failed logins are written to the audit trail
-with the address they came from.
+**A wrong password is refused**, and the refusal is written to the audit trail
+— for example `API REFUSED user=sduser reason=wrong password`.
 
 **On a computer installed from a control file**, until the account password
 has been chosen at the keyboard, only the global password is accepted.

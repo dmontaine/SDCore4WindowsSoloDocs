@@ -71,21 +71,6 @@ a record under an older upper-case spelling, `update.accounts` adds the
 lower-case one beside it, so you may hold both. That is harmless — they
 dispatch to the same programs.
 
-## Windows user names and other languages
-
-**Case folding that depends on the computer's language is a trap**, and SD
-avoids it: on a Turkish or Azeri system Windows turns `I` into a dotless `ı`,
-so a name folded by the computer's rules would not match itself. The one
-place Solo writes your Windows user name in lower case is the ssh
-configuration — the `Match User` line, see [ssh access](08-ssh-access.html) —
-and it folds it the same way on every computer. The account name never
-depends on it, because it is always `sduser`.
-
-> **If you are testing on a Turkish or Azeri computer**, check that your ssh
-> sign-in lands in SD when your Windows user name contains an `I`. The fold
-> is fixed in the source, and has been measured on a Turkish culture setting
-> but not yet on a Turkish computer.
-
 ## A related refusal that no longer depends on case
 
 **`delete.file`**'s refusal to delete `voc` and `$acc` no longer depends on the
