@@ -160,11 +160,7 @@ DOCS = [
 # same as "it is covered".  set.date lived here for one revision on a reason
 # that turned out to be false - it was named on a USER page, not an
 # administrator one - which is exactly the failure this dictionary invites.
-EXEMPT = {
-    'modify.password': 'retired in Solo (SET.PASSWORD replaced it); only a '
-                       'stale voc_template record for SDSYS is left, and '
-                       'nobody logs into SDSYS',
-}
+EXEMPT = {}
 
 # ------------------------------------------------------------------ evidence
 
