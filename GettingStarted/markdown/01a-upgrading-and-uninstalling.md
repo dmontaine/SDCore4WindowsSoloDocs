@@ -68,5 +68,5 @@ Scheduler, and the `SD Core Solo` block in
 
 ## Continued in
 
-[Differences from multiuser SD Core for Windows W1.1-0](01b-differences-from-multiuser-w1-1-0.html)
+[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html)
 — what Solo leaves out, adds, and does differently.

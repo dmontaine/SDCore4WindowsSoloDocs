@@ -47,7 +47,7 @@ that no page runs longer than a reader will scroll.
 | **00a** | [Copyright and licence](00a-copyright-and-licence.html) | The copyright and the licence for this set, in full and in one place |
 | **01** | [Installing](01-installation.html) | What the installer asks, what it puts where, and the control file for installing many computers |
 | **01a** | [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) | Installing a new release over an existing one, and taking SD off the computer |
-| **01b** | [Differences from multiuser SD Core for Windows W1.1-0](01b-differences-from-multiuser-w1-1-0.html) | What Solo leaves out, adds and does differently |
+| **01b** | [Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html) | What Solo leaves out, adds and does differently |
 | **02** | **[Your first thirty minutes](02-first-run.html)** | **Start here if you just want it working** |
 | **03** | [Running SD](03-running-sd.html) | How SD starts, stopping it, and the command line |
 | **04** | [Scheduled jobs](04-scheduled-jobs.html) | Running an SD command on a timer |
@@ -88,7 +88,7 @@ they work for the rest of that session. See
 **3. There is one account and you cannot make another.** It is called
 `sduser` on every computer, whatever your Windows name is. The account and
 grant commands are gone. See
-[Differences from multiuser SD Core for Windows W1.1-0](01b-differences-from-multiuser-w1-1-0.html).
+[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html).
 
 **4. Commands and names are lower case.** Typing in upper case still works —
 the lookup tries what you typed, then lower, then upper. See
@@ -101,7 +101,7 @@ See [ssh access](08-ssh-access.html) and [API access](09-api-access.html).
 
 ## What this release is
 
-**WS1.1-0.** Windows only, and not yet released. **It is a hobby project with
+**WS1.1-1.** Windows only, and not yet released. **It is a hobby project with
 no release schedule.**
 
 This set covers installing and running SD Core Solo for Windows, administering
@@ -138,6 +138,6 @@ The two things worth reporting in most detail are **anything that behaves
 differently from OpenQM and is not described here**, and **anything in these
 pages that turns out not to be true of the build you are running**.
 
-**Quote the version as `WS1.1-0`** — the string in the header bar of every page
+**Quote the version as `WS1.1-1`** — the string in the header bar of every page
 here, in the installer's file name, in the sign-on banner, and in what
 `sd --version` reports.

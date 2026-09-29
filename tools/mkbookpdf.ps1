@@ -33,7 +33,7 @@
 param(
     [Parameter(Mandatory = $true)] [string] $In,
     [Parameter(Mandatory = $true)] [string] $Out,
-    [string] $FooterText = 'SD Core Solo for Windows WS1.1-0',
+    [string] $FooterText = 'SD Core Solo for Windows WS1.1-1',
     [int]    $TimeoutSec = 180
 )
 

@@ -24,7 +24,7 @@ choose one now:
 This account has no password yet. Choose one now - SD Core Solo for Windows asks for it every time it is used.
 ```
 
-The sign-on banner names the product and its version, `WS1.1-0`.
+The sign-on banner names the product and its version, `WS1.1-1`.
 
 ## 2. Look around
 

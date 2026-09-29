@@ -1,14 +1,14 @@
-Title: Differences from multiuser SD Core for Windows W1.1-0
+Title: Differences from multiuser SD Core for Windows W1.1-1
 Subtitle: What SD Core Solo for Windows leaves out, adds and does differently.
 
 **SD Core Solo for Windows was made from the multiuser SD Core for Windows
-W1.1-0**, and the language, the query processor, the file system and nearly
+W1.1-1**, and the language, the query processor, the file system and nearly
 every command are the same. This page is for a reader who knows the multiuser
 product. The User set applies to both.
 
 ## One user, one account
 
-| multiuser W1.1-0 | Solo |
+| multiuser W1.1-1 | Solo |
 |---|---|
 | many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `WHO` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
 | SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in or `LOGTO`s to it; the administrator commands run from your own account |
@@ -17,7 +17,7 @@ product. The User set applies to both.
 
 ## Passwords
 
-| multiuser W1.1-0 | Solo |
+| multiuser W1.1-1 | Solo |
 |---|---|
 | a local sign-in asks for no password — Windows has authenticated you | **every session asks for the account password**: at the keyboard, over ssh, and through the API |
 | a command on the command line (`sd LIST VOC`) needs an elevated window or a `batch.jobs` entry | it uses **a copy of the account password Windows keeps for you**, so scripts and scheduled jobs need no typing |
@@ -28,7 +28,7 @@ See [The account and its passwords](05-account-types.html).
 
 ## Administration
 
-| multiuser W1.1-0 | Solo |
+| multiuser W1.1-1 | Solo |
 |---|---|
 | the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `ADMIN` first** — including eight that had no check of their own because only SDSYS had them: `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` |
 | editing the VOC directly is any account's own business | `ED VOC`, a program's `WRITE` or `DELETE` to the VOC, `COPY` into it, and saving or deleting a sentence with `.S` and `.D` **need `ADMIN`**. What SD writes to the VOC as a side effect — `CREATE.FILE`'s entry, the command stack — does not |
@@ -50,7 +50,7 @@ commands the user may not run (`DENY.VERBS`). An installer control file,
 
 ## Installing and running
 
-| multiuser W1.1-0 | Solo |
+| multiuser W1.1-1 | Solo |
 |---|---|
 | installed for the computer: `C:\Program Files\SD` and `C:\ProgramData\SD`, by an administrator | installed for one user, **all in `%USERPROFILE%\SDCoreSolo`**, by that user, with one administrator consent prompt |
 | a Windows service runs SD as LocalSystem | a **scheduled task** starts SD at Windows start-up **as you**, on an ordinary unelevated token — even when your Windows account is an administrator |

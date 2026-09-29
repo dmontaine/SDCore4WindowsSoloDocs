@@ -1,18 +1,18 @@
 # SD Core Solo for Windows — documentation
 
-Documentation for **SD Core Solo for Windows WS1.1-0**, a personal SD Core for
+Documentation for **SD Core Solo for Windows WS1.1-1**, a personal SD Core for
 one Windows user. The source is in a separate repository,
 `SDCore4WindowsSolo`; nothing here is needed to build SD, and nothing there is
 needed to build these pages.
 
 **Copied on 28 Sep 2026 from `SDCore4WindowsDocs`** (the multi-user SD Core for
-Windows W1.1-0) and being rewritten for Solo. Until that is finished, a page
+Windows W1.1-1) and being rewritten for Solo. Until that is finished, a page
 may still describe the multi-user product. The plan, on the owner's ruling:
 the Administrator set is merged into the others, pages about features Solo
 does not have are deleted, a section covers managing a Solo computer in
 managed mode (the managing server is SD Core for Linux), and each set's
 differences page becomes *Differences from multiuser SD Core for Windows
-W1.1-0*. The Layout section below still describes the multi-user sets.
+W1.1-1*. The Layout section below still describes the multi-user sets.
 
 **This repository does not have `sd4windows`'s no-binaries rule** (owner,
 26 Aug 2026). It does not track the rendered pages anyway — see *Generated*
