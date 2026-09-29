@@ -1,17 +1,10 @@
 Title: Development and file commands
 Subtitle: Compiling, editing, and the verbs that maintain files, indexes and records in bulk.
 
-**Every account has these, from the moment it is created.** SD Core used to
-hold them back from a *standard* account and only give them to a
-*programmer* or *administrator* one; that split is gone — see
-[Accounts](05-account-types.html). This page is now a reference for what
-each of them does, not a list of what you have been given.
-
-**A few, named as they come up below, still need more than the verb**:
-cataloguing globally, and reaching the operating system through the two
-full-screen editors, are gated separately from the VOC — see
-[What actually gates these](#what-actually-gates-these) at the foot of this
-page.
+**You have all of these, and none needs `ADMIN`.** This page is a reference for
+what each does. Two things near them are gated, and are named where they come
+up: **the global catalogue**, which nobody changes from your account, and
+**editing the VOC directly**, which needs `ADMIN`.
 
 ## Compile, catalogue and run
 
@@ -26,16 +19,20 @@ page.
 | **`generate`** | generate source |
 | **`phantom`** | start a background process |
 
-> **Cataloguing globally is SDSYS's alone.** Adding to or removing from the
-> system-wide catalogue needs SDSYS; private and local cataloguing work from
-> any account. That is a separate control from having the verb at all — see
-> [Administrator commands](06-administrator-commands.html).
+> **Catalogue locally or privately; the global catalogue is not yours.**
+> `catalog` and `delete.catalog` work for local and private entries.
+> `catalog ... global`, a name beginning `*`, `!`, `_` or `$`, and
+> `delete.catalog` of a global entry are refused for every session, `ADMIN`
+> or not: *The global catalogue holds the SD Core server's programs from
+> GLOBAL.BP.OUT and is changed only by SYNC.GLOBAL.CATALOG*. On a managed
+> computer the global catalogue holds the SD Core for Linux server's programs,
+> which you can call; see [Managed mode](15-managed-mode.html).
 
 ## Edit and debug
 
 | | |
 |---|---|
-| **`ed`** | the line editor. Needs nothing installed |
+| **`ed`** | the line editor |
 | **`edit`** | a **full-screen** editor — opens the record in Microsoft Edit |
 | **`micro`** | a **full-screen** editor — opens the record in micro |
 | **`debug`** | the BASIC debugger |
@@ -48,8 +45,11 @@ and nothing else changes:
 
 | | |
 |---|---|
-| **`edit`** | **Microsoft Edit** — ships in current Windows builds |
-| **`micro`** | **micro** — never ships with Windows; the installer fetches it |
+| **`edit`** | **Microsoft Edit** |
+| **`micro`** | **micro** |
+
+**Both come with SD**, in `%USERPROFILE%\SDCoreSolo\usr\bin`, so nothing has to
+be installed or downloaded for them.
 
 ```
 edit  bp myprog
@@ -62,12 +62,10 @@ reads it back, and asks whether to save. For a `bp` record it then offers
 the compile and the catalogue.
 
 **Both are terminal editors**, so both work over ssh as well as at the
-console. Where a machine does not have one, the SD installer installs it; if
-that could not be done, the verb says so and names the command that
-installs it. `C:\ProgramData\SD\install-editors.log` records what the
-installer found.
+keyboard. **A session with no terminal is refused** — an API session or a
+piped script has nowhere to draw a full screen, and is told so.
 
-**Only `micro` highlights SD basic.** Microsoft Edit has no syntax
+**Only `micro` highlights SD BASIC.** Microsoft Edit has no syntax
 highlighting at all, which is the one real difference between the two
 verbs:
 
@@ -85,30 +83,16 @@ data record.
 > `BCOMP`'s own tables — **218 statements, 37 reserved words and 176
 > intrinsic functions** — so the highlighting cannot drift from the
 > language. **If a name you expect is not coloured, that is worth
-> reporting**: it means the two have come apart, which is exactly what
-> generating them was meant to prevent.
-
-**Nothing is installed into your profile.** SD ships the rules with itself
-and points micro at them, so they work for every account on the machine.
-
-**`ed` is unaffected and is still there.**
+> reporting.**
 
 ### What the editors are good for, and what they are not
 
 **They are text editors**, so they suit a record whose content is lines of
-text:
+text: BASIC source, VOC records, simple dictionary records, and data records
+with multivalues or subvalues.
 
-| | |
-|---|---|
-| **BASIC source** in a `bp` file | what they are for |
-| **VOC records** | fine — a VOC record is a few short fields |
-| **Dictionary records** | fine for a simple one; see the limit below |
-| **Data records with multivalues** | fine — see the tokens below |
-| **Data records with subvalues** | fine — see the tokens below |
-
-**A field is a line and that part needs no explanation.** SD writes the
-working copy with one field per line, so moving between fields is moving
-between lines.
+**A field is a line.** SD writes the working copy with one field per line, so
+moving between fields is moving between lines.
 
 **A value mark is not a line, and neither is a subvalue mark.** Both are
 control characters an editor cannot show, so each has a token you can type:
@@ -119,8 +103,7 @@ control characters an editor cannot show, so each has a token you can type:
 | `` ~` `` | a **subvalue** mark |
 
 SD converts marks to tokens on the way into the editor and tokens back to
-marks on the way out, so multivalues and subvalues are both ordinary text
-while you are editing.
+marks on the way out.
 
 ```
 SMITH~~JONES~~BROWN
@@ -137,48 +120,33 @@ is two values, the first of which has two subvalues.
 **A record that cannot be written this way is refused, not mangled.** Some
 records would come back different from how they went in — one that already
 contains `~~` as data, for instance, or one with a `~` sitting immediately
-before a mark, where the tilde and the token run together. Before opening
-the editor, SD converts the record and converts it back; **if the result is
-not what it started with, the verb refuses and names `ed`**, which needs
-none of this.
-
-**Text marks are not converted**, and are covered by the same refusal
-rather than being left to surprise you.
+before a mark. Before opening the editor, SD converts the record and converts
+it back; **if the result is not what it started with, the verb refuses and
+names `ed`**, which needs none of this. Text marks are not converted, and are
+covered by the same refusal.
 
 **A compiled dictionary record is truncated to its first 15 fields** while
 you edit it, and recompiled with `cd` when you save.
 
-### Give these verbs only to people you trust
+**Editing the VOC needs `ADMIN`**, whichever editor does it — see
+[Administrator commands](06-administrator-commands.html).
 
-**An editor can write anywhere its user can write.** It opens the record
-you named, but nothing stops the person then opening any other file on the
-machine that their Windows account may open — inside the SD data tree or
-outside it altogether. **That is not a hole in SD; it is what an editor
-is**, and it is the reason these two verbs are behind `OS.EXECUTE`
-permission and not merely behind having the verb — see
-[What actually gates these](#what-actually-gates-these).
+### What an editor can reach
 
-**So `os.users` field 2 is a statement of trust in a person, not a
-convenience.** Before granting it, ask the same question you would ask
-before giving somebody the shell — because in terms of what they can reach
-on disk, you are.
-
-Neither editor can run a command, so neither is a shell. **What they are is
-read and write access to the filesystem, with the account's own Windows
-permissions.** See [Security](12-security.html).
+**An editor can open any file your Windows user can**, inside the
+`SDCoreSolo` folder or outside it. Neither can run a command, so neither is a
+shell. On a Solo computer that is no more than you can do anyway; it matters
+only for who you let use your account — see [Security](12-security.html).
 
 ### Over ssh
 
-**A terminal editor is the point of an ssh session.** An ssh session
-reaches SD through a terminal like any other, and SD hands the editor that
-terminal rather than reading it through a pipe.
+**A terminal editor is the point of an ssh session.** SD hands the editor the
+session's terminal rather than reading it through a pipe. **If an editor
+misbehaves over ssh and not at the keyboard, that is worth reporting** with
+the terminal you connected from.
 
-**If an editor misbehaves over ssh and not at the console, that is worth
-reporting** with the terminal you connected from.
-
-The removed full-screen editors are a different matter: `sed`,
-`update.record` and `modify` are gone and are not coming back. See
-[Not in SD Core](14-not-in-sd-core.html).
+The removed full-screen editors `sed`, `update.record` and `modify` are gone
+and are not coming back. See [Not in SD Core](14-not-in-sd-core.html).
 
 ## Files
 
@@ -191,6 +159,9 @@ The removed full-screen editors are a different matter: `sed`,
 | **`hsm`** | hashed-file statistics monitoring |
 | **`set.trigger`** | attach a trigger |
 | **`cd`** | change directory |
+
+`create.file` writes the file's entry into the VOC for you; that side effect
+needs no `ADMIN`.
 
 ## Indexes
 
@@ -208,58 +179,14 @@ The removed full-screen editors are a different matter: `sed`,
 | **`cname`** | change a record's name |
 | **`delete.common`** | clear a common block |
 
-## What actually gates these
+**Copying into the VOC, or deleting from it, needs `ADMIN`**, like any other
+direct VOC edit.
 
-**Having the verb is not the whole story for two things above: cataloguing
-globally, and the two full-screen editors.** Both need more than being in
-the VOC — and since every account has the VOC now, this is the part worth
-knowing before you rely on anything in this page as a boundary.
+## On a managed computer
 
-| | |
-|---|---|
-| File permissions | Windows ACLs on the data tree — see [Security](12-security.html) |
-| Where an account may sign in | the `sdsshonly` deny rights — see [ssh access](08-ssh-access.html) |
-| Reaching the operating system | the `os.users` permit list, both **`sh`** and `OS.EXECUTE` |
-| What an API session may open | the containment gate, rooted at the account the session stands in |
-
-### The editors need `OS.EXECUTE` permission as well as the verb
-
-**An editor runs outside SD, so reaching one is reaching the operating
-system** — and who may do that is **field 2 of your record in
-`os.users`**, the same field that governs `OS.EXECUTE` from inside a
-program. Two gates, and both have to pass:
-
-| | |
-|---|---|
-| the VOC | everyone has **`edit`** and **`micro`** |
-| `os.users` field 2 | decides **whether either one runs** |
-
-**SDSYS passes this on its own**, exactly as `sh` does, so an empty list
-cannot lock the machine's own administrator out. **A missing record, or a
-missing file, means no**, for every ordinary account — the same direction
-`sh` fails in.
-
-If you have the verb and not the permission you get told so by name, and
-told what to ask for:
-
-```
-edit is not available to fred.
-It runs an editor outside SD, so it needs OS.EXECUTE permission: field 2
-of your record in the SD system file os.users, which only SDSYS can change.
-ed, the line editor, needs none of this.
-```
-
-SDSYS grants it — see [Administrator commands](06-administrator-commands.html#how-you-grant-it).
-
-**A session with no terminal is refused first and separately**: an API
-session or a piped script has nowhere to draw a full screen, and is told
-that rather than being told about `os.users`.
-
-> **WHAT AN EDITOR CAN REACH, and it is worth knowing before you grant it.**
-> An editor can open any file the person running it is allowed to open, so
-> both verbs reach beyond SD's own files. Neither is a shell — neither
-> editor can run a command. That is what field 2 is deciding, and it is why
-> the verb alone was never enough. See [Security](12-security.html).
+**Any of these can be on the list of commands you may not run** without
+`ADMIN`; the SD Core for Linux server keeps that list. See
+[Managed mode](15-managed-mode.html).
 
 ## Two things to know when you compile
 
@@ -267,9 +194,7 @@ that rather than being told about `os.users`.
 Compiling into a reused file name previously produced an object SD could
 not subsequently open.
 
-**Object code and the catalogue are replaced on upgrade.** The compiled
-programs, the BASIC source SD ships, the messages, include records and VOC
-templates are all overwritten by a new release. **Anything you have written
-into the SDSYS `bp` file, and anything you have compiled from it, survives
-an upgrade untouched** — SD now ships nothing into that file at all, so it
-is created empty and is yours.
+**SD's own compiled programs are replaced on upgrade; yours are not.** A new
+release overwrites SD's system programs, messages, include records and VOC
+templates. Your `bp`, `bp.out` and everything else in your account are left
+alone.
