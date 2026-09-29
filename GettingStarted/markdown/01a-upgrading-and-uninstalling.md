@@ -1,71 +1,72 @@
 Title: Upgrading and uninstalling
-Subtitle: Replacing an existing installation, and taking SD off the machine.
+Subtitle: Installing a new release over an existing one, and taking SD off the computer.
 
-This page continues [Installing SD Core](01-installation.html).
+This page continues [Installing](01-installation.html).
 
 ## Upgrading
 
-**Installing a new release over an existing one updates your database.**
+**Run the new installer while the old release is installed.** It recognises
+the installation and upgrades it. It asks nothing — no mode, no passwords, no
+API or ssh choices — and it keeps them all.
 
-| Replaced | Kept, and not touched |
+**SD is stopped first**, because an upgrade replaces `sd.exe`. It starts again
+at the next Windows start-up, or with `sd -start` (see
+[Running SD](03-running-sd.html)).
+
+**What an upgrade replaces, and what it keeps:**
+
+| | |
 |---|---|
-| the catalogue and compiled programs | your accounts and their passwords |
-| the BASIC source | the private catalogue |
-| the messages and include records | which Windows users are linked to which SD accounts |
-| the VOC templates and library routines | the commands each account may run |
-| the SDSYS `BP` programs | your print queue and held reports |
-| terminfo, the licence, the contributor list | everything under your own accounts, and `sd.conf` |
+| **replaced** | the programs, the system programs and their catalogue, SD's messages, the VOC templates and the other files the release ships |
+| **kept** | your account and its data, the passwords, `sd.conf`, the API's TLS key, and on a managed computer the server's programs in `GLOBAL.BP.OUT` and the list of denied commands |
 
-Anything SD created while it was running — your VOC included — is left exactly
-as it is.
+**Then it brings your account up to the release.** Replacing files is not
+enough on its own: your account's VOC and SD's dictionaries were built by the
+release that installed them. So an upgrade also, for you:
 
-**The dictionaries are brought up to date for you.** Upgrading reapplies the
-dictionary definitions the release ships: it adds and updates the entries SD
-ships and leaves alone any you added. If that step cannot run, the installer
-says so at the end rather than finishing quietly, and `upgrade-dicts.log` in
-`C:\ProgramData\SD` says what happened.
+- adds the new release's commands to your account's VOC — it never takes
+  anything away, and a record you keep your own version of is left alone;
+- merges and recompiles SD's own dictionaries;
+- catalogues the server's programs in `GLOBAL.BP.OUT` again, on a managed
+  computer, because the global catalogue is one of the files replaced.
 
-**Every account's VOC is brought up to date for you.** The installer runs
-`update.accounts all`, which walks every registered account, so a command this
-release adds can be typed in accounts that already existed. This did not happen
-before W1.0-0: an upgrade replaced the shipped files and no existing account —
-including the system account — ever gained a new verb.
+Each step reports in `%USERPROFILE%\SDCoreSolo\install-summary.log`, ending
+with a verdict. The startup task is registered again; the firewall and ssh
+settings are not touched.
 
-To refresh one account by hand afterwards, `update.accounts` in that account
-updates it and offers the rest.
-
-Two limits are worth knowing before you rely on it.
-
-> **SD only ever adds records to a VOC, never removes them.** An account created
-> before a verb was withdrawn keeps it. `update.accounts` cannot be relied on to
-> take something away.
-
-> **A record you have customised can be held back on purpose.** Put `[locked]`
-> in field 1 after the type code and the upgrade leaves that record alone,
-> naming it in a message so you know what was withheld — and therefore which
-> corrections this release made that you have not taken. Verbs are the
-> exception: a locked verb is updated anyway, and you are told which. The
-> administrator documentation covers it under *Accounts and security*.
+**Python is installed if none is there**, as on a new installation, and PATH
+gets SD's program folder if it lost it.
 
 ## Uninstalling
 
-It is the standard Windows uninstall — Settings ▸ Apps, or `unins000.exe`.
+**Uninstall from Windows Settings, *Apps*, *SD Core Solo for Windows*.** It
+stops SD, then — after the one administrator consent prompt — removes:
 
-**The default does not touch your accounts, the database or the
-configuration.** Inno removes only what it installed and only removes a
-directory if it is empty, so everything the running system created is invisible
-to it.
+- the startup task **SD Core Solo**;
+- the API's firewall rule;
+- the ssh setting that starts `sd` for your ssh sign-in;
 
-**Removing the data is a separate, opt-in prompt** that defaults to keeping it,
-and says exactly what it destroys and where. **A silent uninstall never
-deletes the database**, whatever the prompt would have offered.
+and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH.
 
-**The uninstaller does not remove OpenSSH.** It may predate SD or be in use by
-something else. It does restore `sshd_config`, keeping the original as
-`sshd_config.before-sd` — but it deliberately does **not** widen the firewall
-rule back, because restoring it would mean opening a port on the way out.
+**Your data stays.** `sdsys`, your account (`user_accounts\sduser`),
+`sd.conf` and the API's TLS key are left in `%USERPROFILE%\SDCoreSolo`. Install
+again later and the installer finds them: it keeps the mode and the passwords,
+and asks only the API and ssh questions again.
+
+**To remove the data too, delete `%USERPROFILE%\SDCoreSolo` yourself** after
+uninstalling. Nothing else holds a copy.
+
+**What uninstalling leaves installed:** the OpenSSH server and Python, even if
+the SD installer put them there — other programs may use them — and the ssh
+server's firewall rule. Remove them from *Apps* if you no longer want them.
+
+**If the administrator step cannot run**, the uninstaller says *"The startup
+task, firewall rule or ssh setting could not be removed"* and names the log.
+The programs are still removed. Delete the task **SD Core Solo** in Task
+Scheduler, and the `SD Core Solo` block in
+`C:\ProgramData\ssh\sshd_config`, by hand.
 
 ## Continued in
 
-[Differences from W1.0-0](01b-differences-from-w1-0-0.html) — everything
-that changed since the previous release, and what an upgrade might break.
+[Differences from multiuser SD Core for Windows W1.1-0](01b-differences-from-multiuser-w1-1-0.html)
+— what Solo leaves out, adds, and does differently.
