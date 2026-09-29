@@ -1,134 +1,117 @@
-Title: Accounts
-Subtitle: Ordinary accounts, SDSYS, Suspended and Group — what each one may do, and how to make one.
+Title: The account and its passwords
+Subtitle: sduser, the account password, the kept copy, and the administrator and global passwords.
 
-**Every ordinary account gets the same VOC.** SD Core used to divide accounts
-into three capability tiers — Standard, Programmer, Administrator — each with
-a different, smaller VOC. **The tiers are gone** (owner's ruling, 18 September
-2026: *"the only privileged account is SDSYS"*). An account you create today
-gets every verb there is, the same set SDSYS has for running applications and
-building them. What it does **not** get is administration — that is not a
-verb an account can be given, it is a separate account.
+## One account: `sduser`
 
-**Suspended** is a state, not a tier — it denies entry and nothing else. Group
-accounts are a different thing again: a shared place, not a person.
+**SD Core Solo for Windows has one SD account, and it is always called
+`sduser`** — on every computer, whatever your Windows user is called. The
+installer makes it, in `%USERPROFILE%\SDCoreSolo\user_accounts\sduser`. `WHO`,
+`@LOGNAME` and the audit trail all say `sduser`, and so does the user name an
+API client signs in with.
 
-## SDSYS is the only administrator
+**There is no way to make another account**, and none is needed: every
+session — at the keyboard, over ssh, through the API, or a command from a
+script — lands in `sduser`. SD's own system account, SDSYS, exists but is never
+entered.
 
-**SDSYS is a single Windows account made by the installer, not something
-`create.account` can produce.** Administering SD — creating, deleting or
-granting accounts, changing system-wide state, reaching another account's
-files without a grant — means signing in to *Windows* as SDSYS and running
-`sd`, elevated. Being a Windows administrator grants nothing by itself: the
-account that ran this installer is an ordinary account like any other once
-setup finishes, and **elevating a session does not make it SDSYS**.
+## Three passwords
 
-> **This is a full reversal of how SD Core 1.0 worked**, where a Windows
-> administrator's own account was automatically an SD administrator. If you
-> read that in an older document or in W1.0 release notes, it no longer
-> holds. The reasoning is in the *Administrator* set's *Accounts and
-> security* chapter.
+| | Set | Asked | Unlocks |
+|---|---|---|---|
+| **Account password** | at installation, or at the first `sd` on a computer installed from a control file | by every session | the account |
+| **Administrator password** | at installation | by `ADMIN` | the administrator commands, for the rest of the session |
+| **Global password** | at installation, managed mode only | by `ADMIN`, and by any session in place of the account password | the account **and** the administrator commands. It is the SD Core for Linux server's |
 
-**SDSYS's Windows sign-in password** is asked for once, during installation,
-in the window that appears after the wizard closes — that is what you type
-at the Windows login screen to reach it at all, and changing it afterward is
-an ordinary Windows administrative action, not an SD verb. SDSYS also has its
-own SD credential (`modify.password`, run from within an SDSYS session,
-changes its own), but that credential secures nothing remote: `remote.api`,
-`remote.ssh` and every other door out of SDSYS are refused outright, on
-purpose — see [Reaching the operating system](06-administrator-commands.html).
+**Every one needs at least 8 characters, with a lower-case letter, an
+upper-case letter, a digit and a symbol** — letters, digits and punctuation
+only. **The global password must differ from both of the others.** One
+account name carries both the account password and the global password, and
+the account password is tried first — so if they were the same, the server
+would land in an ordinary session.
 
-## Creating an account
+## The account password
 
-```
-create.account user <name> {ssh | api | both | none} {no.query}
-
-create.account group <name> {no.query}
-
-create.account other <name> <pathname> {no.query}
-```
-
-**Creating an account needs an elevated SDSYS session.** Creating a Windows
-account needs an elevated token, and only SDSYS carries the identity that
-makes an elevated session mean anything to SD — see
-[SDSYS is the only administrator](#sdsys-is-the-only-administrator) above.
-
-### The route keyword is optional now
-
-**Say nothing and the account gets `both`** (ssh and the API). Name one to be
-narrower: `ssh` for ssh only, `api` for the API only, `none` for neither —
-an account reached only with `logto`, from inside another session.
-
-**`create.account user … ssh` and `… both` are refused when the machine has no
-ssh server**, with a warning saying why: the account would have no way to
-arrive over ssh. `api` and `none` still work. The test is made against the
-machine when you type the command, so installing an ssh server later makes
-`ssh` start working. See [Installing SD Core](01-installation.html#what-you-are-asked).
-
-### What creating a user account actually does
+**Every session asks for it**, and is refused without it:
 
 | | |
 |---|---|
-| Makes a Windows local account | created disabled, then enabled when the password is set |
-| Creates the group `sdu_<name>` | and writes it to the account record |
-| Joins `sdusers` | which is what grants access to the data tree |
-| Joins `sdsshonly` | this is what denies the console and Remote Desktop — every ordinary account gets it now; only SDSYS's own Windows account does not |
-| Joins `sdssh` and/or `sdapi` | to match the route keyword — see below |
-| Prompts for a password | in SD, masked; it never goes on a command line |
+| `sd` at a terminal | `Password:`, three tries, then the session ends |
+| `sd` with its input piped | the first line of the input, one try |
+| ssh | the same as a terminal, after ssh has checked your Windows password |
+| the API | the client library's password, checked by SCRAM — see [API access](09-api-access.html) |
+| `sd <command>` | the kept copy, below — no typing |
 
-**A user account cannot be created without a password.** Refusing the prompt
-creates nothing at all. Previously it left an account you could not sign in
-to.
+**A wrong one is answered `Wrong password`.** On a managed computer the global
+password is accepted in its place, and that session also has the
+administrator commands unlocked.
 
-**`sdssh` and `sdapi` govern the ssh and API doors specifically, separately
-from `sdsshonly`.** An account with route `none` still joins `sdsshonly` like
-every other ordinary account — that has always denied the *Windows* console
-and Remote Desktop, and has nothing to do with ssh — it simply also has
-neither `sdssh` nor `sdapi`, so it has no remote door of any kind and can
-only be reached with `logto`.
+**Being signed in to Windows is not enough.** The password is the gate; anyone
+who has it can use the account, and a copied `SDCoreSolo` folder works for
+whoever knows it.
 
-### What every account can do
+### The kept copy
 
-**Every verb, from the moment it is created.** Compile, catalogue, edit,
-define files and indexes, run the bulk record editors, inspect processes —
-none of that is withheld any more. What an account cannot do is administer:
-create, delete, grant, or suspend another account; change system-wide
-configuration; or reach the operating system through `sh` or `OS.EXECUTE`
-unless SDSYS has switched that on for it — see
-[Reaching the operating system](05a-managing-accounts.html#reaching-the-operating-system).
+**Windows keeps an encrypted copy of the account password for you**, protected
+so that only your Windows user can open it. A command on the `sd` command line
+signs in with it, which is what lets scripts and scheduled jobs use SD — see
+[Scheduled jobs](04-scheduled-jobs.html). The installer writes it, and
+`SET.PASSWORD` updates it.
 
-> **None of this is a wall inside SD.** The VOC is the same for every
-> ordinary account; what actually stops one account reaching another's data
-> is the operating system's file permissions, the ssh confinement, and the
-> `os.users` permit list for `sh`/`OS.EXECUTE` — not the contents of a VOC.
-> See the *Administrator* set's *Accounts and security* chapter.
+**It proves the account password only.** It never unlocks the administrator
+commands.
 
-## Suspended — a state, not a tier
+### Changing it: `SET.PASSWORD`
 
-**A suspended account cannot be entered.** It is for an account that should
-stop working for a while — somebody on leave, a login being looked into —
-and it is refused at all three ways in:
+```
+:admin
+:set.password
+New password:
+Confirm the new password:
+Password changed
+```
 
-| | |
-|---|---|
-| ssh, or the console | `Account FRED is suspended` |
-| **`logto`** from another account | `Account FRED is suspended` |
-| the API | `User not allowed in requested account` |
+**It needs `ADMIN` first**, like every administrator command. The new password
+must meet the rules above and differ from the global password; otherwise it
+says why and leaves the password as it was.
 
-The API wording is deliberately the same one it gives for an account that
-does not exist and for one you are not granted, so the API cannot be used to
-find out which accounts exist or what state they are in.
+**`SET.PASSWORD` also updates the kept copy.** If it cannot, it says *The new
+password could not be kept for commands given on the sd command line* — the
+password is changed, but commands on the `sd` command line will fail until it
+is set again.
 
-**It takes nothing away, which is why lifting it is free.** The VOC is left
-exactly as it is and no Windows group membership moves — suspending sets one
-field and unsuspending clears it. Suspending is not a substitute for
-deleting: it is reversible on purpose. See
-[Changing an account afterwards](05a-managing-accounts.html#changing-an-account-afterwards).
+### The first password on a managed computer
 
-**SDSYS can still `logto` into a suspended account.** That is deliberate —
-looking at a suspended account is the usual reason to have one. **What a
-suspension denies is the account's own user.**
+**A computer installed from a control file has no account password yet.** The
+first `sd` typed at that computer's keyboard asks you to choose one:
 
-## Continued in
+```
+This account has no password yet. Choose one now - SD Core Solo for Windows asks for it every time it is used.
+```
 
-[Managing accounts](05a-managing-accounts.html) — group accounts, sharing
-one, changing an account afterwards, and deleting it.
+**Until then, only the global password is accepted** — over ssh and the API
+the answer is:
+
+```
+This account has no password yet. Set it at this computer's keyboard first; until then only the global password is accepted.
+```
+
+So the SD Core for Linux server can reach a computer it has just set up, and
+nobody else can.
+
+## The administrator password
+
+**It unlocks the administrator commands for one session**: type `ADMIN`, then
+the password. See [Administrator commands](06-administrator-commands.html).
+
+**No command changes it after installation**, and none changes the global
+password either. Both are set by the installer only.
+
+## The global password
+
+**Managed mode only.** The SD Core for Linux server signs in as `sduser` with
+it, and every such session has the administrator commands unlocked. A few
+commands need it and refuse the administrator password — the ones that are the
+server's rather than the user's. See [Managed mode](15-managed-mode.html).
+
+**The mode is fixed at installation**, and with it whether a global password
+exists: nothing sets or clears it afterwards.
