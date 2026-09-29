@@ -44,7 +44,7 @@ import sys
 from collections import Counter
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SETS = ('GettingStarted', 'User', 'Administrator')
+SETS = ('GettingStarted', 'User')   # Administrator merged, Solo ruling 38
 APPLY = '--apply' in sys.argv
 
 SPAN = re.compile(r'\*\*\*(.+?)\*\*\*', re.S)

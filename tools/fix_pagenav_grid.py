@@ -5,7 +5,7 @@ import os
 import re
 
 DOCS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SETS = ["GettingStarted", "User", "Administrator"]
+SETS = ["GettingStarted", "User"]   # Administrator merged, Solo ruling 38
 
 # The pagenav is inside the .page grid, so it needs grid-column: 1 / -1
 # to span both the sidebar and main columns

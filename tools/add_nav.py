@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 Add prev/next navigation to every HTML page in each documentation set,
-create a master index page, and create User and Administrator set
-index pages.
+create a master index page, and create the set index pages.
 
 Works on the rendered HTML files in <set>/html/ directories.
 Each page gets a navigation bar inserted before the </footer> with:
@@ -10,8 +9,7 @@ Each page gets a navigation bar inserted before the </footer> with:
 
 Also creates:
   - index.html at the repo root (master index)
-  - User/html/index.html (User set index)
-  - Administrator/html/index.html (Administrator set index)
+  - GettingStarted/html/index.html and User/html/index.html (set indexes)
 
 Each index entry links to the page and shows its source markdown file.
 
@@ -44,15 +42,12 @@ VERSION = "WS1.1-0"
 
 SETS = {
     "GettingStarted": {
-        "desc": "Installing and running SD Core on Windows, and what differs from OpenQM and SD on Linux.",
+        "desc": "Installing, running and administering SD Core Solo for Windows, managed mode, and what differs from the multiuser SD Core for Windows.",
     },
     "User": {
-        "desc": "For programmers and operators. SDBasic, TCL, the VOC, dictionaries, the file system, and the client API.",
+        "desc": "For programmers and operators. SDBasic, TCL, the VOC, dictionaries, the file system, the client API, and what an ordinary program may not compile.",
     },
-    "Administrator": {
-        "desc": "For administrators. Accounts, security, remote access, encryption, configuration, installation, and what an ordinary program may not compile.",
-    },
-}
+}   # Administrator merged, Solo ruling 38
 
 
 # ── The page order is READ, not typed ────────────────────────

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """mkbook.py - assemble one HTML "book" per set, for a single merged PDF.
 
-    python tools\\mkbook.py --set Administrator --out Administrator\\book.html
+    python tools\\mkbook.py --set User --out User\\book.html
 
 WHY THIS EXISTS.  The release ships PDF only, and 86 separate PDFs is not a
 document - it is a pile of fragments with no continuous page numbers, no
@@ -58,9 +58,7 @@ SET_BLURB = {
                       'way around it for the first time.',
     'User':           'Using SD Core Solo for Windows: SD BASIC, TCL, the '
                       'dictionaries and the file system.',
-    'Administrator':  'Running an SD Core for Windows installation: accounts, '
-                      'security, remote access and the machine.',
-}
+}   # Administrator merged, Solo ruling 38
 
 BOOK_CSS = """
 /* --- mkbook.py: what makes a pile of pages into one document ------------- */
@@ -136,7 +134,6 @@ BOOK = """<!DOCTYPE html>
 PRETTY = {
     'GettingStarted': 'Getting Started',
     'User': 'User Guide',
-    'Administrator': 'Administrator Guide',
 }
 
 

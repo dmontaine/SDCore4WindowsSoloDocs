@@ -43,8 +43,8 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # reported about half the tree as undocumented; reading only the first of them
 # that happened to exist would have been worse, because it would have looked
 # like a result.  Both are required to be present.
-PAGES = [os.path.join('Administrator', 'markdown', '09-the-installed-scripts.md'),
-         os.path.join('Administrator', 'markdown', '09a-scripts-sd-runs-itself.md')]
+PAGES = [os.path.join('GettingStarted', 'markdown', '17-the-installed-scripts.md'),
+         os.path.join('GettingStarted', 'markdown', '17a-scripts-sd-runs-itself.md')]
 
 if not os.path.isdir(ROOT):
     sys.exit('scriptmap: no install at %s' % ROOT)

@@ -155,10 +155,9 @@ This page is only about what nobody has watched happen.
 
 ## See also
 
-[Sessions and Locks](02-sessions-and-locks.html) covers the locking model that
+[Sessions and Locks](06a-sessions-and-locks.html) covers the locking model that
 two of the entries above qualify.
-[Installation and the service](08-sd-installation.html) covers scheduled jobs
-and the account model behind the Task Scheduler entry.
-[SD System Limits](06-sd-system-limits.html) states which of its figures come
+[Scheduled jobs](04-scheduled-jobs.html) covers the Task Scheduler entry.
+[System limits](16a-system-limits.html) states which of its figures come
 from the source and which from a running system, and is the other page in this
 set that distinguishes the two.

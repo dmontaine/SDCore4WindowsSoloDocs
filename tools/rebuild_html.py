@@ -33,13 +33,7 @@ SETS = {
         "set_name": "User",
         "set_desc": "For programmers and operators. SDBasic, TCL, the VOC, dictionaries, the file system, and the client API.",
     },
-    "Administrator": {
-        "md_dir":   "Administrator/markdown",
-        "html_dir": "Administrator/html",
-        "set_name": "Administrator",
-        "set_desc": "For administrators. Accounts, security, encryption, system limits, configuration, and installation.",
-    },
-}
+}   # Administrator merged into GettingStarted and User, Solo ruling 38
 
 # ---------------------------------------------------------------------------
 # Markdown to HTML conversion

@@ -131,27 +131,25 @@ DOCS = [
  ('User', '31-sd-tcl-locks.md', """
    release
  """),
- ('Administrator', '01-accounts-and-security.md', """
-   create.account grant list.grants modify.account modify.password revoke
+ # 28 Sep 26 SD Core Solo for Windows (ruling 38): the Administrator set is
+ # merged into GettingStarted.  The account and grant verbs and remote.api,
+ # remote.ssh and ssh.server are not in Solo.  Each surviving verb is assigned
+ # where the rewritten page is to explain it - including admin, set.password,
+ # deny.verbs and sync.global.catalog, which Solo added.
+ ('GettingStarted', '05-account-types.md', """
+   set.password
  """),
- # THE MAINTENANCE VERBS MOVED TO 01a AND ONLY ONE OF THEM SAID SO.  tclmap
- # reported set.date and passed the other four, because 01 still MENTIONS
- # clean.account, config, delete.account and update.accounts - in the "two
- # gates" paragraph and in a refusal example - and a backtick is evidence.
- # That is the incidental-mention false positive this script exists for,
- # arriving from the other direction: the name is on the page and the
- # explanation is not.  Each verb is assigned where it is actually explained.
- ('Administrator', '01a-account-maintenance.md', """
-   clean.account config delete.account set.date update.accounts
+ ('GettingStarted', '06-administrator-commands.md', """
+   admin append.sd.path clean.account config set.date update.accounts
  """),
- ('Administrator', '02-sessions-and-locks.md', """
+ ('GettingStarted', '06a-sessions-and-locks.md', """
    clear.locks list.locks list.readu listu lock logout unlock
  """),
- ('Administrator', '03-operating-system-access.md', """
+ ('GettingStarted', '06b-operating-system-access.md', """
    sh !
  """),
- ('Administrator', '05-remote-access-and-the-machine.md', """
-   append.sd.path remote.api remote.ssh ssh.server
+ ('GettingStarted', '15-managed-mode.md', """
+   deny.verbs sync.global.catalog
  """),
 ]
 
@@ -162,7 +160,11 @@ DOCS = [
 # same as "it is covered".  set.date lived here for one revision on a reason
 # that turned out to be false - it was named on a USER page, not an
 # administrator one - which is exactly the failure this dictionary invites.
-EXEMPT = {}
+EXEMPT = {
+    'modify.password': 'retired in Solo (SET.PASSWORD replaced it); only a '
+                       'stale voc_template record for SDSYS is left, and '
+                       'nobody logs into SDSYS',
+}
 
 # ------------------------------------------------------------------ evidence
 

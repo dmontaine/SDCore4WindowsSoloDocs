@@ -33,7 +33,7 @@ import os
 import re
 
 DOCS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SETS = ["GettingStarted", "User", "Administrator"]
+SETS = ["GettingStarted", "User"]   # Administrator merged, Solo ruling 38
 
 
 # ─── New CSS block ─────────────────────────────────────────────────────

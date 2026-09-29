@@ -157,7 +157,7 @@ for param in roster:
 # refuses a name that is not on the roster, so it cannot drift silently.
 
 DOCUMENTS = {
- 'Administrator/markdown/07-sd-admin-configuration.md': """
+ 'GettingStarted/markdown/16-configuration.md': """
    APILOGIN APIPORT CMDSTACK CODEPAGE CREATUSR DEADLOCK DEBUG DUMPDIR ERRLOG
    EXCLREM FDS FILERULE FIXUSERS FLTDIFF FSYNC GDI GRPDIR GRPSIZE INTPREC
    JNLDIR JNLMODE LPTRHIGH LPTRWIDE MAXCALL MAXIDLEN MUSTLOCK NETDIRS NETFILES

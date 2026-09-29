@@ -311,5 +311,5 @@ including `unlock` and `logout` against another Windows account's session.
 
 ## See also
 
-[Accounts and Security](01-accounts-and-security.html) ·
-[Operating System Access](03-operating-system-access.html).
+[Administrator commands](06-administrator-commands.html) ·
+[Operating System Access](06b-operating-system-access.html).

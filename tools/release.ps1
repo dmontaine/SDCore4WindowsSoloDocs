@@ -140,9 +140,10 @@ if ($orphans.Count -gt 0) {
 # THEY READ THE SIBLING TREE, which is the layout setup-devbox.ps1 builds.  A
 # missing sibling REFUSES rather than skipping: this script's whole purpose is
 # to stop a doubtful release, and "the checks did not run" is a doubt.
-$sd64 = Join-Path (Split-Path -Parent $root) 'sd4windows\sdb_ai\sd64'
+# 28 Sep 26 SD Core Solo for Windows: the sibling is SDCore4WindowsSolo.
+$sd64 = Join-Path (Split-Path -Parent $root) 'SDCore4WindowsSolo\sdb_ai\sd64'
 if (-not (Test-Path -LiteralPath $sd64)) {
-    Write-Error ("no sd4windows beside this repository at " + $sd64 +
+    Write-Error ("no SDCore4WindowsSolo beside this repository at " + $sd64 +
                  " - the roster checks cannot run, and a release is not made without them")
 }
 
