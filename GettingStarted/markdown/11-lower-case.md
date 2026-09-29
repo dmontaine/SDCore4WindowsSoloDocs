@@ -1,5 +1,5 @@
 Title: Lower case
-Subtitle: Commands, file names, record ids and account names are lower case now — and nothing you type has to change.
+Subtitle: Commands, file names, record ids and the account name are lower case — and nothing you type has to change.
 
 **Everything that can be lower case is lower case.** SD used to be inconsistent
 about it: BASIC source is free-form and usually written lower case, while file
@@ -23,29 +23,23 @@ This order is used everywhere: the parser, the query processor, `RUN`,
 multifile resolution, the `LOGIN` paragraph lookup, and `SET.FILE`'s default
 `qfile` pointer.
 
-> **The change was additive, not a flip.** A `downcase` attempt was inserted
-> into a chain that already tried as-typed and then upper. On a tree whose ids
-> are all upper case the new attempt can never hit, so it changed no behaviour
-> and could not break anything.
-
-## What is spelled in lower case now
+## What is spelled in lower case
 
 | | |
 |---|---|
 | Commands in the VOC | **`list`**, `count`, **`select`**, **`create.file`**, **`setptr`** … and that is how they appear in `list voc`, `listv` and `ct voc` |
-| System files on disk | `accounts`, `bp`, `bp.out`, `gpl.bp`, `messages`, `newvoc`, `pcode.out`, `syscom`, `voc`, `voc.dic`, `voc_template` and the rest |
-| The `BP` and `GPL.BP` VOC entries | `bp` and `gpl.bp` |
+| System files on disk | `accounts`, `bp`, `bp.out`, `messages`, `newvoc`, `pcode.out`, `syscom`, `voc` and the rest under `sdsys` |
 | The hold file | `$hold` |
 | The saved select list file | `$savedlists` |
 | The command stack record | `$command.stack` |
-| Account names on disk | `sdsys\accounts\don`, matching the account's own directory in `user_accounts` |
-| Files in a new account | created with lower-case names on disk |
+| The account | `sduser`, on disk in `user_accounts\sduser` and in `sdsys\accounts` |
+| Files in the account | created with lower-case names on disk |
 
 **Renaming these is cosmetic for resolution** — NTFS matches without being
 asked — but the stored path text is user-visible through `listf` and the
 current-directory reporting, which is the point.
 
-## Record ids in directory files are no longer case sensitive
+## Record ids in directory files are not case sensitive
 
 Two changes that go together:
 
@@ -64,44 +58,35 @@ answered *"'$HOLD' not found"* on the very record `ct voc $HOLD` had just shown
 you. `LIST`, `SORT`, `SELECT` and the rest of the query language now use the
 same as-typed → lower → upper order as everything else.
 
-## Account names
+## The account name
 
-**Account names have never been case sensitive and still are not.**
-**`create.account`**, **`logto`** and the rest accept whatever case you type.
+**The account is `sduser`, and the name is never case sensitive**: `SDUSER`,
+`sduser` and `SdUser` all mean it. It is `sduser` on every computer, however
+your Windows user name is spelled or cased.
 
-What changed is only how the register file is named on disk: new accounts are
-recorded in lower case, so `sdsys\accounts\don` matches the account's own
-directory. **Existing accounts keep the names they already have.**
+## After an upgrade
 
-## Existing accounts are not touched
-
-**An account created before this keeps the upper-case names in its VOC and goes
-on working. there is nothing to migrate.** An account you create now, or one
-you refresh with **`update.accounts`**, gets the new spelling.
-
-Because SD only ever *adds* VOC records at an update, an old account will end
-up holding both spellings after **`update.accounts`**. That is harmless — they
+**An upgrade adds to your VOC and never removes.** If your account's VOC holds
+a record under an older upper-case spelling, `update.accounts` adds the
+lower-case one beside it, so you may hold both. That is harmless — they
 dispatch to the same programs.
 
-## The Turkish and Azeri fix
+## Windows user names and other languages
 
-The installer creates an SD account for whoever authorises the install, and to
-do that it matches your Windows user name against SD's copy of it — which means
-changing both to the same case.
+**Case folding that depends on the computer's language is a trap**, and SD
+avoids it: on a Turkish or Azeri system Windows turns `I` into a dotless `ı`,
+so a name folded by the computer's rules would not match itself. The one
+place Solo writes your Windows user name in lower case is the ssh
+configuration — the `Match User` line, see [ssh access](08-ssh-access.html) —
+and it folds it the same way on every computer. The account name never
+depends on it, because it is always `sduser`.
 
-**Windows and SD did not change case the same way everywhere.** On a Turkish
-or Azeri system Windows turns `I` into a dotless `ı`, and SD does not. A user
-name containing that letter did not match itself, and the install finished
-**without giving you an SD account at all.**
+> **If you are testing on a Turkish or Azeri computer**, check that your ssh
+> sign-in lands in SD when your Windows user name contains an `I`. The fold
+> is fixed in the source, and has been measured on a Turkish culture setting
+> but not yet on a Turkish computer.
 
-Both sides now use the same rule, which does not vary by locale. Nothing
-changes on a system whose locale was never affected.
-
-> If you are testing on a Turkish or Azeri locale, this is worth exercising
-> specifically — it is the kind of fault that only appears on the machine you
-> do not have.
-
-## Two related refusals that no longer depend on case
+## A related refusal that no longer depends on case
 
 **`delete.file`**'s refusal to delete `voc` and `$acc` no longer depends on the
 case you type. It could not be got round before, because those names were upper
