@@ -111,8 +111,8 @@ reference for the language and the command processor is the separate User set.
 ## Where the source is
 
 **Both repositories are public, and everything in them is open source.** SD is
-GPL software; the installed folder carries the licence as the file
-`sdsys\licence`.
+GPL software — `config gpl` at an `sd` prompt displays the licence, and the
+installed folder carries it as the file `sdsys\licence`.
 
 | | |
 |---|---|
