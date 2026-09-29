@@ -1,0 +1,44 @@
+# SD Core for Windows documentation
+#
+# THE MARKDOWN IS THE SOURCE.  The .html and .pdf beside it are generated, and
+# the toolchain lives in this repository now (owner's ruling, 26 Aug 2026,
+# question 15) so a clone needs nothing else:
+#
+#   python tools\mkdoc.py --in Testing\markdown --out Testing\html
+#   powershell -ExecutionPolicy Bypass -File tools\mkpdf.ps1 -In Testing\html -Out Testing\pdf
+#
+# or tools\release.ps1, which renders only what changed and zips the result.
+#
+# THE LAYOUT.  Three sets, each with the same three folders:
+#
+#   Testing\    the tester set - what ships with W1.0-0
+#   User\       written later
+#   Technical\  written later
+#
+# GENERATED, NOT TRACKED - owner's ruling, 26 Aug 2026, question 16.  The
+# pages are rendered after a change, and only the ones that changed.  There
+# are eventually two deliverables, and neither is served out of git history:
+# a PDF download, and the pages on a web site.  Both are built from the
+# Markdown at release time, so tracking a rendered copy would only add a way
+# for the two to disagree.
+#
+# The cost of tracking them is real as well: each PDF is ~200 KB, so a
+# one-word fix to a page would commit a quarter-megabyte of unreadable diff.
+# And the two directions are not equally reversible - ignored now and tracked
+# later costs one deleted line, tracked now and ignored later leaves the
+# binaries in history for ever.
+*.html
+*.pdf
+
+# The release zip tools\release.ps1 writes.  Same reasoning: it is built from
+# the Markdown, it is not history.
+*.zip
+
+# Windows shell litter
+Thumbs.db
+desktop.ini
+
+# Python's byte-cache for tools\.  Generated, machine-specific, and it appeared
+# as untracked the first time a tool here was imported rather than run.
+__pycache__/
+*.pyc
