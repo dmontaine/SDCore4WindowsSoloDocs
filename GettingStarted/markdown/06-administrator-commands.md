@@ -37,7 +37,7 @@ password is never displayed, stored or logged.
 
 | | |
 |---|---|
-| `SET.PASSWORD` | change the account password — [The account and its passwords](05-account-types.html) |
+| `SET.PASSWORD ADMIN` | change the administrator password — [The account and its passwords](05-account-types.html) |
 | `CONFIG` | report or set configuration — except `CONFIG GPL` and `CONFIG CONTRIB`, which need nothing |
 | `SET.DATE` | set the session's date |
 | `CLEAN.ACCOUNT` | empty the account's scratch files |
@@ -59,7 +59,9 @@ Core for Linux server's — see [Managed mode](15-managed-mode.html).
 
 **`LOGOUT` on its own needs nothing** — it ends your own session, like
 `QUIT`. **`sh` needs nothing either**; see
-[Operating system access](06b-operating-system-access.html).
+[Operating system access](06b-operating-system-access.html). **Nor does
+`SET.PASSWORD`** for your own account password — it asks for the current one
+instead; see [The account and its passwords](05-account-types.html).
 
 ## The maintenance verbs
 

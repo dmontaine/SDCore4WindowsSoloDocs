@@ -22,7 +22,7 @@ product. The User set applies to both.
 | a local sign-in asks for no password — Windows has authenticated you | **every session asks for the account password**: at the keyboard, over ssh, and through the API |
 | a command on the command line (`sd LIST VOC`) needs an elevated window or a `batch.jobs` entry | it uses **a copy of the account password Windows keeps for you**, so scripts and scheduled jobs need no typing |
 | administration is being SDSYS | **administration is `ADMIN`** and a password set at installation |
-| `MODIFY.PASSWORD` | **`SET.PASSWORD`**, which also updates the kept copy |
+| `MODIFY.PASSWORD`, run by SDSYS | **`SET.PASSWORD`**: your own account password with no `ADMIN` (it asks the current one), `SET.PASSWORD ADMIN` after `ADMIN`, `SET.PASSWORD GLOBAL` by the SD Core for Linux server only. It also updates the kept copy |
 
 See [The account and its passwords](05-account-types.html).
 

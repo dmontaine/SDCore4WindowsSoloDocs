@@ -35,6 +35,11 @@ the administrator commands unlocked from the start, and it is the only kind of
 session that may use the commands below — the administrator password does not
 open them.
 
+**A server session can change every password on the computer** — the account
+password with `SET.PASSWORD`, the administrator password with `SET.PASSWORD
+ADMIN`, and the global password with `SET.PASSWORD GLOBAL`, which nothing else
+may use. See [The account and its passwords](05-account-types.html).
+
 **On a computer installed from a control file, the server can sign in before
 the user has chosen an account password.** Until the user does, at that
 computer's keyboard, the global password is the only one accepted.

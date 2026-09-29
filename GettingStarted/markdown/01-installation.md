@@ -166,7 +166,7 @@ report, and ends each with a verdict.
 |---|---|
 | The mode | a new installation. The mode is read from the data, so an install over kept data keeps it: uninstall, **move `%USERPROFILE%\SDCoreSolo` aside** (it holds your data — keep it), then install |
 | The API or ssh choices | uninstall, then install again — the data and passwords are kept, and the API and ssh questions are asked again. Or change the firewall and `sd.conf` by hand |
-| The account password | `SET.PASSWORD`. See [The account and its passwords](05-account-types.html) |
+| The passwords | `SET.PASSWORD`, `SET.PASSWORD ADMIN`, and on a managed computer `SET.PASSWORD GLOBAL` from the server. See [The account and its passwords](05-account-types.html) |
 | Your PATH | `APPEND.SD.PATH`. See [Administrator commands](06-administrator-commands.html) |
 
 **Installing over a working installation is an upgrade**, and asks nothing.

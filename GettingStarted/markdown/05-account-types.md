@@ -18,9 +18,9 @@ entered.
 
 | | Set | Asked | Unlocks |
 |---|---|---|---|
-| **Account password** | at installation, or at the first `sd` on a computer installed from a control file | by every session | the account |
-| **Administrator password** | at installation | by `ADMIN` | the administrator commands, for the rest of the session |
-| **Global password** | at installation, managed mode only | by `ADMIN`, and by any session in place of the account password | the account **and** the administrator commands. It is the SD Core for Linux server's |
+| **Account password** | at installation, or at the first `sd` on a computer installed from a control file; changed with `SET.PASSWORD` | by every session | the account |
+| **Administrator password** | at installation; changed with `SET.PASSWORD ADMIN` | by `ADMIN` | the administrator commands, for the rest of the session |
+| **Global password** | at installation, managed mode only; changed with `SET.PASSWORD GLOBAL` by the server | by `ADMIN`, and by any session in place of the account password | the account **and** the administrator commands. It is the SD Core for Linux server's |
 
 **Every one needs at least 8 characters, with a lower-case letter, an
 upper-case letter, a digit and a symbol** — letters, digits and punctuation
@@ -63,16 +63,21 @@ commands.
 ### Changing it: `SET.PASSWORD`
 
 ```
-:admin
 :set.password
+Current password:
 New password:
 Confirm the new password:
 Password changed
 ```
 
-**It needs `ADMIN` first**, like every administrator command. The new password
-must meet the rules above and differ from the global password; otherwise it
-says why and leaves the password as it was.
+**You can always change your own account password**; it needs no `ADMIN`.
+It asks for the current one first, so a session left open cannot be taken
+over by changing it — unless you have typed `ADMIN`, or signed in with the
+global password, in which case it goes straight to the new one. A wrong
+current password is answered *Wrong password - the password is unchanged*.
+
+The new password must meet the rules above and differ from the global
+password; otherwise it says why and leaves the password as it was.
 
 **`SET.PASSWORD` also updates the kept copy.** If it cannot, it says *The new
 password could not be kept for commands given on the sd command line* — the
@@ -103,8 +108,19 @@ nobody else can.
 **It unlocks the administrator commands for one session**: type `ADMIN`, then
 the password. See [Administrator commands](06-administrator-commands.html).
 
-**No command changes it after installation**, and none changes the global
-password either. Both are set by the installer only.
+**Change it with `SET.PASSWORD ADMIN`, after `ADMIN`:**
+
+```
+:admin
+Administrator password:
+Administrator commands unlocked for this session
+:set.password admin
+New password:
+Confirm the new password:
+Password changed
+```
+
+It must differ from the global password.
 
 ## The global password
 
@@ -113,5 +129,24 @@ it, and every such session has the administrator commands unlocked. A few
 commands need it and refuse the administrator password — the ones that are the
 server's rather than the user's. See [Managed mode](15-managed-mode.html).
 
+**Only a session signed in with the global password can change it**, with
+`SET.PASSWORD GLOBAL`, and **such a session can change all three**. Anyone
+else — `ADMIN` included — is told *The global password can only be changed by
+the SD Core server*. It must differ from the account and administrator
+passwords.
+
 **The mode is fixed at installation**, and with it whether a global password
-exists: nothing sets or clears it afterwards.
+exists: nothing creates or removes one afterwards. On a standalone computer
+`SET.PASSWORD GLOBAL` says *This computer is standalone - it has no global
+password*.
+
+## Who can change which
+
+| | account | administrator | global |
+|---|---|---|---|
+| a session with the account password | yes, after the current one | after `ADMIN` | no |
+| a session signed in with the global password | yes | yes | yes |
+
+**The global password must differ from the other two.** A change that would
+make it equal one of them is refused, and the password is left as it was. The
+account and administrator passwords may be the same.
