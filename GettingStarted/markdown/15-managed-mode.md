@@ -117,6 +117,18 @@ deny.verbs set listf,copy        replace the list
 DENY.VERBS 2: LISTF,COPY
 ```
 
+**A command is denied under every name that runs it.** Denying `SH` denies
+`!`, and denying `CATALOG` denies `CATALOGUE`, because each pair runs the same
+command. Some names that look different share one: `EDIT`, `NANO` and
+`MICRO` all run SD's editor program, so denying one denies all three. The
+answer says what else was taken:
+
+```
+:deny.verbs add sh
+DENY.VERBS also denies, as the same command: !
+DENY.VERBS 1: SH
+```
+
 | | |
 |---|---|
 | **Who may use it** | a server session only. Anyone else, `ADMIN` included, is told *The denied verbs can only be listed or changed by the SD Core server* |

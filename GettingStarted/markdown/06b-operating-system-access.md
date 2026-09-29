@@ -116,10 +116,10 @@ password; see [Security](12-security.html).
 ## On a managed computer
 
 **The SD Core for Linux server can put `sh` on the list of denied commands**
-(see [Managed mode](15-managed-mode.html)); it then needs `ADMIN` first.
-**That does not close the operating system off today:** `!` — the same verb
-under another name — cannot be named on the list, and a program's
-`OS.EXECUTE` is not a command the list can hold.
+(see [Managed mode](15-managed-mode.html)); it and `!`, which runs the same
+command, then need `ADMIN` first. **A program's `OS.EXECUTE` is not a command
+the list can hold**, so the list alone does not close the operating system
+off from a program.
 
 ## See also
 
