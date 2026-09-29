@@ -1,6 +1,6 @@
 @echo off
 rem ------------------------------------------------------------------
-rem  SD Core for Windows - local docs server
+rem  SD Core Solo for Windows - local docs server
 rem  Serves the docs tree over http://localhost so Chrome always loads
 rem  the current files from disk (avoids Chrome's file:// cache quirks).
 rem  Close the server window (titled below) to stop it.

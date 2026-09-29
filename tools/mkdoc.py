@@ -804,8 +804,8 @@ def main():
     ap.add_argument('--in', dest='inputs', nargs='+', required=True,
                     metavar='PATH', help='.md files, or directories of them')
     ap.add_argument('--out', required=True, metavar='DIR')
-    ap.add_argument('--product', default='SD Core for Windows')
-    ap.add_argument('--version', default='W1.0-0')
+    ap.add_argument('--product', default='SD Core Solo for Windows')
+    ap.add_argument('--version', default='WS1.1-0')
     args = ap.parse_args()
 
     sources = []

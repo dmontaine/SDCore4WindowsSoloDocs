@@ -54,9 +54,9 @@ LICENCE_URL = 'https://creativecommons.org/licenses/by-sa/4.0/'
 # still reads.  They are here rather than imported from add_nav.py because that
 # module runs work at import time.
 SET_BLURB = {
-    'GettingStarted': 'Installing SD Core for Windows, and finding your way '
-                      'around it for the first time.',
-    'User':           'Using SD Core for Windows: SD BASIC, TCL, the '
+    'GettingStarted': 'Installing SD Core Solo for Windows, and finding your '
+                      'way around it for the first time.',
+    'User':           'Using SD Core Solo for Windows: SD BASIC, TCL, the '
                       'dictionaries and the file system.',
     'Administrator':  'Running an SD Core for Windows installation: accounts, '
                       'security, remote access and the machine.',
@@ -225,8 +225,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--set', required=True)
     ap.add_argument('--out', required=True)
-    ap.add_argument('--product', default='SD Core for Windows')
-    ap.add_argument('--version', default='W1.0-0')
+    ap.add_argument('--product', default='SD Core Solo for Windows')
+    ap.add_argument('--version', default='WS1.1-0')
     args = ap.parse_args()
 
     set_name = args.set

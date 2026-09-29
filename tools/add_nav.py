@@ -37,8 +37,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mkdoc
 
 DOCS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PRODUCT = "SD Core for Windows"
-VERSION = "W1.0-0"
+PRODUCT = "SD Core Solo for Windows"
+VERSION = "WS1.1-0"
 
 # ── Set definitions ──────────────────────────────────────────
 
@@ -207,7 +207,7 @@ def get_title(html_path):
     with open(html_path, 'r', encoding='utf-8') as f:
         content = f.read()
     # Try <title> tag first
-    m = re.search(r'<title>(.+?) - SD Core for Windows</title>', content)
+    m = re.search(r'<title>(.+?) - ' + re.escape(PRODUCT) + r'</title>', content)
     if m:
         return m.group(1)
     # Fallback: tp-title

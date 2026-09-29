@@ -517,13 +517,13 @@ def reformat_content_page(content, set_index_href="index.html"):
     # Extract masthead.  The regex stops at the inner header-row </div>, so
     # re-close the outer .masthead div when the capture is unbalanced.
     masthead_match = re.search(r'(<div class="masthead">.*?</div>)', content, re.DOTALL)
-    masthead_html = masthead_match.group(0) if masthead_match else '<div class="masthead"><div><strong>SD Core for Windows</strong><span>W1.0-0</span></div></div>'
+    masthead_html = masthead_match.group(0) if masthead_match else '<div class="masthead"><div><strong>SD Core Solo for Windows</strong><span>WS1.1-0</span></div></div>'
     if masthead_html.count('<div') > masthead_html.count('</div>'):
         masthead_html += '</div>'
 
     # Find title after the titlepage section
     title_match = re.search(r'<title>(.*?)</title>', content)
-    title_text = title_match.group(1) if title_match else "SD Core for Windows"
+    title_text = title_match.group(1) if title_match else "SD Core Solo for Windows"
 
     # Remove the old <style>...</style> block
     content_no_style = re.sub(r'<style>.*?</style>', '', content, flags=re.DOTALL)
@@ -610,12 +610,12 @@ def reformat_index_page(content, page_class="setindex"):
     """Reformat a set index or master index page."""
     # Extract title
     title_match = re.search(r'<title>(.*?)</title>', content)
-    title_text = title_match.group(1) if title_match else "SD Core for Windows"
+    title_text = title_match.group(1) if title_match else "SD Core Solo for Windows"
 
     # Find masthead.  The regex stops at the inner header-row </div>, so
     # re-close the outer .masthead div when the capture is unbalanced.
     masthead_match = re.search(r'(<div class="masthead">.*?</div>)', content, re.DOTALL)
-    masthead_html = masthead_match.group(0) if masthead_match else '<div class="masthead"><div><strong>SD Core for Windows</strong><span>W1.0-0</span></div></div>'
+    masthead_html = masthead_match.group(0) if masthead_match else '<div class="masthead"><div><strong>SD Core Solo for Windows</strong><span>WS1.1-0</span></div></div>'
     if masthead_html.count('<div') > masthead_html.count('</div>'):
         masthead_html += '</div>'
 

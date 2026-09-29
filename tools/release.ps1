@@ -3,7 +3,7 @@
     deliverable with a checksum.
 
     command line:
-        tools\release.ps1 [-Set GettingStarted] [-Version W1.0-0] [-OutDir <dir>]
+        tools\release.ps1 [-Set GettingStarted] [-Version WS1.1-0] [-OutDir <dir>]
                           [-Force] [-NoZip]
 
     WHY THIS EXISTS, and it is not the ten minutes it saves.  Moving the
@@ -27,7 +27,7 @@
 [CmdletBinding()]
 param(
     [string]$Set     = 'GettingStarted',
-    [string]$Version = 'W1.0-0',
+    [string]$Version = 'WS1.1-0',
     [string]$OutDir,
     [switch]$Force,
     [switch]$NoZip
@@ -198,7 +198,7 @@ if ($toHtml.Count -gt 0) {
     # after it.  This project has paid for that once already.
     $mkdoc = Join-Path $tools 'mkdoc.py'
     $mkdocArgs = @('--in') + @($toHtml | ForEach-Object { $_.FullName }) +
-                 @('--out', $htmlDir, '--product', 'SD Core for Windows',
+                 @('--out', $htmlDir, '--product', 'SD Core Solo for Windows',
                    '--version', $Version)
     Say ("python " + $mkdoc + " " + ($mkdocArgs -join ' '))
     if ($mkdocArgs.Count -lt 5) { Write-Error 'mkdoc argument list is too short to be right' }
@@ -313,16 +313,16 @@ if (-not (Test-Path -LiteralPath $bookDir)) {
     $null = New-Item -ItemType Directory -Path $bookDir -Force
 }
 $bookHtml = Join-Path $bookDir ($Set + '.html')
-$bookPdf  = Join-Path $bookDir ("SD-Core-for-Windows-" + $Version + "-" + $Set + ".pdf")
+$bookPdf  = Join-Path $bookDir ("SD-Core-Solo-for-Windows-" + $Version + "-" + $Set + ".pdf")
 
 $mkbook = Join-Path $tools 'mkbook.py'
 Say ("python " + $mkbook + " --set " + $Set)
-& python $mkbook --set $Set --out $bookHtml --product 'SD Core for Windows' `
+& python $mkbook --set $Set --out $bookHtml --product 'SD Core Solo for Windows' `
                  --version $Version 2>&1 | ForEach-Object { Write-Output ("  " + $_) }
 if ($LASTEXITCODE -ne 0) { Write-Error "mkbook.py failed - the zip was NOT written" }
 
 & (Join-Path $tools 'mkbookpdf.ps1') -In $bookHtml -Out $bookPdf `
-    -FooterText ('SD Core for Windows ' + $Version) |
+    -FooterText ('SD Core Solo for Windows ' + $Version) |
     ForEach-Object { Write-Output ("  " + $_) }
 
 # VERIFY, DO NOT ASSUME - and do not rest it on the exit code alone.  A script
@@ -342,7 +342,7 @@ if ($bookInfo.Length -lt 20000) {
 if ($NoZip) { Say 'no zip written (-NoZip)'; exit 0 }
 
 # --- the deliverable -------------------------------------------------------
-$zip = Join-Path $OutDir ("SD-Core-for-Windows-" + $Version + "-" + $Set + "-docs.zip")
+$zip = Join-Path $OutDir ("SD-Core-Solo-for-Windows-" + $Version + "-" + $Set + "-docs.zip")
 if (Test-Path -LiteralPath $zip) { Remove-Item -LiteralPath $zip -Force }
 
 Compress-Archive -Path @($pdfDir, $htmlDir, $bookDir) -DestinationPath $zip
