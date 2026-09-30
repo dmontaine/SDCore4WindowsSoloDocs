@@ -21,15 +21,14 @@ marks a word typed as it stands; braces mark an optional part.
 
 ## What is not on this page
 
-**Seeing other people's sessions, and ending them, are administrator verbs.**
-`listu` lists every session on the machine and `logout` *n* ends one, and
-neither is in an ordinary account's VOC. They are documented in the
-**administrator documentation**, under *Sessions and Locks*, which is a
-separate set your administrator may or may not have given you.
+**Listing every session, and ending them all, need `ADMIN`.** `listu` lists
+every session on the computer and `logout all` ends every one but yours; both
+are in the GettingStarted set, under *Sessions and locks*.
 
-**`logout` with no argument is the exception and every account has it** — it
-ends your own session and is `quit` under another name. That is worth knowing
-before typing it intending to list something.
+**`logout` with no argument, and `logout` *n*, need nothing** — `logout` ends
+your own session and is `quit` under another name, which is worth knowing
+before typing it intending to list something, and `logout` *n* ends another
+session, since on Solo every session is `sduser`.
 
 What is here is **your own processes**: what this session is doing, work you
 started in the background, and how to look at either.
@@ -73,7 +72,7 @@ User Detail
      Command: pstat user 27 level 1
      $PSTAT 141 (262)
      Command processor
-     /cygdrive/c/ProgramData/SD/user_accounts/don/BP.OUT/ZZMATH 34 (152)
+     /cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser/BP.OUT/ZZMATH 34 (152)
      Command processor
 ```
 
@@ -130,7 +129,7 @@ never started.
 > to know.** When SD is fed commands down a pipe, the phantom child inherits
 > that pipe. The job then never completes — not even after the parent session
 > has exited — and the only way out is to kill the process, which leaves an
-> entry in the user table that needs an elevated `sd -cleanup` to clear.
+> entry in the user table that needs `sd -cleanup` to clear.
 > **`phantom` is for a person at a prompt, or for a program, and not for a
 > piped script.** The listings above are quoted from the verb's own message
 > texts for that reason.
@@ -182,20 +181,21 @@ and nothing is lost. The file is `sddump.`*n* in the directory named by the
 `DUMPDIR` is empty, which is how it ships:
 
 ```
-Dumping process state as C:\ProgramData\SD\sdsys/sddump.27
+Dumping process state as C:\Users\you\SDCoreSolo\sdsys/sddump.27
 ```
 
 It holds the `@`-variables, the current sentence and command, the call stack,
 open files and their locks, and named and unnamed common — which is to say **it
-holds application data**, and it is written where any SD user can read it.
-Treat a dump as you would the data of the program that produced it, and delete
-it when the question it was written to answer has been answered.
+holds application data**, and it is a file in your own profile that anything
+running as you can read. Treat a dump as you would the data of the program that
+produced it, and delete it when the question it was written to answer has been
+answered.
 
 | refusal | when |
 |---|---|
 | *User number required* | `pdump` with no number |
 | *Not logged in* | no session has that user number |
-| *PDUMP not allowed for processes run under other usernames* | the `PDUMP` configuration parameter has bit 1 set and the session is not elevated |
+| *PDUMP not allowed for processes run under other usernames* | the `PDUMP` configuration parameter has bit 1 set and the process is under a different user name. Every session on Solo is `sduser`, so it does not arise |
 
 **It is an event, not a call.** `pdump` marks the target and returns; the target
 writes the file when it next looks at its event flags. A process that is wedged
@@ -228,13 +228,9 @@ The debugger itself — the commands it takes once it is attached — is in
 
 ## Who has these verbs
 
-**Every account has `status`, `phantom`, `pstat`, `pdebug` and `pdump`** —
-there is no withheld set any more.
-
-**`pdump` still has a gate, and it is not about having the verb.** `pdump`
-*n* is yours to use on your own processes; against another Windows
-account's process, it refuses unless the session is SDSYS's. `pstat` reports
-any session, with no such restriction.
+**Your account has `status`, `phantom`, `pstat`, `pdebug` and `pdump`**, and
+none of them needs `ADMIN`. `pdump` *n* and `pstat` work on any session, since
+every session is yours.
 
 ## See also
 

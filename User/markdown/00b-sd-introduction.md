@@ -1,9 +1,9 @@
 Title: SD Core - Introduction and Getting Started
 Subtitle: What a multivalue database is, what SD is, the four components, and your first session.
 
-This page orients you to SD Core for Windows: what a multivalue database is,
-where SD came from, what the pieces are, and how to take your first steps. It
-is the only page in this set that assumes nothing.
+This page orients you to SD Core Solo for Windows: what a multivalue database
+is, where SD came from, what the pieces are, and how to take your first steps.
+It is the only page in this set that assumes nothing.
 
 ## What is a multivalue database?
 
@@ -25,9 +25,12 @@ that carries these marks, and `extract`, `insert`, `delete` and
 
 ## What SD is
 
-SD Core for Windows is a version of SD, with elements found in the main
+SD Core Solo for Windows is a version of SD, with elements found in the main
 SD version and in ScarletDME. ScarletDME was a fork of the original GPL
-release of OpenQM 2.6.6.
+release of OpenQM 2.6.6. **Solo is the personal edition of SD Core for
+Windows**: one Windows user, one computer, one account, and none of the
+multi-user machinery. The GettingStarted set has a page, *Differences from
+multiuser SD Core for Windows W1.1-1*, that says exactly what differs.
 
 **That lineage matters when you go looking for documentation.** Not all
 the features of the *commercial* OpenQM 2.6.6 were in the GPL release,
@@ -40,7 +43,7 @@ If you have used OpenQM, or SD on Linux, much of SD Core will still be
 familiar: the same data model, the same query processor, the same
 BASIC.
 
-**SD Core for Windows is Windows only.** There are no `#ifdef` branches
+**SD Core Solo for Windows is Windows only.** There are no `#ifdef` branches
 keeping Linux alive in this source — Linux SD is a separate project and
 this is not a build of it.
 
@@ -63,22 +66,15 @@ installer carries compiled binaries; the source is a separate download.
 sd
 ```
 
-You land in **the SD account with your own name**. Nothing asks for a
-password — Windows has already authenticated you. SD asks Windows who
-you are.
+**You land in the one SD account, `sduser`, after the account password** — the
+one you chose when installing. Being signed in to Windows is not enough: SD
+asks. If the computer was installed from a control file there is no password
+yet, and `sd` asks you to choose one. The GettingStarted set's *Your first
+thirty minutes* walks through it.
 
-If `sd` answers *Account ... not in register*, you are in the wrong
-account or your group membership has not taken effect yet. If it
-answers *not registered for SD use*, you are not in the `sdusers`
-group.
-
-> **You must sign out and back in after being added to `sdusers`.**
-> Windows fixes group membership when you sign in. Until you get a new
-> logon token you cannot read the data tree at all, and the symptom
-> looks like a broken install.
-
-SD is already running. It is a Windows service — **String Database (SD)**
-— and Windows starts it at every boot. You do not type `sd -start`.
+SD is already running. A scheduled task starts it at every Windows start-up,
+so you do not type `sd -start`. Open a new window after installing: one that
+was open before the install does not have SD on its PATH yet.
 
 ## Your first file and record
 
@@ -91,9 +87,10 @@ ed customers 1001
 to insert, type your lines, a full stop on its own line to stop
 inserting, then `fi` to file and exit.
 
-Every account can also use `edit` (Microsoft Edit, a full-screen
-editor) or `micro` (a full-screen editor with syntax highlighting).
-Both need `OS.EXECUTE` permission — see the administrator documentation.
+You can also use `edit` (Microsoft Edit, a full-screen editor) or `micro` (a
+full-screen editor with syntax highlighting). Both come with SD and both open
+in your session with nothing to unlock — see *Programmer commands* in the
+GettingStarted set.
 
 ```
 list customers
@@ -112,7 +109,7 @@ in `edit`, in `micro`, or in any text editor you like (Notepad, VS Code,
 etc.) — the folder is on disk at:
 
 ```
-C:\ProgramData\SD\user_accounts\<account>\bp
+%USERPROFILE%\SDCoreSolo\user_accounts\sduser\bp
 ```
 
 Compile and catalogue it from inside SD:
@@ -128,35 +125,44 @@ Then run it by name:
 myprog
 ```
 
-## Becoming an administrator
+## Administrator commands
 
-**There is no `logto` route to it.** SDSYS, the one administrator account,
-is reached only by signing in to Windows as the `sdsys` account itself and
-starting `sd` elevated — a fresh session, not a command typed from inside
-one you already have. `logto sdsys` from any other account is refused
-outright, whatever its elevation.
+**There is no separate administrator account.** A few commands — `config`,
+`listu`, editing the VOC directly — refuse with *Command requires
+administrator privileges* until you unlock them for the session:
 
-**This needs the console, or a remote desktop or remote-control product
-installed as a service** — something Windows can draw a UAC consent prompt
-on. Over an ordinary ssh session there is no such screen, and in any case
-SDSYS itself has no ssh route to arrive over.
+```
+admin
+```
+
+Type the administrator password chosen at installation, or, on a managed
+computer, the global password. It lasts until you leave SD or type
+`admin off`. See *Administrator commands* in the GettingStarted set.
 
 ## What is not in SD Core
 
 The following were in OpenQM, in ScarletDME, or in SD on Linux, and
-are not in SD Core for Windows:
+are not in SD Core Solo for Windows:
 
 | Gone | Why |
 |---|---|
 | QMNet (remote files) | Removed; the API is the supported way to reach another SD server |
 | Embedded Python (a Python interpreter loaded into `sd.exe` itself) | Gone permanently - `sd.exe`'s MSYS2 runtime cannot safely share a process with Python. Calling Python **from** a BASIC program is not gone: it runs as a separate helper process instead - see *SD BASIC - Python Integration* |
-| `sdlnxd` daemon | Linux-only; the Windows service replaces it |
+| `sdlnxd` daemon | Linux-only; a scheduled task starts SD on Windows |
 | `ENCRYPT.FIELD` verb | Removed; `sdencrypt()` and `sddecrypt()` in SDBasic are the supported route |
 | `sed`, `update.record`, `modify` editors | Gone; use `edit`, `micro` or `ed` |
 | PROC language | Removed; use paragraphs instead |
 | `SET.LANGUAGE`, `LOAD.LANGUAGE` | Removed; SD Core is English only |
-| Silent install | Refused deliberately; the installer asks questions that cannot be defaulted |
-| Multi-user Remote Desktop | Not supported; accounts SD creates are denied the console and RDP |
+| Accounts, groups and grants | Not in Solo: there is one account, `sduser` |
+
+## Where the listings came from
+
+**The listings in this set were produced by running commands on the multiuser
+SD Core for Windows W1.0-0.** Solo shares its runtime — the compiler, the query
+processor, the file system — so they show what Solo does too, but they were not
+repeated on Solo. Where a page describes something that differs on Solo, it
+says so; the account name in a listing may read `DON` or `SDSYS` where Solo
+would say `sduser`.
 
 ## Document conventions
 

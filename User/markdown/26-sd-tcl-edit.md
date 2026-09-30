@@ -24,21 +24,16 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **The keys below are Microsoft Edit's own**, for the version SD checks for —
-> **1.2.1**, which is what ships in current Windows. SD installs that editor
-> and calls it; it does not implement it, so where a binding differs the editor
-> is right.
+> **The keys below are Microsoft Edit's own**, for the version SD ships —
+> **1.2.1**. SD installs that editor and calls it; it does not implement it, so
+> where a binding differs the editor is right.
 
-## Both editors are installed with SD
+## Both editors come with SD
 
-**You do not install anything.** SD's installer checks for both editors and
-installs whichever is missing, machine-wide, so every account SD creates can
-reach them. Microsoft Edit is usually already there — it is part of current
-Windows, at `C:\Windows\System32\edit.exe`.
-
-If that could not happen — an offline machine, or one whose policy blocks the
-package manager — the verb says so and names the command that installs it,
-rather than opening nothing and reporting the record unchanged.
+**You do not install anything.** Both editors are in
+`%USERPROFILE%\SDCoreSolo\usr\bin` — `edit.exe` is Microsoft Edit 1.2.1 and
+`micro.exe` is micro 2.0.15 — and the installer needs nothing from the internet
+to put them there.
 
 ## The keys
 
@@ -130,46 +125,17 @@ token** — another `~`, a backtick, a `!`, a `-`, a `,`, or a mark. Everywhere
 else a tilde is left exactly as you wrote it, so `a~b` is still `a~b` and
 ordinary source reads normally.
 
-## One gate, and it is separate from the verb
+## Nothing to unlock, and one condition
 
-**Every account has `edit` and `micro`** — there is no tier left to decide
-that. What decides whether either one *runs* is a single permission:
-`os.users` field 2, the `OS.EXECUTE` field.
+**On Solo both editors run in your session with nothing to unlock** — no
+`ADMIN`, no permission to be granted. An editor runs outside SD, as your
+Windows user, and the operating system is yours already; see *Operating system
+access* in the GettingStarted set. (The multiuser SD Core for Windows gates
+them with a permission an administrator grants per account; there is no such
+list on Solo.)
 
-An editor runs outside SD, so it needs operating-system permission that `ed`
-does not. It comes from a record in the system file `os.users` whose field 2
-reads `yes`, **and only SDSYS can put one there.**
-
-**SDSYS reaches the operating system regardless of `os.users`** — the same
-identity check that grants administration grants this too, so signing in as
-SDSYS and running `sd` elevated gets both verbs working immediately, with
-no record needed. Every other account starts with no record at all and is
-refused until SDSYS grants one:
-
-| | |
-|---|---|
-| **`modify.account`** *name* **`os-on`** \| **`os-off`** | grant or withdraw `OS.EXECUTE` — and these two verbs |
-| **`modify.account`** *name* **`sh-on`** \| **`sh-off`** | the same for the `sh` verb |
-
-They are four switches over two fields rather than four names for one state,
-so `sh-off` leaves `OS.EXECUTE` alone. **`modify.account` needs SDSYS**, as
-it always has — signing in as SDSYS is what grants somebody the right not
-to have to.
-
-**`modify.account` refuses `SDSYS` as the target, for these keywords and
-every other one, before the keyword is even read** — SDSYS's own routes are
-not a setting to change:
-
-```
-:modify.account sdsys os-off
-Remote access is never available to SDSYS
-```
-
-The record is ordinary data, so SDSYS can also edit it by hand with
-`ed os.users` *name*.
-
-**And a session with no terminal is refused before anything is written** — an
-API session, or a script driving SD down a pipe:
+**The condition is a terminal.** A session with no terminal is refused before
+anything is written — an API session, or a script driving SD down a pipe:
 
 ```
 :edit bp zzed
@@ -188,9 +154,8 @@ No record name specified.  Usage: edit {dict} <file> <record>
 
 ## Who has these verbs
 
-**Every account has `edit`, `micro` and `ed`.** Whether `edit` and `micro`
-actually run is the separate `os.users` question above; `ed` needs nothing
-more than the verb.
+**Your account has `edit`, `micro` and `ed`**, and all three run with nothing
+to unlock. `ed` also works with no terminal at all.
 
 ## See also
 

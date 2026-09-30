@@ -8,8 +8,10 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **Every listing on this page was produced by running it**, on SD Core for
-> Windows W1.0-0, against a two-line program in an account's `bp` file.
+> **The listings on this page were produced by running them**, on the
+> multiuser SD Core for Windows W1.0-0, against a two-line program in an
+> account's `bp` file. The commands are the same on Solo; where they differ, the
+> text says so — the global catalogue below is the one place.
 
 ## Compiling
 
@@ -89,16 +91,19 @@ itself.
 |---|---|
 | **private** | the account's own. The default when no keyword is given |
 | **local** | a VOC entry in the account, so the name works only there |
-| **global** | `gcat` in the system account — **every account sees it** |
+| **global** | `gcat` in SD's system files — **you can run what is in it, and you cannot add to it** |
 
-**Global cataloguing requires administrator privilege, and on this port that
-means an elevated session.** Without it you get *"Command requires
-administrator privileges"*. **The same gate applies to an implicit global
-catalogue** — one chosen by a `*`, `!`, `_` or `$` prefix on the call name
-rather than by the `global` keyword — so the prefix is not a way round it.
+**On Solo nobody can catalogue a program globally from a session, `ADMIN`
+included.** `catalog ... global` is refused, and so is the implicit form — a
+name chosen with a `*`, `!`, `_` or `$` prefix rather than by the `global`
+keyword — so the prefix is not a way round it. The global catalogue holds SD's
+own programs; on a managed computer it also holds the programs the SD Core for
+Linux server puts there, and only the server may.
 
-Private and local cataloguing need none of this and work in a programmer's own
-account.
+Private and local cataloguing need none of this and work with no `ADMIN`. You
+may run a globally catalogued program, `call *name` from BASIC among them. The
+GettingStarted set's *Managed mode* page says how the server's programs get
+there.
 
 ### Seeing and removing
 
@@ -127,6 +132,9 @@ delete.catalog name... {global | local}
 ```
 ZZPROG deleted from the private catalogue
 ```
+
+**`delete.catalog` of a global entry is refused**, for the same reason as
+cataloguing one.
 
 > **`map` also takes a `file` option**, which writes the map to a file instead
 > of the screen. **It asks before overwriting** — *"File xx will be cleared and
@@ -194,7 +202,7 @@ program in a phantom process"*. The debugger itself is covered in
 
 ## Who has these verbs
 
-**Every account has all of them now**: `format`, `list.common`, `basic`,
+**Your account has all of them**: `format`, `list.common`, `basic`,
 `catalog`, `catalogue`, `cd`, `compile.dict`, `debug`, `delete.catalog`,
 `delete.catalogue`, `delete.common`, `generate`, `map`, `run`.
 

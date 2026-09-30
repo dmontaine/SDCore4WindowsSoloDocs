@@ -123,25 +123,14 @@ show it.
 `who` answers with your user number and the account you are in:
 
 ```
-39 DON
+39 sduser
 ```
 
-**After a `logto` it grows a third part, and that is the useful one:**
-
-```
-29 PAYROLL from DON
-```
-
-**`from DON` is the account you logged in as**, not the one you are in and not
-your Windows account. So the short form means *I am still where I started* and
-the long form means *I have moved* — which makes `who` the quick way to find
-out whether a `logto` actually took effect.
-
-**`SDSYS` cannot appear after `from` here, because `logto sdsys` is refused
-outright from any other account.** Administering SD means signing in to
-Windows as the `sdsys` account itself and starting a fresh session, not
-`logto`-ing there from one you already have — see the *Administrator* set's
-*Accounts and Security* chapter.
+**On Solo the account is always `sduser`**, so the short form is the only one
+you will see. On the multiuser SD Core for Windows, `who` grows a third part
+after a `logto` — `29 PAYROLL from DON`, where `from` names the account you
+logged in as — and that is how it shows whether a `logto` took effect. Solo has
+one account, so there is nowhere to `logto` to.
 
 ## What is not here
 
@@ -168,21 +157,15 @@ there is no shipped example to look at.
 
 ## Who has these verbs
 
-Everything on this page is in a **standard** account except the last two, which
-are administrator-only:
+Your account has every verb on this page, and none of them needs `ADMIN`:
 
 | | |
 |---|---|
-| **standard** | `abort` `alias` `clear.abort` `clear.stack` `display` `get.stack` `go` `if` `list.vars` `logto` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
-
-**Everything on this page is in a standard account.** An account that does not
-have a verb does not have the VOC record for it — the name is simply not
-recognised rather than refused.
+| **your account** | `abort` `alias` `clear.abort` `clear.stack` `display` `get.stack` `go` `if` `list.vars` `logto` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
 
 **The two `OS` verbs are the exception and are not documented here.** `sh` and
-`!` reach the Windows shell, are administrator-tier, and are gated a second time
-by a list of who may use them. They are in the **administrator documentation**,
-under *Operating System Access*, which is a separate set.
+`!` reach the Windows shell. They are in the GettingStarted set, under
+*Operating system access*, and on Solo they need nothing to use.
 
 ## See also
 

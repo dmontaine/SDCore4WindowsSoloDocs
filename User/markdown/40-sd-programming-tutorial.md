@@ -37,7 +37,7 @@ external programs, or in any text editor you like — Notepad, VS Code,
 anything. The folder is on disk at:
 
 ```
-C:\ProgramData\SD\user_accounts\<account>\bp
+%USERPROFILE%\SDCoreSolo\user_accounts\sduser\bp
 ```
 
 ## 1. Hello world

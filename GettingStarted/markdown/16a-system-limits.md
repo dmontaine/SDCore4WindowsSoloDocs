@@ -1,22 +1,18 @@
 Title: System limits
-Subtitle: The sizes, counts and depths compiled into SD Core for Windows, and which of them a site can change.
+Subtitle: The sizes, counts and depths compiled into SD Core Solo for Windows, and which of them can be changed.
 
 Two kinds of number appear on this page and they behave differently.
 
 A **compiled limit** is fixed in the build. Changing it means rebuilding SD, and
 several would change on-disk file formats, so in practice they are ceilings.
 
-A **configured limit** is a value in `sd.conf` with a default. A site can raise
-or lower it, within a range the compiled limits set. Those are covered in full
+A **configured limit** is a value in `sd.conf` with a default. It can be raised
+or lowered, within a range the compiled limits set. Those are covered in full
 under *Configuration* in this set; this page gives the number in force and says
 which parameter controls it.
 
-> This document is separate so that it can be withheld. It links to nothing
-> outside the administrator set. Where a page in another set is worth naming,
-> it is named in words.
-
-> Every figure here was read from the sources that define it, or from a running
-> W1.0-0 system, and not from documentation of another product.
+> Every figure here was read from the sources that define it, and not from
+> documentation of another product.
 
 ## Data
 
@@ -55,11 +51,12 @@ Group size is expressed in 1 KB units, so the compiled maximum of 8 is 8 KB.
 | Concurrent sessions | **20** | `NUMUSERS` |
 | Record locks across all sessions | **100** | `NUMLOCKS` |
 | File locks | one per file | compiled |
-| Windows account name | **32** characters | compiled |
 | SD account name | **32** characters | compiled |
 
 `NUMUSERS` sizes the user table in shared memory, so it is read once when SD
-starts and cannot be changed in a running system.
+starts and cannot be changed in a running system. Every session on a Solo
+computer — the keyboard, ssh, the API — counts against it, and every one is
+`sduser`.
 
 ## Programs
 
@@ -70,6 +67,7 @@ starts and cannot be changed in a running system.
 | Matrix dimensions | **two** | compiled |
 | Compiled programs held in memory | no limit by default | `OBJECTS` |
 | Memory those programs may occupy | no limit by default | `OBJMEM`, in KB |
+| Path of a program named to `RUN` | **255** characters | compiled |
 
 ## Select lists
 
@@ -94,21 +92,14 @@ lists can be saved. `save.list` writes to a file and is limited only by space.
 The extra terminal names are aliases and variants that share a definition with
 their base name.
 
-## What an account gets
+## What the account starts with
 
-**There is no longer a tier to give three different answers for.** Every
-ordinary account gets the whole of `newvoc`; SDSYS gets that plus the
-records that exist only in `voc_template`.
-
-| | VOC records |
-|---|---|
-| An ordinary account (`newvoc`) | **398** |
-| SDSYS (`voc_template`) | **431** |
-
-**These are record counts, not verb counts** — a VOC record may be a verb, a
-keyword, a file pointer, a sentence or a paragraph, and only some are verbs.
-Counted directly from the shipped directories (`newvoc`/`voc_template`),
-matching what `count voc` reports in a freshly created account.
+**The account's VOC starts from the shipped `newvoc` directory, which holds 416
+records.** These are record counts, not verb counts — a VOC record may be a
+verb, a keyword, a file pointer, a sentence or a paragraph, and only some are
+verbs. Counted directly from the shipped directory. The account and grant
+commands are not among them; see
+[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html).
 
 ## Configuration
 
@@ -121,5 +112,5 @@ matching what `count voc` reports in a freshly created account.
 | Parameters accepted that do nothing | **6** |
 
 The six inert parameters, and why each is inert, are listed under
-*Configuration* in this set. `NETFILES` and `CREATUSR` are the two a site is
-most likely to have in an existing `sd.conf`.
+*Configuration* in this set. `NETFILES` and `CREATUSR` are the two most likely
+to be in an existing `sd.conf`.

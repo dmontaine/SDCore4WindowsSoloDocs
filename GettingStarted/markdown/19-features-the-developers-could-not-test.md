@@ -1,5 +1,5 @@
 Title: Features the Developers Could Not Test
-Subtitle: The parts of SD Core for Windows that were built and reasoned about but never exercised, what is known about each, and what it would take to settle it.
+Subtitle: The parts of SD Core Solo for Windows that were built and reasoned about but never exercised, what is known about each, and what it would take to settle it.
 
 Everything else in this documentation describes behaviour that was run and
 watched. **This page is the exception, and it exists so that the exception is
@@ -9,17 +9,12 @@ footnotes.**
 Nothing here is known to be broken. Each entry is something that **compiles,
 or exists, or follows from the source, and was never put under load or into
 the condition that would prove it.** Treat them as the list of things to pilot
-before an application depends on them.
+before you depend on them.
 
-> This document is separate so that it can be withheld. It links to nothing
-> outside the administrator set. Where a page in another set is worth naming,
-> it is named in words.
-
-**Why it is in the administrator set.** A reference page that keeps saying
-*"this part was not tested"* teaches an application programmer to distrust the
-whole book. An administrator deciding what to put into production needs
-exactly that information. So it is gathered here, and the user-facing pages
-state what SD does without qualifying every other paragraph.
+**Two kinds of entry.** The first three sections are about SD's runtime —
+locks, sockets, real data — which Solo shares with the multiuser SD Core for
+Windows; they were established there, and Solo has not repeated them. The rest
+are about Solo itself: its installer, its password, and the way it is reached.
 
 ## How to read an entry
 
@@ -28,21 +23,6 @@ state what SD does without qualifying every other paragraph.
 | **Known** | what was actually run and observed |
 | **Not known** | the specific gap — usually narrower than the heading suggests |
 | **To settle it** | what would have to be done |
-
-## Sessions and terminals
-
-### Interactive SD over ssh, at a real terminal
-
-**Known.** An ssh session lands inside SD, and SD's terminal layer was watched
-driving a real Windows console.
-
-**Not known.** Those two at once. Nobody has run an interactive session at a
-terminal *reached over ssh*, where the pseudo-terminal belongs to the ssh
-server rather than to the Windows console host. Screen handling, cursor
-positioning and the editing keys all go through that layer.
-
-**To settle it.** One interactive session from a second machine, driving a
-full-screen operation and the arrow keys.
 
 ## Locking and contention
 
@@ -108,20 +88,129 @@ ever sent. No UDP or ICMP socket has been opened.
 
 **To settle it.** A datagram to a listener and back.
 
+## Installing and upgrading
+
+### An upgrade over an existing installation
+
+**Known.** A new installation has been run from scratch many times, each on a
+computer with no `SDCoreSolo` folder.
+
+**Not known.** **The upgrade path has not been exercised.** The installer's
+tests always uninstall and then install afresh, so an installation over an
+existing `SDCoreSolo` has not been run start to finish. What an upgrade
+replaces and keeps is described on
+[Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) from the
+installer's own rules, not from having watched it.
+
+**To settle it.** Install one release, use it, then install the next over it
+and check the account, the passwords and the data.
+
+### Installing from a USB stick with no network
+
+**Known.** The installer needs nothing from the internet: the OpenSSH server
+and Python are carried beside it, and its own steps use no network.
+
+**Not known.** **A quiet install from a stick, on a computer with its network
+unplugged, has not been run**, and neither has each of the two packages'
+installs offline. What the OpenSSH package leaves behind — its firewall rule,
+the ssh server's start-up type, its configuration before the first start — is
+read by the installer's ssh steps but was not measured.
+
+**To settle it.** Install from a stick on a computer with the network
+unplugged, and read `install-summary.log`.
+
+### The installer is not signed
+
+**Known.** The installer carries no code-signing certificate.
+
+**Not known.** **What Windows does with it has not been measured.** A copy
+downloaded from the internet, and every file unpacked from a downloaded zip by
+Explorer, carries the *"downloaded from the internet"* mark, so SmartScreen may
+warn before it runs — from a USB stick too.
+
+**To settle it.** Download the zip and run the installer on a computer that has
+not seen it. A code-signing certificate is the fix; the free alternative is to
+tell the user to choose *More info, Run anyway*.
+
+### A tree moved to another Windows user or computer
+
+**Known.** The `SDCoreSolo` folder holds no path, so it can be copied, and a
+damaged kept copy of the account password is refused.
+
+**Not known.** **A tree actually moved to another Windows user, or to another
+computer, has not been run.** The kept copy is protected for one Windows user,
+so it will not open for another, and the damaged-copy test stands in for that
+case rather than being it. The startup task, the firewall rules, the ssh
+setting and the PATH entry are the installer's and do not move.
+
+**To settle it.** Copy a tree to another user and to another computer, and sign
+in with the account password.
+
+## The password and how SD is reached
+
+### The password prompt at a real console
+
+**Known.** A session asks for the account password and refuses a wrong one — on
+input that is piped in, one try; the kept copy lets `sd <command>` run.
+
+**Not known.** Three things at a real terminal, by hand: **the three tries** at
+`Password:` before the session ends; **a command line refused** when the kept
+copy has been moved aside; and **a restart starting SD with nobody signed in**.
+
+**To settle it.** Try each at the keyboard.
+
+### ssh at a real terminal, and its password prompt
+
+**Known.** An ssh session lands inside SD, and SD's terminal layer was watched
+driving a real Windows console.
+
+**Not known.** Those two at once, and the password prompt on top of them.
+Nobody has run an interactive session at a terminal *reached over ssh* and
+been asked for the account password there, where the pseudo-terminal belongs
+to the ssh server rather than to the Windows console host. Screen handling,
+cursor positioning and the editing keys all go through that layer.
+
+**To settle it.** One interactive session from a second computer: the password
+prompt, then a full-screen operation and the arrow keys.
+
+### A domain user in the ssh setting
+
+**Known.** The installer writes `Match User` with the lower-case name of a
+local user.
+
+**Not known.** **Whether the ssh server matches a *domain* user by
+`name@domain`, the form the installer writes for one.**
+
+**To settle it.** On a domain-joined computer, sign in over ssh and check that
+you land in SD.
+
+### The first password on a computer installed from a control file
+
+**Known.** A computer installed from a control file has no account password
+until the user sets one at the keyboard, and the server's global password is
+accepted meanwhile.
+
+**Not known.** The prompt's retries and refusals, the refusal a first-password
+request gets over ssh, and what the API does before a first password has been
+set.
+
+**To settle it.** Install from a control file and try each.
+
 ## Scheduled tasks
 
-### Task Scheduler with an account that `create.account` made
+### A task that does not store your password
 
-**Known.** Scheduled SD jobs work when the task runs as a Windows account you
-already had. That is the case the design was built around.
+**Known.** A scheduled task that runs as you, when you are signed in, runs
+`sd <command>` with the kept copy of the account password. That is the case the
+design was built around.
 
-**Not known.** Accounts that `create.account` creates are **denied interactive
-logon at this machine on purpose**, and whether Task Scheduler will accept one
-of them as the identity a task runs as has never been tried. It may refuse the
-credential outright.
+**Not known.** **A task set to *Run whether user is logged on or not* with *Do
+not store password* ticked.** Windows signs such a task in without your
+password, and the kept copy is protected by it, so it may not open. The
+question is whether a task that stores no password can open a copy protected
+for your Windows user. See [Scheduled jobs](04-scheduled-jobs.html).
 
-**To settle it.** Create an account, point a scheduled task at it, and see
-whether the task page accepts it.
+**To settle it.** Create such a task and see whether the command runs.
 
 ## SD BASIC statements that compile but were never run
 
@@ -158,6 +247,5 @@ This page is only about what nobody has watched happen.
 [Sessions and Locks](06a-sessions-and-locks.html) covers the locking model that
 two of the entries above qualify.
 [Scheduled jobs](04-scheduled-jobs.html) covers the Task Scheduler entry.
-[System limits](16a-system-limits.html) states which of its figures come
-from the source and which from a running system, and is the other page in this
-set that distinguishes the two.
+[System limits](16a-system-limits.html) states which of its figures come from
+the source.

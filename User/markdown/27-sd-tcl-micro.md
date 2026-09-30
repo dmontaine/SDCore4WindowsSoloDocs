@@ -77,16 +77,15 @@ commands, and the two worth knowing on the first day are:
 | `> help keybindings` | every key, including the ones not listed above |
 | `> set` *option* *value* | change a setting for this session |
 
-## Saving works for an ordinary account
+## Saving works
 
-**An earlier build failed here and it is fixed.** Saving used to fail with
-`Permission denied. Save with sudo not supported on Windows` unless the session
-was elevated, because SD pointed micro's configuration directory at a folder
-under `C:\Program Files`, which micro has to write to and an ordinary account
-may not. `micro`'s configuration directory is now per-user — resolved at
+**An earlier multiuser build failed here and it is fixed.** Saving used to fail
+with `Permission denied. Save with sudo not supported on Windows` unless the
+session was elevated, because SD pointed micro's configuration directory at a
+folder under `C:\Program Files`, which micro has to write to and an ordinary
+account may not. `micro`'s configuration directory is now per-user — resolved at
 start by `micro-home.ps1` (`~/.micro`, or a fallback under local application
-data) — so every account, elevated or not, can write it. Saving gives no
-message; it just works.
+data) — so it is always writable. Saving gives no message; it just works.
 
 ## Highlighting SD BASIC
 
@@ -140,10 +139,10 @@ none is mangled. The full rules are on
 
 ## Who has these verbs
 
-**Every account has `micro`, `edit` and `ed`.** Whether `micro` and `edit`
-actually run is a separate `os.users` question — see [SD TCL - The edit
-Screen Editor](26-sd-tcl-edit.html#one-gate-and-it-is-separate-from-the-verb);
-`ed` needs nothing more than the verb.
+**Your account has `micro`, `edit` and `ed`.** All three run with nothing to
+unlock — see [SD TCL - The edit Screen
+Editor](26-sd-tcl-edit.html#nothing-to-unlock-and-one-condition); `ed` is the
+one that also works with no terminal.
 
 ## See also
 

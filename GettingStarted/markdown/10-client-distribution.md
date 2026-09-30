@@ -47,7 +47,10 @@ Under `%USERPROFILE%\SDCoreSolo`:
 | `usr\clients\client32\` | `qmclilib.dll`, `qmclient.dll`, and their import libraries |
 | `usr\bin\` | **both** DLL pairs again, beside `sd.exe`. That folder is on your PATH, so it is where a 32-bit utility finds its client at run time |
 
-**The C headers are not installed.** Take them from the source repository.
+**The C header is installed, but not beside the DLLs**: `sdclilib.h` is in
+`%USERPROFILE%\SDCoreSolo\sdsys\syscom`, with the Gambas and PureBasic bindings,
+`sdclient.bas` and `sdclient.pb`. The other language bindings are in the
+source repository.
 
 ## The one file no installer can update
 

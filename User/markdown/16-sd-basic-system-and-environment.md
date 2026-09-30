@@ -62,11 +62,11 @@ Windows**; it is the key this port sets deliberately for that purpose.
 
 ### Paths, and they are not all in the same form
 
-| Key | | Value |
+| Key | | An example value |
 |---|---|---|
-| `32` | the `sdsys` directory | `C:\ProgramData\SD\sdsys` |
-| `38` | the temporary directory | `/cygdrive/c/WINDOWS/TEMP` |
-| `1011` | the configuration file | `C:/ProgramData/SD/sd.conf` |
+| `32` | the `sdsys` directory | `C:\Users\you\SDCoreSolo\sdsys` |
+| `38` | the temporary directory | `/cygdrive/c/Users/you/AppData/Local/Temp`, from `TMP` |
+| `1011` | the configuration file | `C:/Users/you/SDCoreSolo/sd.conf` |
 | `1024` | the directory SD was started in | `/cygdrive/c/Users/dmont/OneDrive/Documents` |
 
 **Three different spellings of a Windows PATH come out of one function.** A

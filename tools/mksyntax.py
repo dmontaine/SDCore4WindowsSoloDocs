@@ -315,14 +315,9 @@ TECH_HEAD = u"""Title: SD Basic - Restricted Commands
 Subtitle: The statements and functions an ordinary program cannot compile, and what the compiler says when it tries.
 
 Nothing on this page is available to an application: every name here needs a
-program compiled with `$internal`, which in turn needs an administrator in the
-`SDSYS` account. They are listed because they exist, because they appear in
-SD's own source, and because the errors they produce name something other than
-the real cause.
-
-> This document is separate so that it can be withheld. It links to nothing
-> outside the administrator set. Where a page in another set is worth naming,
-> it is named in words.
+program compiled with `$internal`, which is reserved to SD's own setup steps.
+They are listed because they exist, because they appear in SD's own source, and
+because the errors they produce name something other than the real cause.
 
 *Italics* mark something you supply, **bold** a word typed as it stands, and
 braces an optional part.
@@ -357,9 +352,8 @@ itself administrator rights. That was demonstrated, not theorised.
 TECH_TAIL = u"""
 ## See also
 
-[Operating System Access](03-operating-system-access.html) covers the `sh` and
-`!` verbs, which are the other thing an ordinary account cannot reach.
-[Encryption and the SDEXT interface](04-sd-encryption.html) explains why
+*Operating System Access* in the Getting Started set covers the `sh` and `!`
+verbs. *Encryption and the SDEXT interface*, in the same set, explains why
 `sdext` is on this page and what it costs an application.
 
 The User set's *SD Basic - Syntax* card carries everything an application may

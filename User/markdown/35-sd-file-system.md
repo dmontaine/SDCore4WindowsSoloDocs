@@ -13,7 +13,7 @@ record. The record id is the file name.
 
 | | |
 |---|---|
-| On disk | `C:\ProgramData\SD\user_accounts\<account>\<filename>\` |
+| On disk | `%USERPROFILE%\SDCoreSolo\user_accounts\sduser\<filename>\` |
 | Record id | the file name |
 | Readable by | any Windows program (Notepad, Excel, etc.) |
 | Record ids | matched case insensitively |
@@ -46,9 +46,9 @@ records that hash to it. `analyse.file` reports the structure of a real file:
 
 ```
 :analyse.file zzauditf
-Account           : /cygdrive/c/ProgramData/SD/user_accounts/don
+Account           : /cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser
 File name         : zzauditf
-Path name         : /cygdrive/c/ProgramData/SD/user_accounts/don/ZZAUDITF
+Path name         : /cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser/ZZAUDITF
 Type              : Dynamic, version 2
 Group size        : 2 (2048 bytes)
 Large record size : 1638

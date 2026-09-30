@@ -114,7 +114,6 @@ Edit that, then compile it back in. `-x` is the safe form while you are
 experimenting, because it refuses to overwrite a definition that already
 exists.
 
-The compiled definitions live under `C:\ProgramData\SD\sdsys\terminfo`, in
-single-letter directories by first letter. Writing there needs administrator
-rights, so run `sdtic` from an elevated prompt when you are adding a definition
-for the machine.
+The compiled definitions live under `%USERPROFILE%\SDCoreSolo\sdsys\terminfo`,
+in single-letter directories by first letter. It is in your own profile, so
+writing there needs no elevation.

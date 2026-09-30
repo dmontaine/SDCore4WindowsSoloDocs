@@ -43,11 +43,9 @@ any `PY_` function, and the decision stands for the rest of the session:
 | `-12042` | SD could not determine the permission at all (a damaged or unreadable `os.users` record) - one line is written to the error log saying which |
 | `-12040` | the session **is** permitted, but the helper itself could not be started or has died - typically no usable Python on the machine |
 
-SDSYS always has the permission, the same as it always has `SH` and
-`OS.EXECUTE`. An ordinary account needs the grant an administrator gives
-with `os.users` field 2, the same one that governs the shell - see the
-Administrator set's *Operating System Access* chapter for how that grant is
-made and read.
+On Solo the permission is always given: `SH` and `OS.EXECUTE` are open to the
+one account, so a session normally sees the first row. `-12041` and `-12042`
+remain in the list because the check is still made.
 
 **This gate is Windows-specific and does not carry over to SD Core for
 Linux.** Confirmed against their source, not assumed: Linux's Python

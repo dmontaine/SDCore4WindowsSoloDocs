@@ -89,18 +89,18 @@ the command line that started the program: `RUN BP ZZMATH`.
 
 | | Value |
 |---|---|
-| `@who` | `DON` — **upper case** |
-| `@logname`, `@user` | `don` — **lower case** |
-| `@path` | `/cygdrive/c/ProgramData/SD/user_accounts/don` |
-| `@sdsys` | `C:\ProgramData\SD\sdsys` |
+| `@who`, `@logname`, `@user` | `sduser` — every session on Solo is the one account |
+| `@path` | `/cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser` |
+| `@sdsys` | `C:\Users\you\SDCoreSolo\sdsys` |
 | `@user.no` | `67`, the same as `system(18)` |
 | `@tty` | **empty in a piped session** |
 | `@system.return.code` | `1` |
 | `@user.return.code` | `0` |
 | `@crtwide` / `@crthigh` | `200` / `9999` — whatever `TERM` last set |
 
-**`@who` and `@logname` differ in case for the same account.** Compare them
-with `upcase()` on both sides or the test fails on a machine where it worked.
+**On the multiuser SD Core for Windows `@who` and `@logname` differ in case for
+the same account**, so a program shared between the two should compare them with
+`upcase()` on both sides.
 
 `set.exit.status` sets what SD returns to the operating system when the session
 ends.
@@ -111,21 +111,14 @@ ends.
 os.execute command {capturing variable}
 ```
 
-**It is gated per account, and a refusal aborts the program rather than
-setting a status.** In an ordinary account:
+**On Solo it is always allowed.** SD runs as your Windows user, and the
+operating system is yours already, so there is no permission to grant and no
+refusal to handle. See *Operating system access* in the GettingStarted set.
 
-```
-don is not permitted to use OS.EXECUTE at line 10 of .../BP.OUT/ZZMATH
-```
-
-The program stops there. There is no `else`, no `on error` and no status to
-test, so **a program that may run in an account without the right must not
-reach the statement at all**.
-
-Permission is field 2 of the account's record in the system `os.users` file —
-not a VOC entry and not a Windows privilege. An administrator's session passes
-regardless. Ask your administrator to grant it; there is nothing a program can
-do about it.
+**The multiuser SD Core for Windows gates it per account, and a refusal aborts
+the program rather than setting a status.** A program written for that product
+should not reach the statement in an account without the right, because there
+is no `else`, no `on error` and no status to test.
 
 ## LOGMSG
 
@@ -171,8 +164,7 @@ Internal-only: `kernel()` — and therefore the Windows path conversion —
 `ospath()`, `option()`, `pterm()`, `sdext()`, `testlock()` and `getlocks()`.
 The compiler's list is longer than that; those seven are the ones this page
 put in front of it. They are reachable only from a program compiled
-with `$internal`, which additionally requires an administrator in the `SDSYS`
-account.
+with `$internal`, which is reserved to SD's own setup steps.
 
 **And some statements are restricted the same way.** These are
 *"Unrecognised statement"* in an ordinary account: `set.modes`, `reset.modes`,

@@ -12,12 +12,10 @@ here in lower case, which is what this port uses on disk. In the tables,
 *italics* mark something you supply and **bold** marks a word typed as it
 stands; braces mark an optional part.
 
-> **Every record on this page was read from a stock account VOC.** The
-> records were written by `CREATE.ACCOUNT`, which copies them from
-> `newvoc` — not `voc_template`, which is SDSYS's own, larger VOC and
-> what the counts below are taken from. Every ordinary account gets the
-> same set; there is no smaller or larger starting VOC to choose between
-> any more.
+> **The records on this page were read from a stock account VOC on the
+> multiuser SD Core for Windows.** On Solo the installer's account step copies
+> the whole of the shipped `newvoc` into the account's VOC, so the shapes are the
+> same; **the counts below are Solo's own**, taken from the shipped `newvoc`.
 
 ## The ten record types
 
@@ -44,27 +42,30 @@ load-bearing and the remaining thirty are not.**
 supported"* rather than being dispatched, because the record itself is
 valid PROC and it is the interpreter that is gone.
 
-### What SDSYS's own VOC holds
+### What the shipped VOC holds
 
-Counted directly from `voc_template` in the system directory — SDSYS's own
-VOC, 431 records:
+Counted directly from `newvoc` in the system directory — the VOC a new account
+starts with, 416 records:
 
 | Type | Count |
 |---|---|
-| `V` | 144 |
-| `K` | 248 |
-| `F` | 16 |
+| `V` | 139 |
+| `K` | 249 |
+| `F` | 8 |
 | `R` | 10 |
-| `PA` | 4 |
+| `PA` | 1 |
 | `PH` | 2 |
 | `S` | 2 |
 | `Q` | 2 |
 | `X` | 3 |
 
-**An ordinary account's `newvoc` holds 398** — the same shape of table,
-smaller only because it lacks SDSYS's own administration verbs and a few
-system file pointers; it is not a *different kind* of VOC, and every
-ordinary account's copy is identical.
+**The four keyword-verbs are among the 249 `K` records.** They are counted as
+keywords here and are also verbs, so Solo has 139 + 4 = **143 verbs**.
+
+**Your account's VOC starts as a copy of exactly this**, and what you add to it
+is yours. The account and grant commands are not in it — see
+*Differences from multiuser SD Core for Windows W1.1-1* in the GettingStarted
+set.
 
 > **`edit` used to be exactly this kind of trap** — a record present in the
 > VOC whose old type field read `Verb - Full screen editor` rather than `V`,
@@ -93,27 +94,27 @@ dictionary.
 | `2` | data path — a name in the account directory, or `@SDSYS/`*name* for a system file |
 | `3` | dictionary path, or empty if none |
 
-### The eight pointers into @SDSYS
+### The pointers into @SDSYS
 
-A stock account VOC carries eight F-records whose data path begins
-`@SDSYS/`. They point at files in the system directory that every account
-needs:
+Seven of the shipped `F` records have a data path that begins `@SDSYS/`. They
+point at files in the system directory that the account needs; the eighth,
+`$acc`, is the account itself:
 
-| VOC id | Field 2 |
-|---|---|
-| `voc` | `@SDSYS/voc.dic` (field 3 — the dictionary) |
-| `newvoc` | `@SDSYS/newvoc` |
-| `messages` | `@SDSYS/messages` |
-| `syscom` | `@SDSYS/syscom` |
-| `$MAP` | `@SDSYS/...` |
-| `dict.dic` | `@SDSYS/...` |
-| `sd.voclib` | `@SDSYS/...` |
-| `$ipc` | (system IPC file) |
+| VOC id | Field 2 | Field 3 |
+|---|---|---|
+| `voc` | `voc` | `@SDSYS/voc.dic` — the dictionary |
+| `newvoc` | `@SDSYS/newvoc` | `@SDSYS/voc.dic` |
+| `syscom` | `@SDSYS/syscom` | |
+| `$map` | `@SDSYS/$map` | `@SDSYS/$map.dic` |
+| `dict.dict` | `@SDSYS/dict.dic` | `@SDSYS/dict.dic` |
+| `sd.voclib` | `@SDSYS/sd.voclib` | `@SDSYS/voc.dic` |
+| `global.bp.out` | `@SDSYS/global.bp.out` | |
 
-These are **read-only to a network session**. The account-root gate in
-the file engine allows them on read paths but sets `FV_RDONLY` on the
-file variable, so every write path in the engine refuses them. SDSYS is
-exempt; an ordinary account cannot write these files.
+These are **read-only to a network session**. The account-root gate in the
+file engine allows them on read paths but sets `FV_RDONLY` on the file
+variable, so every write path in the engine refuses them. `global.bp.out` is
+the server's file on a managed computer — see *Managed mode* in the
+GettingStarted set.
 
 ### The $ACC record
 
@@ -141,22 +142,21 @@ target, and the remaining fields carry options.
 
 | Field 2 | Field 3 | What it does |
 |---|---|---|
-| `CA` | *catalogue name* | a catalogued program — 99 of the shipped verbs |
+| `CA` | *catalogue name* | a catalogued program — 95 of the shipped verbs |
 | `IN` | *number* | internal verb *n*, handled by the command processor itself — 42 verbs |
 | `OS` | *text* | an operating-system command — `sh` and `!`, and nothing else |
 | `CS` | *path* | a locally catalogued function |
 
-Those four rows account for all but four of SDSYS's 144 `V` records. The
-remaining four are the keyword records described above — `break`, `count`,
-`display` and `off` — where field 2 holds a keyword number rather than a
+The first three rows account for all 139 shipped `V` records; none is `CS`.
+The four keyword records described above — `break`, `count`, `display` and
+`off` — are `K` records in which field 2 holds a keyword number rather than a
 dispatch type, and it is field 3 that marks the record as a verb.
 
 Field 4 carries dispatch options and **field 5 names a security subroutine**.
 If field 5 is present, that subroutine is called before the verb runs and
-can refuse it. **None of the shipped verbs uses field 5** — what SDSYS alone
-can do is withheld by giving or withholding the VOC record itself, not by a
-security subroutine — but the mechanism is there for a site that wants a
-verb guarded rather than absent.
+can refuse it. **None of the shipped verbs uses field 5** — what needs `ADMIN`
+is checked by the verb's own program, not by a security subroutine — but the
+mechanism is there for a site that wants a verb guarded rather than absent.
 
 ### Internal verbs
 
@@ -263,7 +263,7 @@ the words the query processor — `LIST`, `SELECT`, `SORT` and the rest —
 recognises inside a command line. `all` is `K` with number 5; `after` is
 `K` with a number; `and` is `K`.
 
-The 248 K-records in a stock VOC are the query processor's vocabulary,
+The 249 K-records in a stock VOC are the query processor's vocabulary,
 and they are what makes a sentence like `list stock with qty > 100 by
 supplier` parse.
 

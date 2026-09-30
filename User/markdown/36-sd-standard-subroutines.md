@@ -106,22 +106,16 @@ internal routines and the one most likely to change.
 These exist for SD's own use. They are catalogued because SD's programs are
 ordinary compiled programs and reach them the same way anything else does.
 
-**Calling them from an application is not supported.** Several refuse a session
-that is not elevated or not administrative, and some change the state of the
-machine.
+**Calling them from an application is not supported.** Some check the
+administrator password, and some change the state of the machine.
 
 | | |
 |---|---|
 | `!ATVAR` `!SETVAR` | read and set the `@` variables |
 | `!GETPU` `!SETPU` | read and set per-user values |
-| `!CREATE_USER` `!DELETE_USER` `!SET_PASSWD` | the Windows account half of `create.account`, `delete.account` and `modify.password` |
 | `!CRED_SET` `!CRED_VERIFY` | write and check a credential in the credential store |
 | `!SD_GET_SALT` `!SD_KEY_FROM_PW` | the key derivation behind that credential |
-| `!EUID_SET` `!EUID_RESTORE` | the POSIX effective identity calls |
-| `!ELEVATE` | starts, uses and stops the elevated helper |
-| `!PS_SCRIPT` `!PS_SCRIPT_OUT` | run a PowerShell script through that helper, without and with its output |
-| `!IS_USER` `!IS_GROUP` `!IS_GRP_MEMBER` `!IS_SD_USER` `!OS_GROUP` | Windows account and group questions |
-| `!PROFILE_DIR` | `profile_dir(username)` — where a Windows profile lives |
+| `!PS_SCRIPT` `!PS_SCRIPTO` | run a PowerShell script, without and with its output |
 | `!SDCLIENT` | the server side of the client API |
 
 ## What is not here

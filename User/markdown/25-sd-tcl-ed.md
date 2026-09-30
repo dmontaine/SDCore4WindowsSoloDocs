@@ -368,10 +368,9 @@ is reported as line 2.
 
 ## Who has it
 
-**Every account has `ed`, `edit` and `micro` now.** `edit` and `micro` still
-need `os.users` field 2 to actually run — see [The edit Screen
-Editor](26-sd-tcl-edit.html) — but `ed` needs nothing beyond having the
-verb, which every account does.
+**Your account has `ed`, `edit` and `micro`.** All three run with nothing to
+unlock — see [The edit Screen Editor](26-sd-tcl-edit.html) — and `ed` is the one
+that also works with no terminal.
 
 ## See also
 

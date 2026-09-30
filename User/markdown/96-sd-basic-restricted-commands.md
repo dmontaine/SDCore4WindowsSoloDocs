@@ -2,14 +2,9 @@ Title: SD Basic - Restricted Commands
 Subtitle: The statements and functions an ordinary program cannot compile, and what the compiler says when it tries.
 
 Nothing on this page is available to an application: every name here needs a
-program compiled with `$internal`, which in turn needs an administrator in the
-`SDSYS` account. They are listed because they exist, because they appear in
-SD's own source, and because the errors they produce name something other than
-the real cause.
-
-> This document is separate so that it can be withheld. It links to nothing
-> outside the administrator set. Where a page in another set is worth naming,
-> it is named in words.
+program compiled with `$internal`, which is reserved to SD's own setup steps.
+They are listed because they exist, because they appear in SD's own source, and
+because the errors they produce name something other than the real cause.
 
 *Italics* mark something you supply, **bold** a word typed as it stands, and
 braces an optional part.

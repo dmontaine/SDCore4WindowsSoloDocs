@@ -5,9 +5,11 @@ The SDClient API lets an external application connect to SD, open
 files, read and write records, execute commands, call subroutines,
 and manage select lists — all through a single shared library.
 
-**The API is a normal way for any account to use SD**, not a facility reserved
-for developers and administrators. A person running a custom GUI program that
-talks to SD needs API access and may need nothing else.
+**The API is a normal way to use SD**, not a facility reserved for developers
+and administrators. A person running a custom GUI program that talks to SD needs
+the API switched on and the account password, and may need nothing else. On
+Solo the API is on only if it was chosen at installation, or if the computer is
+managed — see *API access* in the GettingStarted set.
 
 ## The library
 
@@ -33,22 +35,21 @@ both names are built rather than one being a copy of the other.
 ### Where they are, and how to use them
 
 ```
-C:\Program Files\SD\usr\clients\client64\     sdclilib.dll  sdclient.dll
-C:\Program Files\SD\usr\clients\client32\     qmclilib.dll  qmclient.dll
+%USERPROFILE%\SDCoreSolo\usr\clients\client64\     sdclilib.dll  sdclient.dll
+%USERPROFILE%\SDCoreSolo\usr\clients\client32\     qmclilib.dll  qmclient.dll
 ```
 
 Copy the DLL your application needs either **beside the application's own
 executable** or into `C:\Windows\System32`. Those are the two supported routes
 and either works.
 
-> **`C:\Program Files\SD\usr\bin` is normally on the system PATH**, because the
-> installer offers to put it there — the *"Add SD Core to the system PATH"*
-> task, which is ticked unless you untick it, and it is what makes `sd` run from
-> any directory. **All four client DLLs live in that directory too**, so an
-> application may find one without your having copied anything. That is
-> convenient, and it is not the same as choosing which copy it loads: PATH order
-> decides, and a stale copy earlier on the PATH wins. **Put the DLL where your
-> application will find it deliberately.**
+> **`%USERPROFILE%\SDCoreSolo\usr\bin` is on your PATH**, because the installer
+> adds it every time it runs — it is what makes `sd` run from any directory.
+> **All four client DLLs live in that directory too**, so an application may find
+> one without your having copied anything. That is convenient, and it is not the
+> same as choosing which copy it loads: PATH order decides, and a stale copy
+> earlier on the PATH wins. **Put the DLL where your application will find it
+> deliberately.**
 
 `usr\clients` holds the DLLs **and one import library for each** — `.dll.a`
 files, GNU-style, for linking rather than loading:
@@ -59,59 +60,40 @@ client32\     libqmclilib.dll.a  libqmclient.dll.a
 ```
 
 They sit beside the DLLs so that everything a client *build* needs is in one
-place. **No header travels with them**: `sdclilib.h` reaches every installation
-at `C:\ProgramData\SD\sdsys\syscom\sdclilib.h`.
+place — apart from the header, which is elsewhere: **`sdclilib.h` is at
+`%USERPROFILE%\SDCoreSolo\sdsys\syscom\sdclilib.h`**, with the Gambas and
+PureBasic bindings, `sdclient.bas` and `sdclient.pb`, beside it.
 
-**All four DLLs also appear in `C:\Program Files\SD\usr\bin`, beside `sd.exe`**,
-and each copy is byte-identical to the one under `usr\clients`. The 32-bit pair
-is there because `usr\bin` is on the PATH, and that is where a **32-bit
-administrative utility** finds its client. Those copies are the server's own and
-are not the ones you should be taking — with one exception, which is the next
-section. **The import libraries are deliberately not in `usr\bin`**: a linker
-input has no business in a directory that goes on the PATH.
+**All four DLLs also appear in `%USERPROFILE%\SDCoreSolo\usr\bin`, beside
+`sd.exe`.** The 32-bit pair is there because `usr\bin` is on the PATH, and that
+is where a **32-bit utility** finds its client. Those copies are SD's own and
+are not the ones you should be taking. **The import libraries are deliberately
+not in `usr\bin`**: a linker input has no business in a directory that goes on
+the PATH.
 
 ## Connection
 
 | | |
 |---|---|
-| `SDConnect(host, port, user, pass, account)` | over the network, to port **4243** |
-| `SDConnectLocal(account)` | on the same machine. Sends no password and never did |
+| `SDConnect(host, port, user, pass, account)` | over the network, to port **4243**. The user and the account are both `sduser` |
+| `SDConnectLocal(account)` | **disabled on Solo.** It signed in with no password, which Solo does not allow: it answers *SDConnectLocal is not available in SD Core Solo for Windows - connect with SDConnect and the account password* |
 
 > `SDConnectUDS` (Unix Domain Socket) appears in the header but is not
-> applicable on Windows. The Windows port supports local and TCP
-> connections only.
+> applicable on Windows. The Windows port supports TCP connections only.
 
-### SDConnectLocal has a requirement the other does not
+**To reach SD from a program on the same computer, call `SDConnect` with
+`127.0.0.1`.** The API has to be on; see *API access* in the GettingStarted set.
 
-`SDConnectLocal` starts a session by running `sd.exe`, and **it looks for
-`sd.exe` beside itself** — in the directory the loaded DLL came from, not on
-the PATH.
-
-So a copy of the DLL sitting next to your own application will not make a local
-connection: there is no `sd.exe` there. Two ways round it:
-
-| | |
-|---|---|
-| Load the copy in `usr\bin` | it is beside `sd.exe`, which is why that copy exists |
-| Use `SDConnect` instead | connect to `127.0.0.1` on port 4243 like any other client |
-
-`SDConnectLocal` sends no password at all. It takes the identity of the process
-that called it and checks that account's grants, so the account has to be one
-the calling Windows user may enter.
-
-**The login is SCRAM-SHA-256.** A client that sends a password in
+**The login is SCRAM-SHA-256, inside TLS 1.3.** A client that sends a password in
 clear is refused. The server sets a puzzle only someone who knows the
 password can answer, and the password itself is never sent in any
 form. The server also proves itself to the client — another program
-that grabbed the port before SD started cannot pretend to be SD.
-
-> **Run `modify.password` again for every account that uses the API**
-> after upgrading. The stored credentials changed shape and the old
-> ones cannot be converted — the password was never kept anywhere, by
-> design.
+that grabbed the port before SD started cannot pretend to be SD. The password
+is the account password — on a managed computer, the global password, which
+the SD Core for Linux server uses.
 
 A session is confined to its own account. An API session can open
-everything inside its own account and the shipped SDSYS files every
+everything inside its own account and the shipped SD system files every
 account needs, but cannot open, rename, delete or list anything else.
 
 ## Server status codes
@@ -138,7 +120,7 @@ account needs, but cannot open, rename, delete or list anything else.
 | `SDDisconnectAll()` | none | end all sessions |
 | `SDGetSession()` | Integer | get the current session number |
 | `SDSetSession(session)` | Boolean | switch to a session |
-| `SDLogto(account)` | Boolean | switch to another account |
+| `SDLogto(account)` | Boolean | switch to another account. Solo has only `sduser` |
 
 ### File operations
 
@@ -227,7 +209,9 @@ account needs, but cannot open, rename, delete or list anything else.
 ## Language bindings
 
 The API headers define bindings for four languages. The function
-signatures are identical in meaning; the syntax differs.
+signatures are identical in meaning; the syntax differs. **The installation
+carries the C header and the Gambas and PureBasic bindings**, in
+`sdsys\syscom`; the others are in the source repository.
 
 ### Gambas3
 
@@ -287,10 +271,14 @@ Per-arity `CFUNCTYPE` definitions are provided for `SDCall` and
 
 | | |
 |---|---|
-| `sh` and `OS.EXECUTE` | refused over the API |
 | Open files outside the account | refused (status 3035 — *not permitted*) |
 | Reach the credential file | never, and cannot be added |
-| Enumerate accounts | refused; all three failure cases give the same message |
+| Write `GLOBAL.BP.OUT` | refused, unless the session signed in with the global password |
+
+**It can run `sh` and `OS.EXECUTE`.** An API session is you, on your ordinary
+Windows token, with the rights of a session at the keyboard — see *API access*
+in the GettingStarted set. That is different from the multiuser SD Core for
+Windows, which refuses both over the API.
 
 ## Continued in
 

@@ -192,7 +192,7 @@ On a newly created dynamic file:
 |---|---|---|
 | `0` | is this variable an open file? | `1` |
 | `1` | the VOC name it was opened by | `ZZWORK` |
-| `2` | the path on disk | `/cygdrive/c/ProgramData/SD/user_accounts/don/ZZWORK` |
+| `2` | the path on disk | `/cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser/ZZWORK` |
 | `3` | file type | `3` |
 | `5` | modulus | |
 | `6` | minimum modulus | `1` |
@@ -206,7 +206,7 @@ File types: `1` SH, **`3` DH — an ordinary dynamic file**, `4` directory, `5`
 sequential.
 
 > **The PATH comes back in POSIX form, not as a Windows path** —
-> `/cygdrive/c/ProgramData/...`, not `C:\ProgramData\...`. **Handing that
+> `/cygdrive/c/Users/...`, not `C:\Users\...`. **Handing that
 > string to a Windows program does not work** — Windows reads it as a
 > drive-relative path and either fails silently or reports that the parent
 > directory does not exist. This is not a theoretical caution: it is what
@@ -280,7 +280,7 @@ things about it changed:
 | | |
 |---|---|
 | **VFS** | the virtual file system layer has been **removed from the C entirely**. `fileinfo()` never reports a VFS type, and the type code is gone |
-| **The data tree is private** | `C:\ProgramData\SD` is protected by an access-control list. A file created by SD is reachable through SD, and not by an ordinary Windows user poking at the directory |
+| **The data tree is in your profile** | `%USERPROFILE%\SDCoreSolo` is under your own Windows profile, so it has the access of that profile: your files, readable by you and by anything running as you |
 
 ## See also
 

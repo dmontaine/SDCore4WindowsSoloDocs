@@ -129,27 +129,22 @@ ct voc name
 Displays the record field by field. This is the way to see what a VOC
 entry actually contains without an editor.
 
-## The VOC and account creation
+## The VOC and the account
 
-`CREATE.ACCOUNT` copies the VOC from `NEWVOC` in the system directory —
-**398 records**, counted directly, and identical for every ordinary
-account. SDSYS's own VOC is copied from `voc_template` instead — **431
-records** — which carries the administration verbs `NEWVOC` does not:
-`create.account`, `delete.account`, `modify.account`, `grant`, `revoke`,
-`list.grants`, and the rest of the set the *Administrator* documentation
-covers.
+Solo has one account, and the installer's account step copies the whole of
+`NEWVOC` from the system directory into its VOC — **416 records**, counted
+directly. There is no second, larger VOC.
 
-**What SDSYS alone can do is in the VOC, not in the verb.** An ordinary
-account does not have `create.account` because the VOC record for it is
-not there, not because a security subroutine refuses it. The name is
-simply not recognised. This is the design: what only SDSYS may do is
-withheld by giving or withholding the record, the same mechanism the old
-account tiers used before they were removed.
+**The multiuser account and grant commands are not in it.** `create.account`,
+`delete.account`, `modify.account`, `grant`, `revoke`, `list.grants` and the
+remote-access verbs are absent from Solo's `NEWVOC`, so the name is simply not
+recognised. What needs `ADMIN` is refused by the verb's own program, and is
+described in the GettingStarted set.
 
 ## Case on disk
 
 Since 18 Aug 2026 the VOC ids are stored in lower case — `list`,
-`create.account` and so on. This changes nothing about what you type —
+`create.file` and so on. This changes nothing about what you type —
 SD tries a name as typed, then lower, then upper. What it changes is what
 SD prints back: `CT VOC LIST` answers `VOC list`.
 
@@ -176,7 +171,7 @@ and there is no shipped example to look at.
 above — present but undispatchable, its type field reading
 `Verb - Full screen editor` rather than `V`. That was reversed 26 Aug
 2026: it is a real `V` record now, a working full-screen editor. See [SD
-VOC - Structure and Usage](32-sd-voc-structure-and-usage.html#what-sdsyss-own-voc-holds).
+VOC - Structure and Usage](32-sd-voc-structure-and-usage.html#what-the-shipped-voc-holds).
 
 ## See also
 

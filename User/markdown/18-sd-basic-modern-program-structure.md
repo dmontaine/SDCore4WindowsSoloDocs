@@ -76,7 +76,7 @@ and then fails at run time:
 
 ```
 000002B3: Unable to load 'TALLY' object code at line 62 of
-/cygdrive/c/ProgramData/SD/user_accounts/don/BP.OUT/zzobj
+/cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser/BP.OUT/zzobj
 ```
 
 **A local function must be declared before it is used.**
@@ -148,7 +148,7 @@ end
 `public function` declare methods; `get` and `set` declare a property.
 
 A class is catalogued and instantiated like any other program, and **a private
-catalogue is enough** — nothing here needs an elevated session:
+catalogue is enough** — nothing here needs `ADMIN`:
 
 ```
 :basic bp zzcls

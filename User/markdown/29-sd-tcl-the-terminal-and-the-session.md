@@ -176,8 +176,8 @@ whichever reads better; nothing distinguishes them.
 > sent down one at all.** In a piped session the input stream *is* the script,
 > so discarding unread input discards the commands that have not run yet —
 > including the `off` that would have ended the session. **A run that did this
-> hung, was killed, and left a session in the user table that only an elevated
-> `sd -cleanup` could clear.** Both verbs are for a person at a terminal.
+> hung, was killed, and left a session in the user table that had to be cleared
+> with `sd -cleanup`.** Both verbs are for a person at a terminal.
 
 ## The inactivity timer
 
@@ -289,10 +289,9 @@ conversion code other than `D` is set, `display` names that too.
 
 **`date.format` with no keyword prints nothing** — like `pterm`, it wants one.
 
-**Setting the machine's date is a different thing entirely** — it is an
-administrator verb, it changes the clock for the whole installation rather than
-for your session, and it is in the **administrator documentation** under
-*Accounts and Security*.
+**Changing the date SD reports is a different thing entirely** — `set.date`
+needs `ADMIN`, and it sets the date for your session only, not the computer's
+clock. It is in the GettingStarted set, under *Administrator commands*.
 
 ## Currency and separators: `nls`
 
@@ -350,7 +349,7 @@ is a stamped, attributed entry in the system error log:
 
 **The user number, the process id and the account name are added for you**, so
 a message does not need to say who wrote it. The log is
-`C:\ProgramData\SD\sdsys\errlog`, shared by every session, which makes `logmsg`
+`%USERPROFILE%\SDCoreSolo\sdsys\errlog`, shared by every session, which makes `logmsg`
 the right way for a phantom or a scheduled job to report something a person will
 read later — there is no terminal to print to and no transcript kept.
 

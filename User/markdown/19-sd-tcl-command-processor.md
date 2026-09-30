@@ -118,18 +118,18 @@ Field 2 of a verb record says how to run it, and field 3 says what to run:
 
 | | | |
 |---|---|---|
-| `CA` | *name* | a catalogued program — 97 of the shipped verbs |
-| `IN` | *n* | internal verb *n*, handled by the command processor itself — 45 |
+| `CA` | *name* | a catalogued program — 95 of the shipped verbs |
+| `IN` | *n* | internal verb *n*, handled by the command processor itself — 42 |
 | `OS` | *text* | an operating-system command — `sh` and `!` |
 | `CS` | *path* | a locally catalogued function |
 
 Field 4 carries dispatch options and **field 5 names a security subroutine**. If
 field 5 is present, that subroutine is called before the verb runs and can
 refuse it, in which case you are told the command is restricted. None of the
-shipped verbs uses field 5 — **every ordinary account has the whole VOC now,
-and what SDSYS alone can do is withheld by giving or withholding the VOC
-record itself**, not by a security subroutine — but the mechanism is there
-for a site that wants a verb guarded rather than absent.
+shipped verbs uses field 5 — **your account has the whole of `newvoc`**, and
+what needs `ADMIN` is checked by the verb's own program, not by a security
+subroutine — but the mechanism is there for a site that wants a verb guarded
+rather than absent.
 
 There are **41 internal verbs**, numbered, and the numbers are positional in the
 command processor's dispatch list. Several names share one: `off` and `quit` are

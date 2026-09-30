@@ -5,35 +5,46 @@ SD reads one configuration file at start-up. It sizes the shared memory
 segment, sets the limits every session inherits, and names the directories SD
 writes to.
 
-> This document is separate so that it can be withheld. It links to nothing
-> outside the administrator set. Where a page in another set is worth naming,
-> it is named in words.
-
 SD folds case, so a command may be typed in either case. Commands are shown
 here in lower case.
 
-> Every listing on this page was produced by running it, on SD Core for Windows,
-> from an SDSYS session.
+> **How this page was checked:** the parameter names, counts, defaults and
+> ranges below were read from SD's source (`config.c`, `op_config.c`), which is
+> the same code as the multiuser SD Core for Windows apart from where the
+> folders default to. The `config` listing shows the form the verb prints; it
+> is abbreviated.
 
 ## The file
 
 ```
-C:\ProgramData\SD\sd.conf
+%USERPROFILE%\SDCoreSolo\sd.conf
 ```
 
-The server and the client both read the `SD_CONFIG` environment variable first
-and fall back to that path. The file is installed only if it does not already
-exist and is marked never to uninstall, so edits to it survive an upgrade and
-survive removal of the product.
+**SD finds it beside its own installation**, so nothing needs setting. The
+server and the client both read the `SD_CONFIG` environment variable first and,
+if it is not set, use `sd.conf` in the `SDCoreSolo` folder. The file is
+installed only if it does not already exist and is marked never to uninstall,
+so edits to it survive an upgrade and survive removal of the product.
 
-It is plain text in one section:
+It is plain text in one section. **There is no path in it:** `SDSYS`, `USRDIR`
+and `GRPDIR` default to folders in the installation's own folder, which is why
+a whole `SDCoreSolo` folder can be moved.
 
 ```
 [sd]
-SDSYS=C:\ProgramData\SD\sdsys
 GRPSIZE=2
 NUMUSERS=20
+SORTMEM=4096
+ERRLOG=50
+APILOGIN=1
+APIPORT=4243
+SH=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NoLogo
+SH1=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command
 ```
+
+**`APIPORT` is there only if the API was chosen at installation.** A computer
+installed without it has the same file with no `APIPORT` line, and so no API
+listener. Managed mode always has it.
 
 Lines beginning `#` are comments. The shipped file is heavily commented and
 those comments record why each value was chosen. Read them before changing
@@ -56,7 +67,9 @@ a message naming the parameter.
 
 ## Reading the settings
 
-The `config` verb reports what is in force:
+**The `config` verb reports what is in force, and needs `ADMIN` first** —
+`config gpl` and `config contrib` are the exceptions. See
+[Administrator commands](06-administrator-commands.html).
 
 ```
 :config
@@ -65,8 +78,6 @@ APILOGIN  1
 APIPORT   4243
 CMDSTACK  99
 DEADLOCK  0
-DUMPDIR   C:\ProgramData\SD\sdsys\dumps
-ERRLOG    50 kb
 ...
 YEARBASE  1930
 ```
@@ -79,7 +90,8 @@ accepted in the file and never displayed: `CODEPAGE`, `CREATUSR`, `DEBUG`,
 outside its own account, and the verb will not tell you what it is set to. Read
 it from the file.
 
-The `config()` function reads one parameter from a program:
+The `config()` function reads one parameter from a program, and needs no
+`ADMIN`:
 
 ```
 group.size = config('GRPSIZE')
@@ -147,26 +159,31 @@ reads.
 
 ## Directories
 
-| Parameter | Default on a new install | Effect |
+| Parameter | Default | Effect |
 |---|---|---|
-| `SDSYS` | `C:\ProgramData\SD\sdsys` | The system account. SD does not start if the global catalogue is not found beneath it |
-| `USRDIR` | `C:\ProgramData\SD\user_accounts` | Where `create.account` puts a user account |
-| `GRPDIR` | `C:\ProgramData\SD\group_accounts` | Where `create.account` puts a group account |
-| `DUMPDIR` | `C:\ProgramData\SD\sdsys\dumps` | Where process dumps are written |
-| `TEMPDIR` | `/cygdrive/c/WINDOWS/TEMP` | Temporary files |
-| `SORTWORK` | `/cygdrive/c/WINDOWS/TEMP` | Work files for a sort that does not fit in memory |
+| `SDSYS` | `<installation>\sdsys` | SD's own files. SD does not start if the global catalogue is not found beneath it |
+| `USRDIR` | `<installation>\user_accounts` | The parent of the account folders. Solo's one account is `user_accounts\sduser` |
+| `GRPDIR` | `<installation>\group_accounts` | The parent of group account folders. Solo has none |
+| `DUMPDIR` | empty | Where process dumps are written. Empty means the system directory, `sdsys` |
+| `TEMPDIR` | empty | Temporary files. Empty means the `TMP` environment variable, or `/tmp` if that is not set |
+| `SORTWORK` | empty | Work files for a sort that does not fit in memory. Empty means `TEMPDIR` |
 | `JNLDIR` | empty | Journal directory |
 | `TERMINFO` | empty | An additional terminfo directory. The shipped definitions are found without it |
 
-`DUMPDIR` is set rather than left empty on purpose. A blank value falls back to
-the system directory, which SD users can write to, and a process dump carries
-the whole variable state of the session that wrote it. The installer makes the
-dump directory write-only to SD users, so a dump can be added and nobody else's
-can be listed or read.
+`<installation>` is the `SDCoreSolo` folder, found at run time from where SD's
+programs are.
+
+**A process dump carries the whole variable state of the session that wrote
+it**, passwords a program was holding included. With `DUMPDIR` empty it goes
+into `sdsys`, in your own profile; Windows' protection of that profile is what
+keeps it from other Windows users. A dump is a file you own — treat it as
+sensitive, and point `DUMPDIR` somewhere else if you want it kept apart.
 
 `TEMPDIR` and `SORTWORK` are reported in POSIX form because that is how the
-server's runtime addresses them. `C:\WINDOWS\TEMP` and
-`/cygdrive/c/WINDOWS/TEMP` are the same directory.
+server's runtime addresses them. A Windows path such as
+`/cygdrive/c/Users/you/AppData/Local/Temp` is the same directory as its
+`C:\Users\you\AppData\Local\Temp` spelling. **A directory named here that does
+not exist is ignored**, and the default applies.
 
 ## The API
 
@@ -179,10 +196,9 @@ server's runtime addresses them. `C:\WINDOWS\TEMP` and
 
 Unset is the strict value for `NETDIRS`. With nothing there, an API session can
 open files in the account it is standing in and nothing else. It never grants
-the credential store, the global catalogue, `os.users` or the account register,
-and naming those has no effect. A directory listed here is reachable by every
-API session in every account, so it is a decision about the machine rather than
-about one account.
+the credential store, the global catalogue or the account register, and naming
+those has no effect. A directory listed here is reachable by every API session,
+so it is a decision about the computer.
 
 `SDCLIENT` is not reported by the `config` verb and has no entry in the shipped
 `sd.conf`. It defaults to 0, which permits everything.
@@ -200,7 +216,7 @@ about one account.
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `SORTMEM` | 4096 kb | Above this much data a sort works on disk instead of in memory |
+| `SORTMEM` | 4096 kb | Above this much data a sort works on disk instead of in memory. The shipped `sd.conf` sets 4096; with no line the built-in value is 1024 |
 | `SORTMRG` | 4 | Files merged at once in a disk sort. Range 2 to 10 |
 
 ## Numbers and dates
@@ -228,29 +244,32 @@ about one account.
 | Parameter | Default | Effect |
 |---|---|---|
 | `SH` | PowerShell, interactive | The shell a bare `sh` starts |
-| `SH1` | PowerShell, non-interactive | The shell `sh command` uses |
+| `SH1` | PowerShell, non-interactive | The shell `sh command` uses, and the one SD uses for its own PowerShell scripts |
 
 Both are full paths on a real install:
 
 ```
 SH        C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NoLogo
-SH1       C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -Command
+SH1       C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command
 ```
 
-The difference between them matters. `SH1` carries `-NonInteractive` and `SH`
-does not, so a bare `sh` in a phantom or a scheduled job hands control to a
-shell with nobody at the keyboard. Operating system access has its own page in
-this set.
+The difference between them matters. `SH1` carries `-NonInteractive`, and
+`-ExecutionPolicy Bypass` so the scripts SD installed run on a stock Windows
+whose default policy is Restricted; `SH` carries neither, so a bare `sh` in a
+phantom or a scheduled job hands control to a shell with nobody at the
+keyboard, under your computer's own execution policy. Operating system access
+has its own page in this set — see
+[Operating system access](06b-operating-system-access.html).
 
 ## Parameters that are accepted and do nothing
 
 These are parsed so that an existing `sd.conf` still loads. None of them
-changes SD's behaviour, and none should be offered to a site as a control.
+changes SD's behaviour, and none should be offered as a control.
 
 | Parameter | Why it is inert |
 |---|---|
 | `NETFILES` | SDNet was removed from this port. `netfiles.c` is deleted, a `server;file` VOC reference is refused, and the request that reports open SDNet connections returns an empty list. The value is still stored and still reported, and setting it opens nothing |
-| `CREATUSR` | SD has accounts rather than accounts and users, so `create.account` always creates the operating system account and there is nothing to opt in to. The value is discarded as it is read |
+| `CREATUSR` | Nothing creates operating system accounts from `sd.conf`. The value is discarded as it is read |
 | `CODEPAGE` | Stored, readable and settable. Nothing acts on it |
 | `EXCLREM` | Stored, readable and settable. It described exclusive access to a remote file, and there are no remote files |
 | `RINGWAIT` | Stored, readable and settable. Nothing acts on it |
@@ -260,6 +279,6 @@ changes SD's behaviour, and none should be offered to a site as a control.
 bits died with SDNet, but bit 4 is live and decides whether a `PATH:` VOC
 reference may name a pathname directly.
 
-There is no licence parameter and no licence verb. SD Core for Windows is
+There is no licence parameter and no licence verb. SD Core Solo for Windows is
 GPL v3 and is not licensed per site or per user; `config gpl` displays the
 licence text.

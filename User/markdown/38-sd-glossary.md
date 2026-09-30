@@ -7,15 +7,12 @@ documentation set. Terms are listed in alphabetical order.
 ## A
 
 **Account** — a workspace: a directory containing one or more files, a
-VOC, and its own `bp` source file. An account maps to a Windows group
-(`sdu_<name>` for user accounts, `sdg_<name>` for group accounts).
-Entry to an account is membership of its Windows group.
+VOC, and its own `bp` source file. Solo has one account, `sduser`, in
+`%USERPROFILE%\SDCoreSolo\user_accounts\sduser`.
 
-**Administrator** — SDSYS, the one privileged account. There is no
-tier or keyword that makes any other account an administrator; being a
-Windows administrator, elevated or not, grants nothing. SDSYS is
-reached only by signing in to Windows as the `sdsys` account and
-starting `sd` elevated.
+**Administrator** — a session that has unlocked `ADMIN` with the
+administrator password. Being a Windows administrator, elevated or not, grants
+nothing. There is one account, `sduser`, and no SDSYS sign-in.
 
 **Alternate key index** — a secondary access path to records in a file,
 built from the values in a nominated field. Created with
@@ -104,10 +101,6 @@ possibly in another account. A remote file pointer.
 
 **Group** — (1) a Windows group used for account membership. (2) In a
 dynamic file, the bucket that holds records hashed to the same slot.
-
-**Group account** — a shared workspace with no Windows account and no
-sign-in of its own. Created with `create.account group`. Reached with
-`logto` or through an F-pointer.
 
 ## I
 
@@ -206,10 +199,6 @@ reduced starting set to default to.
 
 **Subvalue mark** — the delimiter (char 252) that separates subvalues
 within a multivalue.
-
-**Suspended** — an account state, not a tier, that denies all entry.
-Reversible with `modify.account <name> unsuspended`. Does not touch the
-VOC or Windows group membership.
 
 ## T
 

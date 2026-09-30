@@ -1,99 +1,146 @@
 Title: The Scripts SD Runs For Itself
-Subtitle: The scripts the installer, the administrator verbs, the uninstaller and SD itself call, which nobody types.
+Subtitle: The scripts the installer, the verbs and SD itself call, which nobody types.
 
-This page continues [The Installed Scripts](09-the-installed-scripts.html).
+This page continues [The Installed Scripts](17-the-installed-scripts.html).
 
 ## The ones the installer runs
 
-**You should not need any of these**, and running one out of order can undo
-work rather than repeat it - most of them must run *after* the step that
-secures the data tree, or inheritance puts back exactly what they took away.
-They are listed so that a name in a log or an error message can be looked up.
+**You should not need to run either of these.** They are listed so that a name
+in the installer's report or in an error message can be looked up. Each step's
+report is appended to `%USERPROFILE%\SDCoreSolo\install-summary.log` under a
+title, which is where to read what actually happened.
 
 | | |
 |---|---|
-| `adopt-account.ps1` | gives the installing user an SD account. Without it SD installs and then refuses the person who installed it |
-| `deny-logon.ps1` | denies a local group the console and Remote Desktop, which is what confines an account to ssh |
-| `finish-install.ps1` | the two steps that happen after the installer closes - SD opens so you can set your own password, then the post-install check runs |
-| `install-service.ps1` | creates, starts and removes the Windows service **String Database (SD)** |
-| `install-editors.ps1` | makes sure the editors the `edit` and `micro` verbs run are on the machine |
-| `ssh-preflight.ps1` | asks whether SD may install here at all, and refuses a machine carrying an ssh server SD does not own. Runs before the wizard is drawn |
-| `sync-route-groups.ps1` | creates the two groups that decide which remote route an account may use, and seeds `sdssh` so an existing install does not lose ssh |
-| `upgrade-dicts.ps1` | brings an upgraded install's dictionaries up to the release. Runs on an upgrade only |
-| `upgrade-voc.ps1` | brings every existing account's VOC up to the release, by running `update.accounts all`. Runs on an upgrade only |
-| `secure-accounts.ps1` | the containers account directories are created in |
-| `secure-account-dirs.ps1` | the ACL on each account's own directory |
-| `secure-audit.ps1` | creates the audit trail and makes it append-only |
-| `secure-cred.ps1` | locks the credential store to SYSTEM and Administrators |
-| `secure-dumps.ps1` | makes the process-dump directory write-only to SD users, so a dump can be added and nobody else's can be read |
-| `secure-gcat.ps1` | locks the global catalogue, and separately the compiled objects it is loaded from |
-| `secure-log.ps1` | creates a log only administrators can see or write |
-| `secure-osusers.ps1` | locks a permission list so only an administrator can change who is on it. The installer calls it four times - twice for `os.users` and twice for `batch.jobs` |
-| `secure-pcode.ps1` | locks the pcode library, which is the interpreter every session runs |
-| `secure-psdir.ps1` | the directory privileged scripts are written into |
-| `secure-reclaim.ps1` | creates the profile-reclaim store and locks it to SYSTEM |
-| `secure-sysdirs.ps1` | takes Modify off the system directories that nothing writes |
+| `solo-setup.ps1` | the steps that run **as you**, with no elevation |
+| `solo-machine.ps1` | the one step that needs an **administrator**, behind a single consent prompt |
+| `internal-marker.ps1` | a helper the first one loads; it defines two functions and does nothing else |
 
-**THE `secure-` FAMILY IS WHAT KEEPS SD's USERS OUT OF SD's OWN FILES.** The
-data tree grants the `sdusers` group Modify, because every SD user needs it to
-use the database at all, and that grant is inherited everywhere. Each of these
-scripts takes it back off one thing that must not carry it.
+### `solo-setup.ps1`
 
-## The ones an administrator verb calls
+**It runs after the files are copied**, and does these in order:
 
-Four SD verbs change the machine rather than the database, and each of them
-works by running one of these. **Prefer the verb.** It asks the questions that
-need asking, reports what happened in the product's own words, and refuses
-when it cannot act; the script does the work and assumes the caller knew what
-they were doing.
+1. starts SD, because sessions need a started SD;
+2. makes the account `sduser`;
+3. sets the passwords the installer collected — the account password, the
+   administrator password and, in managed mode, the global password — and, from
+   a control file, the list of denied commands;
+4. **on an upgrade only**, brings the dictionaries up to the release and runs
+   `UPDATE.ACCOUNTS`, because an upgrade replaces the shipped VOC records but
+   does not rebuild the account's own;
+5. removes the system programs' source from the VOC and, in managed mode,
+   makes the global catalogue match `GLOBAL.BP.OUT` again after an upgrade has
+   replaced the catalogue;
+6. stops SD, so that the scheduled task — which the next script registers —
+   starts it and owns it.
+
+**The passwords never appear on a command line or in a file.** The installer
+puts them in its own environment for the moment it starts the script and clears
+them afterwards; the script reads them, clears them from its own environment
+before it starts anything, and writes each one to SD's standard input. Each
+step is judged on the line the SD program prints on success, and a password
+found in a session's output fails the step.
+
+**Exit 0** every step passed, **1** a step failed, **2** it refused before
+doing anything.
+
+### `solo-machine.ps1`
+
+**It is started by the installer, through one consent prompt, and is not meant
+to be run by hand.** It acts for the Windows user who is installing, whichever
+administrator approves the prompt.
+
+| Action | What it does |
+|---|---|
+| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH server when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; writes the ssh setting that starts `sd` for your ssh sign-in, and sets the ssh server to start with Windows |
+| **Upgrade** | registers the scheduled task again, and nothing else — an upgrade does not revisit the choices |
+| **Remove** | takes away the task, the API rule and the ssh setting. **The ssh firewall rule is Microsoft's and is left as it is** |
+
+**The task runs `sd -start` as you, at Windows start-up, whether or not you are
+signed in** — that is what lets ssh and the API work before anyone signs in.
+For a user who is an administrator, Task Scheduler gives the task the full
+administrator token, and **`sd.exe` drops it itself**, so SD runs on an
+ordinary token whatever the task does. See [Running SD](03-running-sd.html).
+
+**The ssh setting is a block appended to `sshd_config`, between markers**, so
+that the uninstaller can remove exactly it and nothing else:
+
+```
+# BEGIN SD Core Solo - added by its installer, removed by its uninstaller
+Match User <your Windows user>
+    ForceCommand "%USERPROFILE%\SDCoreSolo\usr\bin\sd.exe"
+    DisableForwarding yes
+# END SD Core Solo
+```
+
+**Only your user is matched**; sign-in is the ssh server's own, with your
+Windows password or key. `DisableForwarding` is there because `ForceCommand`
+does not by itself stop port forwarding. The file is checked with `sshd -t`
+afterwards and put back if the ssh server rejects it. See
+[ssh access](08-ssh-access.html).
+
+**Exit 0** every step passed, **1** a step failed, **2** it refused — not
+elevated, or an input was missing.
+
+**If you decline the consent prompt, the installer still finishes**, and lists
+the steps that did not complete. See [Installing](01-installation.html).
+
+### `internal-marker.ps1`
+
+**`sd -internal` is how the installer runs SD's setup steps, and it is admitted
+only while a marker file exists.** This script writes that file immediately
+before each internal session, and SD deletes it on admission, so an
+un-used marker authorises exactly one later session and then expires. It is
+loaded by the installer's other scripts, never run on its own.
+
+**It is a speed bump, not a boundary**, and says so: anyone who can write into
+the `sdsys` folder can write the file by hand, and in Solo that is you. See
+[Security](12-security.html#the-installers-own-door).
+
+## The ones a verb calls
+
+**Prefer the verb.** It reports what happened in the product's own words and
+refuses when it cannot act; the script does the work and assumes the caller
+knew what they were doing.
 
 | | Called by |
 |---|---|
-| `install-ssh.ps1` | `ssh.server install` |
-| `remove-ssh.ps1` | `ssh.server remove` - takes the Windows OpenSSH server capability off the machine. The removal completes at the next restart |
-| `ssh-firewall.ps1` | `remote.ssh on` \| `off` - scopes the shared Windows rule `OpenSSH-Server-In-TCP` rather than disabling it |
-| `api-listener.ps1` | `remote.api on` \| `off` - writes or comments out the `APIPORT` line in `sd.conf` |
-| `api-firewall.ps1` | `remote.api on` \| `local` - opens or restricts the API port |
-| `sd-path.ps1` | `append.sd.path on` \| `off` - puts SD's program directory on the system PATH, or takes it off |
-| `restart-sd.ps1` | offered by `remote.api on` and `off`, because the listener is only read at start-up |
+| `sd-path.ps1` | `append.sd.path on` \| `off` — puts SD's program folder on **your** PATH, or takes it off |
+| `micro-home.ps1` | the editor programs, before `micro` starts — see below |
 
-The verbs are covered in the SD Core for Windows administrator documentation,
-under *Remote access and the machine*.
+### `sd-path.ps1`
 
-## The ones the uninstaller runs
+```
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\sd-path.ps1" -Show
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\sd-path.ps1" -Add
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\sd-path.ps1" -Remove
+```
 
-| | |
-|---|---|
-| `remove-sdaccounts.ps1` | takes away the Windows accounts SD created. Only runs if you ask for the data to be removed |
-| `reclaim-profiles.ps1` | removes the Windows profiles SD had to leave behind at the time |
-| `restore-sshonly.ps1` | puts every non-administrator SD account back into `sdsshonly`, reading the account register rather than anything local |
+**It changes your own PATH, not the computer's, and needs no elevation.** Exit
+**0** applied (or `-Show` succeeded), **1** failed, **2** refused. It reads and
+writes the same registry value the installer does, and it keeps a PATH entry
+that refers to a variable (`%SystemRoot%`) as a reference rather than expanding
+it. Every install and upgrade puts SD on your PATH again, so `-Remove` lasts
+until the next one. See [Administrator commands](06-administrator-commands.html).
 
-`restore-sshonly.ps1` is the repair for a half-finished removal: an account
-that lost its deny rights but still exists would otherwise become an ordinary
-ssh login on the machine.
+### `micro-home.ps1`
 
-## The ones SD runs for itself
+**`micro` writes to a configuration folder when it saves**, and this script
+gives you one you can write to, in your profile, and prints where it is:
 
-These are launched by SD while it is running rather than by the installer.
-**Do not run them by hand**; they are listed because they appear in logs and in
-Task Manager.
+```
+MICROHOME=C:\Users\you\.micro
+```
 
-| | |
-|---|---|
-| `sd-elevate.ps1` | the unelevated half of an administrator session, called by SD's `ELEVATE` program with `-Start`, `-Run` or `-Stop`. Exit 0 done, 1 failed, **5 not elevated or elevation refused** |
-| `sd-elevate-helper.ps1` | the elevated half. `sd-elevate.ps1` launches it, which is where the UAC prompt appears, and it serves one SD session until that session ends |
-| `micro-home.ps1` | gives the calling user a `micro` configuration home they can write to, and prints where it is. Run by the `EDIT` program before it launches `micro` |
-| `reconcile-accounts.ps1` | removes register records whose Windows account has gone, and the account directory with them. Runs at every service start |
-
-**A Windows process's token is fixed when it is created**, so nothing can
-elevate a running process. That is why administrator work is done by a separate
-helper process rather than by an elevated `sd.exe`: SD stays unelevated for its
-whole life.
+The editor program reads that line and nothing else from it. It exits 0 with
+that line, or 1 without it. It exists because `micro` printed a false
+*"Permission denied"* on every save when its configuration folder was read-only;
+**the folder has to be per-user and writable only by its owner**, because
+`micro` loads and runs plug-ins from it. Nothing about it is a setting — see
+[Programmer commands](07-programmer-commands.html#editors).
 
 ## See also
 
-[Installation and the service](08-sd-installation.html) covers what the
-installer puts on the machine and what an upgrade replaces.
-[Remote access and the machine](05-remote-access-and-the-machine.html) covers
-the four verbs that call seven of these scripts, and is the supported way to
-change any of those settings.
+[Installing](01-installation.html) covers what the installer puts on the
+computer and what an upgrade replaces.
+[Security](12-security.html) covers what each password guards.
