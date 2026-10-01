@@ -21,7 +21,7 @@ import glob
 # ---------------------------------------------------------------------------
 
 PRODUCT = "SD Core Solo for Windows"
-VERSION = "WS1.1-1"
+VERSION = "WS1.1-2"
 COPYRIGHT = "Copyright \u00a9 2026 Donald Montaine"
 LICENCE = "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)"
 LICENCE_URL = "https://creativecommons.org/licenses/by-sa/4.0/"

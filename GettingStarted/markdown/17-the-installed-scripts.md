@@ -1,5 +1,5 @@
 Title: The Installed Scripts
-Subtitle: The seven PowerShell scripts installed beside SD - the execution policy they need, what their exit codes mean, and the two you may need to run yourself.
+Subtitle: The eight PowerShell scripts installed beside SD - the execution policy they need, what their exit codes mean, and the two you may need to run yourself.
 
 SD's installer does part of its work in PowerShell rather than inside the
 installer script, and **it leaves those scripts on the computer**. They are in
@@ -18,7 +18,7 @@ braces an optional part.
 
 ## What is here and what is not
 
-**Seven scripts ship.**
+**Eight scripts ship.**
 
 | | |
 |---|---|
@@ -29,8 +29,9 @@ braces an optional part.
 | `internal-marker.ps1` | a helper the installer's steps load |
 | `sd-path.ps1` | what `append.sd.path` runs |
 | `micro-home.ps1` | what the `micro` editor verb runs |
+| `solo-sshkey.ps1` | what the API's ssh key request runs, on a managed computer |
 
-The last five are described on
+The last six are described on
 [The Scripts SD Runs For Itself](17a-scripts-sd-runs-itself.html).
 
 Everything else in the project's `gplbld` directory — the verifiers, the

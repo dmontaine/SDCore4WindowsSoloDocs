@@ -36,7 +36,7 @@ import mkdoc
 
 DOCS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRODUCT = "SD Core Solo for Windows"
-VERSION = "WS1.1-1"
+VERSION = "WS1.1-2"
 
 # ── Set definitions ──────────────────────────────────────────
 

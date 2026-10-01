@@ -34,6 +34,36 @@ Match User "you"
 | `ForceCommand` | your ssh session runs `sd` and nothing else |
 | `DisableForwarding` | no port forwarding for you, which `ForceCommand` alone would not stop |
 
+**On a managed computer the block is different in two ways.** It has a fourth
+line, `AuthorizedKeysFile .ssh/authorized_keys`, and it is written **before** the
+first `Match` line instead of at the end:
+
+```
+# BEGIN SD Core Solo - added by its installer, removed by its uninstaller
+Match User "you"
+    ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd.exe"
+    AuthorizedKeysFile .ssh/authorized_keys
+    DisableForwarding yes
+# END SD Core Solo
+Match Group administrators
+    ...
+```
+
+**The reason is the position.** ssh uses the first value it finds for each
+setting. The standard configuration has a `Match Group administrators` block
+that sends every administrator to a key file only an elevated process can
+write, and your Windows user is usually an administrator. With Solo's block
+after it, ssh would never read your own key file, and the SD Core server's key
+could not be installed through the API (see [Managed mode](15-managed-mode.html)).
+This was measured: a key in `.ssh\authorized_keys` was refused with the block
+last and accepted with it first. **A standalone computer keeps the block as
+described above, at the end, with three lines.**
+
+**The installer also records this computer's ssh server key fingerprint** in
+`sdsys\ssh-hostkey`, because the file ssh keeps it in cannot be read without
+elevation. A managed computer tells the server that fingerprint when the server
+installs its key.
+
 **The change is checked before it stays**: `sshd -t` must accept the new
 configuration, or the original is put back and the installer says so. The
 block is removed by the uninstaller, and the rest of the file is left as it was.

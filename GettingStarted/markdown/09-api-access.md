@@ -110,5 +110,33 @@ and cannot be added to `NETDIRS`. A server session may reach `GLOBAL.BP.OUT`.
 **Use a client library from this release or later.** One that predates SCRAM
 is refused. See [Client distribution](10-client-distribution.html).
 
+## The client library remembers each server's certificate
+
+**The first time a client library connects to a server, it keeps that server's
+certificate; after that it connects only to a server that presents the same
+one.** This is *first use* trust: the first connection is taken on trust, and
+every later one is checked. It closes the one gap SCRAM leaves — someone
+posing as the server could otherwise collect a login and try to guess the
+password offline.
+
+| | |
+|---|---|
+| **What is kept** | the SHA-256 of the server's whole certificate, as 64 lower-case hex digits |
+| **Where** | `%USERPROFILE%\.sdcore\known_servers`, or the file named by the environment variable `SD_KNOWN_SERVERS`; one line per server, `host:port` and the digits. A different port is a different server |
+| **When it is checked** | right after the secure connection is made and before anything is sent — no login byte, no password |
+
+**A changed certificate is refused**, with *"THE SERVER'S CERTIFICATE HAS CHANGED
+since this client first connected to host:port (pinned ..., now ...). The
+connection was refused before any password was sent. If the server was
+reinstalled, remove the line for host:port from ... and connect again"*. Nothing
+updates the file by itself and nothing asks you; **removing the line is the
+remedy**, and only if you know why the certificate changed. **A file that cannot
+be opened or written refuses the connection** ("cannot pin the server: cannot
+open ...") rather than connecting unchecked.
+
+**Installing SD Core Solo again makes a new certificate**, because the
+installation is replaced. A client that already knew the computer will refuse it
+until its line is removed.
+
 **Programs using the `!sdclient` class** — SD BASIC reaching another SD over
 the API — speak the same login, from this release at both ends.

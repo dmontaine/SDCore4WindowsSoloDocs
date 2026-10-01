@@ -30,6 +30,40 @@ and then gives SD the global password when `sd` asks. One account name carries
 two passwords: SD tries the account password first and the global password
 second, which is why the two must differ.
 
+## The server's ssh key
+
+**The server cannot know which Windows user this computer's SD belongs to,** and
+ssh needs that name. So over the API, a server session can install the server's
+ssh public key in your own Windows user's `.ssh\authorized_keys`, and is told
+the user name in reply. From then on the server signs in over ssh with its key
+instead of a Windows password.
+
+| Request | What it does |
+|---|---|
+| **ADD** | puts the key in `%USERPROFILE%\.ssh\authorized_keys`. The reply carries your Windows user name as ssh matches it, this computer's name, the key's fingerprint (`SHA256:...`), `ADDED` or `PRESENT`, and the fingerprint of this computer's ssh server key, so the server can check it is talking to the right computer — empty when that is not known |
+| **REMOVE** | takes the key with that fingerprint out; the reply is `REMOVED` or `ABSENT` and the number of the server's keys left |
+| **LIST** | the fingerprints of the server's keys, one per field |
+
+**Only a server session may ask.** A session signed in with the account
+password is refused with *"Only the SD Core server may manage ssh keys"*, and
+nothing changes. A standalone computer has no global password, so nothing can
+ask.
+
+**What lands in the file is one line:** `restrict`, the key, and the tag
+`sdcoresolo-managed`. The key can start SD and nothing else — it gives no shell
+and no port forwarding. **At most four** of these lines are kept, and **your
+own keys in the file are never added to, listed or removed.** A refusal says
+why in one of four ways: the key or fingerprint is not valid, four keys are
+already installed, the request is unknown, or it could not be carried out. Every
+use is written to the audit trail, and a successful one carries the key's
+fingerprint and the address the request came from.
+
+**It needs the installer's ssh block.** A managed install writes it with a key
+file line and in the position that makes ssh read your own file even when your
+Windows user is an administrator — see [ssh access](08-ssh-access.html). A
+computer installed before that was done refuses the request until it is
+installed again; an upgrade does not rewrite the block.
+
 **A session signed in with the global password is a server session.** It has
 the administrator commands unlocked from the start, and it is the only kind of
 session that may use the commands below — the administrator password does not

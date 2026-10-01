@@ -107,6 +107,7 @@ knew what they were doing.
 |---|---|
 | `sd-path.ps1` | `append.sd.path on` \| `off` — puts SD's program folder on **your** PATH, or takes it off |
 | `micro-home.ps1` | the editor programs, before `micro` starts — see below |
+| `solo-sshkey.ps1` | the API's ssh key request (49), on a managed computer — see below |
 
 ### `sd-path.ps1`
 
@@ -138,6 +139,18 @@ that line, or 1 without it. It exists because `micro` printed a false
 **the folder has to be per-user and writable only by its owner**, because
 `micro` loads and runs plug-ins from it. Nothing about it is a setting — see
 [Programmer commands](07-programmer-commands.html#editors).
+
+### `solo-sshkey.ps1`
+
+**Run by SD itself, in your own session, when the SD Core server asks to add,
+remove or list its ssh key** — see [Managed mode](15-managed-mode.html). It is
+not for typing: it takes a request verb (`ADD`, `REMOVE` or `LIST`) and a key or
+fingerprint, and prints lines SD reads back (`RESULT=ADDED`, `FPR=SHA256:...`,
+`ERROR=...`). **It needs no elevation**, because it writes only
+`%USERPROFILE%\.ssh\authorized_keys`, and it refuses unless the installer's ssh
+block is in place. It touches only lines it wrote itself, tagged
+`sdcoresolo-managed`, and keeps at most four. Exit **0** with a `RESULT=` line,
+**1** with an `ERROR=` line and nothing changed.
 
 ## See also
 
