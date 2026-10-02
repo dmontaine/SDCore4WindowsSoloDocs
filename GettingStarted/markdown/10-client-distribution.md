@@ -45,7 +45,7 @@ Under `%USERPROFILE%\SDCoreSolo`:
 |---|---|
 | `usr\clients\client64\` | `sdclilib.dll`, `sdclient.dll`, and the import libraries (`libsdclilib.dll.a`, `libsdclient.dll.a`) to link against |
 | `usr\clients\client32\` | `qmclilib.dll`, `qmclient.dll`, and their import libraries |
-| `usr\bin\` | **both** DLL pairs again, beside `sd.exe`. That folder is on your PATH, so it is where a 32-bit utility finds its client at run time |
+| `usr\bin\` | **both** DLL pairs again, beside `sd-solo.exe`. That folder is on your PATH, so it is where a 32-bit utility finds its client at run time |
 
 **The C header is installed, but not beside the DLLs**: `sdclilib.h` is in
 `%USERPROFILE%\SDCoreSolo\sdsys\syscom`, with the Gambas and PureBasic bindings,
@@ -76,7 +76,7 @@ usual culprit.
 
 | | |
 |---|---|
-| `SDConnect()` | over the network, to port **4243**, as `sduser` with the account password. It is the only way to connect |
+| `SDConnect()` | over the network, to port **4249**, as `sduser` with the account password. It is the only way to connect |
 | `SDConnectLocal()` | **disabled.** It answers *SDConnectLocal is not available in SD Core Solo for Windows - connect with SDConnect and the account password* |
 
 **To reach this computer from a program on it, call `SDConnect()` with

@@ -10,11 +10,11 @@ not a reference — every step links to the page that explains it properly.
 the install does not have SD on its PATH yet — and type:
 
 ```
-sd
+sd-solo
 ```
 
 **SD is already running.** A scheduled task starts it at every Windows
-start-up, so you do not type `sd -start`. See [Running SD](03-running-sd.html).
+start-up, so you do not type `sd-solo -start`. See [Running SD](03-running-sd.html).
 
 **It asks for the account password**, the one you chose when installing. On a
 computer installed from a control file there is none yet, and it asks you to
@@ -117,7 +117,7 @@ off
 **From a PowerShell or Command Prompt window**, not from inside SD:
 
 ```
-sd list customers
+sd-solo list customers
 ```
 
 **It runs the one command and returns, with no password prompt.** A command on
@@ -132,13 +132,13 @@ you — which is what lets a script or a scheduled job use SD. See
    records. Then query it — the query processor is where most of the surface
    area is.
 2. **A client program against the API**, if you chose it when installing. It
-   signs in as `sduser` with the account password, on port 4243, and needs a
+   signs in as `sduser` with the account password, on port 4249, and needs a
    client library from this release. **The DLL goes in the same directory as
    the application that loads it**, and its architecture must match. See
    [API access](09-api-access.html) and
    [Client distribution](10-client-distribution.html).
 3. **ssh**, if an ssh server is installed: `ssh <your Windows user>@localhost`
-   signs in with your Windows password and lands in `sd`, which asks for the
+   signs in with your Windows password and lands in `sd-solo`, which asks for the
    account password. See [ssh access](08-ssh-access.html).
 
 ## When something goes wrong
@@ -153,5 +153,5 @@ you — which is what lets a script or a scheduled job use SD. See
 question.
 
 **When you report something, say which build.** The release stamp is on the
-sign-on banner, in `sd --version`, and in
+sign-on banner, in `sd-solo --version`, and in
 `%USERPROFILE%\SDCoreSolo\changelog`.

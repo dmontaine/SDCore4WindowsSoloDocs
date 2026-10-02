@@ -39,7 +39,7 @@ before it writes the application, not after.
 
 **The Python half of SDEXT is not on this list.** It was removed along with
 the embedded interpreter, then rebuilt as a separate helper process,
-`sdpy.exe`, rather than restored as a library inside `sd.exe` — the two cannot
+`sdpy.exe`, rather than restored as a library inside `sd-solo.exe` — the two cannot
 safely share a process (`long` is a different width on each side of the MSYS2
 boundary). `SDPYFUNC.H` and its twenty-one `PY_*` functions are documented in
 full in the User set's *SD BASIC - Python Integration* chapter. A session may
@@ -83,7 +83,7 @@ The function that turns a password into a key of the right length is
 `sdext()`'s `SD_KEYFROMPW`, and `sdext()` is internal-only — it needs a program
 compiled with `$internal`, which is reserved to SD's own setup steps. **So an
 ordinary program cannot obtain a key these functions will accept, and there is
-no supported way in.** On Solo the door that setup steps use, `sd -internal`,
+no supported way in.** On Solo the door that setup steps use, `sd-solo -internal`,
 admits a session only on a one-shot marker file the installer writes — see
 [Security](12-security.html#the-installers-own-door).
 
@@ -151,7 +151,7 @@ Eight shipped programs call `sdext()` for these keys, and they are the whole of
 its use apart from the Python programs: `APISRVR`, `CRED_SET`, `CRED_VERIFY`,
 `LOGIN`, `SD_GET_SALT`, `SD_KEY_FROM_PW`, `SDCLIENT` and `SOLO_STORE_PW`.
 Between them they set a credential, verify one, run the API's SCRAM exchange,
-and keep and read back the account password for `sd <command>`. The six
+and keep and read back the account password for `sd-solo <command>`. The six
 `PY_*` programs that start, stop and run the Python helper call it too, with
 their own keys, described in the Python chapter.
 

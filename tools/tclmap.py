@@ -142,6 +142,9 @@ DOCS = [
  ('GettingStarted', '06-administrator-commands.md', """
    admin append.sd.path clean.account config set.date update.accounts
  """),
+ ('GettingStarted', '06c-backup-and-restore.md', """
+   backup.account restore.account set.backup.directory settings.report
+ """),
  ('GettingStarted', '06a-sessions-and-locks.md', """
    clear.locks list.locks list.readu listu lock logout unlock
  """),

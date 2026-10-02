@@ -44,8 +44,14 @@ Use `SDConnect` to this computer's own address instead.
 
 ## The port
 
-**`APIPORT=4243` in `sd.conf`.** Whether other computers can reach it is a
-Windows Firewall rule:
+**The API port is 4249, and nothing can change it.** It used to be 4243, which
+OpenQM and ScarletDME also use, and the full SD Core for Windows uses 4247, so
+the two products can be installed on one computer. `APIPORT` in `sd.conf` now only
+switches the API on: any number above zero means on, and SD listens on 4249
+whatever the number is. A file that says `APIPORT=4243` keeps working and means
+4249. A program that names port 4243 must name 4249 instead; one that names no
+port needs no change. Whether other computers can reach it is a Windows Firewall
+rule, named `SD-Solo-API-In-TCP`:
 
 | | |
 |---|---|
@@ -65,7 +71,7 @@ reports without changing anything (and needs no elevation). It exits `0`
 applied, `1` failed, `2` refused.
 
 **To turn the API off or on** after installing, remove or add the `APIPORT`
-line in `%USERPROFILE%\SDCoreSolo\sd.conf`, then `sd -stop` and `sd -start`.
+line in `%USERPROFILE%\SDCoreSolo\sd.conf`, then `sd-solo -stop` and `sd-solo -start`.
 The listener is read only at start-up.
 
 > **`APILOGIN` is not an off switch.** It decides whether the API demands a

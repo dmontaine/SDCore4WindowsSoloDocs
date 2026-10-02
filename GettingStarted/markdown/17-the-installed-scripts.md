@@ -8,7 +8,7 @@ reasons: so that a step which failed during the installation can be looked up
 and understood, and so that a choice made in the wizard can be changed
 afterwards.
 
-**They are Windows scripts, not SD verbs.** Nothing here is typed at an `sd`
+**They are Windows scripts, not SD verbs.** Nothing here is typed at an `sd-solo`
 prompt. Two of them need a PowerShell prompt started with **Run as
 administrator**, because they change the firewall; the others need no
 elevation.
@@ -132,8 +132,10 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\api-firewall.
 
 Exit **0** applied, **1** failed, **2** refused. `-Show` changes nothing and
 needs no elevation. `-Open` allows any address, `-Restrict` this computer only;
-add *{-Port n}* for a port other than 4243. **This script owns its rule** — it
-created it, and `-Remove` takes it away.
+The port is always 4249; the script takes no port. `-Retarget` moves a rule an
+older release left on port 4243 to 4249 under the name `SD-Solo-API-In-TCP`, and
+keeps who may reach it as it was (an upgrade runs it). **This script owns its
+rule** — it created it, and `-Remove` takes it away.
 
 **It says who may reach the port, not whether there is one.** Whether anything
 is listening is `APIPORT` in `sd.conf` — see

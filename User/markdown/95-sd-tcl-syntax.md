@@ -11,7 +11,7 @@ folds case, so any of this may be typed in either case.
 
 > **This page is generated, and it is checked for completeness rather
 > than proof-read for it.** The roster is computed from SD's own VOC:
-> every verb record in `newvoc`, which is **143** verbs, and
+> every verb record in `newvoc`, which is **147** verbs, and
 > `tools/mktclsyntax.py` refuses to
 > write the page if any of them has no line. The shapes come from the
 > subject documents, where each verb is described in full.
@@ -20,7 +20,7 @@ folds case, so any of this may be typed in either case.
 reading `newvoc` directly, so it cannot drift from what the account
 actually gets. **A verb your account does not have is not refused — the
 name is simply not recognised.** Solo has one account, and it has all
-143 of them; whether a verb needs `ADMIN` is in the GettingStarted set.
+147 of them; whether a verb needs `ADMIN` is in the GettingStarted set.
 
 ## The verbs
 
@@ -34,6 +34,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`analyze.file`** | **`analyze.file`** — the same verb as **`analyse.file`** |
 | **`append.sd.path`** | **`append.sd.path`** {**`on`** \| **`off`**} |
 | **`autologout`** | **`autologout`** {*minutes*} |
+| **`backup.account`** | **`backup.account`** *account* {**`to`** *folder*} |
 | **`basic`** | **`basic`** {*file*} *record* {*record* …} |
 | **`bell`** | **`bell on`** \| **`off`** |
 | **`break`** | **`break on`** \| **`off`** \| **`on user`** *n* |
@@ -135,18 +136,21 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`rename`** | **`rename`** — the same verb as **`cname`** |
 | **`report.src`** | **`report.src on`** \| **`off`** \| **`report.src`** to toggle |
 | **`report.style`** | **`report.style`** {*name* \| **`off`**} |
+| **`restore.account`** | **`restore.account`** *zipfile* *account* {**`no.query`**} |
 | **`run`** | **`run`** {*file*} *record* {*arguments*} |
 | **`save.list`** | **`save.list`** *list* {**`from`** *list.no*} |
 | **`save.stack`** | **`save.stack`** {*name*} |
 | **`search`** | **`search`** {**`dict`**} *file* {*selection*} |
 | **`select`** | **`select`** {**`dict`**} *file* {*selection*} {*list.no*} |
 | **`set`** | **`set`** *name* *value* |
+| **`set.backup.directory`** | **`set.backup.directory`** {*folder*} |
 | **`set.date`** | **`set.date`** *date* |
 | **`set.exit.status`** | **`set.exit.status`** *n* |
 | **`set.file`** | **`set.file`** *account* *file* *pointer* |
 | **`set.password`** | **`set.password`** \| **`set.password admin`** \| **`set.password global`** |
 | **`set.trigger`** | **`set.trigger`** *file* *name* {*modes*} |
 | **`setptr`** | **`setptr`** *unit* \| **`default`**`,`*width*`,`*depth*`,`*top*`,`*bottom*`,`*mode* {`,`*options*}  ·  **`setptr display`**  ·  **`setptr`** *unit*`,`**`display`** |
+| **`settings.report`** | **`settings.report`** {*folder*} |
 | **`sh`** | **`sh`** *command* |
 | **`show`** | **`show`** {**`dict`**} *file* {*selection*} |
 | **`sleep`** | **`sleep`** *n* \| *hh*`:`*mm*{`:`*ss*} |

@@ -71,7 +71,7 @@ You cannot see the lock table without `ADMIN`, so the useful sequence is:
 outside SD keeps both its user-table entry and its record and file locks, so
 everything wanting that record waits for a process that is not there. **Nothing
 you can type inside SD will clear that**, and guessing at it wastes time — the
-recovery is `sd -cleanup`, from a PowerShell window.
+recovery is `sd-solo -cleanup`, from a PowerShell window.
 
 ## Task locks, and why you will rarely meet one
 
@@ -84,7 +84,7 @@ agree that lock 7 means *this job*, and the number carries no other meaning.
 the BASIC `lock` and `unlock` statements, which need nothing. That is the route
 to reach for; the TCL verbs exist for inspecting or clearing the table by hand.
 
-> **A task lock held by a killed session is not given back by `sd -cleanup`.**
+> **A task lock held by a killed session is not given back by `sd-solo -cleanup`.**
 > It stays held, by a user number nothing is behind, until SD itself is
 > restarted — a defect. If a job guarded by a task lock will not start again
 > after a crash, that is the first thing to suspect, and `unlock tasklock`

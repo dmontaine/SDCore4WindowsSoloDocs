@@ -40,7 +40,7 @@ are reached from other computers. See
 | Administrator commands | refused until `ADMIN`. The eight that had no check of their own — `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` — are gated too. See [Administrator commands](06-administrator-commands.html) |
 | The VOC | direct edits need `ADMIN`; the global catalogue is changed by nobody in a session |
 | The daemon | runs as you on an ordinary token, Administrators deny-only and Medium integrity, even from an administrator's account |
-| ssh | your own sign-in only, forced into `sd`, no forwarding — see [ssh access](08-ssh-access.html) |
+| ssh | your own sign-in only, forced into `sd-solo`, no forwarding — see [ssh access](08-ssh-access.html) |
 | The API | off unless chosen (always on in managed mode); SCRAM inside TLS 1.3; a session confined to the account's files — see [API access](09-api-access.html) |
 
 **The account is the same one for every session**, so the gates are about *how
@@ -51,7 +51,7 @@ you arrived and what you unlocked*, not about which account you are in.
 | | |
 |---|---|
 | **The passwords** | none is stored. `$cred` holds a verifier for each — the account, the administrator and the global — that cannot be turned back into a password |
-| **The kept copy** | a copy of the account password, encrypted with Windows' own protection for your Windows user, that lets `sd <command>` sign in without typing. **Any program running as you can ask Windows to decrypt it**; it keeps it from other Windows users, not from other programs of yours |
+| **The kept copy** | a copy of the account password, encrypted with Windows' own protection for your Windows user, that lets `sd-solo <command>` sign in without typing. **Any program running as you can ask Windows to decrypt it**; it keeps it from other Windows users, not from other programs of yours |
 
 **Whoever can replace a verifier can set a password they know**, and anyone who
 is your Windows user, or an administrator of the computer, can. That is the
@@ -60,7 +60,7 @@ files under them.
 
 ## The installer's own door
 
-**`sd -internal` is how the installer runs SD's setup steps**, and it is admitted
+**`sd-solo -internal` is how the installer runs SD's setup steps**, and it is admitted
 only by a one-shot marker file the installer writes and SD consumes — the
 setup log shows *Internal session admitted (opened by solo-setup)*. It is not a
 way into a running system. **SDSYS, SD's own system account, is never signed

@@ -15,7 +15,7 @@ comes with:
 | | |
 |---|---|
 | **a global password** | set at installation, on the installer's page or in the control file. The server signs in with it |
-| **the API, on and open** | port 4243, reachable from other computers — the server's way in |
+| **the API, on and open** | port 4249, reachable from other computers — the server's way in |
 | **ssh, on and open** | the OpenSSH server installed if none was, reachable from other computers |
 
 See [Installing](01-installation.html), including the **control file** that
@@ -26,7 +26,7 @@ sets up many computers from one USB stick.
 **As `sduser`, with the global password.** Over the API that is the whole of
 it. Over ssh the server first signs in to the computer's ssh server as its
 Windows user — ssh's own sign-in, with that user's Windows password or key —
-and then gives SD the global password when `sd` asks. One account name carries
+and then gives SD the global password when `sd-solo` asks. One account name carries
 two passwords: SD tries the account password first and the global password
 second, which is why the two must differ.
 

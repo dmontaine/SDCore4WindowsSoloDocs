@@ -177,7 +177,7 @@ whichever reads better; nothing distinguishes them.
 > so discarding unread input discards the commands that have not run yet —
 > including the `off` that would have ended the session. **A run that did this
 > hung, was killed, and left a session in the user table that had to be cleared
-> with `sd -cleanup`.** Both verbs are for a person at a terminal.
+> with `sd-solo -cleanup`.** Both verbs are for a person at a terminal.
 
 ## The inactivity timer
 

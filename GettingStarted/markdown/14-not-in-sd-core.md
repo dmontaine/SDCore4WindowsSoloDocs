@@ -107,11 +107,11 @@ separators.
 
 ## Embedded Python — reversed again, and reversed differently
 
-**Python inside `sd.exe` is dropped, permanently — but calling Python from
+**Python inside `sd-solo.exe` is dropped, permanently — but calling Python from
 SD BASIC is back**, as a separate, native helper process SD talks to over a
 pipe rather than a library loaded into the server. The distinction is not
 cosmetic: the earlier removal was because Python and the MSYS2 runtime
-`sd.exe` is built on cannot share one process safely (§5.3 — `long` is a
+`sd-solo.exe` is built on cannot share one process safely (§5.3 — `long` is a
 different width on each side). The helper avoids that by never being the
 same process at all.
 

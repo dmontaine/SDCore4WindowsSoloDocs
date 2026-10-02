@@ -1,9 +1,9 @@
 Title: Scheduled jobs
 Subtitle: Running an SD command on a timer with Windows Task Scheduler.
 
-**A scheduled job is `sd <command>`, run by Windows Task Scheduler as you.**
+**A scheduled job is `sd-solo <command>`, run by Windows Task Scheduler as you.**
 There is no permit list to fill in and no administrator rights to give it: a
-command on the `sd` command line signs in with the copy of the account
+command on the `sd-solo` command line signs in with the copy of the account
 password Windows keeps for you, and runs.
 
 ## Setting one up
@@ -20,7 +20,7 @@ commands on the lines after the type. Editing the VOC needs `ADMIN` first:
 a timer. Then check it from a PowerShell window, the way the task will run it:
 
 ```
-sd my.report
+sd-solo my.report
 ```
 
 **3. Create the task** in Windows Task Scheduler. Two fields carry the whole
@@ -28,7 +28,7 @@ of it:
 
 | | |
 |---|---|
-| Program/script | `%USERPROFILE%\SDCoreSolo\usr\bin\sd.exe` |
+| Program/script | `%USERPROFILE%\SDCoreSolo\usr\bin\sd-solo.exe` |
 | Add arguments | `my.report` |
 
 **Run it as your own Windows user**, the one SD is installed for. Another
@@ -52,7 +52,7 @@ password without `SET.PASSWORD` — a command whose input is piped takes the
 first line of that input as the account password, once:
 
 ```
-Get-Content C:\jobs\sd-password.txt | sd my.report
+Get-Content C:\jobs\sd-password.txt | sd-solo my.report
 ```
 
 **That file holds the password in clear text.** Keep it where only your Windows

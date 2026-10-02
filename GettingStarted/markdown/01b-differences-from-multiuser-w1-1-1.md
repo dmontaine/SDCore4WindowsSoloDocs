@@ -20,7 +20,7 @@ product. The User set applies to both.
 | multiuser W1.1-1 | Solo |
 |---|---|
 | a local sign-in asks for no password — Windows has authenticated you | **every session asks for the account password**: at the keyboard, over ssh, and through the API |
-| a command on the command line (`sd LIST VOC`) needs an elevated window or a `batch.jobs` entry | it uses **a copy of the account password Windows keeps for you**, so scripts and scheduled jobs need no typing |
+| a command on the command line (`sd-solo LIST VOC`) needs an elevated window or a `batch.jobs` entry | it uses **a copy of the account password Windows keeps for you**, so scripts and scheduled jobs need no typing |
 | administration is being SDSYS | **administration is `ADMIN`** and a password set at installation |
 | `MODIFY.PASSWORD`, run by SDSYS | **`SET.PASSWORD`**: your own account password with no `ADMIN` (it asks the current one), `SET.PASSWORD ADMIN` after `ADMIN`, `SET.PASSWORD GLOBAL` by the SD Core for Linux server only. It also updates the kept copy |
 
@@ -56,7 +56,7 @@ commands the user may not run (`DENY.VERBS`). An installer control file,
 | a Windows service runs SD as LocalSystem | a **scheduled task** starts SD at Windows start-up **as you**, on an ordinary unelevated token — even when your Windows account is an administrator |
 | the system programs' BASIC source is installed | **compiled programs only**; no system source is installed |
 | OpenSSH installed from Windows Update, Python separately, the editors by winget | the release **carries** the OpenSSH MSI and the Python installer, and installs them from beside itself — offline, from a USB stick if need be. The two editors are in the release |
-| each SD account's own Windows user lands in `sd` over ssh; administrators get a Windows shell | **your own ssh sign-in lands in `sd`**, at the account-password prompt. There is no Windows shell over ssh for you, and `scp`/`sftp` to your user do not work |
+| each SD account's own Windows user lands in `sd-solo` over ssh; administrators get a Windows shell | **your own ssh sign-in lands in `sd-solo`**, at the account-password prompt. There is no Windows shell over ssh for you, and `scp`/`sftp` to your user do not work |
 
 See [Installing](01-installation.html) and [Running SD](03-running-sd.html).
 

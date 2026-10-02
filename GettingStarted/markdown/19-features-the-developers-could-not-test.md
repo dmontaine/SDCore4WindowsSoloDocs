@@ -151,7 +151,7 @@ in with the account password.
 ### The password prompt at a real console
 
 **Known.** A session asks for the account password and refuses a wrong one — on
-input that is piped in, one try; the kept copy lets `sd <command>` run.
+input that is piped in, one try; the kept copy lets `sd-solo <command>` run.
 
 **Not known.** Three things at a real terminal, by hand: **the three tries** at
 `Password:` before the session ends; **a command line refused** when the kept
@@ -201,7 +201,7 @@ set.
 ### A task that does not store your password
 
 **Known.** A scheduled task that runs as you, when you are signed in, runs
-`sd <command>` with the kept copy of the account password. That is the case the
+`sd-solo <command>` with the kept copy of the account password. That is the case the
 design was built around.
 
 **Not known.** **A task set to *Run whether user is logged on or not* with *Do

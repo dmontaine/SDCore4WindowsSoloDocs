@@ -132,7 +132,7 @@ entry actually contains without an editor.
 ## The VOC and the account
 
 Solo has one account, and the installer's account step copies the whole of
-`NEWVOC` from the system directory into its VOC — **416 records**, counted
+`NEWVOC` from the system directory into its VOC — **420 records**, counted
 directly. There is no second, larger VOC.
 
 **The multiuser account and grant commands are not in it.** `create.account`,

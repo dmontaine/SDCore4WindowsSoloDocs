@@ -94,7 +94,7 @@ their base name.
 
 ## What the account starts with
 
-**The account's VOC starts from the shipped `newvoc` directory, which holds 416
+**The account's VOC starts from the shipped `newvoc` directory, which holds 420
 records.** These are record counts, not verb counts — a VOC record may be a
 verb, a keyword, a file pointer, a sentence or a paragraph, and only some are
 verbs. Counted directly from the shipped directory. The account and grant

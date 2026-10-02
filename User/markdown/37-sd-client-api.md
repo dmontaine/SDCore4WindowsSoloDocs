@@ -44,7 +44,7 @@ executable** or into `C:\Windows\System32`. Those are the two supported routes
 and either works.
 
 > **`%USERPROFILE%\SDCoreSolo\usr\bin` is on your PATH**, because the installer
-> adds it every time it runs — it is what makes `sd` run from any directory.
+> adds it every time it runs — it is what makes `sd-solo` run from any directory.
 > **All four client DLLs live in that directory too**, so an application may find
 > one without your having copied anything. That is convenient, and it is not the
 > same as choosing which copy it loads: PATH order decides, and a stale copy
@@ -65,7 +65,7 @@ place — apart from the header, which is elsewhere: **`sdclilib.h` is at
 PureBasic bindings, `sdclient.bas` and `sdclient.pb`, beside it.
 
 **All four DLLs also appear in `%USERPROFILE%\SDCoreSolo\usr\bin`, beside
-`sd.exe`.** The 32-bit pair is there because `usr\bin` is on the PATH, and that
+`sd-solo.exe`.** The 32-bit pair is there because `usr\bin` is on the PATH, and that
 is where a **32-bit utility** finds its client. Those copies are SD's own and
 are not the ones you should be taking. **The import libraries are deliberately
 not in `usr\bin`**: a linker input has no business in a directory that goes on
@@ -75,7 +75,7 @@ the PATH.
 
 | | |
 |---|---|
-| `SDConnect(host, port, user, pass, account)` | over the network, to port **4243**. The user and the account are both `sduser` |
+| `SDConnect(host, port, user, pass, account)` | over the network, to port **4249** (the default when you name none). The user and the account are both `sduser` |
 | `SDConnectLocal(account)` | **disabled on Solo.** It signed in with no password, which Solo does not allow: it answers *SDConnectLocal is not available in SD Core Solo for Windows - connect with SDConnect and the account password* |
 
 > `SDConnectUDS` (Unix Domain Socket) appears in the header but is not

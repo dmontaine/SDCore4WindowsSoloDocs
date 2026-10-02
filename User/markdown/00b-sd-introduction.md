@@ -63,17 +63,17 @@ installer carries compiled binaries; the source is a separate download.
 ## Signing in
 
 ```
-sd
+sd-solo
 ```
 
 **You land in the one SD account, `sduser`, after the account password** — the
 one you chose when installing. Being signed in to Windows is not enough: SD
 asks. If the computer was installed from a control file there is no password
-yet, and `sd` asks you to choose one. The GettingStarted set's *Your first
+yet, and `sd-solo` asks you to choose one. The GettingStarted set's *Your first
 thirty minutes* walks through it.
 
 SD is already running. A scheduled task starts it at every Windows start-up,
-so you do not type `sd -start`. Open a new window after installing: one that
+so you do not type `sd-solo -start`. Open a new window after installing: one that
 was open before the install does not have SD on its PATH yet.
 
 ## Your first file and record
@@ -147,7 +147,7 @@ are not in SD Core Solo for Windows:
 | Gone | Why |
 |---|---|
 | QMNet (remote files) | Removed; the API is the supported way to reach another SD server |
-| Embedded Python (a Python interpreter loaded into `sd.exe` itself) | Gone permanently - `sd.exe`'s MSYS2 runtime cannot safely share a process with Python. Calling Python **from** a BASIC program is not gone: it runs as a separate helper process instead - see *SD BASIC - Python Integration* |
+| Embedded Python (a Python interpreter loaded into `sd-solo.exe` itself) | Gone permanently - `sd-solo.exe`'s MSYS2 runtime cannot safely share a process with Python. Calling Python **from** a BASIC program is not gone: it runs as a separate helper process instead - see *SD BASIC - Python Integration* |
 | `sdlnxd` daemon | Linux-only; a scheduled task starts SD on Windows |
 | `ENCRYPT.FIELD` verb | Removed; `sdencrypt()` and `sddecrypt()` in SDBasic are the supported route |
 | `sed`, `update.record`, `modify` editors | Gone; use `edit`, `micro` or `ed` |

@@ -3,7 +3,7 @@ Subtitle: Reaching SD on this computer over ssh, what the installer sets up, and
 
 **An ssh sign-in as your Windows user lands inside SD.** The ssh server checks
 your Windows password (or key) as it would for any sign-in; then, instead of a
-Windows prompt, you get `sd`, which asks for the account password.
+Windows prompt, you get `sd-solo`, which asks for the account password.
 
 ```
 ssh you@this-computer
@@ -23,7 +23,7 @@ end of its configuration**, `C:\ProgramData\ssh\sshd_config`:
 ```
 # BEGIN SD Core Solo - added by its installer, removed by its uninstaller
 Match User "you"
-    ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd.exe"
+    ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd-solo.exe"
     DisableForwarding yes
 # END SD Core Solo
 ```
@@ -31,7 +31,7 @@ Match User "you"
 | | |
 |---|---|
 | `Match User` | **only your Windows user** is affected. Other Windows users of the computer sign in over ssh as before |
-| `ForceCommand` | your ssh session runs `sd` and nothing else |
+| `ForceCommand` | your ssh session runs `sd-solo` and nothing else |
 | `DisableForwarding` | no port forwarding for you, which `ForceCommand` alone would not stop |
 
 **On a managed computer the block is different in two ways.** It has a fourth
@@ -41,7 +41,7 @@ first `Match` line instead of at the end:
 ```
 # BEGIN SD Core Solo - added by its installer, removed by its uninstaller
 Match User "you"
-    ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd.exe"
+    ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd-solo.exe"
     AuthorizedKeysFile .ssh/authorized_keys
     DisableForwarding yes
 # END SD Core Solo

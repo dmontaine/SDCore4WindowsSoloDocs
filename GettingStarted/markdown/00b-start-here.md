@@ -76,7 +76,7 @@ that no page runs longer than a reader will scroll.
 
 **1. Every session asks for the account password.** At the keyboard, over ssh
 and through the API. Being signed in to Windows is not enough. A command given
-on the command line — `sd LIST VOC` — uses a copy of the password kept for you
+on the command line — `sd-solo LIST VOC` — uses a copy of the password kept for you
 by Windows, so a script or a scheduled job does not have to type it. See
 [The account and its passwords](05-account-types.html).
 
@@ -114,7 +114,7 @@ reference for the language and the command processor is the separate User set.
 ## Where the source is
 
 **Both repositories are public, and everything in them is open source.** SD is
-GPL software — `config gpl` at an `sd` prompt displays the licence, and the
+GPL software — `config gpl` at an `sd-solo` prompt displays the licence, and the
 installed folder carries it as the file `sdsys\licence`.
 
 | | |
@@ -143,4 +143,4 @@ pages that turns out not to be true of the build you are running**.
 
 **Quote the version as `WS1.1-2`** — the string in the header bar of every page
 here, in the installer's file name, in the sign-on banner, and in what
-`sd --version` reports.
+`sd-solo --version` reports.

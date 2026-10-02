@@ -7,15 +7,15 @@ reaching out to Python.
 
 ## The model: a separate process, not a library
 
-**Python does not run inside `sd.exe`.** It runs in its own program,
-`sdpy.exe`, installed beside `sd.exe`, and a session that calls a `PY_`
+**Python does not run inside `sd-solo.exe`.** It runs in its own program,
+`sdpy.exe`, installed beside `sd-solo.exe`, and a session that calls a `PY_`
 function talks to it down a pipe. Nothing starts or stops it by hand: the
 first `PY_` call in a session starts the helper, and it goes away when the
 session ends.
 
 **This is a rebuild, not a restoration of the old embedded interpreter.**
-Python used to run as a library loaded into `sd.exe` itself; that is gone
-permanently, because Python and the MSYS2 runtime `sd.exe` is built on
+Python used to run as a library loaded into `sd-solo.exe` itself; that is gone
+permanently, because Python and the MSYS2 runtime `sd-solo.exe` is built on
 cannot safely share one process (`long` is a different width on each side).
 Running Python as a separate program avoids the conflict by never being the
 same process at all - and, as a side effect, a Python crash can no longer

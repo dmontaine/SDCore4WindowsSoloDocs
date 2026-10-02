@@ -48,7 +48,7 @@ profile is what keeps other Windows users away from it — see
 ## Scheduled jobs
 
 A scheduled task can run an SD command as you, with no `ADMIN`: it is
-`sd <command>`, which signs in with the kept copy of the account password. It
+`sd-solo <command>`, which signs in with the kept copy of the account password. It
 has its own page: **[Scheduled jobs](04-scheduled-jobs.html)**.
 
 ## The logs
@@ -235,4 +235,4 @@ scripts](17-the-installed-scripts.html) has the detail.**
 | How it starts | a scheduled task, **SD Core Solo** — see [Running SD](03-running-sd.html). There is no Windows service |
 | After an unclean shutdown | SD starts anyway, rather than refusing because the last stop was abrupt |
 | Nested sessions | SD will not start a second time inside itself |
-| `sd <command>` | signs in with the kept copy of the account password, so a script or a scheduled job can use it — see [Running SD](03-running-sd.html) |
+| `sd-solo <command>` | signs in with the kept copy of the account password, so a script or a scheduled job can use it — see [Running SD](03-running-sd.html) |

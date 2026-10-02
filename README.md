@@ -257,7 +257,7 @@ line inside a fenced syntax block. Prose alone does not count.
 |---|---|
 | `docmap.py` | assigns every name `BCOMP` accepts to exactly one document and exits non-zero on a gap. **411 of 411** |
 | `tclmap.py` | the same for the TCL verbs, across the `User` and `Administrator` sets — **and it also checks the page actually documents the verb**, not merely that the name occurs somewhere. **147 of 147, 0 exempt** |
-| `confmap.py` | the same for the configuration parameters `config.c` accepts, and it reports which of them anything still reads. **52 of 52** |
+| `confmap.py` | the same for the configuration parameters `config.c` accepts, and it reports which of them anything still reads. **53 of 53** |
 | `verbcounts.py` | every verb count written in prose, against the counts computed from the VOC. Standard **82**, programmer **124**, administrator **147** |
 | `scriptmap.py` | every PowerShell script the installer leaves on the machine, against the page that lists them. **37 of 37** |
 | `linkup.py` | turns `*SD Basic - X*` into a link only for pages that exist |

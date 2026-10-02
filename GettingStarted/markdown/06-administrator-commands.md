@@ -41,6 +41,7 @@ password is never displayed, stored or logged.
 | `CONFIG` | report or set configuration — except `CONFIG GPL` and `CONFIG CONTRIB`, which need nothing |
 | `SET.DATE` | set the session's date |
 | `CLEAN.ACCOUNT` | empty the account's scratch files |
+| `BACKUP.ACCOUNT`, `RESTORE.ACCOUNT`, `SET.BACKUP.DIRECTORY`, `SETTINGS.REPORT` | [Backing up and restoring the account](06c-backup-and-restore.html) |
 | `UPDATE.ACCOUNTS` | refresh the account's VOC |
 | `APPEND.SD.PATH` | put SD on your PATH, or take it off |
 | `LISTU`, `LOGOUT ALL` | [Sessions and locks](06a-sessions-and-locks.html) |

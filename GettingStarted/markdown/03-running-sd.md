@@ -2,7 +2,7 @@ Title: Running SD
 Subtitle: How SD starts, stopping it, the command line, and what to do when the last shutdown was not a clean one.
 
 **SD is started by a scheduled task, and it is already running.** You do not
-type `sd -start`.
+type `sd-solo -start`.
 
 | | |
 |---|---|
@@ -19,8 +19,8 @@ a service under LocalSystem; Solo runs it as the one user who owns it.
 ## Starting and stopping
 
 ```
-sd -stop
-sd -start
+sd-solo -stop
+sd-solo -start
 ```
 
 **Stopping SD ends every session**, including API and ssh sessions. **Neither
@@ -31,21 +31,21 @@ Windows' own protection of your profile is the gate.
 task starts it again at the next start-up. Running the task from Task
 Scheduler does the same thing.
 
-## `sd -start` and `sd -stop` tell the truth
+## `sd-solo -start` and `sd-solo -stop` tell the truth
 
 **"SD is already started" is only said when the daemon really is running**,
 and it gives the Windows process id — the number Task Manager and
 `Stop-Process` use.
 
 **If SD's shared memory is there but the daemon is not** — what a killed or
-crashed SD leaves behind — `sd -start` says so and tells you to run `sd -stop`
+crashed SD leaves behind — `sd-solo -start` says so and tells you to run `sd-solo -stop`
 first. It does not clear it for you, because that would end any sessions
 still attached; the count of those is printed so you can decide.
 
-**`sd -stop` checks that the daemon actually stopped**, and warns with its
+**`sd-solo -stop` checks that the daemon actually stopped**, and warns with its
 process id if it did not.
 
-> **Known limit.** If the shared memory has already gone, `sd -stop` has
+> **Known limit.** If the shared memory has already gone, `sd-solo -stop` has
 > nowhere left to read the daemon's process id from and cannot report on it.
 > Check by hand:
 >
@@ -69,25 +69,25 @@ A segment belonging to a running SD is never touched.
 
 ## SD will not start a second time inside itself
 
-If you leave SD with **`sh`** and then type `sd` in that shell, it says so and
+If you leave SD with **`sh`** and then type `sd-solo` in that shell, it says so and
 returns you to the session you already have. `sh` is yours to use, with no
 `ADMIN` — see [Operating system access](06b-operating-system-access.html).
 
 ## The command line
 
 ```
-sd                  enter the account, after the account password
-sd <command>        run one command and return, using the kept password
-sd -quiet           suppress the displays on entry
-sd -u               list current sessions
-sd -k <n> | -k all  end session n, or every session
-sd -start           start SD
-sd -stop            stop SD
-sd --version        report the version
-sd --help           a summary of these
+sd-solo                  enter the account, after the account password
+sd-solo <command>        run one command and return, using the kept password
+sd-solo -quiet           suppress the displays on entry
+sd-solo -u               list current sessions
+sd-solo -k <n> | -k all  end session n, or every session
+sd-solo -start           start SD
+sd-solo -stop            stop SD
+sd-solo --version        report the version
+sd-solo --help           a summary of these
 ```
 
-**`sd <command>` runs and exits, with no prompt.** It uses a copy of the
+**`sd-solo <command>` runs and exits, with no prompt.** It uses a copy of the
 account password Windows keeps for you (see
 [The account and its passwords](05-account-types.html)), which is what lets a
 script or a scheduled job use SD. **If that copy is missing or no longer
@@ -100,10 +100,10 @@ matches**, what happens depends on where the input comes from:
 
 `SET.PASSWORD` keeps the copy up to date when you change the password.
 
-**`sd -a` and `sd -a<name>` have nothing to choose between**: there is one
+**`sd-solo -a` and `sd-solo -a<name>` have nothing to choose between**: there is one
 account, `sduser`, and every session lands in it.
 
-**`sd -u` and `sd -k` need no `ADMIN`.** They are switches on the program,
+**`sd-solo -u` and `sd-solo -k` need no `ADMIN`.** They are switches on the program,
 outside any SD session, and like `-start` and `-stop` they are the business
 of the user who owns SD. Inside a session, the same jobs are `LISTU` and
 `LOGOUT`, which do need `ADMIN` — see [Sessions and locks](06a-sessions-and-locks.html).
@@ -124,11 +124,11 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 | What the installer did | `install-summary.log` |
 
 **Do not move the programs out of `usr\bin`.** The runtime DLLs ship beside
-`sd.exe` deliberately — Windows searches the program's own folder before
+`sd-solo.exe` deliberately — Windows searches the program's own folder before
 `PATH`, which keeps Git for Windows's rival `msys-2.0.dll` from being picked
 up. **That failure makes SD report "SD has not been started" while it is
 running**, which is worth recognising because it looks like nothing else.
 The whole `SDCoreSolo` folder can be moved; its parts cannot be separated.
 
-**There is no Start Menu entry.** `sd` is on your PATH; open a window and type
+**There is no Start Menu entry.** `sd-solo` is on your PATH; open a window and type
 it.

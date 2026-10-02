@@ -83,7 +83,7 @@ definition.
 ## Compiling a definition
 
 **The terminfo compiler ships with SD.** `sdtic.exe` is in
-`C:\Program Files\SD\usr\bin`, beside `sd.exe`. Nothing needs building and
+`%USERPROFILE%\SDCoreSolo\usr\bin`, beside `sd-solo.exe`. Nothing needs building and
 nothing needs downloading.
 
 ```

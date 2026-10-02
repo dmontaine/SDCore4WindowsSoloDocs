@@ -82,7 +82,7 @@ next.
 ## SD refuses to nest
 
 ```
-:sh sd
+:sh sd-solo
 SD is already running in this session - type EXIT to return to it.
 ```
 

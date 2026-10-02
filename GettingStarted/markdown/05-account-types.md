@@ -18,7 +18,7 @@ entered.
 
 | | Set | Asked | Unlocks |
 |---|---|---|---|
-| **Account password** | at installation, or at the first `sd` on a computer installed from a control file; changed with `SET.PASSWORD` | by every session | the account |
+| **Account password** | at installation, or at the first `sd-solo` on a computer installed from a control file; changed with `SET.PASSWORD` | by every session | the account |
 | **Administrator password** | at installation; changed with `SET.PASSWORD ADMIN` | by `ADMIN` | the administrator commands, for the rest of the session |
 | **Global password** | at installation, managed mode only; changed with `SET.PASSWORD GLOBAL` by the server | by `ADMIN`, and by any session in place of the account password | the account **and** the administrator commands. It is the SD Core for Linux server's |
 
@@ -35,11 +35,11 @@ would land in an ordinary session.
 
 | | |
 |---|---|
-| `sd` at a terminal | `Password:`, three tries, then the session ends |
-| `sd` with its input piped | the first line of the input, one try |
+| `sd-solo` at a terminal | `Password:`, three tries, then the session ends |
+| `sd-solo` with its input piped | the first line of the input, one try |
 | ssh | the same as a terminal, after ssh has checked your Windows password |
 | the API | the client library's password, checked by SCRAM — see [API access](09-api-access.html) |
-| `sd <command>` | the kept copy, below — no typing |
+| `sd-solo <command>` | the kept copy, below — no typing |
 
 **A wrong one is answered `Wrong password`.** On a managed computer the global
 password is accepted in its place, and that session also has the
@@ -52,7 +52,7 @@ whoever knows it.
 ### The kept copy
 
 **Windows keeps an encrypted copy of the account password for you**, protected
-so that only your Windows user can open it. A command on the `sd` command line
+so that only your Windows user can open it. A command on the `sd-solo` command line
 signs in with it, which is what lets scripts and scheduled jobs use SD — see
 [Scheduled jobs](04-scheduled-jobs.html). The installer writes it, and
 `SET.PASSWORD` updates it.
@@ -81,13 +81,13 @@ password; otherwise it says why and leaves the password as it was.
 
 **`SET.PASSWORD` also updates the kept copy.** If it cannot, it says *The new
 password could not be kept for commands given on the sd command line* — the
-password is changed, but commands on the `sd` command line will fail until it
+password is changed, but commands on the `sd-solo` command line will fail until it
 is set again.
 
 ### The first password on a managed computer
 
 **A computer installed from a control file has no account password yet.** The
-first `sd` typed at that computer's keyboard asks you to choose one:
+first `sd-solo` typed at that computer's keyboard asks you to choose one:
 
 ```
 This account has no password yet. Choose one now - SD Core Solo for Windows asks for it every time it is used.

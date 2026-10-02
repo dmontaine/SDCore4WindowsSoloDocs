@@ -62,8 +62,8 @@ session. See [The account and its passwords](05-account-types.html).
 
 | | |
 |---|---|
-| **Provide the SD Core API (port 4243)** | starts the API listener. Off by default |
-| **Let other computers reach it** | opens port 4243 in Windows Firewall. Without it the API answers this computer only |
+| **Provide the SD Core API (port 4249)** | starts the API listener. Off by default |
+| **Let other computers reach it** | opens port 4249 in Windows Firewall. Without it the API answers this computer only |
 | **Let other computers reach this computer's ssh server** | shown when an ssh server with a firewall rule is already installed. Opens that rule to the network |
 | **Install the OpenSSH server** | shown when no ssh server is installed. Installs the MSI from `ssh-server\` |
 
@@ -77,8 +77,8 @@ mode leaves nothing to choose.
 | | |
 |---|---|
 | **Python** | installed for you, from `python\`, unless a Python 3.13 or later is already installed. It is a per-user install and needs no administrator rights |
-| **PATH** | `%USERPROFILE%\SDCoreSolo\usr\bin` is added to your PATH, so `sd` works from any new window |
-| **ssh lands in SD** | wherever an OpenSSH server is present, it is set so that your ssh sign-in starts `sd`, and the ssh server is set to start with Windows. See [ssh access](08-ssh-access.html) |
+| **PATH** | `%USERPROFILE%\SDCoreSolo\usr\bin` is added to your PATH, so `sd-solo` works from any new window |
+| **ssh lands in SD** | wherever an OpenSSH server is present, it is set so that your ssh sign-in starts `sd-solo`, and the ssh server is set to start with Windows. See [ssh access](08-ssh-access.html) |
 
 ## The one administrator step
 
@@ -90,7 +90,7 @@ than yours:
   Windows start-up, as you, whether or not you are signed in;
 - opens or restricts the firewall rules chosen above;
 - installs the OpenSSH MSI, when that was chosen or managed mode needs it;
-- writes the ssh setting that starts `sd` for your ssh sign-in.
+- writes the ssh setting that starts `sd-solo` for your ssh sign-in.
 
 **If you decline the prompt, SD is installed but does not start at start-up**,
 and ssh and the firewall are left as they were. The installer says which steps
@@ -102,7 +102,7 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 
 | | |
 |---|---|
-| `usr\bin` | `sd.exe` and the other programs, the client libraries, and the two full-screen editors the `edit` and `micro` verbs run |
+| `usr\bin` | `sd-solo.exe` and the other programs, the client libraries, and the two full-screen editors the `edit` and `micro` verbs run |
 | `usr\clients` | the client libraries for applications, 64-bit and 32-bit. See [Client distribution](10-client-distribution.html) |
 | `sd.conf` | the configuration. See [Configuration](16-configuration.html) |
 | `sdsys` | SD's own files: the system programs (compiled only — no source is installed), messages, the dictionaries, the credential store |
@@ -133,7 +133,7 @@ managed — and it is how one USB stick sets up several computers.
 
 **The account password is deliberately not in it.** On a computer installed
 from a control file, the user sets the account password **the first time they
-run `sd` at that computer's keyboard**. Until then ssh and the API accept only
+run `sd-solo` at that computer's keyboard**. Until then ssh and the API accept only
 the global password — the server can reach the computer, and nobody else can.
 
 **A blank answer is asked for**, and so is one that breaks the password rules.

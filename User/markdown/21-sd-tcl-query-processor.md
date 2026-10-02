@@ -39,7 +39,7 @@ count voc
 **That number is particular to the account it was run in.** Every account has
 a `voc`, and no two need hold the same records — local additions differ. The
 counts on this page came from the multiuser product's `SDSYS` account, whose
-VOC is larger to begin with; on Solo the shipped VOC holds 416 records, so
+VOC is larger to begin with; on Solo the shipped VOC holds 420 records, so
 your counts will differ.
 
 ## The verbs

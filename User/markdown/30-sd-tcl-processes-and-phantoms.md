@@ -129,7 +129,7 @@ never started.
 > to know.** When SD is fed commands down a pipe, the phantom child inherits
 > that pipe. The job then never completes — not even after the parent session
 > has exited — and the only way out is to kill the process, which leaves an
-> entry in the user table that needs `sd -cleanup` to clear.
+> entry in the user table that needs `sd-solo -cleanup` to clear.
 > **`phantom` is for a person at a prompt, or for a program, and not for a
 > piped script.** The listings above are quoted from the verb's own message
 > texts for that reason.

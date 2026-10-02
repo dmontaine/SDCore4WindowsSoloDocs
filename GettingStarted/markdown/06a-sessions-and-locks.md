@@ -52,7 +52,7 @@ or ssh.
 **`(logout pending)`** after the name means somebody has asked that session to
 end and it has not gone. See below.
 
-**`sd -u`**, from a PowerShell window, lists the same sessions without an SD
+**`sd-solo -u`**, from a PowerShell window, lists the same sessions without an SD
 session of your own.
 
 ## Ending a session: `logout`
@@ -71,7 +71,7 @@ something.
 under the same user name, and on a Solo computer every session is `sduser`.
 **`logout all` needs `ADMIN`.** It leaves your own session alone.
 
-**`sd -k n`** and **`sd -k all`**, from a PowerShell window, do the same from
+**`sd-solo -k n`** and **`sd-solo -k all`**, from a PowerShell window, do the same from
 outside SD.
 
 ### When a session will not end
@@ -86,11 +86,11 @@ is the usual one — is refused while it is there. **Recovery is not another
 `logout`:**
 
 ```
-sd -cleanup
+sd-solo -cleanup
 ```
 
-from a PowerShell window — no elevation needed — and `sd -stop` then
-`sd -start` if that does not take it.
+from a PowerShell window — no elevation needed — and `sd-solo -stop` then
+`sd-solo -start` if that does not take it.
 
 **Confirm the session is actually dead before clearing it.** `pstat` *n*
 answers *(Not responding)* for a session with nothing behind it — it asks the
@@ -253,7 +253,7 @@ user number must be specified* — so there is no `unlock` that means
 
 **Task locks are released when a session ends normally.**
 
-> **`sd -cleanup` does not give them back, and that is a defect.** It releases
+> **`sd-solo -cleanup` does not give them back, and that is a defect.** It releases
 > a dead session's record locks and file locks and leaves its task locks held,
 > by a user number nothing is behind, until SD itself is restarted.
 > `list.locks` shows the number with an owner and `clear.locks` refuses it
@@ -264,7 +264,7 @@ user number must be specified* — so there is no `unlock` that means
 | | |
 |---|---|
 | **need `ADMIN`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock` |
-| **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd -u`, `sd -k`, `sd -cleanup` |
+| **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` |
 
 Without it they answer *Command requires administrator privileges*. See
 [Administrator commands](06-administrator-commands.html).

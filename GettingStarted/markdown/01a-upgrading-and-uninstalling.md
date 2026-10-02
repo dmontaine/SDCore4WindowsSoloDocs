@@ -9,8 +9,8 @@ This page continues [Installing](01-installation.html).
 the installation and upgrades it. It asks nothing — no mode, no passwords, no
 API or ssh choices — and it keeps them all.
 
-**SD is stopped first**, because an upgrade replaces `sd.exe`. It starts again
-at the next Windows start-up, or with `sd -start` (see
+**SD is stopped first**, because an upgrade replaces `sd-solo.exe`. It starts again
+at the next Windows start-up, or with `sd-solo -start` (see
 [Running SD](03-running-sd.html)).
 
 **What an upgrade replaces, and what it keeps:**
@@ -44,7 +44,7 @@ stops SD, then — after the one administrator consent prompt — removes:
 
 - the startup task **SD Core Solo**;
 - the API's firewall rule;
-- the ssh setting that starts `sd` for your ssh sign-in;
+- the ssh setting that starts `sd-solo` for your ssh sign-in;
 
 and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH.
 

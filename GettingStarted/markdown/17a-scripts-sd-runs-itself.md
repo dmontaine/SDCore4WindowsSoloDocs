@@ -52,14 +52,14 @@ administrator approves the prompt.
 
 | Action | What it does |
 |---|---|
-| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH server when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; writes the ssh setting that starts `sd` for your ssh sign-in, and sets the ssh server to start with Windows |
+| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH server when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; writes the ssh setting that starts `sd-solo` for your ssh sign-in, and sets the ssh server to start with Windows |
 | **Upgrade** | registers the scheduled task again, and nothing else — an upgrade does not revisit the choices |
 | **Remove** | takes away the task, the API rule and the ssh setting. **The ssh firewall rule is Microsoft's and is left as it is** |
 
-**The task runs `sd -start` as you, at Windows start-up, whether or not you are
+**The task runs `sd-solo -start` as you, at Windows start-up, whether or not you are
 signed in** — that is what lets ssh and the API work before anyone signs in.
 For a user who is an administrator, Task Scheduler gives the task the full
-administrator token, and **`sd.exe` drops it itself**, so SD runs on an
+administrator token, and **`sd-solo.exe` drops it itself**, so SD runs on an
 ordinary token whatever the task does. See [Running SD](03-running-sd.html).
 
 **The ssh setting is a block appended to `sshd_config`, between markers**, so
@@ -68,7 +68,7 @@ that the uninstaller can remove exactly it and nothing else:
 ```
 # BEGIN SD Core Solo - added by its installer, removed by its uninstaller
 Match User <your Windows user>
-    ForceCommand "%USERPROFILE%\SDCoreSolo\usr\bin\sd.exe"
+    ForceCommand "%USERPROFILE%\SDCoreSolo\usr\bin\sd-solo.exe"
     DisableForwarding yes
 # END SD Core Solo
 ```
@@ -87,7 +87,7 @@ the steps that did not complete. See [Installing](01-installation.html).
 
 ### `internal-marker.ps1`
 
-**`sd -internal` is how the installer runs SD's setup steps, and it is admitted
+**`sd-solo -internal` is how the installer runs SD's setup steps, and it is admitted
 only while a marker file exists.** This script writes that file immediately
 before each internal session, and SD deletes it on admission, so an
 un-used marker authorises exactly one later session and then expires. It is
