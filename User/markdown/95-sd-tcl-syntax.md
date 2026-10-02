@@ -136,7 +136,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`rename`** | **`rename`** — the same verb as **`cname`** |
 | **`report.src`** | **`report.src on`** \| **`off`** \| **`report.src`** to toggle |
 | **`report.style`** | **`report.style`** {*name* \| **`off`**} |
-| **`restore.account`** | **`restore.account`** *zipfile* *account* {**`no.query`**} |
+| **`restore.account`** | **`restore.account`** *zipfile* *account* {**`no.query`**}  ·  **`restore.account latest`** *account* {**`no.query`**} |
 | **`run`** | **`run`** {*file*} *record* {*arguments*} |
 | **`save.list`** | **`save.list`** *list* {**`from`** *list.no*} |
 | **`save.stack`** | **`save.stack`** {*name*} |

@@ -57,10 +57,18 @@ the product is `windows-solo`.
 
 ```
 restore.account zipfile sduser {NO.QUERY}
+restore.account LATEST sduser {NO.QUERY}
 ```
 
 * **A bare file name** is looked for in the remembered folder. A name that
   includes a folder is used as given.
+* **`LATEST` takes the place of the file name** and chooses the newest backup in
+  the remembered folder that was made **on this computer** and holds the account.
+  It says which file it chose before it asks. If there is none it says so and
+  changes nothing. The choice is made from the file name, which carries the
+  computer, the account and the time, so a backup renamed by hand may not be
+  found. The zip is still checked against its own counts, below, before anything
+  changes.
 * **The zip is checked against its own counts before anything is changed.** The
   product (a Solo backup restores only into a Solo), the number of accounts, and
   the account's files, bytes and directories must match what was unpacked. Any
