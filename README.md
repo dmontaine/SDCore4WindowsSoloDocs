@@ -1,6 +1,6 @@
 # SD Core Solo for Windows — documentation
 
-Documentation for **SD Core Solo for Windows WS1.1-2**, a personal SD Core for
+Documentation for **SD Core Solo for Windows WS1.1-3**, a personal SD Core for
 one Windows user. The source is in a separate repository,
 `SDCore4WindowsSolo`; nothing here is needed to build SD, and nothing there is
 needed to build these pages.

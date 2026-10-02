@@ -1,7 +1,7 @@
 Title: Installing
 Subtitle: What the installer asks, what it puts where, and the control file for installing many computers.
 
-**The installer is one file, `sd-solo-setup-WS1.1-2.exe`, and it installs for
+**The installer is one file, `sd-solo-setup-WS1.1-3.exe`, and it installs for
 the Windows user who runs it.** Everything goes into that user's profile, in
 `%USERPROFILE%\SDCoreSolo`. Nothing is installed for other users of the
 computer, and there is no Windows service.

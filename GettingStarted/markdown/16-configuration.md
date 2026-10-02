@@ -73,7 +73,7 @@ a message naming the parameter.
 
 ```
 :config
-Virtual Machine Version Number WS1.1-2
+Virtual Machine Version Number WS1.1-3
 APILOGIN  1
 APIPORT   4249
 CMDSTACK  99
