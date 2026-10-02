@@ -34,7 +34,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`analyze.file`** | **`analyze.file`** — the same verb as **`analyse.file`** |
 | **`append.sd.path`** | **`append.sd.path`** {**`on`** \| **`off`**} |
 | **`autologout`** | **`autologout`** {*minutes*} |
-| **`backup.account`** | **`backup.account`** *account* {**`to`** *folder*} |
+| **`backup.account`** | **`backup.account`** {*account*} {**`to`** *folder*} |
 | **`basic`** | **`basic`** {*file*} *record* {*record* …} |
 | **`bell`** | **`bell on`** \| **`off`** |
 | **`break`** | **`break on`** \| **`off`** \| **`on user`** *n* |
@@ -136,7 +136,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`rename`** | **`rename`** — the same verb as **`cname`** |
 | **`report.src`** | **`report.src on`** \| **`off`** \| **`report.src`** to toggle |
 | **`report.style`** | **`report.style`** {*name* \| **`off`**} |
-| **`restore.account`** | **`restore.account`** *zipfile* *account* {**`no.query`**}  ·  **`restore.account latest`** *account* {**`no.query`**} |
+| **`restore.account`** | **`restore.account`** *zipfile* {*account*} {**`no.query`**}  ·  **`restore.account latest`** {*account*} {**`no.query`**} |
 | **`run`** | **`run`** {*file*} *record* {*arguments*} |
 | **`save.list`** | **`save.list`** *list* {**`from`** *list.no*} |
 | **`save.stack`** | **`save.stack`** {*name*} |

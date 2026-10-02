@@ -28,11 +28,14 @@ going back to an older release.
 ## Backing up: `backup.account`
 
 ```
-backup.account sduser {TO folder}
+backup.account {TO folder}
 ```
 
 Writes the account to **one zip file** in the folder, named after the computer,
 the account and the time, for example `SD-ace-sduser-20261001-144419.zip`.
+
+**There is one account, so no name is needed.** With none, the command fills in the
+name `sduser`. `backup.account sduser` and `backup.account ALL` are accepted too.
 
 * **Without `TO`** the remembered folder is used. **With `TO`** the folder is used
   for that one backup only; nothing is remembered.
@@ -46,7 +49,7 @@ the account and the time, for example `SD-ace-sduser-20261001-144419.zip`.
   against the account.
 
 ```
-:backup.account sduser
+:backup.account
 sduser: 4 files, 78848 bytes, 6 directories
 ```
 
@@ -56,9 +59,12 @@ the product is `windows-solo`.
 ## Restoring: `restore.account`
 
 ```
-restore.account zipfile sduser {NO.QUERY}
-restore.account LATEST sduser {NO.QUERY}
+restore.account zipfile {NO.QUERY}
+restore.account LATEST {NO.QUERY}
 ```
+
+**With no account name the command fills in `sduser`**, as `backup.account` does. A
+name (`sduser`) and `ALL` are accepted too.
 
 * **A bare file name** is looked for in the remembered folder. A name that
   includes a folder is used as given.
