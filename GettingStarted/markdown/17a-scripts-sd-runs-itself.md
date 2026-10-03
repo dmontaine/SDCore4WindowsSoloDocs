@@ -96,8 +96,8 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshd.ps1
 |---|---|
 | `-Prepare` | makes `%USERPROFILE%\SDCoreSolo\ssh` with its host key, its configuration and its key file, moves the SD Core server's key out of `%USERPROFILE%\.ssh\authorized_keys` if an earlier release put it there, and stops |
 | `-Run` | does `-Prepare`, checks the configuration with `sshd -t`, and runs `sshd.exe` in the foreground on port 4251. It refuses if something else already holds the port |
-| `-Stop` | ends the `sshd.exe` that was started from this configuration, found by its command line — never the Windows ssh service |
-| `-Show` | reports the port and whether it is listening, and changes nothing |
+| `-Stop` | ends the `sshd.exe` that was started from this configuration, found by its command line — never the Windows ssh service. **Run it from an elevated PowerShell.** The process the startup task started cannot be inspected from an ordinary window, even your own; there `-Stop` says *"cannot inspect"*, exits `1` and stops nothing, rather than report that there was nothing to stop |
+| `-Show` | reports the port, whether it is listening and which process holds it, and changes nothing |
 
 **The port is fixed at 4251 and is not a parameter.** The configuration is
 written fresh each time, so editing it by hand does not last.
