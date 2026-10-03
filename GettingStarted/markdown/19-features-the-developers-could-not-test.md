@@ -140,8 +140,8 @@ damaged kept copy of the account password is refused.
 **Not known.** **A tree actually moved to another Windows user, or to another
 computer, has not been run.** The kept copy is protected for one Windows user,
 so it will not open for another, and the damaged-copy test stands in for that
-case rather than being it. The startup task, the firewall rules, the ssh
-setting and the PATH entry are the installer's and do not move.
+case rather than being it. The startup tasks, the firewall rules and the PATH
+entry are the installer's and do not move.
 
 **To settle it.** Copy a tree to another user and to another computer, and sign
 in with the account password.
@@ -175,14 +175,34 @@ prompt, then a full-screen operation and the arrow keys.
 
 ### A domain user in the ssh setting
 
-**Known.** The installer writes `Match User` with the lower-case name of a
-local user.
+**Known.** Solo's ssh server is configured with `AllowUsers` and the lower-case
+name of a local user.
 
 **Not known.** **Whether the ssh server matches a *domain* user by
-`name@domain`, the form the installer writes for one.**
+`name@domain`, the form the configuration uses for one.**
 
-**To settle it.** On a domain-joined computer, sign in over ssh and check that
-you land in SD.
+**To settle it.** On a domain-joined computer, sign in over ssh, on port 4251,
+and check that you land in SD.
+
+### Solo's own ssh server: starting at boot, and reaching it
+
+**Known.** Solo's ssh server, started by hand from a normal PowerShell with
+`solo-sshd.ps1 -Run`, accepts a key and refuses a stranger's key and a password,
+runs the forced command as you, and does not touch the Windows ssh service; its configuration is accepted by
+`sshd -t`, and `StrictModes` refuses a key file others can write.
+
+**Not known.** Four things have not been run on a real computer. **That the
+task SD Core Solo SSH starts the server at Windows start-up with nobody signed
+in**: it is registered without a password, and a task registered that way cannot
+be created without administrator rights, so it could not be tried here. **That a
+key login works to a server started that way.** **That another computer can
+reach port 4251** through the firewall rule; only this computer has connected.
+**That SD Core Solo and SD Core work together on one computer**, each on its
+own ssh port.
+
+**To settle it.** Restart the computer, do not sign in, and connect from a second
+computer with `ssh -p 4251`, once with SD Core Solo alone and once with SD Core
+installed beside it.
 
 ### The first password on a computer installed from a control file
 

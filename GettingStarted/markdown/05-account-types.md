@@ -37,7 +37,7 @@ would land in an ordinary session.
 |---|---|
 | `sd-solo` at a terminal | `Password:`, three tries, then the session ends |
 | `sd-solo` with its input piped | the first line of the input, one try |
-| ssh | the same as a terminal, after ssh has checked your Windows password |
+| ssh | the same as a terminal, after ssh has checked your key |
 | the API | the client library's password, checked by SCRAM — see [API access](09-api-access.html) |
 | `sd-solo <command>` | the kept copy, below — no typing |
 

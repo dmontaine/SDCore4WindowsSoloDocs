@@ -137,9 +137,11 @@ you — which is what lets a script or a scheduled job use SD. See
    the application that loads it**, and its architecture must match. See
    [API access](09-api-access.html) and
    [Client distribution](10-client-distribution.html).
-3. **ssh**, if an ssh server is installed: `ssh <your Windows user>@localhost`
-   signs in with your Windows password and lands in `sd-solo`, which asks for the
-   account password. See [ssh access](08-ssh-access.html).
+3. **ssh**, if the OpenSSH package is installed: `ssh -p 4251 <your Windows
+   user>@localhost` signs in with a key and lands in `sd-solo`, which asks for the
+   account password. Add your public key to
+   `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` first; a password is never
+   accepted. See [ssh access](08-ssh-access.html).
 
 ## When something goes wrong
 

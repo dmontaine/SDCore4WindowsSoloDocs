@@ -16,7 +16,7 @@ comes with:
 |---|---|
 | **a global password** | set at installation, on the installer's page or in the control file. The server signs in with it |
 | **the API, on and open** | port 4249, reachable from other computers — the server's way in |
-| **ssh, on and open** | the OpenSSH server installed if none was, reachable from other computers |
+| **ssh, on and open** | the OpenSSH package installed if none was, and Solo's own ssh server on port 4251, reachable from other computers |
 
 See [Installing](01-installation.html), including the **control file** that
 sets up many computers from one USB stick.
@@ -24,9 +24,9 @@ sets up many computers from one USB stick.
 ## How the server signs in
 
 **As `sduser`, with the global password.** Over the API that is the whole of
-it. Over ssh the server first signs in to the computer's ssh server as its
-Windows user — ssh's own sign-in, with that user's Windows password or key —
-and then gives SD the global password when `sd-solo` asks. One account name carries
+it. Over ssh the server first signs in to Solo's ssh server, on port 4251, as
+the Windows user — ssh's own sign-in, with that user's key; a password is never
+accepted there — and then gives SD the global password when `sd-solo` asks. One account name carries
 two passwords: SD tries the account password first and the global password
 second, which is why the two must differ.
 
@@ -34,13 +34,13 @@ second, which is why the two must differ.
 
 **The server cannot know which Windows user this computer's SD belongs to,** and
 ssh needs that name. So over the API, a server session can install the server's
-ssh public key in your own Windows user's `.ssh\authorized_keys`, and is told
-the user name in reply. From then on the server signs in over ssh with its key
-instead of a Windows password.
+ssh public key in Solo's own key file, `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`,
+and is told the user name and the port in reply. From then on the server signs
+in over ssh, on that port, with its key.
 
 | Request | What it does |
 |---|---|
-| **ADD** | puts the key in `%USERPROFILE%\.ssh\authorized_keys`. The reply carries your Windows user name as ssh matches it, this computer's name, the key's fingerprint (`SHA256:...`), `ADDED` or `PRESENT`, and the fingerprint of this computer's ssh server key, so the server can check it is talking to the right computer — empty when that is not known |
+| **ADD** | puts the key in `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`. The reply carries your Windows user name as ssh matches it, this computer's name, the key's fingerprint (`SHA256:...`), `ADDED` or `PRESENT`, the fingerprint of Solo's own ssh server key, so the server can check it is talking to the right computer — empty when that is not known — and the port, `4251` |
 | **REMOVE** | takes the key with that fingerprint out; the reply is `REMOVED` or `ABSENT` and the number of the server's keys left |
 | **LIST** | the fingerprints of the server's keys, one per field |
 
@@ -58,11 +58,11 @@ already installed, the request is unknown, or it could not be carried out. Every
 use is written to the audit trail, and a successful one carries the key's
 fingerprint and the address the request came from.
 
-**It needs the installer's ssh block.** A managed install writes it with a key
-file line and in the position that makes ssh read your own file even when your
-Windows user is an administrator — see [ssh access](08-ssh-access.html). A
-computer installed before that was done refuses the request until it is
-installed again; an upgrade does not rewrite the block.
+**It needs Solo's own ssh server**, which needs the OpenSSH package's
+`sshd.exe` — see [ssh access](08-ssh-access.html). Without it the request is
+refused. A computer installed before this release is moved to the new
+arrangement by an upgrade: the key already added is moved into Solo's key file,
+and the server reaches the computer on port 4251 from then on, not 22.
 
 **A session signed in with the global password is a server session.** It has
 the administrator commands unlocked from the start, and it is the only kind of

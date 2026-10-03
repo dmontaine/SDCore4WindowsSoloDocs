@@ -24,9 +24,11 @@ below; carrying them is not optional.
 packages from beside itself and never downloads anything, so the same folder
 serves as a download and as a USB stick for installing several computers.
 
-**The multiuser SD Core for Windows must not be installed.** If it is, the
-installer stops with *"SD Core is installed on this computer. Uninstall it
-first."* The two cannot share a computer.
+**The multiuser SD Core for Windows can be installed on the same computer.** The
+two products keep their own programs, ports, firewall rules and shared memory:
+SD Core Solo's API is on 4249 and its ssh is on **4251**, while SD Core uses
+the computer's ordinary ssh port, 22. See [ssh access](08-ssh-access.html).
+Earlier releases refused to install beside SD Core.
 
 ## What you are asked
 
@@ -64,7 +66,7 @@ session. See [The account and its passwords](05-account-types.html).
 |---|---|
 | **Provide the SD Core API (port 4249)** | starts the API listener. Off by default |
 | **Let other computers reach it** | opens port 4249 in Windows Firewall. Without it the API answers this computer only |
-| **Let other computers reach this computer's ssh server** | shown when an ssh server with a firewall rule is already installed. Opens that rule to the network |
+| **Let other computers reach Solo's ssh port (4251)** | shown when the OpenSSH server is already installed. Opens Solo's own firewall rule for port 4251 to the network. Without it, ssh answers this computer only |
 | **Install the OpenSSH server** | shown when no ssh server is installed. Installs the MSI from `ssh-server\` |
 
 **In managed mode none of this is asked**: the API is on and reachable from
@@ -78,7 +80,7 @@ mode leaves nothing to choose.
 |---|---|
 | **Python** | installed for you, from `python\`, unless a Python 3.13 or later is already installed. It is a per-user install and needs no administrator rights |
 | **PATH** | `%USERPROFILE%\SDCoreSolo\usr\bin` is added to your PATH, so `sd-solo` works from any new window |
-| **ssh lands in SD** | wherever an OpenSSH server is present, it is set so that your ssh sign-in starts `sd-solo`, and the ssh server is set to start with Windows. See [ssh access](08-ssh-access.html) |
+| **ssh lands in SD** | wherever the OpenSSH package is present, Solo runs an ssh server of its own on port 4251, as you, and starts it with Windows. A key login there starts `sd-solo`. Windows' own ssh server and its port 22 are not changed. See [ssh access](08-ssh-access.html) |
 
 ## The one administrator step
 
@@ -90,11 +92,13 @@ than yours:
   Windows start-up, as you, whether or not you are signed in;
 - opens or restricts the firewall rules chosen above;
 - installs the OpenSSH MSI, when that was chosen or managed mode needs it;
-- writes the ssh setting that starts `sd-solo` for your ssh sign-in.
+- registers the scheduled task **SD Core Solo SSH**, which starts Solo's own ssh
+  server on port 4251 at every Windows start-up, as you, and removes what an
+  earlier release added to Windows' ssh settings.
 
 **If you decline the prompt, SD is installed but does not start at start-up**,
-and ssh and the firewall are left as they were. The installer says which steps
-did not complete.
+and Solo's ssh server and the firewall rules are not set up. The installer says
+which steps did not complete.
 
 ## What lands where
 
@@ -116,7 +120,7 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 **The folder can be moved.** SD finds its files from where its programs are,
 not from a path written into it, so a copied tree works under another Windows
 user or on another computer — as long as the account password is known. The
-startup task, the firewall rules, the ssh setting and PATH are the installer's
+startup tasks, the firewall rules and PATH are the installer's
 and do not move with it.
 
 ## Installing many computers: the control file

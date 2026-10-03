@@ -52,38 +52,62 @@ administrator approves the prompt.
 
 | Action | What it does |
 |---|---|
-| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH server when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; writes the ssh setting that starts `sd-solo` for your ssh sign-in, and sets the ssh server to start with Windows |
-| **Upgrade** | registers the scheduled task again, and nothing else — an upgrade does not revisit the choices |
-| **Remove** | takes away the task, the API rule and the ssh setting. **The ssh firewall rule is Microsoft's and is left as it is** |
+| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH package when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server (below) |
+| **Upgrade** | registers the scheduled tasks again — an upgrade does not revisit the choices, with one exception: on a managed computer with no firewall rule for port 4251 yet, it opens one. It also removes what an earlier release added to Windows' ssh settings |
+| **Remove** | takes away both tasks, stops Solo's ssh server, and takes away the API rule and the ssh port rule. **Windows' own ssh rule for port 22 is Microsoft's and is never touched** |
 
 **The task runs `sd-solo -start` as you, at Windows start-up, whether or not you are
-signed in** — that is what lets ssh and the API work before anyone signs in.
+signed in** — that is what lets the API work before anyone signs in.
 For a user who is an administrator, Task Scheduler gives the task the full
 administrator token, and **`sd-solo.exe` drops it itself**, so SD runs on an
 ordinary token whatever the task does. See [Running SD](03-running-sd.html).
 
-**The ssh setting is a block appended to `sshd_config`, between markers**, so
-that the uninstaller can remove exactly it and nothing else:
+**The task SD Core Solo SSH runs `solo-sshd.ps1 -Run` as you, at Windows
+start-up, whether or not you are signed in.** It is registered without a stored
+password, so it can only ever run as you and with no more rights than you have
+at the keyboard. Starting it again, up to three times a minute apart, is left to
+Task Scheduler if the server stops.
 
-```
-# BEGIN SD Core Solo - added by its installer, removed by its uninstaller
-Match User <your Windows user>
-    ForceCommand "%USERPROFILE%\SDCoreSolo\usr\bin\sd-solo.exe"
-    DisableForwarding yes
-# END SD Core Solo
-```
-
-**Only your user is matched**; sign-in is the ssh server's own, with your
-Windows password or key. `DisableForwarding` is there because `ForceCommand`
-does not by itself stop port forwarding. The file is checked with `sshd -t`
-afterwards and put back if the ssh server rejects it. See
-[ssh access](08-ssh-access.html).
+**An earlier release wrote a block into Windows' `sshd_config`**, between
+`# BEGIN SD Core Solo` and `# END SD Core Solo` markers, with a `Match User`
+line for your Windows user. **This release removes exactly that block and
+nothing else**, on an install, an upgrade and an uninstall. The file is checked
+with `sshd -t` afterwards and put back if the ssh server rejects it, and the
+Windows ssh service is restarted only if it was running and a block was removed.
+Solo no longer writes to that file.
 
 **Exit 0** every step passed, **1** a step failed, **2** it refused — not
 elevated, or an input was missing.
 
 **If you decline the consent prompt, the installer still finishes**, and lists
 the steps that did not complete. See [Installing](01-installation.html).
+
+### `solo-sshd.ps1`
+
+**Prepares and runs Solo's own ssh server.** It is started by the task SD Core
+Solo SSH, and by `solo-sshkey.ps1`, which uses its `-Prepare`. It needs no
+elevation.
+
+```
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshd.ps1" -Show
+```
+
+| Switch | What it does |
+|---|---|
+| `-Prepare` | makes `%USERPROFILE%\SDCoreSolo\ssh` with its host key, its configuration and its key file, moves the SD Core server's key out of `%USERPROFILE%\.ssh\authorized_keys` if an earlier release put it there, and stops |
+| `-Run` | does `-Prepare`, checks the configuration with `sshd -t`, and runs `sshd.exe` in the foreground on port 4251. It refuses if something else already holds the port |
+| `-Stop` | ends the `sshd.exe` that was started from this configuration, found by its command line — never the Windows ssh service |
+| `-Show` | reports the port and whether it is listening, and changes nothing |
+
+**The port is fixed at 4251 and is not a parameter.** The configuration is
+written fresh each time, so editing it by hand does not last.
+
+### `solo-ssh-firewall.ps1`
+
+**Decides whether other computers may reach port 4251.** It is the one step of
+Solo's ssh that needs an administrator, so it is run from the installer's
+consent prompt, or by you from an elevated PowerShell. See
+[ssh access](08-ssh-access.html) for the four switches and their exit codes.
 
 ### `internal-marker.ps1`
 
@@ -146,10 +170,11 @@ that line, or 1 without it. It exists because `micro` printed a false
 remove or list its ssh key** — see [Managed mode](15-managed-mode.html). It is
 not for typing: it takes a request verb (`ADD`, `REMOVE` or `LIST`) and a key or
 fingerprint, and prints lines SD reads back (`RESULT=ADDED`, `FPR=SHA256:...`,
-`ERROR=...`). **It needs no elevation**, because it writes only
-`%USERPROFILE%\.ssh\authorized_keys`, and it refuses unless the installer's ssh
-block is in place. It touches only lines it wrote itself, tagged
-`sdcoresolo-managed`, and keeps at most four. Exit **0** with a `RESULT=` line,
+`ERROR=...`). **It needs no elevation**, because it writes only Solo's own key
+file, `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`, and it refuses unless
+`sshd.exe` is installed. It runs `solo-sshd.ps1 -Prepare` first, which also
+tells it Solo's ssh server key and port. It touches only lines it wrote itself,
+tagged `sdcoresolo-managed`, and keeps at most four. Exit **0** with a `RESULT=` line,
 **1** with an `ERROR=` line and nothing changed.
 
 ## See also

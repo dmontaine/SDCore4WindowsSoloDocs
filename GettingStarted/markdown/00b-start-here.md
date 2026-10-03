@@ -95,8 +95,9 @@ the lookup tries what you typed, then lower, then upper. See
 [Lower case](11-lower-case.html).
 
 **5. An ssh session lands inside SD, and the API login is SCRAM.** ssh to this
-computer as your Windows user and you are at SD's prompt, asked for the account
-password. Clients built against the old cleartext API login will not connect.
+computer, on port 4251, as your Windows user with your key, and you are at SD's
+prompt, asked for the account password. Clients built against the old cleartext
+API login will not connect.
 See [ssh access](08-ssh-access.html) and [API access](09-api-access.html).
 
 ## What this release is
