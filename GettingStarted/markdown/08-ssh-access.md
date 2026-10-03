@@ -176,11 +176,11 @@ This account has no password yet. Set it at this computer's keyboard first; unti
 **These have not been measured on a real computer.** See
 [Features the developers could not test](19-features-the-developers-could-not-test.html).
 
-- **A Windows password sign-in through this server.** A server run as an ordinary
-  user was measured to check the password and then fail to start the session;
-  the SYSTEM server this version installs has not been signed in to with a
-  password yet. The owner types his own password for that test.
-- **A key sign-in through the SYSTEM server**, and from another computer.
+- **A sign-in from another computer.** From the same computer, a Windows
+  password sign-in through this server reached SD, and so did a key sign-in
+  (the first with the owner's own password, typed by him). From a second
+  computer, only reaching the port has been tried, and that was with an earlier
+  build of this server.
 - **That SD Core Solo and SD Core work together on one computer**, each answering on its own ssh port.
 - **The user name for a domain user.** The configuration names a local user by the
   lower-case user name, and a domain user as `name@domain`. Whether the server
