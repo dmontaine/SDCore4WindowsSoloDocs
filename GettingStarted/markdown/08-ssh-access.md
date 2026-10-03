@@ -176,11 +176,10 @@ This account has no password yet. Set it at this computer's keyboard first; unti
 **These have not been measured on a real computer.** See
 [Features the developers could not test](19-features-the-developers-could-not-test.html).
 
-- **A sign-in from another computer.** From the same computer, a Windows
-  password sign-in through this server reached SD, and so did a key sign-in
-  (the first with the owner's own password, typed by him). From a second
-  computer, only reaching the port has been tried, and that was with an earlier
-  build of this server.
+- **A restart with nobody signed in.** That was seen for an earlier build of
+  this server only. (A Windows password sign-in through this server reached SD
+  from the same computer and from a second one, typed by the owner himself, and
+  a key sign-in reached SD from the same computer.)
 - **That SD Core Solo and SD Core work together on one computer**, each answering on its own ssh port.
 - **The user name for a domain user.** The configuration names a local user by the
   lower-case user name, and a domain user as `name@domain`. Whether the server

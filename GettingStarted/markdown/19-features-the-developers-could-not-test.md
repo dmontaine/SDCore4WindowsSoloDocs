@@ -196,12 +196,13 @@ version runs the server as SYSTEM instead.
 
 **Also known.** The SYSTEM server this version installs, on the developer's
 computer: a Windows password sign-in from the same computer reached SD (the
-owner typed his own password), and a key sign-in did too.
+owner typed his own password), a second computer's Windows password sign-in
+did too, and a key sign-in from the same computer did.
 
-**Not known.** The SYSTEM server has not been signed in to **from a second
-computer**, nor **after a restart with nobody signed in** (that was seen for the
-first build only), and **ssh to port 22 still landing in SD Core**, with Solo
-installed beside it, has not been tried.
+**Not known.** The SYSTEM server has not been signed in to **after a restart
+with nobody signed in** (that was seen for the first build only), and **ssh to
+port 22 still landing in SD Core**, with Solo installed beside it, has not been
+tried.
 
 **To settle it.** Restart the computer, do not sign in, and connect from a
 second computer with `ssh -p 4251`, typing the Windows password and then the SD
