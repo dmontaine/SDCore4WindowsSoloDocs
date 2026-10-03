@@ -53,7 +53,8 @@ gets SD's program folder if it lost it.
 stops SD, then — after the one administrator consent prompt — removes:
 
 - the startup task **SD Core Solo** and the ssh task **SD Core Solo SSH**,
-  which also stops Solo's ssh server;
+  which also stops Solo's ssh server and deletes its administrators-only folder,
+  `C:\ProgramData\SDCoreSolo`;
 - the firewall rules for the API and for Solo's ssh port, 4251;
 
 and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH.
@@ -69,15 +70,17 @@ uninstalling. Nothing else holds a copy.
 **What uninstalling leaves installed:** the OpenSSH server and Python, even if
 the SD installer put them there — other programs may use them — and Windows'
 own ssh firewall rule for port 22, which is Microsoft's and was never Solo's.
-Remove them from *Apps* if you no longer want them. Your ssh key file and host
-key stay with your data, in `%USERPROFILE%\SDCoreSolo\ssh`.
+Remove them from *Apps* if you no longer want them. Your optional ssh key file
+stays with your data, in `%USERPROFILE%\SDCoreSolo\ssh`; the server's host key
+goes with its folder, so a client sees a new host key after a reinstall.
 
 **If the administrator step cannot run**, the uninstaller says *"The startup
 task, firewall rule or ssh setting could not be removed"* and names the log.
 The programs are still removed. Delete the tasks **SD Core Solo** and **SD Core
-Solo SSH** in Task Scheduler, end any `sshd.exe` still running from
-`%USERPROFILE%\SDCoreSolo\ssh`, and delete the rules `SD-Solo-API-In-TCP` and
-`SD-Solo-SSH-In-TCP` in `wf.msc`, by hand.
+Solo SSH** in Task Scheduler, end the `sshd.exe` that is listening on port 4251,
+delete the folder `C:\ProgramData\SDCoreSolo`, and delete the rules
+`SD-Solo-API-In-TCP` and `SD-Solo-SSH-In-TCP` in `wf.msc`, by hand, from an
+elevated prompt.
 
 ## Continued in
 

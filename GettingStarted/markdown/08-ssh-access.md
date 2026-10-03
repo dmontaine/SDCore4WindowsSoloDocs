@@ -1,18 +1,20 @@
 Title: ssh access
-Subtitle: Reaching SD on this computer over ssh, on SD Core Solo's own port, and what it costs.
+Subtitle: Reaching SD on this computer over ssh, on SD Core Solo's own port, with your Windows account name and password.
 
 **An ssh sign-in to port 4251 lands inside SD.** SD Core Solo runs an ssh server
-of its own on port **4251**. It checks your key; then, instead of a Windows
-prompt, you get `sd-solo`, which asks for the account password.
+of its own on port **4251**. You sign in with your Windows account name and its
+Windows password, as you would to any computer; then, instead of a Windows
+prompt, you get `sd-solo`, which asks for the SD account password.
 
 ```
-ssh -p 4251 you@this-computer        <- your key, ssh's own check
+ssh -p 4251 you@this-computer
+you@this-computer's password:        <- your Windows password, ssh's own check
 Password:                            <- SD's account password
 :
 ```
 
-**Only a key can log in.** The server never accepts a password on this port, so
-there is nothing to guess. The port is fixed: it is not a setting.
+**There is no key to set up first.** A key is an optional extra (below), never
+the only way in. The port is fixed: it is not a setting.
 
 **ssh works while nobody is signed in to the computer**: the server is started
 when Windows starts, by its own scheduled task, and SD is started at start-up by
@@ -28,23 +30,32 @@ computer.**
 
 | | |
 |---|---|
-| **The ssh server** | the `sshd.exe` that Microsoft's OpenSSH package installs, run as **you**, without administrator rights, with a configuration of its own: `%USERPROFILE%\SDCoreSolo\ssh\sshd_config`. The file is rewritten each time the server starts, so do not edit it |
-| **The task** | **SD Core Solo SSH**, which starts the server when Windows starts, whether or not you are signed in, and starts it again, up to three times a minute apart, if it stops |
-| **Its host key** | `%USERPROFILE%\SDCoreSolo\ssh\ssh_host_ed25519_key`, made the first time the server starts. It is Solo's own, not the Windows OpenSSH Server's |
-| **The key file** | `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`, the only place the server looks for keys |
+| **The ssh server** | the `sshd.exe` that Microsoft's OpenSSH package installs, started by a scheduled task, **SD Core Solo SSH**, as **SYSTEM**, when Windows starts, and again up to three times a minute apart if it stops |
+| **Its folder** | `C:\ProgramData\SDCoreSolo\ssh`: the server's configuration (`sshd_config`) and its host key. Only administrators can change it, and **the installer reads the permissions back after setting them and stops if anyone else could write there** |
+| **The key file** | `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`, in your own folder, for the optional keys |
 
-The configuration allows **only your Windows user**, only by key, and gives that
-user `sd-solo` and nothing else:
+The configuration allows **only your Windows user**, gives that user `sd-solo`
+and nothing else, and takes a password or a key:
 
 ```
 Port 4251
 StrictModes yes
-PasswordAuthentication no
-AuthenticationMethods publickey
+PasswordAuthentication yes
+PubkeyAuthentication yes
 AllowUsers you
 DisableForwarding yes
 ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd-solo.exe"
 ```
+
+**Why the server runs as SYSTEM.** A server run as an ordinary user can check
+your Windows password but then cannot start your session: Windows refuses with
+*"a required privilege is not held"* (error 1314). This was measured. The
+Windows OpenSSH Server service runs as SYSTEM too. **Because SYSTEM
+trusts the configuration, the configuration and host key are in an
+administrators-only folder, made by the installer's one administrator step,**
+not in your own folder where a program of yours could change what runs as
+SYSTEM. Your `sd-solo.exe` still runs as **you**: the server starts it under
+your account after you sign in.
 
 **Nothing in the Windows OpenSSH Server's own configuration, service or port 22
 firewall rule is changed.** The OpenSSH package must be installed, because Solo
@@ -59,13 +70,34 @@ installs always do. See [Installing](01-installation.html).
 ssh access to SD Core Solo is. The one choice it asks is who may reach the port
 (below).
 
-## Keys
+## Warnings and things to know
 
-**The SD Core for Linux server adds its own key** on a managed computer, through
-the API (see [Managed mode](15-managed-mode.html)), and removes it again if it is
-asked to.
+**Anyone who can reach the port can try passwords for your Windows account, and
+Windows can then lock you out of it.** Wrong passwords count against the
+account like wrong passwords at the sign-in screen. On the computer this was
+developed on, the policy locks an account after 10 wrong tries within 10
+minutes (`net accounts` shows yours), and that includes you. So **leave the firewall rule limited to this computer unless other
+computers need to reach SD**, and use a long Windows password. (Windows OpenSSH
+on port 22 has the same property.)
 
-**To log in from your own computer**, add your public key to
+**The password is not sent in the clear.** ssh encrypts the connection before
+it asks for the password, so it crosses the network inside the encrypted
+channel; the server receives it decrypted, as any ssh server does. **Check the
+host key the first time you connect**: ssh shows its fingerprint and asks. It
+is the one in `C:\ProgramData\SDCoreSolo\ssh\ssh_host_ed25519_key.pub`, and
+`ssh-keygen -l -f` prints it.
+
+**A Windows account with no password cannot sign in over ssh**, because Windows
+refuses a network sign-in for a blank password by default. Give the account a
+password first.
+
+## Keys, as an optional extra
+
+**A key never replaces the password; it is another way in.** The SD Core for
+Linux server adds its own key on a managed computer, through the API (see
+[Managed mode](15-managed-mode.html)), and removes it again if it is asked to.
+
+**To sign in from your own computer with a key**, add your public key to
 `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` as one line (the file is in your
 own folder, so no administrator is needed):
 
@@ -77,10 +109,10 @@ The server checks the file's permissions (`StrictModes yes`) and refuses a key
 file that anyone but you, SYSTEM and the administrators may write to. A file in
 your own profile folder has the right permissions as Windows creates it.
 
-**Keys from an earlier version are moved.** Before this version, SD Core
-Solo put the server's key in `%USERPROFILE%\.ssh\authorized_keys`. The first
-start moves that key into the new file, keeps a copy of your old file beside it
-as `authorized_keys.sdcoresolo-backup`, and leaves any key of your own in the old
+**Keys from an earlier version are moved.** Before this version, SD Core Solo
+put the server's key in `%USERPROFILE%\.ssh\authorized_keys`. Installing moves
+that key into the new file, keeps a copy of your old file beside it as
+`authorized_keys.sdcoresolo-backup`, and leaves any key of your own in the old
 file alone.
 
 ## The cost: no scp or sftp to your user, and no Windows prompt
@@ -103,12 +135,13 @@ pulling them from here.
 | **Standalone** | the installer asks. Unticked, the firewall rule for port 4251 is limited to `127.0.0.1` — this computer only |
 | **Managed** | always open to other computers, because the SD Core for Linux server connects from elsewhere |
 
-**`ssh -p 4251 localhost` works either way**, because Windows does not filter
-traffic that never leaves the computer.
+**Use `127.0.0.1` rather than `localhost` for a connection from this computer**:
+Windows' ssh client tries the IPv6 address first and does not fall back to
+IPv4. `ssh -p 4251 you@127.0.0.1` works either way the rule is set, because
+Windows does not filter traffic that never leaves the computer.
 
-**The rule is Solo's own, named `SD-Solo-SSH-In-TCP`**, and it is the one step of
-Solo's ssh that needs an administrator: a firewall rule is machine-wide. The
-uninstaller removes it.
+**The rule is Solo's own, named `SD-Solo-SSH-In-TCP`**, and creating it needs an
+administrator: a firewall rule is machine-wide. The uninstaller removes it.
 
 **To change it afterwards**, from an elevated PowerShell:
 
@@ -127,9 +160,9 @@ rule's remote address rather than disabling it, so the rule reads correctly in
 ## What an ssh session is
 
 **It is you**: the same account, `sduser`, and the same rights as a session at
-the keyboard. It runs on an ordinary, unelevated token even when your Windows
-account is an administrator — SD drops the rights for an ssh session as it
-does for itself.
+the keyboard. SD drops administrator rights for an ssh session as it does for
+itself, so it runs on an ordinary, unelevated token even when your Windows
+account is an administrator.
 
 **On a computer installed from a control file**, before the account password
 has been chosen at the keyboard, an ssh session is told:
@@ -143,11 +176,11 @@ This account has no password yet. Set it at this computer's keyboard first; unti
 **These have not been measured on a real computer.** See
 [Features the developers could not test](19-features-the-developers-could-not-test.html).
 
-- **That the server starts at Windows start-up with nobody signed in.** The task
-  runs as you without a stored password; that this logon type starts the server
-  at boot has not been seen.
-- **That another computer can reach port 4251** through the firewall rule. Only a
-  connection from this computer has been tried.
+- **A Windows password sign-in through this server.** A server run as an ordinary
+  user was measured to check the password and then fail to start the session;
+  the SYSTEM server this version installs has not been signed in to with a
+  password yet. The owner types his own password for that test.
+- **A key sign-in through the SYSTEM server**, and from another computer.
 - **That SD Core Solo and SD Core work together on one computer**, each answering on its own ssh port.
 - **The user name for a domain user.** The configuration names a local user by the
   lower-case user name, and a domain user as `name@domain`. Whether the server

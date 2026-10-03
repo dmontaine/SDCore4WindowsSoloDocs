@@ -56,7 +56,7 @@ commands the user may not run (`DENY.VERBS`). An installer control file,
 | a Windows service runs SD as LocalSystem | a **scheduled task** starts SD at Windows start-up **as you**, on an ordinary unelevated token — even when your Windows account is an administrator |
 | the system programs' BASIC source is installed | **compiled programs only**; no system source is installed |
 | OpenSSH installed from Windows Update, Python separately, the editors by winget | the release **carries** the OpenSSH MSI and the Python installer, and installs them from beside itself — offline, from a USB stick if need be. The two editors are in the release |
-| each SD account's own Windows user lands in `sd-solo` over ssh, on the computer's ssh port 22; administrators get a Windows shell | **your own ssh key sign-in on port 4251 lands in `sd-solo`**, at the account-password prompt, on an ssh server of Solo's own. There is no Windows shell over ssh for you, a password is never accepted, and `scp`/`sftp` to your user do not work. The two products can be installed on one computer |
+| each SD account's own Windows user lands in `sd-solo` over ssh, on the computer's ssh port 22; administrators get a Windows shell | **your own Windows account name and password sign-in on port 4251 lands in `sd-solo`**, at the account-password prompt, on an ssh server of Solo's own (run as SYSTEM, as the system sshd is; no key to set up). There is no Windows shell over ssh for you, and `scp`/`sftp` to your user do not work. The two products can be installed on one computer |
 
 See [Installing](01-installation.html) and [Running SD](03-running-sd.html).
 

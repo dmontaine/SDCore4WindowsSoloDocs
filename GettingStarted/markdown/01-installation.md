@@ -80,7 +80,7 @@ mode leaves nothing to choose.
 |---|---|
 | **Python** | installed for you, from `python\`, unless a Python 3.13 or later is already installed. It is a per-user install and needs no administrator rights |
 | **PATH** | `%USERPROFILE%\SDCoreSolo\usr\bin` is added to your PATH, so `sd-solo` works from any new window |
-| **ssh lands in SD** | wherever the OpenSSH package is present, Solo runs an ssh server of its own on port 4251, as you, and starts it with Windows. A key login there starts `sd-solo`. Windows' own ssh server and its port 22 are not changed. See [ssh access](08-ssh-access.html) |
+| **ssh lands in SD** | wherever the OpenSSH package is present, Solo runs an ssh server of its own on port 4251 and starts it with Windows. You sign in to it with your Windows account name and password, and it starts `sd-solo`. Windows' own ssh server and its port 22 are not changed. See [ssh access](08-ssh-access.html) |
 
 ## The one administrator step
 
@@ -92,9 +92,12 @@ than yours:
   Windows start-up, as you, whether or not you are signed in;
 - opens or restricts the firewall rules chosen above;
 - installs the OpenSSH MSI, when that was chosen or managed mode needs it;
-- registers the scheduled task **SD Core Solo SSH**, which starts Solo's own ssh
-  server on port 4251 at every Windows start-up, as you, and removes what an
-  earlier release added to Windows' ssh settings.
+- makes the administrators-only folder `C:\ProgramData\SDCoreSolo\ssh` (the ssh
+  server's configuration and host key, with its permissions checked afterwards)
+  and registers the scheduled task **SD Core Solo SSH**, which starts Solo's own
+  ssh server on port 4251 at every Windows start-up, as SYSTEM, so that your
+  Windows password can sign you in; it also removes what an earlier release
+  added to Windows' ssh settings.
 
 **If you decline the prompt, SD is installed but does not start at start-up**,
 and Solo's ssh server and the firewall rules are not set up. The installer says

@@ -25,8 +25,9 @@ sets up many computers from one USB stick.
 
 **As `sduser`, with the global password.** Over the API that is the whole of
 it. Over ssh the server first signs in to Solo's ssh server, on port 4251, as
-the Windows user — ssh's own sign-in, with that user's key; a password is never
-accepted there — and then gives SD the global password when `sd-solo` asks. One account name carries
+the Windows user — ssh's own sign-in, with that user's Windows password or with
+the key it installed (below) — and then gives SD the global password when
+`sd-solo` asks. One account name carries
 two passwords: SD tries the account password first and the global password
 second, which is why the two must differ.
 
@@ -35,8 +36,9 @@ second, which is why the two must differ.
 **The server cannot know which Windows user this computer's SD belongs to,** and
 ssh needs that name. So over the API, a server session can install the server's
 ssh public key in Solo's own key file, `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`,
-and is told the user name and the port in reply. From then on the server signs
-in over ssh, on that port, with its key.
+and is told the user name and the port in reply. From then on the server can
+sign in over ssh, on that port, with its key instead of the Windows password.
+The key is an extra: it does not switch the password off.
 
 | Request | What it does |
 |---|---|

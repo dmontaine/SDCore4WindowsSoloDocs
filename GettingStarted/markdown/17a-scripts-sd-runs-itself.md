@@ -52,9 +52,9 @@ administrator approves the prompt.
 
 | Action | What it does |
 |---|---|
-| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH package when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server (below) |
+| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH package when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; has `solo-sshd.ps1 -Install` make the administrators-only ssh folder, then registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server as SYSTEM (below) |
 | **Upgrade** | registers the scheduled tasks again — an upgrade does not revisit the choices, with one exception: on a managed computer with no firewall rule for port 4251 yet, it opens one. It also removes what an earlier release added to Windows' ssh settings |
-| **Remove** | takes away both tasks, stops Solo's ssh server, and takes away the API rule and the ssh port rule. **Windows' own ssh rule for port 22 is Microsoft's and is never touched** |
+| **Remove** | takes away both tasks, stops Solo's ssh server and deletes its administrators-only folder, and takes away the API rule and the ssh port rule. **Windows' own ssh rule for port 22 is Microsoft's and is never touched** |
 
 **The task runs `sd-solo -start` as you, at Windows start-up, whether or not you are
 signed in** — that is what lets the API work before anyone signs in.
@@ -62,11 +62,12 @@ For a user who is an administrator, Task Scheduler gives the task the full
 administrator token, and **`sd-solo.exe` drops it itself**, so SD runs on an
 ordinary token whatever the task does. See [Running SD](03-running-sd.html).
 
-**The task SD Core Solo SSH runs `solo-sshd.ps1 -Run` as you, at Windows
-start-up, whether or not you are signed in.** It is registered without a stored
-password, so it can only ever run as you and with no more rights than you have
-at the keyboard. Starting it again, up to three times a minute apart, is left to
-Task Scheduler if the server stops.
+**The task SD Core Solo SSH runs `sshd.exe` itself, as SYSTEM, at Windows
+start-up, whether or not you are signed in,** against the configuration in
+`C:\ProgramData\SDCoreSolo\ssh`. **It never runs a script of yours as SYSTEM**:
+everything it reads is in that administrators-only folder, which the installer
+makes and whose permissions it reads back before going on. Starting it again, up
+to three times a minute apart, is left to Task Scheduler if the server stops.
 
 **An earlier release wrote a block into Windows' `sshd_config`**, between
 `# BEGIN SD Core Solo` and `# END SD Core Solo` markers, with a `Match User`
@@ -84,9 +85,9 @@ the steps that did not complete. See [Installing](01-installation.html).
 
 ### `solo-sshd.ps1`
 
-**Prepares and runs Solo's own ssh server.** It is started by the task SD Core
-Solo SSH, and by `solo-sshkey.ps1`, which uses its `-Prepare`. It needs no
-elevation.
+**Sets up and looks after Solo's own ssh server.** The installer's administrator
+step runs `-Install` and `-Uninstall`; `solo-sshkey.ps1` uses `-Prepare`, which
+needs no elevation.
 
 ```
 powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshd.ps1" -Show
@@ -94,13 +95,15 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshd.ps1
 
 | Switch | What it does |
 |---|---|
-| `-Prepare` | makes `%USERPROFILE%\SDCoreSolo\ssh` with its host key, its configuration and its key file, moves the SD Core server's key out of `%USERPROFILE%\.ssh\authorized_keys` if an earlier release put it there, and stops |
-| `-Run` | does `-Prepare`, checks the configuration with `sshd -t`, and runs `sshd.exe` in the foreground on port 4251. It refuses if something else already holds the port |
-| `-Stop` | ends the `sshd.exe` that was started from this configuration, found by its command line — never the Windows ssh service. **Run it from an elevated PowerShell.** The process the startup task started cannot be inspected from an ordinary window, even your own; there `-Stop` says *"cannot inspect"*, exits `1` and stops nothing, rather than report that there was nothing to stop |
+| `-Prepare` | **ordinary user.** Makes your optional key file `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` if it is missing, deletes what the first build of this version left in that folder, moves the SD Core server's key out of `%USERPROFILE%\.ssh\authorized_keys` if an earlier release put it there, and stops. It reads the server's host-key fingerprint from the administrators-only folder and writes nothing there |
+| `-Install` | **elevated.** Makes `C:\ProgramData\SDCoreSolo\ssh` (administrators and SYSTEM may change it; users may read it), the host key (kept across upgrades) and the configuration, **reads the permissions back and stops with `PROBLEM=` lines if anyone else could write there or read the private key**, and checks the configuration with `sshd -t`. It refuses a login name or folder name that could add a line to the configuration |
+| `-Stop` | **elevated.** Ends the `sshd.exe` that was started from this configuration, found by its command line — never the Windows ssh service. The process a SYSTEM task started cannot be inspected from an ordinary window; there `-Stop` says *"cannot inspect"*, exits `1` and stops nothing, rather than report that there was nothing to stop |
+| `-Uninstall` | **elevated.** `-Stop`, then deletes `C:\ProgramData\SDCoreSolo` |
 | `-Show` | reports the port, whether it is listening and which process holds it, and changes nothing |
+| `-PrintConfig -OsUser <name>` | prints the configuration that would be written, and writes nothing |
 
-**The port is fixed at 4251 and is not a parameter.** The configuration is
-written fresh each time, so editing it by hand does not last.
+**The port is fixed at 4251 and is not a parameter.** The installer rewrites the
+configuration, so editing it by hand does not last.
 
 ### `solo-ssh-firewall.ps1`
 

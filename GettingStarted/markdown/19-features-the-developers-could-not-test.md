@@ -186,23 +186,24 @@ and check that you land in SD.
 
 ### Solo's own ssh server: starting at boot, and reaching it
 
-**Known.** Solo's ssh server, started by hand from a normal PowerShell with
-`solo-sshd.ps1 -Run`, accepts a key and refuses a stranger's key and a password,
-runs the forced command as you, and does not touch the Windows ssh service; its configuration is accepted by
-`sshd -t`, and `StrictModes` refuses a key file others can write.
+**Known.** The first build of this version ran Solo's ssh server as an ordinary
+user. With it: a scheduled task started the server at Windows start-up before
+anyone signed in; a key sign-in worked; a second computer reached port 4251
+through the firewall rule; SD Core Solo and SD Core were installed and running
+together, each with its own ports; and **the server checked a Windows password
+and then could not start the session** (Windows error 1314), which is why this
+version runs the server as SYSTEM instead.
 
-**Not known.** Four things have not been run on a real computer. **That the
-task SD Core Solo SSH starts the server at Windows start-up with nobody signed
-in**: it is registered without a password, and a task registered that way cannot
-be created without administrator rights, so it could not be tried here. **That a
-key login works to a server started that way.** **That another computer can
-reach port 4251** through the firewall rule; only this computer has connected.
-**That SD Core Solo and SD Core work together on one computer**, each on its
-own ssh port.
+**Not known.** The SYSTEM server this version installs has not been signed in
+to, on a real computer, in these ways: **with a Windows password** (the owner
+types his own for that test), **with a key**, **from a second computer**, and
+**after a restart with nobody signed in**. Nor has **ssh to port 22 still
+landing in SD Core**, with Solo installed beside it, been tried.
 
-**To settle it.** Restart the computer, do not sign in, and connect from a second
-computer with `ssh -p 4251`, once with SD Core Solo alone and once with SD Core
-installed beside it.
+**To settle it.** From the same computer, `ssh -p 4251 you@127.0.0.1` and type
+the Windows password, then the SD password. Then restart the computer, do not
+sign in, and connect from a second computer with `ssh -p 4251`; and connect to
+port 22 as an SD Core user.
 
 ### The first password on a computer installed from a control file
 
