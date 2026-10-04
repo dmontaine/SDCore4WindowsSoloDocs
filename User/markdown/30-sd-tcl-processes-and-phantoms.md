@@ -165,8 +165,7 @@ User  Started            Command
 ```
 
 **It reports only your own children.** It is not a system-wide view and it is
-not `listu` — a phantom somebody else started does not appear, and neither does
-one your session started before you `logto`'d somewhere else. The register it
+not `listu` — a phantom somebody else started does not appear. The register it
 reads is keyed by the parent's user number.
 
 ## Dumping a process: `pdump`

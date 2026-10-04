@@ -45,11 +45,11 @@ valid PROC and it is the interpreter that is gone.
 ### What the shipped VOC holds
 
 Counted directly from `newvoc` in the system directory — the VOC a new account
-starts with, 420 records:
+starts with, 419 records:
 
 | Type | Count |
 |---|---|
-| `V` | 143 |
+| `V` | 142 |
 | `K` | 249 |
 | `F` | 8 |
 | `R` | 10 |
@@ -60,7 +60,7 @@ starts with, 420 records:
 | `X` | 3 |
 
 **The four keyword-verbs are among the 249 `K` records.** They are counted as
-keywords here and are also verbs, so Solo has 143 + 4 = **147 verbs**.
+keywords here and are also verbs, so Solo has 142 + 4 = **146 verbs**.
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
 is yours. The account and grant commands are not in it — see
@@ -143,11 +143,11 @@ target, and the remaining fields carry options.
 | Field 2 | Field 3 | What it does |
 |---|---|---|
 | `CA` | *catalogue name* | a catalogued program — 99 of the shipped verbs |
-| `IN` | *number* | internal verb *n*, handled by the command processor itself — 42 verbs |
+| `IN` | *number* | internal verb *n*, handled by the command processor itself — 41 verbs |
 | `OS` | *text* | an operating-system command — `sh` and `!`, and nothing else |
 | `CS` | *path* | a locally catalogued function |
 
-The first three rows account for all 143 shipped `V` records; none is `CS`.
+The first three rows account for all 142 shipped `V` records; none is `CS`.
 The four keyword records described above — `break`, `count`, `display` and
 `off` — are `K` records in which field 2 holds a keyword number rather than a
 dispatch type, and it is field 3 that marks the record as a verb.

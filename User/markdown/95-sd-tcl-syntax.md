@@ -11,7 +11,7 @@ folds case, so any of this may be typed in either case.
 
 > **This page is generated, and it is checked for completeness rather
 > than proof-read for it.** The roster is computed from SD's own VOC:
-> every verb record in `newvoc`, which is **147** verbs, and
+> every verb record in `newvoc`, which is **146** verbs, and
 > `tools/mktclsyntax.py` refuses to
 > write the page if any of them has no line. The shapes come from the
 > subject documents, where each verb is described in full.
@@ -20,7 +20,7 @@ folds case, so any of this may be typed in either case.
 reading `newvoc` directly, so it cannot drift from what the account
 actually gets. **A verb your account does not have is not refused — the
 name is simply not recognised.** Solo has one account, and it has all
-147 of them; whether a verb needs `ADMIN` is in the GettingStarted set.
+146 of them; whether a verb needs `ADMIN` is in the GettingStarted set.
 
 ## The verbs
 
@@ -111,7 +111,6 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`lock`** | **`lock`** *n* {**`no.wait`**} |
 | **`logmsg`** | **`logmsg`** *text* |
 | **`logout`** | **`logout`** \| *n* … \| **`all`** |
-| **`logto`** | **`logto`** *account* |
 | **`make.index`** | **`make.index`** *file* *field* … {**`no.nulls`**} {**`pathname`** *path*} |
 | **`map`** | **`map`** {**`all`**} {**`lptr`** {*n*}} {**`file`** {*name*}} |
 | **`merge.list`** | **`merge.list`** *list.no* *rel.op* *list.no* {**`to`** *list.no*} {**`count.sup`**} |

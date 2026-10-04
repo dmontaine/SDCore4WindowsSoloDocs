@@ -109,7 +109,6 @@ show it.
 |---|---|
 | **`who`** | your user number and the account you are in |
 | **`who.am.i`** | the same information at more length |
-| **`logto`** *account* | change account without logging out |
 | **`off`** · **`quit`** | end the session |
 | **`option`** {*name*} {**on**\|**off**\|**display**} | set or show a session option |
 | **`option all off`** | turn every session option off at once |
@@ -130,7 +129,8 @@ show it.
 you will see. On the multiuser SD Core for Windows, `who` grows a third part
 after a `logto` — `29 PAYROLL from DON`, where `from` names the account you
 logged in as — and that is how it shows whether a `logto` took effect. Solo has
-one account, so there is nowhere to `logto` to.
+one account, so there is nowhere to `logto` to, and it has no `logto` verb:
+typing it answers `LOGTO is not in your VOC`, like any word SD does not know.
 
 ## What is not here
 
@@ -161,7 +161,7 @@ Your account has every verb on this page, and none of them needs `ADMIN`:
 
 | | |
 |---|---|
-| **your account** | `abort` `alias` `clear.abort` `clear.stack` `display` `get.stack` `go` `if` `list.vars` `logto` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
+| **your account** | `abort` `alias` `clear.abort` `clear.stack` `display` `get.stack` `go` `if` `list.vars` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
 
 **The two `OS` verbs are the exception and are not documented here.** `sh` and
 `!` reach the Windows shell. They are in the GettingStarted set, under

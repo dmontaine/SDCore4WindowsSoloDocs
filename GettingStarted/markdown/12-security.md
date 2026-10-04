@@ -64,7 +64,7 @@ files under them.
 only by a one-shot marker file the installer writes and SD consumes — the
 setup log shows *Internal session admitted (opened by solo-setup)*. It is not a
 way into a running system. **SDSYS, SD's own system account, is never signed
-in to**: nobody logs in or `LOGTO`s to it.
+in to**: nobody logs in to it, and Solo has no `LOGTO` verb.
 
 ## On a managed computer
 

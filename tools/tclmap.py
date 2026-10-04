@@ -86,7 +86,7 @@ DOCS = [
  # when the page was cut in two.  The twelve below were named by tclmap itself,
  # one NO EVIDENCE row each, which is the map working as designed.
  ('User', '19a-sd-tcl-the-command-stack.md', """
-   alias clear.abort clear.stack get.stack list.vars logto option save.stack
+   alias clear.abort clear.stack get.stack list.vars option save.stack
    set set.exit.status who who.am.i
  """),
  ('User', '20-sd-tcl-files-and-records.md', """

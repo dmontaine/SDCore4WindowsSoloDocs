@@ -106,7 +106,6 @@ listu = **`listu`** {**`no.page`**} {**`lptr`** {*n*}}
 lock = **`lock`** *n* {**`no.wait`**}
 logmsg = **`logmsg`** *text*
 logout = **`logout`** | *n* … | **`all`**
-logto = **`logto`** *account*
 make.index = **`make.index`** *file* *field* … {**`no.nulls`**} {**`pathname`** *path*}
 map = **`map`** {**`all`**} {**`lptr`** {*n*}} {**`file`** {*name*}}
 merge.list = **`merge.list`** *list.no* *rel.op* *list.no* {**`to`** *list.no*} {**`count.sup`**}

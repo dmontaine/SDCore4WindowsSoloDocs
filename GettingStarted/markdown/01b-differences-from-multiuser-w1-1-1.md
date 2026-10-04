@@ -11,8 +11,8 @@ product. The User set applies to both.
 | multiuser W1.1-1 | Solo |
 |---|---|
 | many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `WHO` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
-| SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in or `LOGTO`s to it; the administrator commands run from your own account |
-| `CREATE.ACCOUNT`, `DELETE.ACCOUNT`, `MODIFY.ACCOUNT`, `GRANT`, `REVOKE`, `LIST.GRANTS`, `MODIFY.PASSWORD` | **gone** |
+| SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in to it; the administrator commands run from your own account |
+| `CREATE.ACCOUNT`, `DELETE.ACCOUNT`, `MODIFY.ACCOUNT`, `GRANT`, `REVOKE`, `LIST.GRANTS`, `MODIFY.PASSWORD`, `LOGTO` | **gone.** Solo has one account, so `LOGTO` had nowhere to go (removed in WS1.1-3; typing it answers `LOGTO is not in your VOC`) |
 | Windows groups `sdusers`, `sdssh`, `sdapi`, `sdsshonly`; the `os.users` and `batch.jobs` permit lists; console and Remote Desktop denied to SD accounts | **gone.** There is one Windows user, and it is yours |
 
 ## Passwords
@@ -74,8 +74,8 @@ See [Installing](01-installation.html) and [Running SD](03-running-sd.html).
 
 - **Anything that creates, grants or deletes accounts**, or signs in to more
   than one account.
-- **Scripts that `LOGTO SDSYS`**, or that expect administrator verbs to work
-  without `ADMIN`.
+- **Scripts that use `LOGTO`** (to `SDSYS` or anywhere else), or that expect
+  administrator verbs to work without `ADMIN`.
 - **A client that signs in with a Windows user name**, or with the old
   cleartext login, or through `SDConnectLocal`.
 - **Anything that writes the global catalogue.** Catalogue programs locally
