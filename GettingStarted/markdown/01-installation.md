@@ -32,6 +32,16 @@ Earlier releases refused to install beside SD Core.
 
 ## What you are asked
 
+### Saved data — only where an uninstall kept some
+
+**If `%USERPROFILE%\SDCoreSolo` holds data that an earlier uninstall kept** (the
+account `sduser` and `sd.conf`, with a `.sdcore-kept` file), the first question
+is *Reload your saved data and configuration into this new install?* — **Yes**
+reloads them, **No** starts clean. Either way the old folder is moved aside to
+`SDCoreSolo.kept-<date and time>`, never deleted, and the passwords below are
+asked as for any new installation. See
+[Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
+
 ### 1. The passwords
 
 Asked in this order, each typed twice:
@@ -124,7 +134,9 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 | `sd-tls` | the API's TLS key, made the first time a client connects |
 | `install-summary.log` | what every installer step did — read this first when something did not work |
 
-**Uninstalling keeps `sdsys`, the account and `sd.conf`.** See
+**Uninstalling asks to keep or delete your data and configuration.** Keep leaves
+the account and `sd.conf` and removes the rest, passwords included; a new
+installation then offers them back. See
 [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 **The folder can be moved.** SD finds its files from where its programs are,
@@ -145,6 +157,7 @@ only what it gives; its presence does not make a computer managed.
 | `global-password=` | the global password. **Blank or left out means no global password:** the computer is not managed and nothing is asked |
 | `api=` | `off`, `local` (this computer only) or `open` (other computers too) |
 | `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer |
+| `reload-data=` | `yes` or `no`, where the folder holds data kept by an earlier uninstall: reload it, or start clean (the kept data is moved aside, never deleted). Blank: the installer asks, or reloads when the file answers everything else too. Where nothing is kept it does nothing, so one file can say it for every computer |
 | `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed computers](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
 
 **The account password is deliberately not in it.** With a global password, the
@@ -166,8 +179,10 @@ which explains each item and shows a sample answer; copy it to
 **The file holds passwords in clear text.** Keep the stick safe, and do not
 leave the file on a computer after installing.
 
-**It is read only for a new installation.** On a computer that already has an
-`SDCoreSolo` data tree it is ignored — the tree already has its passwords.
+**It is read only for a new installation**, kept data included (kept data holds
+no passwords). On a computer that already has an `SDCoreSolo` data tree — an
+earlier release's, with `sdsys` — it is ignored: the tree already has its
+passwords.
 
 ## When a step fails
 
@@ -187,8 +202,8 @@ report, and ends each with a verdict.
 
 | | |
 |---|---|
-| Whether there is a global password | a new installation. That is read from the data, so an install over kept data keeps it: uninstall, **move `%USERPROFILE%\SDCoreSolo` aside** (it holds your data — keep it), then install |
-| The API or ssh choices | uninstall, then install again — the data and passwords are kept, and the API and ssh questions are asked again. Or change the firewall and `sd.conf` by hand |
+| Whether there is a global password | uninstall and choose **Keep**, then install again: the passwords are asked again (the global one may be left blank, or entered), and you reload your saved data. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) |
+| The API or ssh choices | the same — uninstall (Keep), install again and answer the API and ssh questions. Or change the firewall and `sd.conf` by hand |
 | The passwords | `SET.PASSWORD`, `SET.PASSWORD ADMIN`, and on a managed computer `SET.PASSWORD GLOBAL` from the server. See [The account and its passwords](05-account-types.html) |
 | Your PATH | `APPEND.SD.PATH`. See [Administrator commands](06-administrator-commands.html) |
 

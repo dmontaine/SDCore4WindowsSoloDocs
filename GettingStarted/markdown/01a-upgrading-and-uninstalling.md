@@ -61,20 +61,41 @@ stops SD, then — after the one administrator consent prompt — removes:
 
 and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH.
 
-**Your data stays.** `sdsys`, your account (`user_accounts\sduser`),
-`sd.conf` and the API's TLS key are left in `%USERPROFILE%\SDCoreSolo`. Install
-again later and the installer finds them: it keeps the passwords, with or
-without a global password, and asks only the API and ssh questions again.
+**Then it asks what to do with your data and configuration, and Keep comes
+first:**
 
-**To remove the data too, delete `%USERPROFILE%\SDCoreSolo` yourself** after
-uninstalling. Nothing else holds a copy.
+| | |
+|---|---|
+| **Keep** | leaves your account `sduser` with its data (`user_accounts\sduser`) and `sd.conf` in `%USERPROFILE%\SDCoreSolo`, with a small file, `.sdcore-kept`, that says so. **Everything else in the folder is removed:** the passwords, the audit trail, the list of denied commands, `GLOBAL.BP.OUT`, the API's TLS key and your ssh key file |
+| **Delete** | removes the whole folder, for good |
+
+**A silent uninstall never deletes your data**; it keeps, as above. Whichever you
+choose, the uninstaller says what it did and where.
+
+**Install again later and the installer finds what Keep left.** It asks *Reload
+your saved data and configuration into this new install?* (Yes is the default):
+
+| | |
+|---|---|
+| **Yes** | copies the account's files into the new account, tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
+| **No** | starts clean |
+
+**Either way the old folder is moved aside, never deleted:** it becomes
+`%USERPROFILE%\SDCoreSolo.kept-<date and time>`, and stays until you delete it.
+**The passwords are asked again** — they are not in the kept data — and the
+global password may be left blank, so this is also how to add a global password
+to a computer that has none, or to drop one. See [Installing](01-installation.html).
+
+**A folder left by an earlier release's uninstaller** still holds `sdsys` and
+the passwords, and is reinstalled over as it always was: nothing is asked and
+everything is kept.
 
 **What uninstalling leaves installed:** the OpenSSH server and Python, even if
 the SD installer put them there — other programs may use them — and Windows'
 own ssh firewall rule for port 22, which is Microsoft's and was never Solo's.
 Remove them from *Apps* if you no longer want them. Your optional ssh key file
-stays with your data, in `%USERPROFILE%\SDCoreSolo\ssh`; the server's host key
-goes with its folder, so a client sees a new host key after a reinstall.
+goes with the rest of the folder (Keep removes it), and so does the server's host
+key, so a client sees a new host key after a reinstall.
 
 **If the administrator step cannot run**, the uninstaller says *"The startup
 task, firewall rule or ssh setting could not be removed"* and names the log.
