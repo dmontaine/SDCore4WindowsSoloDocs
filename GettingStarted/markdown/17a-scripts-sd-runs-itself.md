@@ -23,13 +23,13 @@ title, which is where to read what actually happened.
 1. starts SD, because sessions need a started SD;
 2. makes the account `sduser`;
 3. sets the passwords the installer collected — the account password, the
-   administrator password and, in managed mode, the global password — and, from
-   a control file, the list of denied commands;
+   administrator password and, when one was given, the global password — and,
+   from a control file, the list of denied commands;
 4. **on an upgrade only**, brings the dictionaries up to the release and runs
    `UPDATE.ACCOUNTS`, because an upgrade replaces the shipped VOC records but
    does not rebuild the account's own;
-5. removes the system programs' source from the VOC and, in managed mode,
-   makes the global catalogue match `GLOBAL.BP.OUT` again after an upgrade has
+5. removes the system programs' source from the VOC and, where there is a
+   global password, makes the global catalogue match `GLOBAL.BP.OUT` again after an upgrade has
    replaced the catalogue;
 6. stops SD, so that the scheduled task — which the next script registers —
    starts it and owns it.
@@ -52,8 +52,8 @@ administrator approves the prompt.
 
 | Action | What it does |
 |---|---|
-| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH package when that was chosen or managed mode needs it; opens or restricts the API and ssh firewall rules as chosen; has `solo-sshd.ps1 -Install` make the administrators-only ssh folder, then registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server as SYSTEM (below) |
-| **Upgrade** | registers the scheduled tasks again — an upgrade does not revisit the choices, with one exception: on a managed computer with no firewall rule for port 4251 yet, it opens one. It also removes what an earlier release added to Windows' ssh settings |
+| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH package when that was chosen; opens or restricts the API and ssh firewall rules as chosen; when Solo's ssh server was chosen, has `solo-sshd.ps1 -Install` make the administrators-only ssh folder, then registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server as SYSTEM (below) |
+| **Upgrade** | registers the scheduled tasks again — an upgrade does not revisit the choices, and registers the ssh task only where Solo's ssh server is already set up. It also removes what an earlier release added to Windows' ssh settings |
 | **Remove** | takes away both tasks, stops Solo's ssh server and deletes its administrators-only folder, and takes away the API rule and the ssh port rule. **Windows' own ssh rule for port 22 is Microsoft's and is never touched** |
 
 **The task runs `sd-solo -start` as you, at Windows start-up, whether or not you are
@@ -170,7 +170,7 @@ that line, or 1 without it. It exists because `micro` printed a false
 ### `solo-sshkey.ps1`
 
 **Run by SD itself, in your own session, when the SD Core server asks to add,
-remove or list its ssh key** — see [Managed mode](15-managed-mode.html). It is
+remove or list its ssh key** — see [Managed computers](15-managed-mode.html). It is
 not for typing: it takes a request verb (`ADD`, `REMOVE` or `LIST`) and a key or
 fingerprint, and prints lines SD reads back (`RESULT=ADDED`, `FPR=SHA256:...`,
 `ERROR=...`). **It needs no elevation**, because it writes only Solo's own key

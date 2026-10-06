@@ -113,7 +113,7 @@ point at files in the system directory that the account needs; the eighth,
 These are **read-only to a network session**. The account-root gate in the
 file engine allows them on read paths but sets `FV_RDONLY` on the file
 variable, so every write path in the engine refuses them. `global.bp.out` is
-the server's file on a managed computer — see *Managed mode* in the
+the server's file on a managed computer — see *Managed computers* in the
 GettingStarted set.
 
 ### The $ACC record

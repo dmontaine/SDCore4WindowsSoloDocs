@@ -26,7 +26,7 @@ should be one only you know.
 **On a managed computer**, the SD Core for Linux server can put `sh` on the
 list of denied commands, and `!` goes with it. **A program's `OS.EXECUTE` is
 not a command the list can hold**, so the list alone does not close the
-computer off from a program. See [Managed mode](15-managed-mode.html).
+computer off from a program. See [Managed computers](15-managed-mode.html).
 
 ## Privileged work is done through a script, not a command line
 
@@ -56,7 +56,7 @@ each, with the date, time and user:
 | **`ADMIN`** | every unlock and every refusal |
 | **Passwords** | a change of the account, administrator or global password, and a refused change |
 | **The API** | every login, every refused request, and every failed login with its reason — `API REFUSED user=sduser reason=wrong password`. **The address is not recorded** |
-| **Managed mode** | `DENY.VERBS` changes and `SYNC.GLOBAL.CATALOG` runs, and the installer's own internal sessions |
+| **A managed computer** | `DENY.VERBS` changes and `SYNC.GLOBAL.CATALOG` runs, and the installer's own internal sessions |
 
 **The refusals are the interesting half.** An `ADMIN REFUSED`, a
 `LOGIN REFUSED` or an `API REFUSED` is somebody trying something that did not

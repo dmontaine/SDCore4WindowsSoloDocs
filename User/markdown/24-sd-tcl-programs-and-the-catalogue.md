@@ -102,7 +102,7 @@ Linux server puts there, and only the server may.
 
 Private and local cataloguing need none of this and work with no `ADMIN`. You
 may run a globally catalogued program, `call *name` from BASIC among them. The
-GettingStarted set's *Managed mode* page says how the server's programs get
+GettingStarted set's *Managed computers* page says how the server's programs get
 there.
 
 ### Seeing and removing

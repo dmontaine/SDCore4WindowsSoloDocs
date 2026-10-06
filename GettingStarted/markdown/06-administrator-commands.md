@@ -46,7 +46,7 @@ password is never displayed, stored or logged.
 | `APPEND.SD.PATH` | put SD on your PATH, or take it off |
 | `LISTU`, `LOGOUT ALL` | [Sessions and locks](06a-sessions-and-locks.html) |
 | `LIST.READU`, `LIST.LOCKS`, `LOCK`, `CLEAR.LOCKS`, `UNLOCK` | [Sessions and locks](06a-sessions-and-locks.html) |
-| anything on the deny list | managed mode only — [Managed mode](15-managed-mode.html) |
+| anything on the deny list | a deny list is set by the control file or by the server — [Managed computers](15-managed-mode.html) |
 
 **Refused without `ADMIN`, with *The VOC can only be changed after ADMIN*:**
 editing the VOC directly — `ED VOC`, a program's `WRITE` or `DELETE` to the
@@ -56,7 +56,7 @@ What SD writes to the VOC as a side effect of an ordinary command —
 
 **Refused even with `ADMIN`**: changing the global catalogue (`CATALOG ...
 GLOBAL`, `DELETE.CATALOG` of a global entry), and the commands that are the SD
-Core for Linux server's — see [Managed mode](15-managed-mode.html).
+Core for Linux server's — see [Managed computers](15-managed-mode.html).
 
 **`LOGOUT` on its own needs nothing** — it ends your own session, like
 `QUIT` — **and nor does `LOGOUT` *n***, because every session on a Solo

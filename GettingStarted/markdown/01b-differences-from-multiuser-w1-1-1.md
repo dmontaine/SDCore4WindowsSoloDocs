@@ -38,15 +38,15 @@ See [The account and its passwords](05-account-types.html).
 
 See [Administrator commands](06-administrator-commands.html).
 
-## Managed mode
+## Managed computers
 
-**New in Solo.** A computer installed in managed mode is also managed by an
-SD Core for Linux server, which signs in with a **global password** set when
-the computer was installed. The server can put compiled programs into the
-global catalogue (`GLOBAL.BP.OUT`, `SYNC.GLOBAL.CATALOG`) and keep a list of
-commands the user may not run (`DENY.VERBS`). An installer control file,
-`sd-solo-setup.conf`, sets up many computers the same way. See
-[Managed mode](15-managed-mode.html).
+**New in Solo.** A computer installed with a **global password** — the
+installer asks for one and it may be left blank — is also managed by an
+SD Core for Linux server, which signs in with that password. The server can put
+compiled programs into the global catalogue (`GLOBAL.BP.OUT`,
+`SYNC.GLOBAL.CATALOG`) and keep a list of commands the user may not run
+(`DENY.VERBS`). An installer control file, `sd-solo-setup.conf`, sets up many
+computers the same way. See [Managed computers](15-managed-mode.html).
 
 ## Installing and running
 

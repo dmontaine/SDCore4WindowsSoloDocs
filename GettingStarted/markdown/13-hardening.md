@@ -11,7 +11,7 @@ what it touches. The passwords and what each one guards are on
 `ADMIN` and the account password do not change that.** The global catalogue
 holds the programs SD runs for everybody, `$login` among them; on a managed
 computer it also holds the SD Core for Linux server's programs, and only the
-server puts them there. See [Managed mode](15-managed-mode.html).
+server puts them there. See [Managed computers](15-managed-mode.html).
 
 **Refused, for every session:**
 

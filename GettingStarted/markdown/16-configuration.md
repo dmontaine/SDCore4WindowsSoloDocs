@@ -44,7 +44,7 @@ SH1=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInt
 
 **`APIPORT` is there only if the API was chosen at installation.** A computer
 installed without it has the same file with no `APIPORT` line, and so no API
-listener. Managed mode always has it.
+listener. A managed computer needs it, and chooses it like any other.
 
 Lines beginning `#` are comments. The shipped file is heavily commented and
 those comments record why each value was chosen. Read them before changing

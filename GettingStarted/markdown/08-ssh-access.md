@@ -62,13 +62,16 @@ firewall rule is changed.** The OpenSSH package must be installed, because Solo
 runs the `sshd.exe` it provides; the Windows service does not have to be
 running, and need not be set to start.
 
-**If there is no OpenSSH package**, standalone installs offer to install
-Microsoft's OpenSSH server from the release's `ssh-server` folder, and managed
-installs always do. See [Installing](01-installation.html).
+**If there is no OpenSSH package**, the installer offers to install Microsoft's
+OpenSSH server from the release's `ssh-server` folder. See
+[Installing](01-installation.html).
 
-**It is not a choice.** The installer has no box for landing in SD; that is what
-ssh access to SD Core Solo is. The one choice it asks is who may reach the port
-(below).
+**Whether Solo has an ssh server at all is a choice**, made when installing —
+**Provide Solo's ssh server** where an OpenSSH server is already installed,
+**Install the OpenSSH server** where none is, or `ssh=` in the control file.
+With it off there is no ssh to SD Core Solo, and nothing on this page applies.
+The installer has no box for landing in SD: when the server is on, that is what
+it does. The other choice it asks is who may reach the port (below).
 
 ## Warnings and things to know
 
@@ -95,7 +98,7 @@ password first.
 
 **A key never replaces the password; it is another way in.** The SD Core for
 Linux server adds its own key on a managed computer, through the API (see
-[Managed mode](15-managed-mode.html)), and removes it again if it is asked to.
+[Managed computers](15-managed-mode.html)), and removes it again if it is asked to.
 
 **To sign in from your own computer with a key**, add your public key to
 `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` as one line (the file is in your
@@ -132,8 +135,8 @@ pulling them from here.
 
 | | |
 |---|---|
-| **Standalone** | the installer asks. Unticked, the firewall rule for port 4251 is limited to `127.0.0.1` — this computer only |
-| **Managed** | always open to other computers, because the SD Core for Linux server connects from elsewhere |
+| **Let other computers reach it** | the installer asks, or `ssh=open` in the control file. Unticked, or `ssh=local`, the firewall rule for port 4251 is limited to `127.0.0.1` — this computer only |
+| **A managed computer** | needs it open, because the SD Core for Linux server connects from elsewhere. Nothing opens it for you |
 
 **Use `127.0.0.1` rather than `localhost` for a connection from this computer**:
 Windows' ssh client tries the IPv6 address first and does not fall back to

@@ -21,18 +21,19 @@ OpenQM documents are not authoritative here.
 additions, changes and deletions — of features, of structure, of security and
 of commands. **These pages cover those changes.**
 
-## Two ways to use it
+## With or without a global password
 
-**The installer asks which, and the answer is fixed until you reinstall.**
+**The installer asks for a global password, and you may leave it blank.** Whether
+there is one is fixed until you reinstall.
 
 | | |
 |---|---|
-| **Standalone** | a single-user database on this computer, in the way SQLite is. Nothing else manages it |
-| **Managed** | a local database that an **SD Core for Linux** server also manages — one of several computers it looks after. The server signs in with a **global password** set when this computer was installed |
+| **No global password** | a single-user database on this computer, in the way SQLite is. Nothing else manages it |
+| **A global password** | a local database that an **SD Core for Linux** server also manages — one of several computers it looks after. The server signs in with the global password |
 
 Only the SD Core for Linux server manages a Solo computer; there is no Windows
 management server. What the server can do today is on
-[Managed mode](15-managed-mode.html), and it will grow as management features
+[Managed computers](15-managed-mode.html), and it will grow as management features
 are added to SD Core for Linux.
 
 ## The pages
@@ -64,7 +65,7 @@ that no page runs longer than a reader will scroll.
 | **12a** | [Security and the operating system](12a-security-and-the-operating-system.html) | Reaching the computer from inside SD, and the audit trail |
 | **13** | [Other hardening](13-hardening.html) | The global catalogue, the logs, and the rest |
 | **14** | [Not in SD Core](14-not-in-sd-core.html) | What has been removed, and what to use instead |
-| **15** | [Managed mode](15-managed-mode.html) | What an SD Core for Linux server can do to a managed computer |
+| **15** | [Managed computers](15-managed-mode.html) | What an SD Core for Linux server can do to a managed computer |
 | **16** | [Configuration](16-configuration.html) | `sd.conf` and its parameters |
 | **16a** | [System limits](16a-system-limits.html) | The sizes and counts SD works within |
 | **17** | [The installed scripts](17-the-installed-scripts.html) | The PowerShell scripts in the installed folder |
@@ -104,14 +105,14 @@ See [ssh access](08-ssh-access.html) and [API access](09-api-access.html).
 
 **WS1.1-3.** Windows only. WS1.1-1 was the first release. WS1.1-2 added the
 SD Core server's ssh key install for managed computers and first-use trust of
-a server's certificate for client libraries (see [Managed mode](15-managed-mode.html)
+a server's certificate for client libraries (see [Managed computers](15-managed-mode.html)
 and [API access](09-api-access.html)). This one starts SD Core Solo with the
 name `sd-solo`, fixes the API at port 4249, and adds backing up and restoring the
 account (see [Backing up and restoring the account](06c-backup-and-restore.html)).
 **It is a hobby project with no release schedule.**
 
 This set covers installing and running SD Core Solo for Windows, administering
-it, managed mode, and what differs from the multiuser SD Core for Windows. The
+it, managed computers, and what differs from the multiuser SD Core for Windows. The
 reference for the language and the command processor is the separate User set.
 
 ## Where the source is

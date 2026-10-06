@@ -26,7 +26,7 @@ up: **the global catalogue**, which nobody changes from your account, and
 > or not: *The global catalogue holds the SD Core server's programs from
 > GLOBAL.BP.OUT and is changed only by SYNC.GLOBAL.CATALOG*. On a managed
 > computer the global catalogue holds the SD Core for Linux server's programs,
-> which you can call; see [Managed mode](15-managed-mode.html).
+> which you can call; see [Managed computers](15-managed-mode.html).
 
 ## Edit and debug
 
@@ -186,7 +186,7 @@ direct VOC edit.
 
 **Any of these can be on the list of commands you may not run** without
 `ADMIN`; the SD Core for Linux server keeps that list. See
-[Managed mode](15-managed-mode.html).
+[Managed computers](15-managed-mode.html).
 
 ## Two things to know when you compile
 

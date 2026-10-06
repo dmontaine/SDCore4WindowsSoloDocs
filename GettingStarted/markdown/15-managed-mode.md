@@ -1,7 +1,7 @@
-Title: Managed mode
+Title: Managed computers
 Subtitle: What an SD Core for Linux server can do to a Solo computer it manages, and how.
 
-**A computer installed in managed mode is a local database that an SD Core for
+**A computer that has a global password is a local database that an SD Core for
 Linux server also manages.** The server is the only thing that manages Solo
 computers; there is no Windows management server. **This page will grow** as
 management features are added to SD Core for Linux — what is here is what a
@@ -9,14 +9,23 @@ managed computer offers the server today.
 
 ## What makes a computer managed
 
-**The choice made when installing**, and fixed until a new installation. It
-comes with:
+**A global password, and nothing else.** It is entered when installing — on the
+installer's page, or in the control file — and may be left blank; a computer
+with no global password is not managed. Whether there is one is fixed until a
+new installation.
+
+**The server also has to be able to reach the computer.** Both of these are a
+choice in every installation, on the installer's Tasks page or in the control
+file, and neither is switched on for you:
 
 | | |
 |---|---|
-| **a global password** | set at installation, on the installer's page or in the control file. The server signs in with it |
 | **the API, on and open** | port 4249, reachable from other computers — the server's way in |
-| **ssh, on and open** | the OpenSSH package installed if none was, and Solo's own ssh server on port 4251, reachable from other computers |
+| **ssh, on and open** | Solo's own ssh server on port 4251 (the OpenSSH package is installed if none was), reachable from other computers |
+
+With either off, or open to this computer only, the server cannot use that
+route. An administrator who sets up many computers puts `api=open` and
+`ssh=open` in the control file.
 
 See [Installing](01-installation.html), including the **control file** that
 sets up many computers from one USB stick.
@@ -48,8 +57,8 @@ The key is an extra: it does not switch the password off.
 
 **Only a server session may ask.** A session signed in with the account
 password is refused with *"Only the SD Core server may manage ssh keys"*, and
-nothing changes. A standalone computer has no global password, so nothing can
-ask.
+nothing changes. A computer with no global password has no server, so nothing
+can ask.
 
 **What lands in the file is one line:** `restrict`, the key, and the tag
 `sdcoresolo-managed`. The key can start SD and nothing else — it gives no shell
@@ -130,8 +139,10 @@ is kept.
 | *The global catalogue can only be changed by the SD Core server* | `SYNC.GLOBAL.CATALOG`, or writing `GLOBAL.BP.OUT`, from a session that did not sign in with the global password |
 | *The global catalogue holds the SD Core server's programs from GLOBAL.BP.OUT and is changed only by SYNC.GLOBAL.CATALOG* | `CATALOG ... GLOBAL`, a `CATALOG` name beginning `*`, `!`, `_` or `$`, or `DELETE.CATALOG` of a global entry — from any session |
 
-**On a standalone computer** there is no server: `SYNC.GLOBAL.CATALOG` says
-so and changes nothing, and the global catalogue holds only SD's own programs.
+**On a computer with no global password** there is no server:
+`SYNC.GLOBAL.CATALOG` says *"this computer has no global password, so no SD Core
+server manages it and there is nothing to manage"* and changes nothing, and the
+global catalogue holds only SD's own programs.
 
 ## Commands the user may not run: `DENY.VERBS`
 
@@ -139,6 +150,10 @@ so and changes nothing, and the global catalogue holds only SD's own programs.
 without the administrator or global password.** A command on the list behaves
 like the administrator commands: refused with *Command requires administrator
 privileges* until `ADMIN`.
+
+**Only a global-password session changes the list**, so a computer installed
+with a list in the control file (`deny-verbs=`) and no global password keeps
+that list until a new installation.
 
 ```
 deny.verbs                       list them
@@ -181,7 +196,7 @@ says.
 **SD enforces these rules; Windows does not.** The whole `SDCoreSolo` folder
 belongs to the computer's Windows user, who can change any file in it from
 outside SD — `GLOBAL.BP.OUT`, the catalogue, the list of denied commands. What
-managed mode protects is what happens inside SD. A computer whose user must
+a global password protects is what happens inside SD. A computer whose user must
 not be able to change these needs that user to lack the Windows rights to the
 folder, and Solo does not set that up.
 

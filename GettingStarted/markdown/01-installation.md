@@ -14,7 +14,7 @@ computer, and there is no Windows service.
 | Rights | an ordinary user account. The installer asks for administrator consent **once**, for the steps that change the computer rather than your profile |
 | The package | the installer, with two folders beside it: `ssh-server\` holding Microsoft's OpenSSH server MSI, and `python\` holding python.org's Python installer (`python-3.x.x-amd64.exe`) |
 
-**The two folders are part of the package, in every mode.** If either is
+**The two folders are part of the package, every time.** If either is
 missing the installer stops at once with *"Invalid installation package.
 Missing beside this installer:"* and the name of what is missing, before it
 changes anything. Whether each package is actually *installed* is decided
@@ -32,19 +32,7 @@ Earlier releases refused to install beside SD Core.
 
 ## What you are asked
 
-### 1. The mode
-
-| | |
-|---|---|
-| **Standalone** | a database for this computer only. The default |
-| **Managed client of an SD Core server** | a computer an SD Core for Linux server also manages. See [Managed mode](15-managed-mode.html) |
-
-**The mode cannot be changed later except by a new installation.** It is the
-one choice that is fixed: it decides whether a global password exists, and
-nothing sets or clears that afterwards. The installer asks it only when there
-is no `SDCoreSolo` data yet.
-
-### 2. The passwords
+### 1. The passwords
 
 Asked in this order, each typed twice:
 
@@ -52,27 +40,47 @@ Asked in this order, each typed twice:
 |---|---|
 | **Account password** | the password every SD session asks for — at the keyboard, over ssh and through the API |
 | **Administrator password** | unlocks the administrator commands, with `ADMIN` |
-| **Global password** | managed mode only. The SD Core for Linux server signs in with it, and it also unlocks the administrator commands |
+| **Global password** | **optional — leave it blank if no SD Core server manages this computer.** The SD Core for Linux server signs in with it, and it also unlocks the administrator commands |
+
+**A computer is managed if and only if it has a global password.** Leave it
+blank and no SD Core server manages the computer: it is a database for this
+computer alone, and there is nothing else to choose. Enter one and the computer
+is managed by an SD Core for Linux server — see [Managed computers](15-managed-mode.html).
+
+**Whether there is a global password is fixed at installation.** Nothing
+creates or clears one afterwards; the server can change an existing one with
+`SET.PASSWORD GLOBAL`. To add one to a computer that has none, install again as
+described under *Changing any of it afterwards*. An upgrade never adds, changes
+or removes it.
 
 **Every password needs at least 8 characters, with a lower-case letter, an
 upper-case letter, a digit and a symbol** — letters, digits and punctuation
-only, no spaces. The global password must differ from both of the others;
-otherwise the server, signing in with the same name, would land in an ordinary
-session. See [The account and its passwords](05-account-types.html).
+only, no spaces. The global password, when there is one, must differ from both
+of the others; otherwise the server, signing in with the same name, would land
+in an ordinary session. See [The account and its passwords](05-account-types.html).
 
-### 3. The API and ssh — standalone only
+### 2. The API and ssh
+
+Asked on every new installation, whether or not there is a global password.
 
 | | |
 |---|---|
 | **Provide the SD Core API (port 4249)** | starts the API listener. Off by default |
 | **Let other computers reach it** | opens port 4249 in Windows Firewall. Without it the API answers this computer only |
-| **Let other computers reach Solo's ssh port (4251)** | shown when the OpenSSH server is already installed. Opens Solo's own firewall rule for port 4251 to the network. Without it, ssh answers this computer only |
-| **Install the OpenSSH server** | shown when no ssh server is installed. Installs the MSI from `ssh-server\` |
+| **Provide Solo's ssh server (port 4251)** | shown when an OpenSSH server is already installed. On by default. Unticked, Solo has no ssh server |
+| **Let other computers reach it** | opens Solo's own firewall rule for port 4251 to the network. Without it, ssh answers this computer only |
+| **Install the OpenSSH server** | shown when no ssh server is installed. Installs the MSI from `ssh-server\` and sets up Solo's own ssh server. Off by default |
+| **Let other computers reach it** | the same, for the box above |
 
-**In managed mode none of this is asked**: the API is on and reachable from
-other computers, and so is ssh — the OpenSSH MSI is installed if there is no
-ssh server. The server has to reach the computer from elsewhere, so managed
-mode leaves nothing to choose.
+**When Solo's ssh server is on,** it runs on port 4251 and starts with Windows.
+You sign in to it with your Windows account name and password, and it starts
+`sd-solo`. Windows' own ssh server and its port 22 are not changed. See
+[ssh access](08-ssh-access.html).
+
+**An SD Core server that manages the computer connects from elsewhere**, through
+the API and ssh. With either off, or open to this computer only, the server
+cannot reach the computer until the choice is changed. An administrator who
+sets up many computers gives these two answers in the control file.
 
 ### What is not asked, because it always happens
 
@@ -80,7 +88,6 @@ mode leaves nothing to choose.
 |---|---|
 | **Python** | installed for you, from `python\`, unless a Python 3.13 or later is already installed. It is a per-user install and needs no administrator rights |
 | **PATH** | `%USERPROFILE%\SDCoreSolo\usr\bin` is added to your PATH, so `sd-solo` works from any new window |
-| **ssh lands in SD** | wherever the OpenSSH package is present, Solo runs an ssh server of its own on port 4251 and starts it with Windows. You sign in to it with your Windows account name and password, and it starts `sd-solo`. Windows' own ssh server and its port 22 are not changed. See [ssh access](08-ssh-access.html) |
 
 ## The one administrator step
 
@@ -91,13 +98,13 @@ than yours:
 - registers the scheduled task **SD Core Solo**, which starts SD at every
   Windows start-up, as you, whether or not you are signed in;
 - opens or restricts the firewall rules chosen above;
-- installs the OpenSSH MSI, when that was chosen or managed mode needs it;
-- makes the administrators-only folder `C:\ProgramData\SDCoreSolo\ssh` (the ssh
-  server's configuration and host key, with its permissions checked afterwards)
-  and registers the scheduled task **SD Core Solo SSH**, which starts Solo's own
-  ssh server on port 4251 at every Windows start-up, as SYSTEM, so that your
-  Windows password can sign you in; it also removes what an earlier release
-  added to Windows' ssh settings.
+- installs the OpenSSH MSI, when that was chosen;
+- when Solo's ssh server was chosen: makes the administrators-only folder
+  `C:\ProgramData\SDCoreSolo\ssh` (the ssh server's configuration and host key,
+  with its permissions checked afterwards) and registers the scheduled task
+  **SD Core Solo SSH**, which starts Solo's own ssh server on port 4251 at every
+  Windows start-up, as SYSTEM, so that your Windows password can sign you in;
+  it also removes what an earlier release added to Windows' ssh settings.
 
 **If you decline the prompt, SD is installed but does not start at start-up**,
 and Solo's ssh server and the firewall rules are not set up. The installer says
@@ -129,23 +136,32 @@ and do not move with it.
 ## Installing many computers: the control file
 
 **A file named `sd-solo-setup.conf` beside the installer answers its
-questions.** It is for **managed mode only** — its presence makes the install
-managed — and it is how one USB stick sets up several computers.
+questions** — it is how one USB stick sets up several computers. It answers
+only what it gives; its presence does not make a computer managed.
 
 | | |
 |---|---|
 | `admin-password=` | the administrator password |
-| `global-password=` | the global password |
-| `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed mode](15-managed-mode.html) |
+| `global-password=` | the global password. **Blank or left out means no global password:** the computer is not managed and nothing is asked |
+| `api=` | `off`, `local` (this computer only) or `open` (other computers too) |
+| `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer |
+| `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed computers](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
 
-**The account password is deliberately not in it.** On a computer installed
-from a control file, the user sets the account password **the first time they
-run `sd-solo` at that computer's keyboard**. Until then ssh and the API accept only
-the global password — the server can reach the computer, and nobody else can.
+**The account password is deliberately not in it.** With a global password, the
+user sets the account password **the first time they run `sd-solo` at that
+computer's keyboard**. Until then ssh and the API accept only the global
+password — the server can reach the computer, and nobody else can. **With no
+global password the installer asks for the account password**, so an
+installation with no global password cannot run unattended.
 
-**A blank answer is asked for**, and so is one that breaks the password rules.
-The release carries `sd-solo-setup.conf.sample`, which explains each item and
-shows a sample answer; copy it to `sd-solo-setup.conf` and fill it in.
+**A blank answer is asked for**, except the global password above, and so is
+one the installer cannot accept: a password that breaks the rules, or an `api=`
+or `ssh=` that is not `off`, `local` or `open`. When the file gives no global
+password the installer says that this computer will not be managed by an SD
+Core server, in `install-summary.log` and on its last page — a mistyped name
+ends the same way, so read it. The release carries `sd-solo-setup.conf.sample`,
+which explains each item and shows a sample answer; copy it to
+`sd-solo-setup.conf` and fill it in.
 
 **The file holds passwords in clear text.** Keep the stick safe, and do not
 leave the file on a computer after installing.
@@ -171,7 +187,7 @@ report, and ends each with a verdict.
 
 | | |
 |---|---|
-| The mode | a new installation. The mode is read from the data, so an install over kept data keeps it: uninstall, **move `%USERPROFILE%\SDCoreSolo` aside** (it holds your data — keep it), then install |
+| Whether there is a global password | a new installation. That is read from the data, so an install over kept data keeps it: uninstall, **move `%USERPROFILE%\SDCoreSolo` aside** (it holds your data — keep it), then install |
 | The API or ssh choices | uninstall, then install again — the data and passwords are kept, and the API and ssh questions are asked again. Or change the firewall and `sd.conf` by hand |
 | The passwords | `SET.PASSWORD`, `SET.PASSWORD ADMIN`, and on a managed computer `SET.PASSWORD GLOBAL` from the server. See [The account and its passwords](05-account-types.html) |
 | Your PATH | `APPEND.SD.PATH`. See [Administrator commands](06-administrator-commands.html) |

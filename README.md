@@ -9,8 +9,8 @@ needed to build these pages.
 Windows W1.1-1) and being rewritten for Solo. Until that is finished, a page
 may still describe the multi-user product. The plan, on the owner's ruling:
 the Administrator set is merged into the others, pages about features Solo
-does not have are deleted, a section covers managing a Solo computer in
-managed mode (the managing server is SD Core for Linux), and each set's
+does not have are deleted, a section covers managing a Solo computer that has a
+global password (the managing server is SD Core for Linux), and each set's
 differences page becomes *Differences from multiuser SD Core for Windows
 W1.1-1*. The Layout section below still describes the multi-user sets.
 

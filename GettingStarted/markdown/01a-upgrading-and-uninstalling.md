@@ -6,8 +6,9 @@ This page continues [Installing](01-installation.html).
 ## Upgrading
 
 **Run the new installer while the old release is installed.** It recognises
-the installation and upgrades it. It asks nothing — no mode, no passwords, no
-API or ssh choices — and it keeps them all.
+the installation and upgrades it. It asks nothing — no passwords, no API or ssh
+choices — and it keeps them all. It never adds, changes or removes the global
+password.
 
 **SD is stopped first**, because an upgrade replaces `sd-solo.exe`. It starts again
 at the next Windows start-up, or with `sd-solo -start` (see
@@ -31,18 +32,19 @@ release that installed them. So an upgrade also, for you:
   computer, because the global catalogue is one of the files replaced.
 
 Each step reports in `%USERPROFILE%\SDCoreSolo\install-summary.log`, ending
-with a verdict. The startup task is registered again, and so is the ssh task
-(**SD Core Solo SSH**, which starts Solo's own ssh server on port 4251). An
-existing firewall rule is not touched.
+with a verdict. The startup task is registered again. So is the ssh task
+(**SD Core Solo SSH**, which starts Solo's own ssh server on port 4251), but
+only where Solo's ssh server is already set up: an upgrade never turns ssh on
+for a computer that chose none. An existing firewall rule is not touched.
 
 **Upgrading from a release before WS1.1-3 changes how ssh works**, and does it
 without asking: what the earlier release added to Windows' ssh settings is
 removed, the key the SD Core server added to `%USERPROFILE%\.ssh\authorized_keys`
 moves into Solo's own key file, and ssh to Solo is now on port 4251 instead of
-22. See [ssh access](08-ssh-access.html). **A managed computer gets the firewall
-rule for 4251 opened to other computers**, because the server has to reach it.
-**A standalone computer does not**: its port 4251 answers this computer only
-until you run `solo-ssh-firewall.ps1 -Open` from an elevated PowerShell.
+22. See [ssh access](08-ssh-access.html). **An upgrade does not open the
+firewall rule for 4251 to other computers**, not even on a managed computer
+whose server has to reach it: its port 4251 answers this computer only until
+you run `solo-ssh-firewall.ps1 -Open` from an elevated PowerShell.
 
 **Python is installed if none is there**, as on a new installation, and PATH
 gets SD's program folder if it lost it.
@@ -61,8 +63,8 @@ and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH.
 
 **Your data stays.** `sdsys`, your account (`user_accounts\sduser`),
 `sd.conf` and the API's TLS key are left in `%USERPROFILE%\SDCoreSolo`. Install
-again later and the installer finds them: it keeps the mode and the passwords,
-and asks only the API and ssh questions again.
+again later and the installer finds them: it keeps the passwords, with or
+without a global password, and asks only the API and ssh questions again.
 
 **To remove the data too, delete `%USERPROFILE%\SDCoreSolo` yourself** after
 uninstalling. Nothing else holds a copy.

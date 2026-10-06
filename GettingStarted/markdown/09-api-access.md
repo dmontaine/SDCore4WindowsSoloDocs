@@ -9,8 +9,10 @@ client library as with any SD Core — see [Client distribution](10-client-distr
 
 | | |
 |---|---|
-| **Standalone** | only if **Provide the SD Core API** was ticked when installing. Off by default |
-| **Managed** | always on, and open to other computers, because the SD Core for Linux server connects through it |
+**Only if it was chosen when installing** — **Provide the SD Core API** ticked,
+or `api=local` or `api=open` in the control file. Off by default, with or
+without a global password. A managed computer needs it on and open, because the
+SD Core for Linux server connects through it; nothing switches it on for you.
 
 **Declined at installation, there is no listener at all**: the installer
 writes an `sd.conf` with no `APIPORT` line, and SD opens no socket.
@@ -34,8 +36,9 @@ is no longer supported; this server requires SCRAM authentication"*.
 **A wrong password is refused**, and the refusal is written to the audit trail
 — for example `API REFUSED user=sduser reason=wrong password`.
 
-**On a computer installed from a control file**, until the account password
-has been chosen at the keyboard, only the global password is accepted.
+**On a computer installed from a control file that gave a global password**,
+until the account password has been chosen at the keyboard, only the global
+password is accepted.
 
 **`SDConnectLocal` is disabled.** It signed in with no password, which Solo
 does not allow; a client calling it gets *SDConnectLocal is not available in
@@ -55,8 +58,8 @@ rule, named `SD-Solo-API-In-TCP`:
 
 | | |
 |---|---|
-| **Standalone** | the installer asks; unticked, the rule allows this computer only |
-| **Managed** | open to other computers |
+| **Let other computers reach it** | the installer asks, or `api=open` in the control file. Unticked, or `api=local`, the rule allows this computer only |
+| **A managed computer** | needs it open. Nothing opens it for you |
 
 **To change it afterwards**, from an elevated PowerShell:
 
@@ -87,7 +90,7 @@ encryption runs on a restricted copy of your Windows token that cannot read
 your files; the session itself is ordinary and unelevated.
 
 **A session signed in with the global password is a server session**, with
-the administrator commands unlocked. See [Managed mode](15-managed-mode.html).
+the administrator commands unlocked. See [Managed computers](15-managed-mode.html).
 
 ### A session is confined to its own account
 

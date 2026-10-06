@@ -41,7 +41,7 @@ are reached from other computers. See
 | The VOC | direct edits need `ADMIN`; the global catalogue is changed by nobody in a session |
 | The daemon | runs as you on an ordinary token, Administrators deny-only and Medium integrity, even from an administrator's account |
 | ssh | your own Windows account name and password only, on Solo's own port 4251, forced into `sd-solo`, no forwarding; the server runs as SYSTEM with its configuration in an administrators-only folder — see [ssh access](08-ssh-access.html) |
-| The API | off unless chosen (always on in managed mode); SCRAM inside TLS 1.3; a session confined to the account's files — see [API access](09-api-access.html) |
+| The API | off unless chosen; SCRAM inside TLS 1.3; a session confined to the account's files — see [API access](09-api-access.html) |
 
 **The account is the same one for every session**, so the gates are about *how
 you arrived and what you unlocked*, not about which account you are in.
@@ -72,8 +72,8 @@ in to**: nobody logs in to it, and Solo has no `LOGTO` verb.
 catalogue, the list of denied commands — and it signs in with the global
 password. **All of that is SD enforcing it, and none of it is Windows
 enforcing it**: the user of the computer owns the files and can change them
-from outside SD. What managed mode protects is what happens *inside* SD. See
-[Managed mode](15-managed-mode.html).
+from outside SD. What a global password protects is what happens *inside* SD. See
+[Managed computers](15-managed-mode.html).
 
 ## What you can do further
 
@@ -82,12 +82,12 @@ VOC (which needs `ADMIN`) and turning off its break key (`pterm break off`), so
 it can neither compile nor run anything else and cannot interrupt out to a TCL
 prompt. Neither is a setting; both are done by hand.
 
-**Turn the API off** if you do not use it — in standalone mode it is off
-unless it was chosen; see [API access](09-api-access.html). **Restrict ssh to
-this computer** if other computers do not need it — see
-[ssh access](08-ssh-access.html). Wherever the OpenSSH package is installed,
-Solo runs its own ssh server on port 4251, your Windows sign-in lands in SD and
-the server starts with Windows. Anyone who can reach the port can try passwords
+**Turn the API off** if you do not use it — it is off unless it was chosen; see
+[API access](09-api-access.html). **Restrict ssh to this computer** if other
+computers do not need it, or **leave it off** — see
+[ssh access](08-ssh-access.html). When Solo's ssh server is on, it runs on
+port 4251, your Windows sign-in lands in SD and the server starts with
+Windows. Anyone who can reach the port can try passwords
 for your Windows account, so keep the firewall rule limited to this computer
 unless you need it open.
 
