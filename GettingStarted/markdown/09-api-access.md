@@ -95,10 +95,11 @@ switches given). **Make the firewall rule first** — `-Restrict` or `-Open`, ab
 because Windows asks whether to allow a program the first time it listens with
 no rule, and an *Allow* there makes rules open to any address.
 
-> **`APILOGIN` is not a switch of any kind now.** The API always demands the
-> account's password, whatever `sd.conf` says, and `APILOGIN=0` does not weaken
-> that. It is still accepted, so an old `sd.conf` keeps working, and `CONFIG`
-> still prints it. To turn the API off, take away its listener, `APIPORT`.
+> **`APILOGIN` is retired.** The API always demands the account's password,
+> whatever `sd.conf` says, and `APILOGIN=0` never weakened that. An old
+> `sd.conf` that still has the line keeps working and the line is ignored; the
+> installer no longer writes it and `CONFIG` no longer prints it. To turn the
+> API off, take away its listener, `APIPORT`.
 
 ## An API session is you
 
