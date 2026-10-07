@@ -66,7 +66,7 @@ first:**
 
 | | |
 |---|---|
-| **Keep** | leaves your account `sduser` with its data (`user_accounts\sduser`) and `sd.conf` in `%USERPROFILE%\SDCoreSolo`, with a small file, `.sdcore-kept`, that says so. **Everything else in the folder is removed:** the passwords, the audit trail, the list of denied commands, `GLOBAL.BP.OUT`, the API's TLS key and your ssh key file |
+| **Keep** | leaves your account `sduser` with its data (`user_accounts\sduser`) and `sd.conf` in `%USERPROFILE%\SDCoreSolo`, with a small file, `.sdcore-kept`, that says so. **These are removed, and the dialog lists them:** every password, the audit trail, the list of denied commands, `GLOBAL.BP.OUT`, the API's TLS key, your ssh key file, the system files (`sdsys`) and the install logs |
 | **Delete** | removes the whole folder, for good |
 
 **A silent uninstall never deletes your data**; it keeps, as above. Whichever you

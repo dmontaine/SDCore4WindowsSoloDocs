@@ -7,15 +7,20 @@ client library as with any SD Core — see [Client distribution](10-client-distr
 
 ## Is it on?
 
-| | |
-|---|---|
 **Only if it was chosen when installing** — **Provide the SD Core API** ticked,
 or `api=local` or `api=open` in the control file. Off by default, with or
 without a global password. A managed computer needs it on and open, because the
 SD Core for Linux server connects through it; nothing switches it on for you.
 
-**Declined at installation, there is no listener at all**: the installer
-writes an `sd.conf` with no `APIPORT` line, and SD opens no socket.
+**Declined at installation, there is no listener at all**: `sd.conf` has its
+`APIPORT` line commented out, and SD opens no socket.
+
+**Chosen, the listener is switched on after the firewall rule exists.** The
+installer's `sd.conf` always starts with `APIPORT` commented out, so the
+installer's own first start of SD opens no port and Windows shows no firewall
+alert. The administrator step then makes the API's firewall rule, switches
+`APIPORT` on with `solo-api-listener.ps1`, and starts SD from the startup task.
+The install report says whether the API is listening on 4249.
 
 ## Signing in
 
