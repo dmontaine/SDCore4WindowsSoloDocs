@@ -106,7 +106,8 @@ sets up many computers gives these two answers in the control file.
 than yours:
 
 - registers the scheduled task **SD Core Solo**, which starts SD at every
-  Windows start-up, as you, whether or not you are signed in;
+  Windows start-up, as you, whether or not you are signed in (a standard
+  account gets a different task, below);
 - opens or restricts the firewall rules chosen above;
 - installs the OpenSSH MSI, when that was chosen;
 - when Solo's ssh server was chosen: makes the administrators-only folder
@@ -119,6 +120,19 @@ than yours:
 **If you decline the prompt, SD is installed but does not start at start-up**,
 and Solo's ssh server and the firewall rules are not set up. The installer says
 which steps did not complete.
+
+**A standard Windows account** — one that is not an administrator — gets the
+same prompt, but Windows asks for an administrator's name and password in it
+instead of a click, and the installation goes on with them. Windows refuses the
+start-up task above for such an account ("Access is denied"), whoever sets it
+up, so the installer registers a task that starts SD, with no window, **when you
+sign in**. SD is therefore not running between a restart and your sign-in.
+Signing out ends SD, and leaves it marked as not shut down cleanly; the sign-in
+task clears that and starts SD again, and writes what it did to
+`solo-start.log` in the `SDCoreSolo` folder. Solo's ssh server and the firewall
+rules are set up as for any account, and `install-summary.log` says which of the
+two tasks was made. This was measured on one Windows 11 computer with a local
+standard account; a domain account has not been tried.
 
 ## What lands where
 
@@ -135,8 +149,9 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 | `install-summary.log` | what every installer step did — read this first when something did not work |
 
 **Uninstalling asks to keep or delete your data and configuration.** Keep leaves
-the account and `sd.conf` and removes the rest, passwords included; a new
-installation then offers them back. See
+the account and `sd.conf` and removes the passwords, audit trail, deny list,
+`GLOBAL.BP.OUT`, the API's TLS key, your ssh key file, the system files and the
+logs; a new installation then offers the account and `sd.conf` back. See
 [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 **The folder can be moved.** SD finds its files from where its programs are,
