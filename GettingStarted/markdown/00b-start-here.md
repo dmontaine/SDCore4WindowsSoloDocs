@@ -69,7 +69,8 @@ that no page runs longer than a reader will scroll.
 | **16** | [Configuration](16-configuration.html) | `sd.conf` and its parameters |
 | **16a** | [System limits](16a-system-limits.html) | The sizes and counts SD works within |
 | **17** | [The installed scripts](17-the-installed-scripts.html) | The PowerShell scripts in the installed folder |
-| **17a** | [The scripts SD runs itself](17a-scripts-sd-runs-itself.html) | The ones the installer and SD call, which nobody types |
+| **17a** | [The scripts SD runs itself](17a-scripts-sd-runs-itself.html) | The ones the installer and the startup tasks run, which nobody types |
+| **17b** | [The scripts a verb calls](17b-scripts-a-verb-calls.html) | The ones a verb runs, and the one SD runs as it starts |
 | **18** | [Encryption and the SDEXT interface](18-encryption.html) | What encryption SD has, and the interface behind it |
 | **19** | [Features the developers could not test](19-features-the-developers-could-not-test.html) | What nobody has watched work |
 

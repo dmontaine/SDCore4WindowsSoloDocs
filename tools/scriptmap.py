@@ -37,14 +37,17 @@ if len(sys.argv) < 2:
 
 ROOT = sys.argv[1]
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# TWO PAGES SINCE THE SPLIT, AND BOTH ARE READ.  09 was cut in two - the
+# THREE PAGES SINCE THE SPLITS, AND ALL ARE READ.  17 was cut in two - the
 # scripts you may run yourself stayed on it, the ones the installer, the verbs,
-# the uninstaller and SD itself run went to 09a.  Reading only 09 would have
-# reported about half the tree as undocumented; reading only the first of them
-# that happened to exist would have been worse, because it would have looked
-# like a result.  Both are required to be present.
+# the uninstaller and SD itself run went to 17a - and 17a was cut again on
+# 6 Oct 2026 (17b holds the ones a verb calls) to stay under the page-length
+# rule.  Reading only 17 would have reported about half the tree as
+# undocumented; reading only the first of them that happened to exist would have
+# been worse, because it would have looked like a result.  All are required to
+# be present.
 PAGES = [os.path.join('GettingStarted', 'markdown', '17-the-installed-scripts.md'),
-         os.path.join('GettingStarted', 'markdown', '17a-scripts-sd-runs-itself.md')]
+         os.path.join('GettingStarted', 'markdown', '17a-scripts-sd-runs-itself.md'),
+         os.path.join('GettingStarted', 'markdown', '17b-scripts-a-verb-calls.md')]
 
 if not os.path.isdir(ROOT):
     sys.exit('scriptmap: no install at %s' % ROOT)

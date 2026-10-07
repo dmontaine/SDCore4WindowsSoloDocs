@@ -42,9 +42,11 @@ SH=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NoLogo
 SH1=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command
 ```
 
-**`APIPORT` is there only if the API was chosen at installation.** A computer
-installed without it has the same file with no `APIPORT` line, and so no API
-listener. A managed computer needs it, and chooses it like any other.
+**`APIPORT` is active only if the API was chosen at installation.** A computer
+installed without it has the same file with the line commented out
+(`# APIPORT=4249`), and so no API listener. A managed computer needs it, and
+chooses it like any other. `solo-api-listener.ps1` switches it; see
+[API access](09-api-access.html).
 
 Lines beginning `#` are comments. The shipped file is heavily commented and
 those comments record why each value was chosen. Read them before changing
@@ -189,7 +191,7 @@ not exist is ignored**, and the default applies.
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `APIPORT` | 4249 | Switches the API on. Any number above zero means on, and SD listens on port 4249 whatever the number is; the port cannot be changed. If the line is absent no socket is created at all, which is how the API is turned off. A file that says `APIPORT=4243` still means on |
+| `APIPORT` | 4249 | Switches the API on. Any number above zero means on, and SD listens on port 4249 whatever the number is; the port cannot be changed. If the line is absent or commented out no socket is created at all, which is how the API is turned off. A file that says `APIPORT=4243` still means on |
 | `BACKUPDIR` | unset | The folder `BACKUP.ACCOUNT` and `RESTORE.ACCOUNT` use. Set by `SET.BACKUP.DIRECTORY`, not by hand - see [Backing up and restoring the account](06c-backup-and-restore.html) |
 | `APILOGIN` | 1 | Whether the API requires authentication. `0` is the weaker setting, not the safer one |
 | `NETDIRS` | unset | Directories outside its own account an API session may open, separated by semicolons because a Windows path contains a colon |

@@ -1,19 +1,25 @@
 Title: The Scripts SD Runs For Itself
-Subtitle: The scripts the installer, the verbs and SD itself call, which nobody types.
+Subtitle: The scripts the installer and the startup tasks run, which nobody types.
 
 This page continues [The Installed Scripts](17-the-installed-scripts.html).
 
 ## The ones the installer runs
 
-**You should not need to run either of these.** They are listed so that a name
-in the installer's report or in an error message can be looked up. Each step's
-report is appended to `%USERPROFILE%\SDCoreSolo\install-summary.log` under a
-title, which is where to read what actually happened.
+**You should not need to run any of these** (`solo-ssh-firewall.ps1` is the one
+you may, on [The Installed Scripts](17-the-installed-scripts.html)). They are
+listed so that a name in the installer's report or in an error message can be
+looked up. Each step's report is appended to
+`%USERPROFILE%\SDCoreSolo\install-summary.log` under a title, which is where to
+read what actually happened.
 
 | | |
 |---|---|
 | `solo-setup.ps1` | the steps that run **as you**, with no elevation |
 | `solo-machine.ps1` | the one step that needs an **administrator**, behind a single consent prompt |
+| `solo-api-listener.ps1` | switches the API listener on or off in `sd.conf`; `solo-machine.ps1` runs it |
+| `solo-sshd.ps1` | sets up and looks after Solo's own ssh server |
+| `solo-ssh-firewall.ps1` | the firewall rule for Solo's ssh port |
+| `solo-start.ps1` | what the sign-in startup task runs, on an account that cannot have a start-up task |
 | `internal-marker.ps1` | a helper the first one loads; it defines two functions and does nothing else |
 
 ### `solo-setup.ps1`
@@ -52,8 +58,8 @@ administrator approves the prompt.
 
 | Action | What it does |
 |---|---|
-| **Install** | registers and starts the scheduled task **SD Core Solo**; installs the OpenSSH package when that was chosen; opens or restricts the API and ssh firewall rules as chosen; when Solo's ssh server was chosen, has `solo-sshd.ps1 -Install` make the administrators-only ssh folder, then registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server as SYSTEM (below) |
-| **Upgrade** | registers the scheduled tasks again — an upgrade does not revisit the choices, and registers the ssh task only where Solo's ssh server is already set up. It also removes what an earlier release added to Windows' ssh settings |
+| **Install** | makes the API firewall rule as chosen, **then** switches the API listener on or off with `solo-api-listener.ps1`, **then** registers and starts the scheduled task **SD Core Solo** — in that order, so the first start of SD that listens finds its rule already there and Windows shows no alert — and, when the API was chosen, waits until port 4249 is listening and says so; installs the OpenSSH package when that was chosen; opens or restricts the ssh port rule as chosen; when Solo's ssh server was chosen, has `solo-sshd.ps1 -Install` make the administrators-only ssh folder, then registers and starts the task **SD Core Solo SSH**, which runs Solo's own ssh server as SYSTEM (below) |
+| **Upgrade** | registers the scheduled tasks again — an upgrade does not revisit the choices, and registers the ssh task only where Solo's ssh server is already set up. It moves an API firewall rule an earlier release left on port 4243 to 4249, keeping who may reach it, and leaves `sd.conf` alone. It also removes what an earlier release added to Windows' ssh settings |
 | **Remove** | takes away both tasks, stops Solo's ssh server and deletes its administrators-only folder, and takes away the API rule and the ssh port rule. **Windows' own ssh rule for port 22 is Microsoft's and is never touched** |
 
 **The task runs `sd-solo -start` as you, at Windows start-up, whether or not you are
@@ -61,6 +67,10 @@ signed in** — that is what lets the API work before anyone signs in.
 For a user who is an administrator, Task Scheduler gives the task the full
 administrator token, and **`sd-solo.exe` drops it itself**, so SD runs on an
 ordinary token whatever the task does. See [Running SD](03-running-sd.html).
+**Windows refuses that start-up task for a standard (non-administrator) account**,
+and then the installer registers a task of the same name that runs
+`solo-start.ps1` when you **sign in**, below. `install-summary.log` says which
+of the two was made.
 
 **The task SD Core Solo SSH runs `sshd.exe` itself, as SYSTEM, at Windows
 start-up, whether or not you are signed in,** against the configuration in
@@ -112,6 +122,42 @@ Solo's ssh that needs an administrator, so it is run from the installer's
 consent prompt, or by you from an elevated PowerShell. See
 [ssh access](08-ssh-access.html) for the four switches and their exit codes.
 
+### `solo-api-listener.ps1`
+
+**Switches the API listener, `APIPORT` in `sd.conf`, on or off.**
+`solo-machine.ps1` runs it with `-On` after it has made the API firewall rule
+and before it starts the startup task, or with `-Off` when the API was not
+chosen. You can run it yourself; [API access](09-api-access.html) has the
+commands.
+
+| Switch | What it does |
+|---|---|
+| `-On` | makes `APIPORT=4249` the one active line: it un-comments the commented line, rewrites an older `APIPORT=4243`, or adds the line where there is none |
+| `-Off` | comments the active line out |
+| `-Show` | reports whether the listener is on, and changes nothing |
+| `-ConfPath <file>` | works on that file instead of the `sd.conf` beside the script |
+
+**It changes the file, not the running SD**: the listener is read once, as SD
+starts. It keeps the file's own line endings, reads the file again before it
+says it is done, and says so on every run which file it used. Exit **0** the
+file now says what was asked, **1** it could not be written or did not read back
+as asked, **2** it could not tell — no such file, or not exactly one of
+`-On`, `-Off` and `-Show`.
+
+**It is the listener, not the firewall.** `APIPORT` decides whether SD opens a
+socket at all; `api-firewall.ps1` decides who may reach it.
+
+### `solo-start.ps1`
+
+**What the sign-in startup task runs**, as you, with no window and no
+elevation. It exists because Windows refuses the start-up task for a standard
+account, and because signing out ends SD and leaves its shared memory behind, so
+a plain `sd-solo -start` at the next sign-in would refuse to start. It starts SD;
+if that failed and no SD is running, it clears the leftover with `sd-solo -stop`
+and starts once more. **It never stops an SD that is running, and it does not
+loop.** What it did is written to `solo-start.log` beside it. Exit **0** SD is
+running when it ends, **1** it is not.
+
 ### `internal-marker.ps1`
 
 **`sd-solo -internal` is how the installer runs SD's setup steps, and it is admitted
@@ -124,64 +170,7 @@ loaded by the installer's other scripts, never run on its own.
 the `sdsys` folder can write the file by hand, and in Solo that is you. See
 [Security](12-security.html#the-installers-own-door).
 
-## The ones a verb calls
+## Continued in
 
-**Prefer the verb.** It reports what happened in the product's own words and
-refuses when it cannot act; the script does the work and assumes the caller
-knew what they were doing.
-
-| | Called by |
-|---|---|
-| `sd-path.ps1` | `append.sd.path on` \| `off` — puts SD's program folder on **your** PATH, or takes it off |
-| `micro-home.ps1` | the editor programs, before `micro` starts — see below |
-| `solo-sshkey.ps1` | the API's ssh key request (49), on a managed computer — see below |
-
-### `sd-path.ps1`
-
-```
-powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\sd-path.ps1" -Show
-powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\sd-path.ps1" -Add
-powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\sd-path.ps1" -Remove
-```
-
-**It changes your own PATH, not the computer's, and needs no elevation.** Exit
-**0** applied (or `-Show` succeeded), **1** failed, **2** refused. It reads and
-writes the same registry value the installer does, and it keeps a PATH entry
-that refers to a variable (`%SystemRoot%`) as a reference rather than expanding
-it. Every install and upgrade puts SD on your PATH again, so `-Remove` lasts
-until the next one. See [Administrator commands](06-administrator-commands.html).
-
-### `micro-home.ps1`
-
-**`micro` writes to a configuration folder when it saves**, and this script
-gives you one you can write to, in your profile, and prints where it is:
-
-```
-MICROHOME=C:\Users\you\.micro
-```
-
-The editor program reads that line and nothing else from it. It exits 0 with
-that line, or 1 without it. It exists because `micro` printed a false
-*"Permission denied"* on every save when its configuration folder was read-only;
-**the folder has to be per-user and writable only by its owner**, because
-`micro` loads and runs plug-ins from it. Nothing about it is a setting — see
-[Programmer commands](07-programmer-commands.html#editors).
-
-### `solo-sshkey.ps1`
-
-**Run by SD itself, in your own session, when the SD Core server asks to add,
-remove or list its ssh key** — see [Managed computers](15-managed-mode.html). It is
-not for typing: it takes a request verb (`ADD`, `REMOVE` or `LIST`) and a key or
-fingerprint, and prints lines SD reads back (`RESULT=ADDED`, `FPR=SHA256:...`,
-`ERROR=...`). **It needs no elevation**, because it writes only Solo's own key
-file, `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`, and it refuses unless
-`sshd.exe` is installed. It runs `solo-sshd.ps1 -Prepare` first, which also
-tells it Solo's ssh server key and port. It touches only lines it wrote itself,
-tagged `sdcoresolo-managed`, and keeps at most four. Exit **0** with a `RESULT=` line,
-**1** with an `ERROR=` line and nothing changed.
-
-## See also
-
-[Installing](01-installation.html) covers what the installer puts on the
-computer and what an upgrade replaces.
-[Security](12-security.html) covers what each password guards.
+[The Scripts a Verb Calls](17b-scripts-a-verb-calls.html) — the scripts the
+verbs call, and the one SD runs as it starts

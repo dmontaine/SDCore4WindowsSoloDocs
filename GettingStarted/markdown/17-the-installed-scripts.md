@@ -1,5 +1,5 @@
 Title: The Installed Scripts
-Subtitle: The eight PowerShell scripts installed beside SD - the execution policy they need, what their exit codes mean, and the two you may need to run yourself.
+Subtitle: The fifteen PowerShell scripts installed beside SD - the execution policy they need, what their exit codes mean, and the two you may need to run yourself.
 
 SD's installer does part of its work in PowerShell rather than inside the
 installer script, and **it leaves those scripts on the computer**. They are in
@@ -9,30 +9,38 @@ and understood, and so that a choice made in the wizard can be changed
 afterwards.
 
 **They are Windows scripts, not SD verbs.** Nothing here is typed at an `sd-solo`
-prompt. Two of them need a PowerShell prompt started with **Run as
-administrator**, because they change the firewall; the others need no
-elevation.
+prompt. The two you may run yourself need a PowerShell prompt started with
+**Run as administrator**, because they change the firewall. The rest are run by
+the installer or by SD.
 
 *Italics* mark something you supply, **bold** a word typed as it stands, and
 braces an optional part.
 
 ## What is here and what is not
 
-**Eight scripts ship.**
+**Fifteen scripts ship.**
 
 | | |
 |---|---|
 | `api-firewall.ps1` | who may reach the API port — [below](#who-may-reach-the-api-from-other-computers) |
-| `ssh-firewall.ps1` | who may reach the ssh server — [below](#who-may-reach-ssh-from-other-computers) |
+| `solo-ssh-firewall.ps1` | who may reach Solo's ssh port, 4251 — [below](#who-may-reach-ssh-from-other-computers) |
+| `solo-api-listener.ps1` | switches the API listener on or off in `sd.conf` — [API access](09-api-access.html) |
 | `solo-machine.ps1` | the installer's one administrator step |
 | `solo-setup.ps1` | the installer's steps that run as you |
+| `solo-sshd.ps1` | sets up and looks after Solo's own ssh server |
+| `solo-start.ps1` | what the sign-in startup task runs, for an account Windows will not give a start-up task |
 | `internal-marker.ps1` | a helper the installer's steps load |
 | `sd-path.ps1` | what `append.sd.path` runs |
 | `micro-home.ps1` | what the `micro` editor verb runs |
 | `solo-sshkey.ps1` | what the API's ssh key request runs, on a managed computer |
+| `sd-account-archive.ps1` | the file work of `BACKUP.ACCOUNT` and `RESTORE.ACCOUNT` |
+| `sd-settings-os.ps1` | the Windows sections of `SETTINGS.REPORT` |
+| `sd-backupdir.ps1` | what `SET.BACKUP.DIRECTORY` runs |
+| `solo-restore-swap.ps1` | puts a restore in place while SD starts |
 
-The last six are described on
-[The Scripts SD Runs For Itself](17a-scripts-sd-runs-itself.html).
+The rest are described on
+[The Scripts SD Runs For Itself](17a-scripts-sd-runs-itself.html) and
+[The Scripts a Verb Calls](17b-scripts-a-verb-calls.html).
 
 Everything else in the project's `gplbld` directory — the verifiers, the
 probes, the build and test cycle — is development tooling and **is deliberately
@@ -145,25 +153,25 @@ A rule for a port nothing has opened admits nothing.
 ### Who may reach ssh from other computers
 
 ```
-powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\ssh-firewall.ps1" -Show
-powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\ssh-firewall.ps1" -Installed -Restrict
-powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\ssh-firewall.ps1" -Installed -Open
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-firewall.ps1" -Show
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-firewall.ps1" -Restrict
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-firewall.ps1" -Open
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-firewall.ps1" -Remove
 ```
 
-Exit **0** applied, **1** failed, **2** refused, or the rule is not there yet.
+Exit **0** applied, **1** failed, **2** refused (for example, not elevated).
+`-Show` changes nothing and needs no elevation. `-Open` allows any address,
+`-Restrict` this computer only. The port is always 4251; the script takes no
+port.
 
-**It toggles a rule it did not create.** Installing the OpenSSH server creates
-`OpenSSH-Server-In-TCP` and enables it for any address; this narrows it to this
-computer or widens it again. It has no `-Remove`, deliberately: the rule is
-Microsoft's and SD must not delete it.
-
-**Any change needs `-Installed`**, which says *an administrator asked for this*.
-Without it the script refuses and exits 2: it will not reconfigure an ssh
-server merely because it was run. `-Show` needs neither `-Installed` nor
-elevation. See [ssh access](08-ssh-access.html).
+**This script owns its rule**, `SD-Solo-SSH-In-TCP` — it made it, and `-Remove`
+takes it away. **It never touches Windows' own ssh rule for port 22**
+(`OpenSSH-Server-In-TCP`): that is Microsoft's, and Solo's ssh server does not
+use port 22. See [ssh access](08-ssh-access.html).
 
 ## See also
 
 [Installing](01-installation.html) covers what the installer asks and what it
 does with each answer. [The Scripts SD Runs For Itself](17a-scripts-sd-runs-itself.html)
-covers the other five.
+and [The Scripts a Verb Calls](17b-scripts-a-verb-calls.html) cover the other
+thirteen.

@@ -78,9 +78,22 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\api-firewall.
 reports without changing anything (and needs no elevation). It exits `0`
 applied, `1` failed, `2` refused.
 
-**To turn the API off or on** after installing, remove or add the `APIPORT`
-line in `%USERPROFILE%\SDCoreSolo\sd.conf`, then `sd-solo -stop` and `sd-solo -start`.
-The listener is read only at start-up.
+**To turn the API off or on** after installing, run `solo-api-listener.ps1`
+with `-Off`, `-On` or `-Show`, then `sd-solo -stop` and `sd-solo -start`. The
+listener is read only at start-up.
+
+```
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-api-listener.ps1" -Show
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-api-listener.ps1" -On
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-api-listener.ps1" -Off
+```
+
+It comments `APIPORT` out or puts it back in `sd.conf` and reads the file again
+before it says it is done; `-Show` changes nothing. It exits `0` done, `1` the
+file could not be written, `2` it could not tell (no file, or none of the three
+switches given). **Make the firewall rule first** — `-Restrict` or `-Open`, above —
+because Windows asks whether to allow a program the first time it listens with
+no rule, and an *Allow* there makes rules open to any address.
 
 > **`APILOGIN` is not an off switch.** It decides whether the API demands a
 > password. `APILOGIN=0` is the **weaker** setting, not the safer one. Do not
