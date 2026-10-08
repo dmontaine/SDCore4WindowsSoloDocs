@@ -128,7 +128,7 @@ ordinary source reads normally.
 ## Nothing to unlock, and one condition
 
 **On Solo both editors run in your session with nothing to unlock** — no
-`ADMIN`, no permission to be granted. An editor runs outside SD, as your
+`admin`, no permission to be granted. An editor runs outside SD, as your
 Windows user, and the operating system is yours already; see *Operating system
 access* in the GettingStarted set. (The multiuser SD Core for Windows gates
 them with a permission an administrator grants per account; there is no such

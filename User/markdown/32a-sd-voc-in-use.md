@@ -138,7 +138,7 @@ directly. There is no second, larger VOC.
 **The multiuser account and grant commands are not in it.** `create.account`,
 `delete.account`, `modify.account`, `grant`, `revoke`, `list.grants` and the
 remote-access verbs are absent from Solo's `NEWVOC`, so the name is simply not
-recognised. What needs `ADMIN` is refused by the verb's own program, and is
+recognised. What needs `admin` is refused by the verb's own program, and is
 described in the GettingStarted set.
 
 ## Case on disk

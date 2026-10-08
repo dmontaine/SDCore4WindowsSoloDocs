@@ -32,10 +32,10 @@ read what actually happened.
    administrator password and, when one was given, the global password — and,
    from a control file, the list of denied commands;
 4. **on an upgrade only**, brings the dictionaries up to the release and runs
-   `UPDATE.ACCOUNTS`, because an upgrade replaces the shipped VOC records but
+   `update.accounts`, because an upgrade replaces the shipped VOC records but
    does not rebuild the account's own;
 5. removes the system programs' source from the VOC and, where there is a
-   global password, makes the global catalogue match `GLOBAL.BP.OUT` again after an upgrade has
+   global password, makes the global catalogue match `global.bp.out` again after an upgrade has
    replaced the catalogue;
 6. stops SD, so that the scheduled task — which the next script registers —
    starts it and owns it.

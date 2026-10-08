@@ -81,28 +81,28 @@ session that may use the commands below — the administrator password does not
 open them.
 
 **A server session can change every password on the computer** — the account
-password with `SET.PASSWORD`, the administrator password with `SET.PASSWORD
-ADMIN`, and the global password with `SET.PASSWORD GLOBAL`, which nothing else
+password with `set.password`, the administrator password with `set.password
+admin`, and the global password with `set.password global`, which nothing else
 may use. See [The account and its passwords](05-account-types.html).
 
 **On a computer installed from a control file, the server can sign in before
 the user has chosen an account password.** Until the user does, at that
 computer's keyboard, the global password is the only one accepted.
 
-## The server's programs: `GLOBAL.BP.OUT`
+## The server's programs: `global.bp.out`
 
 **The global catalogue of a managed computer holds the server's programs.**
 The user can run them — `CALL *name` — and cannot add, replace or remove any,
-with or without `ADMIN`.
+with or without `admin`.
 
 | | |
 |---|---|
-| `GLOBAL.BP.OUT` | a file of **compiled programs only** — no source is installed. Empty after installation; the server fills it |
-| `SYNC.GLOBAL.CATALOG` | makes the global catalogue match `GLOBAL.BP.OUT` |
+| `global.bp.out` | a file of **compiled programs only** — no source is installed. Empty after installation; the server fills it |
+| `sync.global.catalog` | makes the global catalogue match `global.bp.out` |
 
 **To add or replace a program**, a server session copies its compiled object
-into `GLOBAL.BP.OUT` — for example from a `BP.OUT` it has written it to — and
-runs `SYNC.GLOBAL.CATALOG`:
+into `global.bp.out` — for example from a `BP.OUT` it has written it to — and
+runs `sync.global.catalog`:
 
 ```
 :copy from bp.out to global.bp.out myprog overwriting
@@ -111,8 +111,8 @@ catalogued *myprog
 SYNC GLOBAL CATALOG DONE 1 catalogued 0 removed 0 refused
 ```
 
-**To remove one**, delete it from `GLOBAL.BP.OUT` and run
-`SYNC.GLOBAL.CATALOG` again; the `*myprog` entry goes:
+**To remove one**, delete it from `global.bp.out` and run
+`sync.global.catalog` again; the `*myprog` entry goes:
 
 ```
 :delete global.bp.out myprog
@@ -121,35 +121,35 @@ removed *myprog
 SYNC GLOBAL CATALOG DONE 0 catalogued 1 removed 0 refused
 ```
 
-**What `SYNC.GLOBAL.CATALOG` does:** every object in `GLOBAL.BP.OUT` is
+**What `sync.global.catalog` does:** every object in `global.bp.out` is
 catalogued as `*<name>`, in lower case, replacing any older copy; every `*`
-entry with no object left in `GLOBAL.BP.OUT` is removed. SD's own system
+entry with no object left in `global.bp.out` is removed. SD's own system
 programs in the catalogue are never touched. An object it cannot load is
 refused by name and the rest still go in. The last line always reads
 `SYNC GLOBAL CATALOG DONE <n> catalogued <n> removed <n> refused`.
 
 **An upgrade catalogues them again for you.** It replaces the global catalogue
-with the new release's, then runs `SYNC.GLOBAL.CATALOG`; `GLOBAL.BP.OUT` itself
+with the new release's, then runs `sync.global.catalog`; `global.bp.out` itself
 is kept.
 
 **Everyone else is refused**:
 
 | | |
 |---|---|
-| *The global catalogue can only be changed by the SD Core server* | `SYNC.GLOBAL.CATALOG`, or writing `GLOBAL.BP.OUT`, from a session that did not sign in with the global password |
-| *The global catalogue holds the SD Core server's programs from GLOBAL.BP.OUT and is changed only by SYNC.GLOBAL.CATALOG* | `CATALOG ... GLOBAL`, a `CATALOG` name beginning `*`, `!`, `_` or `$`, or `DELETE.CATALOG` of a global entry — from any session |
+| *The global catalogue can only be changed by the SD Core server* | `sync.global.catalog`, or writing `global.bp.out`, from a session that did not sign in with the global password |
+| *The global catalogue holds the SD Core server's programs from global.bp.out and is changed only by sync.global.catalog* | `CATALOG ... GLOBAL`, a `CATALOG` name beginning `*`, `!`, `_` or `$`, or `DELETE.CATALOG` of a global entry — from any session |
 
 **On a computer with no global password** there is no server:
-`SYNC.GLOBAL.CATALOG` says *"this computer has no global password, so no SD Core
+`sync.global.catalog` says *"this computer has no global password, so no SD Core
 server manages it and there is nothing to manage"* and changes nothing, and the
 global catalogue holds only SD's own programs.
 
-## Commands the user may not run: `DENY.VERBS`
+## Commands the user may not run: `deny.verbs`
 
 **The server keeps a list of commands the user of the computer may not run
 without the administrator or global password.** A command on the list behaves
 like the administrator commands: refused with *Command requires administrator
-privileges* until `ADMIN`.
+privileges* until `admin`.
 
 **Only a global-password session changes the list**, so a computer installed
 with a list in the control file (`deny-verbs=`) and no global password keeps
@@ -165,7 +165,7 @@ deny.verbs set listf,copy        replace the list
 **Every form answers with the list as it now stands:**
 
 ```
-DENY.VERBS 2: LISTF,COPY
+deny.verbs 2: listf,copy
 ```
 
 **A command is denied under every name that runs it.** Denying `SH` denies
@@ -176,26 +176,26 @@ answer says what else was taken:
 
 ```
 :deny.verbs add sh
-DENY.VERBS also denies, as the same command: !
-DENY.VERBS 1: SH
+deny.verbs also denies, as the same command: !
+deny.verbs 1: sh
 ```
 
 | | |
 |---|---|
-| **Who may use it** | a server session only. Anyone else, `ADMIN` included, is told *The denied verbs can only be listed or changed by the SD Core server* |
-| **Never denied** | `ADMIN`, `OFF`, `QUIT` and `LO` — a list naming one says it is dropped |
+| **Who may use it** | a server session only. Anyone else, `admin` included, is told *The denied verbs can only be listed or changed by the SD Core server* |
+| **Never denied** | `admin`, `off`, `quit` and `lo` — a list naming one says it is dropped |
 | **Set at installation** | the control file's `deny-verbs=` line, on a new installation only |
 | **Kept by an upgrade** | yes |
 
 **It only adds.** It cannot lift the check an administrator command carries in
-its own code; a command already needing `ADMIN` needs it whatever the list
+its own code; a command already needing `admin` needs it whatever the list
 says.
 
 ## The limit of all this
 
 **SD enforces these rules; Windows does not.** The whole `SDCoreSolo` folder
 belongs to the computer's Windows user, who can change any file in it from
-outside SD — `GLOBAL.BP.OUT`, the catalogue, the list of denied commands. What
+outside SD — `global.bp.out`, the catalogue, the list of denied commands. What
 a global password protects is what happens inside SD. A computer whose user must
 not be able to change these needs that user to lack the Windows rights to the
 folder, and Solo does not set that up.

@@ -31,7 +31,7 @@ gone as *programs*; the capability is not.
 
 `modify` is not in SD Core at all.
 
-**`modify.password` is gone too**: `SET.PASSWORD` changes your account password
+**`modify.password` is gone too**: `set.password` changes your account password
 — see [The account and its passwords](05-account-types.html).
 
 > **`ed`** was never affected by the keyboard faults that hit the full-screen

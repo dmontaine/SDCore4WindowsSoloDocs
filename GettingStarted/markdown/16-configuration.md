@@ -68,7 +68,7 @@ a message naming the parameter.
 
 ## Reading the settings
 
-**The `config` verb reports what is in force, and needs `ADMIN` first** —
+**The `config` verb reports what is in force, and needs `admin` first** —
 `config gpl` and `config contrib` are the exceptions. See
 [Administrator commands](06-administrator-commands.html).
 
@@ -91,7 +91,7 @@ outside its own account, and the verb will not tell you what it is set to. Read
 it from the file.
 
 The `config()` function reads one parameter from a program, and needs no
-`ADMIN`:
+`admin`:
 
 ```
 group.size = config('GRPSIZE')
@@ -190,7 +190,7 @@ not exist is ignored**, and the default applies.
 | Parameter | Default | Effect |
 |---|---|---|
 | `APIPORT` | 4249 | Switches the API on. Any number above zero means on, and SD listens on port 4249 whatever the number is; the port cannot be changed. If the line is absent or commented out no socket is created at all, which is how the API is turned off. A file that says `APIPORT=4243` still means on |
-| `BACKUPDIR` | unset | The folder `BACKUP.ACCOUNT` and `RESTORE.ACCOUNT` use. Set by `SET.BACKUP.DIRECTORY`, not by hand - see [Backing up and restoring the account](06c-backup-and-restore.html) |
+| `BACKUPDIR` | unset | The folder `backup.account` and `restore.account` use. Set by `set.backup.directory`, not by hand - see [Backing up and restoring the account](06c-backup-and-restore.html) |
 | `APILOGIN` | none | **Retired.** The API always requires the account's password. An `sd.conf` that still has the line works and the line is ignored; the installer no longer writes it and `CONFIG` no longer prints it |
 | `NETDIRS` | unset | Directories outside its own account an API session may open, separated by semicolons because a Windows path contains a colon |
 | `SDCLIENT` | 0 | Restricts what an API session may do. Non-zero disables file access outright; `2` additionally refuses any subroutine not compiled as callable from a client |

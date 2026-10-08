@@ -5,7 +5,7 @@ Subtitle: The `sh` and `!` verbs, OS.EXECUTE, and what they reach on a Solo comp
 shorter name. **They are the only way out of SD to the operating system from
 TCL**; `OS.EXECUTE` is the way from a program.
 
-**On a Solo computer they are yours to use, with no `ADMIN`** — at the keyboard,
+**On a Solo computer they are yours to use, with no `admin`** — at the keyboard,
 over ssh and through the API. SD, its data and the Windows user it runs as are
 all one person's, so there is nobody for a gate to keep out. The multiuser SD
 Core for Windows decided this per person with an `os.users` list; Solo has no
@@ -117,7 +117,7 @@ password; see [Security](12-security.html).
 
 **The SD Core for Linux server can put `sh` on the list of denied commands**
 (see [Managed computers](15-managed-mode.html)); it and `!`, which runs the same
-command, then need `ADMIN` first. **A program's `OS.EXECUTE` is not a command
+command, then need `admin` first. **A program's `OS.EXECUTE` is not a command
 the list can hold**, so the list alone does not close the operating system
 off from a program.
 

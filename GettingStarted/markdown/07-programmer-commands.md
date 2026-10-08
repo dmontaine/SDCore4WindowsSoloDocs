@@ -1,10 +1,10 @@
 Title: Development and file commands
 Subtitle: Compiling, editing, and the verbs that maintain files, indexes and records in bulk.
 
-**You have all of these, and none needs `ADMIN`.** This page is a reference for
+**You have all of these, and none needs `admin`.** This page is a reference for
 what each does. Two things near them are gated, and are named where they come
 up: **the global catalogue**, which nobody changes from your account, and
-**editing the VOC directly**, which needs `ADMIN`.
+**editing the VOC directly**, which needs `admin`.
 
 ## Compile, catalogue and run
 
@@ -22,9 +22,9 @@ up: **the global catalogue**, which nobody changes from your account, and
 > **Catalogue locally or privately; the global catalogue is not yours.**
 > `catalog` and `delete.catalog` work for local and private entries.
 > `catalog ... global`, a name beginning `*`, `!`, `_` or `$`, and
-> `delete.catalog` of a global entry are refused for every session, `ADMIN`
+> `delete.catalog` of a global entry are refused for every session, `admin`
 > or not: *The global catalogue holds the SD Core server's programs from
-> GLOBAL.BP.OUT and is changed only by SYNC.GLOBAL.CATALOG*. On a managed
+> global.bp.out and is changed only by sync.global.catalog*. On a managed
 > computer the global catalogue holds the SD Core for Linux server's programs,
 > which you can call; see [Managed computers](15-managed-mode.html).
 
@@ -128,7 +128,7 @@ covered by the same refusal.
 **A compiled dictionary record is truncated to its first 15 fields** while
 you edit it, and recompiled with `cd` when you save.
 
-**Editing the VOC needs `ADMIN`**, whichever editor does it — see
+**Editing the VOC needs `admin`**, whichever editor does it — see
 [Administrator commands](06-administrator-commands.html).
 
 ### What an editor can reach
@@ -161,7 +161,7 @@ and are not coming back. See [Not in SD Core](14-not-in-sd-core.html).
 | **`cd`** | change directory |
 
 `create.file` writes the file's entry into the VOC for you; that side effect
-needs no `ADMIN`.
+needs no `admin`.
 
 ## Indexes
 
@@ -179,13 +179,13 @@ needs no `ADMIN`.
 | **`cname`** | change a record's name |
 | **`delete.common`** | clear a common block |
 
-**Copying into the VOC, or deleting from it, needs `ADMIN`**, like any other
+**Copying into the VOC, or deleting from it, needs `admin`**, like any other
 direct VOC edit.
 
 ## On a managed computer
 
 **Any of these can be on the list of commands you may not run** without
-`ADMIN`; the SD Core for Linux server keeps that list. See
+`admin`; the SD Core for Linux server keeps that list. See
 [Managed computers](15-managed-mode.html).
 
 ## Two things to know when you compile

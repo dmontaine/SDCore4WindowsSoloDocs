@@ -1,10 +1,10 @@
 Title: Administrator commands
-Subtitle: ADMIN, the commands that need it, and the maintenance verbs.
+Subtitle: admin, the commands that need it, and the maintenance verbs.
 
-**The administrator commands are in your own account, and they need `ADMIN`
+**The administrator commands are in your own account, and they need `admin`
 first.** There is no separate administrator account to sign in to.
 
-## `ADMIN`
+## `admin`
 
 ```
 :admin
@@ -13,7 +13,7 @@ Administrator commands unlocked for this session
 ```
 
 **Type the administrator password** — or, on a managed computer, the global
-password. **It lasts until you leave SD or type `ADMIN OFF`**:
+password. **It lasts until you leave SD or type `admin off`**:
 
 ```
 :admin off
@@ -22,7 +22,7 @@ Administrator commands locked
 
 | | |
 |---|---|
-| *Wrong password - administrator commands stay locked* | one try; type `ADMIN` again |
+| *Wrong password - administrator commands stay locked* | one try; type `admin` again |
 | *Administrator commands are already unlocked* | nothing to do |
 | *No administrator password is set on this system* | the installation did not set one; install again |
 
@@ -33,28 +33,28 @@ password is never displayed, stored or logged.
 
 ## What needs it
 
-**Refused without `ADMIN`, with *Command requires administrator privileges*:**
+**Refused without `admin`, with *Command requires administrator privileges*:**
 
 | | |
 |---|---|
-| `SET.PASSWORD ADMIN` | change the administrator password — [The account and its passwords](05-account-types.html) |
+| `set.password admin` | change the administrator password — [The account and its passwords](05-account-types.html) |
 | `CONFIG` | report or set configuration — except `CONFIG GPL` and `CONFIG CONTRIB`, which need nothing |
 | `SET.DATE` | set the session's date |
 | `CLEAN.ACCOUNT` | empty the account's scratch files |
-| `BACKUP.ACCOUNT`, `RESTORE.ACCOUNT`, `SET.BACKUP.DIRECTORY`, `SETTINGS.REPORT` | [Backing up and restoring the account](06c-backup-and-restore.html) |
-| `UPDATE.ACCOUNTS` | refresh the account's VOC |
+| `backup.account`, `restore.account`, `set.backup.directory`, `settings.report` | [Backing up and restoring the account](06c-backup-and-restore.html) |
+| `update.accounts` | refresh the account's VOC |
 | `APPEND.SD.PATH` | put SD on your PATH, or take it off |
 | `LISTU`, `LOGOUT ALL` | [Sessions and locks](06a-sessions-and-locks.html) |
 | `LIST.READU`, `LIST.LOCKS`, `LOCK`, `CLEAR.LOCKS`, `UNLOCK` | [Sessions and locks](06a-sessions-and-locks.html) |
 | anything on the deny list | a deny list is set by the control file or by the server — [Managed computers](15-managed-mode.html) |
 
-**Refused without `ADMIN`, with *The VOC can only be changed after ADMIN*:**
+**Refused without `admin`, with *The VOC can only be changed after admin*:**
 editing the VOC directly — `ED VOC`, a program's `WRITE` or `DELETE` to the
 VOC, `COPY` into it — and saving or deleting a sentence with `.S` and `.D`.
 What SD writes to the VOC as a side effect of an ordinary command —
 `CREATE.FILE`'s entry, the command stack — is not gated.
 
-**Refused even with `ADMIN`**: changing the global catalogue (`CATALOG ...
+**Refused even with `admin`**: changing the global catalogue (`CATALOG ...
 GLOBAL`, `DELETE.CATALOG` of a global entry), and the commands that are the SD
 Core for Linux server's — see [Managed computers](15-managed-mode.html).
 
@@ -62,7 +62,7 @@ Core for Linux server's — see [Managed computers](15-managed-mode.html).
 `QUIT` — **and nor does `LOGOUT` *n***, because every session on a Solo
 computer runs as `sduser`. **`sh` needs nothing either**; see
 [Operating system access](06b-operating-system-access.html). **Nor does
-`SET.PASSWORD`** for your own account password — it asks for the current one
+`set.password`** for your own account password — it asks for the current one
 instead; see [The account and its passwords](05-account-types.html).
 
 ## The maintenance verbs
@@ -122,7 +122,7 @@ Empties the account's captured transcripts (`$COMO`), its hold file of reports
 touched** — no data file, no program, no dictionary. A como capture that is
 running is left alone and says so.
 
-### `UPDATE.ACCOUNTS`
+### `update.accounts`
 
 ```
 update.accounts {all}

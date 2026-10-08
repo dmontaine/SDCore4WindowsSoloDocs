@@ -71,7 +71,7 @@ A segment belonging to a running SD is never touched.
 
 If you leave SD with **`sh`** and then type `sd-solo` in that shell, it says so and
 returns you to the session you already have. `sh` is yours to use, with no
-`ADMIN` — see [Operating system access](06b-operating-system-access.html).
+`admin` — see [Operating system access](06b-operating-system-access.html).
 
 ## The command line
 
@@ -98,15 +98,15 @@ matches**, what happens depends on where the input comes from:
 | typed at a terminal | refused: *A command given on the sd command line needs the account password on its input* |
 | piped in | the first line of the input is taken as the password, once — so a job can supply it itself |
 
-`SET.PASSWORD` keeps the copy up to date when you change the password.
+`set.password` keeps the copy up to date when you change the password.
 
 **`sd-solo -a` and `sd-solo -a<name>` have nothing to choose between**: there is one
 account, `sduser`, and every session lands in it.
 
-**`sd-solo -u` and `sd-solo -k` need no `ADMIN`.** They are switches on the program,
+**`sd-solo -u` and `sd-solo -k` need no `admin`.** They are switches on the program,
 outside any SD session, and like `-start` and `-stop` they are the business
 of the user who owns SD. Inside a session, the same jobs are `LISTU` and
-`LOGOUT`, which do need `ADMIN` — see [Sessions and locks](06a-sessions-and-locks.html).
+`LOGOUT`, which do need `admin` — see [Sessions and locks](06a-sessions-and-locks.html).
 
 ## Where things are
 

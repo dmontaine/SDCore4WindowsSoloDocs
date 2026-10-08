@@ -8,7 +8,7 @@ what it touches. The passwords and what each one guards are on
 ## The global catalogue
 
 **Nobody can add to or remove from the system-wide catalogue from a session —
-`ADMIN` and the account password do not change that.** The global catalogue
+`admin` and the account password do not change that.** The global catalogue
 holds the programs SD runs for everybody, `$login` among them; on a managed
 computer it also holds the SD Core for Linux server's programs, and only the
 server puts them there. See [Managed computers](15-managed-mode.html).
@@ -29,7 +29,7 @@ catalog bp myprog          private catalogue
 catalog bp myprog local    your VOC
 ```
 
-Both work, and need no `ADMIN`. The only thing you cannot do is catalogue a
+Both work, and need no `admin`. The only thing you cannot do is catalogue a
 program whose name starts with `*`, `!`, `_` or `$` — those characters mean
 *system-wide*. Name it without one. You may **run** a globally catalogued
 program.
@@ -47,7 +47,7 @@ profile is what keeps other Windows users away from it — see
 
 ## Scheduled jobs
 
-A scheduled task can run an SD command as you, with no `ADMIN`: it is
+A scheduled task can run an SD command as you, with no `admin`: it is
 `sd-solo <command>`, which signs in with the kept copy of the account password. It
 has its own page: **[Scheduled jobs](04-scheduled-jobs.html)**.
 
@@ -57,7 +57,7 @@ There are two, and they are not interchangeable.
 
 | File | Where | For |
 |---|---|---|
-| `audit` | `%USERPROFILE%\SDCoreSolo\sdsys` | **who did what** — sign-ins, refusals, `ADMIN`, password changes. See [Security and the operating system](12a-security-and-the-operating-system.html#the-audit-trail) |
+| `audit` | `%USERPROFILE%\SDCoreSolo\sdsys` | **who did what** — sign-ins, refusals, `admin`, password changes. See [Security and the operating system](12a-security-and-the-operating-system.html#the-audit-trail) |
 | `errlog` | `%USERPROFILE%\SDCoreSolo\sdsys` | diagnostics, and API connection records |
 
 ### The error log records who connects to the API port

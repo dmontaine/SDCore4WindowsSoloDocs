@@ -9,7 +9,7 @@ password Windows keeps for you, and runs.
 ## Setting one up
 
 **1. Write the work as a paragraph** — a `PA` record in the VOC, with the
-commands on the lines after the type. Editing the VOC needs `ADMIN` first:
+commands on the lines after the type. Editing the VOC needs `admin` first:
 
 ```
 :admin
@@ -48,7 +48,7 @@ the rights anyway.
 ## Supplying the password on the input
 
 **If the kept copy does not open, or no longer matches** — you changed the
-password without `SET.PASSWORD` — a command whose input is piped takes the
+password without `set.password` — a command whose input is piped takes the
 first line of that input as the account password, once:
 
 ```

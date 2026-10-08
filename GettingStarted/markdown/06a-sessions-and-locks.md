@@ -3,7 +3,7 @@ Subtitle: Seeing who is signed in, ending a session that will not end itself, an
 
 These are the verbs for looking at SD as a whole and intervening in it:
 **which sessions are running, what they are holding, and how to take either
-away.** Most need `ADMIN` first; the table at the end says which.
+away.** Most need `admin` first; the table at the end says which.
 
 SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
@@ -67,9 +67,9 @@ logout all              end every session but this one
 another name, which is worth knowing before typing it intending to list
 something.
 
-**`logout n` needs no `ADMIN`.** SD lets a session end any session running
+**`logout n` needs no `admin`.** SD lets a session end any session running
 under the same user name, and on a Solo computer every session is `sduser`.
-**`logout all` needs `ADMIN`.** It leaves your own session alone.
+**`logout all` needs `admin`.** It leaves your own session alone.
 
 **`sd-solo -k n`** and **`sd-solo -k all`**, from a PowerShell window, do the same from
 outside SD.
@@ -259,11 +259,11 @@ user number must be specified* — so there is no `unlock` that means
 > `list.locks` shows the number with an owner and `clear.locks` refuses it
 > because it is not yours. **`unlock tasklock` *n*** is the way out.
 
-## Which need `ADMIN`
+## Which need `admin`
 
 | | |
 |---|---|
-| **need `ADMIN`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock` |
+| **need `admin`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock` |
 | **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` |
 
 Without it they answer *Command requires administrator privileges*. See

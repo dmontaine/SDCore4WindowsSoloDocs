@@ -19,7 +19,7 @@ at the next Windows start-up, or with `sd-solo -start` (see
 | | |
 |---|---|
 | **replaced** | the programs, the system programs and their catalogue, SD's messages, the VOC templates and the other files the release ships |
-| **kept** | your account and its data, the passwords, `sd.conf`, the API's TLS key, and on a managed computer the server's programs in `GLOBAL.BP.OUT` and the list of denied commands |
+| **kept** | your account and its data, the passwords, `sd.conf`, the API's TLS key, and on a managed computer the server's programs in `global.bp.out` and the list of denied commands |
 
 **Then it brings your account up to the release.** Replacing files is not
 enough on its own: your account's VOC and SD's dictionaries were built by the
@@ -28,7 +28,7 @@ release that installed them. So an upgrade also, for you:
 - adds the new release's commands to your account's VOC — it never takes
   anything away, and a record you keep your own version of is left alone;
 - merges and recompiles SD's own dictionaries;
-- catalogues the server's programs in `GLOBAL.BP.OUT` again, on a managed
+- catalogues the server's programs in `global.bp.out` again, on a managed
   computer, because the global catalogue is one of the files replaced.
 
 Each step reports in `%USERPROFILE%\SDCoreSolo\install-summary.log`, ending
@@ -66,7 +66,7 @@ first:**
 
 | | |
 |---|---|
-| **Keep** | leaves your account `sduser` with its data (`user_accounts\sduser`) and `sd.conf` in `%USERPROFILE%\SDCoreSolo`, with a small file, `.sdcore-kept`, that says so. **These are removed, and the dialog lists them:** every password, the audit trail, the list of denied commands, `GLOBAL.BP.OUT`, the API's TLS key, your ssh key file, the system files (`sdsys`) and the install logs |
+| **Keep** | leaves your account `sduser` with its data (`user_accounts\sduser`) and `sd.conf` in `%USERPROFILE%\SDCoreSolo`, with a small file, `.sdcore-kept`, that says so. **These are removed, and the dialog lists them:** every password, the audit trail, the list of denied commands, `global.bp.out`, the API's TLS key, your ssh key file, the system files (`sdsys`) and the install logs |
 | **Delete** | removes the whole folder, for good |
 
 **A silent uninstall never deletes your data**; it keeps, as above. Whichever you

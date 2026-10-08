@@ -10,7 +10,7 @@ documentation set. Terms are listed in alphabetical order.
 VOC, and its own `bp` source file. Solo has one account, `sduser`, in
 `%USERPROFILE%\SDCoreSolo\user_accounts\sduser`.
 
-**Administrator** — a session that has unlocked `ADMIN` with the
+**Administrator** — a session that has unlocked `admin` with the
 administrator password. Being a Windows administrator, elevated or not, grants
 nothing. There is one account, `sduser`, and no SDSYS sign-in.
 

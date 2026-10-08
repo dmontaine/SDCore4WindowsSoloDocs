@@ -21,7 +21,7 @@ marks a word typed as it stands; braces mark an optional part.
 
 ## What is not on this page
 
-**Listing every session, and ending them all, need `ADMIN`.** `listu` lists
+**Listing every session, and ending them all, need `admin`.** `listu` lists
 every session on the computer and `logout all` ends every one but yours; both
 are in the GettingStarted set, under *Sessions and locks*.
 
@@ -228,7 +228,7 @@ The debugger itself — the commands it takes once it is attached — is in
 ## Who has these verbs
 
 **Your account has `status`, `phantom`, `pstat`, `pdebug` and `pdump`**, and
-none of them needs `ADMIN`. `pdump` *n* and `pstat` work on any session, since
+none of them needs `admin`. `pdump` *n* and `pstat` work on any session, since
 every session is yours.
 
 ## See also

@@ -273,7 +273,7 @@ Per-arity `CFUNCTYPE` definitions are provided for `SDCall` and
 |---|---|
 | Open files outside the account | refused (status 3035 — *not permitted*) |
 | Reach the credential file | never, and cannot be added |
-| Write `GLOBAL.BP.OUT` | refused, unless the session signed in with the global password |
+| Write `global.bp.out` | refused, unless the session signed in with the global password |
 
 **It can run `sh` and `OS.EXECUTE`.** An API session is you, on your ordinary
 Windows token, with the rights of a session at the keyboard — see *API access*

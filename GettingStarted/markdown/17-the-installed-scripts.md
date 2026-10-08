@@ -33,9 +33,9 @@ braces an optional part.
 | `sd-path.ps1` | what `append.sd.path` runs |
 | `micro-home.ps1` | what the `micro` editor verb runs |
 | `solo-sshkey.ps1` | what the API's ssh key request runs, on a managed computer |
-| `sd-account-archive.ps1` | the file work of `BACKUP.ACCOUNT` and `RESTORE.ACCOUNT` |
-| `sd-settings-os.ps1` | the Windows sections of `SETTINGS.REPORT` |
-| `sd-backupdir.ps1` | what `SET.BACKUP.DIRECTORY` runs |
+| `sd-account-archive.ps1` | the file work of `backup.account` and `restore.account` |
+| `sd-settings-os.ps1` | the Windows sections of `settings.report` |
+| `sd-backupdir.ps1` | what `set.backup.directory` runs |
 | `solo-restore-swap.ps1` | puts a restore in place while SD starts |
 
 The rest are described on

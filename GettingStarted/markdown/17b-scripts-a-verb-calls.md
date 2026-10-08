@@ -15,9 +15,9 @@ knew what they were doing.
 | `sd-path.ps1` | `append.sd.path on` \| `off` — puts SD's program folder on **your** PATH, or takes it off |
 | `micro-home.ps1` | the editor programs, before `micro` starts — see below |
 | `solo-sshkey.ps1` | the API's ssh key request (49), on a managed computer — see below |
-| `sd-account-archive.ps1` | `BACKUP.ACCOUNT` and `RESTORE.ACCOUNT` — see below |
-| `sd-settings-os.ps1` | `SETTINGS.REPORT` — see below |
-| `sd-backupdir.ps1` | `SET.BACKUP.DIRECTORY` — see below |
+| `sd-account-archive.ps1` | `backup.account` and `restore.account` — see below |
+| `sd-settings-os.ps1` | `settings.report` — see below |
+| `sd-backupdir.ps1` | `set.backup.directory` — see below |
 
 **One more is run by SD itself, when it starts:** `solo-restore-swap.ps1`, also
 below.
@@ -68,7 +68,7 @@ tagged `sdcoresolo-managed`, and keeps at most four. Exit **0** with a `RESULT=`
 
 ### `sd-account-archive.ps1`
 
-**The file work behind `BACKUP.ACCOUNT` and `RESTORE.ACCOUNT`**: it writes the
+**The file work behind `backup.account` and `restore.account`**: it writes the
 backup zip, unpacks one into a staging folder, counts what is there, and puts a
 restored account's files in place. It is not for typing. Whatever it reports
 ends in one line, `ACC-ARCHIVE <mode> OK` or `ACC-ARCHIVE ERROR <reason>`, and
@@ -83,7 +83,7 @@ See [Backing up and restoring the account](06c-backup-and-restore.html).
 
 ### `sd-settings-os.ps1`
 
-**The Windows sections of `SETTINGS.REPORT`**: `sd.conf`, ssh, the API's
+**The Windows sections of `settings.report`**: `sd.conf`, ssh, the API's
 certificate, the firewall rules and the start-up task. Every line is printed as
 `REPORT <text>` and the last is `SETTINGS-OS OK SECTIONS <n>`. **It never
 prints a password or a private key**; of the API's key-and-certificate file it
@@ -92,8 +92,8 @@ and the rest still print. Exit **0** done, **1** failed.
 
 ### `sd-backupdir.ps1`
 
-**What `SET.BACKUP.DIRECTORY` runs.** It saves the folder `BACKUP.ACCOUNT` and
-`RESTORE.ACCOUNT` use when none is typed, as one line of `sd.conf`,
+**What `set.backup.directory` runs.** It saves the folder `backup.account` and
+`restore.account` use when none is typed, as one line of `sd.conf`,
 `BACKUPDIR=<full path>`, which is read at every use, so a change needs no
 restart. It makes the folder if it is not there and proves it can write to it
 before it saves. **The path must be a full Windows path, plain ASCII, at most 240
@@ -103,7 +103,7 @@ if it does not read back. Exit **0** done, **1** refused or failed. See
 
 ### `solo-restore-swap.ps1`
 
-**Puts a restore in place while SD starts.** `RESTORE.ACCOUNT` cannot replace
+**Puts a restore in place while SD starts.** `restore.account` cannot replace
 `sduser` from inside a session, because every session is in it, so the verb
 unpacks and checks the backup and leaves a marker, `.sdrestore.pending`, in the
 `SDCoreSolo` folder. The next `sd-solo -start` or `-restart` finds it, runs this

@@ -12,7 +12,7 @@ product. The User set applies to both.
 |---|---|
 | many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `WHO` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
 | SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in to it; the administrator commands run from your own account |
-| `CREATE.ACCOUNT`, `DELETE.ACCOUNT`, `MODIFY.ACCOUNT`, `GRANT`, `REVOKE`, `LIST.GRANTS`, `MODIFY.PASSWORD`, `LOGTO` | **gone.** Solo has one account, so `LOGTO` had nowhere to go (removed in WS1.1-3; typing it answers `LOGTO is not in your VOC`) |
+| `create.account`, `delete.account`, `modify.account`, `grant`, `revoke`, `list.grants`, `modify.password`, `logto` | **gone.** Solo has one account, so `logto` had nowhere to go (removed in WS1.1-3; typing it answers `logto is not in your VOC`) |
 | Windows groups `sdusers`, `sdssh`, `sdapi`, `sdsshonly`; the `os.users` and `batch.jobs` permit lists; console and Remote Desktop denied to SD accounts | **gone.** There is one Windows user, and it is yours |
 
 ## Passwords
@@ -21,8 +21,8 @@ product. The User set applies to both.
 |---|---|
 | a local sign-in asks for no password — Windows has authenticated you | **every session asks for the account password**: at the keyboard, over ssh, and through the API |
 | a command on the command line (`sd-solo LIST VOC`) needs an elevated window or a `batch.jobs` entry | it uses **a copy of the account password Windows keeps for you**, so scripts and scheduled jobs need no typing |
-| administration is being SDSYS | **administration is `ADMIN`** and a password set at installation |
-| `MODIFY.PASSWORD`, run by SDSYS | **`SET.PASSWORD`**: your own account password with no `ADMIN` (it asks the current one), `SET.PASSWORD ADMIN` after `ADMIN`, `SET.PASSWORD GLOBAL` by the SD Core for Linux server only. It also updates the kept copy |
+| administration is being SDSYS | **administration is `admin`** and a password set at installation |
+| `modify.password`, run by SDSYS | **`set.password`**: your own account password with no `admin` (it asks the current one), `set.password admin` after `admin`, `set.password global` by the SD Core for Linux server only. It also updates the kept copy |
 
 See [The account and its passwords](05-account-types.html).
 
@@ -30,9 +30,9 @@ See [The account and its passwords](05-account-types.html).
 
 | multiuser W1.1-1 | Solo |
 |---|---|
-| the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `ADMIN` first** — including eight that had no check of their own because only SDSYS had them: `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` |
-| editing the VOC directly is any account's own business | `ED VOC`, a program's `WRITE` or `DELETE` to the VOC, `COPY` into it, and saving or deleting a sentence with `.S` and `.D` **need `ADMIN`**. What SD writes to the VOC as a side effect — `CREATE.FILE`'s entry, the command stack — does not |
-| an administrator can `CATALOG ... GLOBAL` | **nobody changes the global catalogue**, `ADMIN` or not. On a managed computer it holds the SD Core for Linux server's programs. See [Other hardening](13-hardening.html) |
+| the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `admin` first** — including eight that had no check of their own because only SDSYS had them: `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` |
+| editing the VOC directly is any account's own business | `ED VOC`, a program's `WRITE` or `DELETE` to the VOC, `COPY` into it, and saving or deleting a sentence with `.S` and `.D` **need `admin`**. What SD writes to the VOC as a side effect — `CREATE.FILE`'s entry, the command stack — does not |
+| an administrator can `CATALOG ... GLOBAL` | **nobody changes the global catalogue**, `admin` or not. On a managed computer it holds the SD Core for Linux server's programs. See [Other hardening](13-hardening.html) |
 | `ssh.server`, `remote.ssh`, `remote.api` | **gone.** The API and ssh are chosen when installing |
 | `APPEND.SD.PATH` changes the system PATH | it changes **your** PATH, and needs no elevation |
 
@@ -43,9 +43,9 @@ See [Administrator commands](06-administrator-commands.html).
 **New in Solo.** A computer installed with a **global password** — the
 installer asks for one and it may be left blank — is also managed by an
 SD Core for Linux server, which signs in with that password. The server can put
-compiled programs into the global catalogue (`GLOBAL.BP.OUT`,
-`SYNC.GLOBAL.CATALOG`) and keep a list of commands the user may not run
-(`DENY.VERBS`). An installer control file, `sd-solo-setup.conf`, sets up many
+compiled programs into the global catalogue (`global.bp.out`,
+`sync.global.catalog`) and keep a list of commands the user may not run
+(`deny.verbs`). An installer control file, `sd-solo-setup.conf`, sets up many
 computers the same way. See [Managed computers](15-managed-mode.html).
 
 ## Installing and running
@@ -74,8 +74,8 @@ See [Installing](01-installation.html) and [Running SD](03-running-sd.html).
 
 - **Anything that creates, grants or deletes accounts**, or signs in to more
   than one account.
-- **Scripts that use `LOGTO`** (to `SDSYS` or anywhere else), or that expect
-  administrator verbs to work without `ADMIN`.
+- **Scripts that use `logto`** (to `SDSYS` or anywhere else), or that expect
+  administrator verbs to work without `admin`.
 - **A client that signs in with a Windows user name**, or with the old
   cleartext login, or through `SDConnectLocal`.
 - **Anything that writes the global catalogue.** Catalogue programs locally

@@ -1,7 +1,7 @@
 Title: Backing up and restoring the account
 Subtitle: Writing your account to a zip file, putting it back, remembering the backup folder, and recording the system's settings.
 
-This page continues [Administrator commands](06-administrator-commands.html). **All four verbs need `ADMIN` first.**
+This page continues [Administrator commands](06-administrator-commands.html). **All four verbs need `admin` first.**
 
 ## The backup folder: `set.backup.directory`
 
@@ -19,7 +19,7 @@ that depends on the current folder is refused.
 
 **You do not have to run it first.** If no folder is remembered, `backup.account`
 and `restore.account` ask for one and remember the answer exactly as this verb
-would. `restore.account` with `NO.QUERY` has nobody to ask and refuses instead.
+would. `restore.account` with `no.query` has nobody to ask and refuses instead.
 
 **An older SD Core Solo will not start on an `sd.conf` that carries a `BACKUPDIR`
 line.** SD stops at start-up on any key it does not know. Remove the line before
@@ -28,14 +28,14 @@ going back to an older release.
 ## Backing up: `backup.account`
 
 ```
-backup.account {TO folder}
+backup.account {to folder}
 ```
 
 Writes the account to **one zip file** in the folder, named after the computer,
 the account and the time, for example `SD-ace-sduser-20261001-144419.zip`.
 
 **There is one account, so no name is needed.** With none, the command fills in the
-name `sduser`. `backup.account sduser` and `backup.account ALL` are accepted too.
+name `sduser`. `backup.account sduser` and `backup.account all` are accepted too.
 
 * **Without `TO`** the remembered folder is used. **With `TO`** the folder is used
   for that one backup only; nothing is remembered.
@@ -59,8 +59,8 @@ the product is `windows-solo`.
 ## Restoring: `restore.account`
 
 ```
-restore.account zipfile {NO.QUERY}
-restore.account LATEST {NO.QUERY}
+restore.account zipfile {no.query}
+restore.account latest {no.query}
 ```
 
 **With no account name the command fills in `sduser`**, as `backup.account` does. A
@@ -68,7 +68,7 @@ name (`sduser`) and `ALL` are accepted too.
 
 * **A bare file name** is looked for in the remembered folder. A name that
   includes a folder is used as given.
-* **`LATEST` takes the place of the file name** and chooses the newest backup in
+* **`latest` takes the place of the file name** and chooses the newest backup in
   the remembered folder that was made **on this computer** and **holds** the
   account. It finds the computer and the time from the file name, then opens each
   candidate and reads its record of the accounts it holds (nothing is unpacked), so
@@ -82,7 +82,7 @@ name (`sduser`) and `ALL` are accepted too.
   the account's files, bytes and directories must match what was unpacked. Any
   difference stops the restore with nothing changed.
 * **It says what will be replaced, and asks once.** The default answer is no.
-  `NO.QUERY` skips the question.
+  `no.query` skips the question.
 * A VOC entry that holds the account's old path is rewritten to the new one. A
   pointer to somewhere outside the account is listed, not followed.
 

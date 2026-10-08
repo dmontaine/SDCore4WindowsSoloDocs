@@ -130,7 +130,7 @@ you will see. On the multiuser SD Core for Windows, `who` grows a third part
 after a `logto` — `29 PAYROLL from DON`, where `from` names the account you
 logged in as — and that is how it shows whether a `logto` took effect. Solo has
 one account, so there is nowhere to `logto` to, and it has no `logto` verb:
-typing it answers `LOGTO is not in your VOC`, like any word SD does not know.
+typing it answers `logto is not in your VOC`, like any word SD does not know.
 
 ## What is not here
 
@@ -157,7 +157,7 @@ there is no shipped example to look at.
 
 ## Who has these verbs
 
-Your account has every verb on this page, and none of them needs `ADMIN`:
+Your account has every verb on this page, and none of them needs `admin`:
 
 | | |
 |---|---|

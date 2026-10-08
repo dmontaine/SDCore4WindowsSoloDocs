@@ -49,7 +49,7 @@ Asked in this order, each typed twice:
 | | |
 |---|---|
 | **Account password** | the password every SD session asks for — at the keyboard, over ssh and through the API |
-| **Administrator password** | unlocks the administrator commands, with `ADMIN` |
+| **Administrator password** | unlocks the administrator commands, with `admin` |
 | **Global password** | **optional — leave it blank if no SD Core server manages this computer.** The SD Core for Linux server signs in with it, and it also unlocks the administrator commands |
 
 **A computer is managed if and only if it has a global password.** Leave it
@@ -59,7 +59,7 @@ is managed by an SD Core for Linux server — see [Managed computers](15-managed
 
 **Whether there is a global password is fixed at installation.** Nothing
 creates or clears one afterwards; the server can change an existing one with
-`SET.PASSWORD GLOBAL`. To add one to a computer that has none, install again as
+`set.password global`. To add one to a computer that has none, install again as
 described under *Changing any of it afterwards*. An upgrade never adds, changes
 or removes it.
 
@@ -150,7 +150,7 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 
 **Uninstalling asks to keep or delete your data and configuration.** Keep leaves
 the account and `sd.conf` and removes the passwords, audit trail, deny list,
-`GLOBAL.BP.OUT`, the API's TLS key, your ssh key file, the system files and the
+`global.bp.out`, the API's TLS key, your ssh key file, the system files and the
 logs; a new installation then offers the account and `sd.conf` back. See
 [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
@@ -219,7 +219,7 @@ report, and ends each with a verdict.
 |---|---|
 | Whether there is a global password | uninstall and choose **Keep**, then install again: the passwords are asked again (the global one may be left blank, or entered), and you reload your saved data. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) |
 | The API or ssh choices | the same — uninstall (Keep), install again and answer the API and ssh questions. Or change the firewall and `sd.conf` by hand |
-| The passwords | `SET.PASSWORD`, `SET.PASSWORD ADMIN`, and on a managed computer `SET.PASSWORD GLOBAL` from the server. See [The account and its passwords](05-account-types.html) |
+| The passwords | `set.password`, `set.password admin`, and on a managed computer `set.password global` from the server. See [The account and its passwords](05-account-types.html) |
 | Your PATH | `APPEND.SD.PATH`. See [Administrator commands](06-administrator-commands.html) |
 
 **Installing over a working installation is an upgrade**, and asks nothing.

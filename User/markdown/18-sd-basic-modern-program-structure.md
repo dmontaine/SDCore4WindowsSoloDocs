@@ -148,7 +148,7 @@ end
 `public function` declare methods; `get` and `set` declare a property.
 
 A class is catalogued and instantiated like any other program, and **a private
-catalogue is enough** — nothing here needs `ADMIN`:
+catalogue is enough** — nothing here needs `admin`:
 
 ```
 :basic bp zzcls

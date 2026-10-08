@@ -127,7 +127,7 @@ this confinement, not a missing file.
 **`NETDIRS`** setting in `sd.conf`, separating several with a semicolon.
 `config('NETDIRS')` prints what is in force. SD's password file, its program
 catalogue and its account register are never reachable from an API session,
-and cannot be added to `NETDIRS`. A server session may reach `GLOBAL.BP.OUT`.
+and cannot be added to `NETDIRS`. A server session may reach `global.bp.out`.
 
 ## Client libraries
 

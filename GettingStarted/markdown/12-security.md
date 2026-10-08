@@ -22,7 +22,7 @@ the computer, from reading or changing the files directly.
 |---|---|---|
 | **Windows** | your profile from other Windows users | it from you, and from the computer's administrators, who can read `SDCoreSolo` — the credential store included |
 | **The account password** | every SD session: keyboard, ssh, API, and a command line | the files themselves |
-| **`ADMIN`** | the administrator commands and direct VOC edits, in a session | a program that reads the files |
+| **`admin`** | the administrator commands and direct VOC edits, in a session | a program that reads the files |
 | **The global password** | a managed computer, for the SD Core for Linux server | — |
 | **The deny list** | commands the user may not run on a managed computer | the same files, outside SD |
 
@@ -37,8 +37,8 @@ are reached from other computers. See
 | | |
 |---|---|
 | Every session | asks the account password |
-| Administrator commands | refused until `ADMIN`. The eight that had no check of their own — `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` — are gated too. See [Administrator commands](06-administrator-commands.html) |
-| The VOC | direct edits need `ADMIN`; the global catalogue is changed by nobody in a session |
+| Administrator commands | refused until `admin`. The eight that had no check of their own — `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` — are gated too. See [Administrator commands](06-administrator-commands.html) |
+| The VOC | direct edits need `admin`; the global catalogue is changed by nobody in a session |
 | The daemon | runs as you on an ordinary token, Administrators deny-only and Medium integrity, even from an administrator's account |
 | ssh | your own Windows account name and password only, on Solo's own port 4251, forced into `sd-solo`, no forwarding; the server runs as SYSTEM with its configuration in an administrators-only folder — see [ssh access](08-ssh-access.html) |
 | The API | off unless chosen; SCRAM inside TLS 1.3; a session confined to the account's files — see [API access](09-api-access.html) |
@@ -64,7 +64,7 @@ files under them.
 only by a one-shot marker file the installer writes and SD consumes — the
 setup log shows *Internal session admitted (opened by solo-setup)*. It is not a
 way into a running system. **SDSYS, SD's own system account, is never signed
-in to**: nobody logs in to it, and Solo has no `LOGTO` verb.
+in to**: nobody logs in to it, and Solo has no `logto` verb.
 
 ## On a managed computer
 
@@ -78,7 +78,7 @@ from outside SD. What a global password protects is what happens *inside* SD. Se
 ## What you can do further
 
 **Lock a session into one application** by removing `basic` and `run` from the
-VOC (which needs `ADMIN`) and turning off its break key (`pterm break off`), so
+VOC (which needs `admin`) and turning off its break key (`pterm break off`), so
 it can neither compile nor run anything else and cannot interrupt out to a TCL
 prompt. Neither is a setting; both are done by hand.
 

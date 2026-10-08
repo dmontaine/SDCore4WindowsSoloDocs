@@ -93,14 +93,14 @@ itself.
 | **local** | a VOC entry in the account, so the name works only there |
 | **global** | `gcat` in SD's system files — **you can run what is in it, and you cannot add to it** |
 
-**On Solo nobody can catalogue a program globally from a session, `ADMIN`
+**On Solo nobody can catalogue a program globally from a session, `admin`
 included.** `catalog ... global` is refused, and so is the implicit form — a
 name chosen with a `*`, `!`, `_` or `$` prefix rather than by the `global`
 keyword — so the prefix is not a way round it. The global catalogue holds SD's
 own programs; on a managed computer it also holds the programs the SD Core for
 Linux server puts there, and only the server may.
 
-Private and local cataloguing need none of this and work with no `ADMIN`. You
+Private and local cataloguing need none of this and work with no `admin`. You
 may run a globally catalogued program, `call *name` from BASIC among them. The
 GettingStarted set's *Managed computers* page says how the server's programs get
 there.
