@@ -64,7 +64,7 @@ user can read it, or prefer the kept copy.
 |---|---|
 | *A command given on the sd command line needs the account password on its input* | the kept copy did not work and the command was run at a terminal, with nothing piped in |
 | *Wrong password* | the piped password was wrong |
-| the task reports success and nothing happened | look in `%USERPROFILE%\SDCoreSolo\sdsys\audit`: a sign-in with the kept copy is recorded as `LOGIN PASSWORD account=SDUSER via=stored` |
+| the task reports success and nothing happened | look in `%USERPROFILE%\SDCoreSolo\sdsys\audit`: a sign-in with the kept copy is recorded as `login password account=SDUSER via=stored` |
 
 **A job's output goes nowhere** unless the paragraph sends it somewhere — a
 file, or a printer. Task Scheduler shows only the exit code.

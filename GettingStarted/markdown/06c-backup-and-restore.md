@@ -99,7 +99,7 @@ account you had is **kept**, in a folder beside it named `.sdrestore.previous`, 
 a restore can be undone by hand. What happened is written to `sdrestore.log` in
 `%USERPROFILE%\SDCoreSolo`; it ends with `SOLO-RESTORE APPLIED` when the swap
 worked. **The audit trail** gets a line when the restore has put the copy aside,
-`RESTORE.ACCOUNT account=sduser archive=<backup file name>`, naming the file and
+`restore.account account=sduser archive=<backup file name>`, naming the file and
 not its folder; the swap itself is in `sdrestore.log`, not in the audit trail.
 
 **Restoring needs SD to be the only session.** Nobody else may be signed in while

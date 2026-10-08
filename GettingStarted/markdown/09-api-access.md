@@ -39,7 +39,7 @@ SD started cannot collect passwords by pretending to be SD.
 is no longer supported; this server requires SCRAM authentication"*.
 
 **A wrong password is refused**, and the refusal is written to the audit trail
-— for example `API REFUSED user=sduser reason=wrong password`.
+— for example `api refused user=sduser reason=wrong password`.
 
 **On a computer installed from a control file that gave a global password**,
 until the account password has been chosen at the keyboard, only the global

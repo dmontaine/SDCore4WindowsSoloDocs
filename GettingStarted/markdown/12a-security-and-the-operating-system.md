@@ -45,21 +45,26 @@ error — rather than falling back to somewhere less private.
 each, with the date, time and user:
 
 ```
-2026-09-29 00:15:33 user=sduser uid=105 pid=1043 LOGIN PASSWORD account=SDUSER via=global
-2026-09-29 00:15:33 user=sduser uid=105 pid=1043 LOGIN account=SDUSER
-2026-09-29 00:15:34 user=sduser uid=105 pid=1043 GLOBAL PASSWORD SET
+2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login password account=SDUSER via=global
+2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login account=SDUSER
+2026-09-29 00:15:34 user=sduser uid=105 pid=1043 global password set
 ```
+
+Every word before the first `=` is lower case. What follows an `=` is as it
+was: an account name keeps its case, and so does the text of a reason. A
+file that was started before this was the rule holds both spellings, so search
+it without regard to case.
 
 | Recorded | |
 |---|---|
 | **Sign-ins** | every one, with how the password was proved — `via=account`, `via=global`, or `via=stored` for a command-line `sd-solo <command>` — and every refusal |
 | **`ADMIN`** | every unlock and every refusal |
 | **Passwords** | a change of the account, administrator or global password, and a refused change |
-| **The API** | every login, every refused request, and every failed login with its reason — `API REFUSED user=sduser reason=wrong password`. **The address is not recorded** |
-| **A managed computer** | `DENY.VERBS` changes and `SYNC.GLOBAL.CATALOG` runs, and the installer's own internal sessions |
+| **The API** | every login, every refused request, and every failed login with its reason — `api refused user=sduser reason=wrong password`. **The address is not recorded** |
+| **A managed computer** | `deny.verbs` changes and `sync.global.catalog` runs, and the installer's own internal sessions |
 
-**The refusals are the interesting half.** An `ADMIN REFUSED`, a
-`LOGIN REFUSED` or an `API REFUSED` is somebody trying something that did not
+**The refusals are the interesting half.** An `admin refused`, a
+`login refused` or an `api refused` is somebody trying something that did not
 work.
 
 **Nothing is ever discarded.** At 1 MB the file is **renamed with the date and
