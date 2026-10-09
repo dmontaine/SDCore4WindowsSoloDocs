@@ -108,7 +108,7 @@ runs `sync.global.catalog`:
 :copy from bp.out to global.bp.out myprog overwriting
 :sync.global.catalog
 catalogued *myprog
-SYNC GLOBAL CATALOG DONE 1 catalogued 0 removed 0 refused
+sync global catalog done 1 catalogued 0 removed 0 refused
 ```
 
 **To remove one**, delete it from `global.bp.out` and run
@@ -118,7 +118,7 @@ SYNC GLOBAL CATALOG DONE 1 catalogued 0 removed 0 refused
 :delete global.bp.out myprog
 :sync.global.catalog
 removed *myprog
-SYNC GLOBAL CATALOG DONE 0 catalogued 1 removed 0 refused
+sync global catalog done 0 catalogued 1 removed 0 refused
 ```
 
 **What `sync.global.catalog` does:** every object in `global.bp.out` is
@@ -126,7 +126,7 @@ catalogued as `*<name>`, in lower case, replacing any older copy; every `*`
 entry with no object left in `global.bp.out` is removed. SD's own system
 programs in the catalogue are never touched. An object it cannot load is
 refused by name and the rest still go in. The last line always reads
-`SYNC GLOBAL CATALOG DONE <n> catalogued <n> removed <n> refused`.
+`sync global catalog done <n> catalogued <n> removed <n> refused`.
 
 **An upgrade catalogues them again for you.** It replaces the global catalogue
 with the new release's, then runs `sync.global.catalog`; `global.bp.out` itself
