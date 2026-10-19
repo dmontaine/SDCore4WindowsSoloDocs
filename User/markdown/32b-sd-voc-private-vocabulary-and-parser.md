@@ -50,7 +50,8 @@ any type. A verb, a sentence and a paragraph all work.
 ```
 
 A program that makes the file, puts three records in it and points the VOC at
-it:
+it. **On Solo the writes to the VOC are refused until you have typed `admin`**
+and given the administrator password; the writes to `zzpv` need nothing:
 
 ```
 open 'zzpv' to f else stop
@@ -171,11 +172,6 @@ and the number of a line in the command processor (the session carries on).
 * **At sign-on, once.** A record written during a session changes nothing in
   that session: `zzcust` was still `not valid for this usage` after the
   record had been written, and was handled in the next session.
-* **`logto` does not read the new account's record.** A session that signed
-  on to an account with a `$voc.parser` record kept that list after `logto` to
-  an account without one, and was handled by it there. A session that signed
-  on to an account without the record did not use the record of the account
-  it went to.
 
 ### Things this can do to a whole session
 
@@ -204,6 +200,9 @@ account you can reach from outside before you put it on one you cannot.
   `zzpv` is not the VOC. Once the VOC points at it, any session that can write
   the file can add commands to it and replace commands in it. It still cannot
   touch the VOC's own records, so it cannot replace a VOC command.
+* **Writing either record to the VOC needs `admin`** (see *SD VOC - Using and
+  Managing the VOC*). The file a private vocabulary lives in is not the VOC, so
+  its records can be written without it.
 * **A handler is a catalogued program.** Whoever can write the `$voc.parser`
   record can switch on a handler that is already catalogued.
 * **Neither record is in a stock VOC.** Nothing SD ships writes them.
