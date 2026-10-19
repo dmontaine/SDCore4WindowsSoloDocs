@@ -289,6 +289,15 @@ is not the hold that `backup.account` and `restore.account` take**, which keeps
 every new session out for as long as they run and lapses the same way when the
 session that took it is killed.
 
+## The paragraph every session runs first: `MASTER.LOGIN`
+
+A VOC record named `MASTER.LOGIN` in the SDSYS account (the `voc` file in
+`%USERPROFILE%\SDCoreSolo\sdsys`), if it is a paragraph (its first line is `PA`),
+is run **by each new session before the account's own `LOGIN` paragraph**. **An
+API session does not run it here.** There is none unless you write one, so
+nothing runs by default. It runs under the account's own switches: it can do no
+more there than the account's user can.
+
 ## Which need `admin`
 
 | | |
