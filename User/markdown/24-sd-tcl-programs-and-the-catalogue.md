@@ -100,7 +100,7 @@ the name of a VOC verb.
 
 **On Solo nobody can catalogue a program globally from a session, `admin`
 included.** `catalog ... global` is refused, and so is the implicit form — a
-name chosen with a `*`, `!`, `_` or `$` prefix rather than by the `global`
+name chosen with a `*`, `!`, `_`, `$` or `-` prefix rather than by the `global`
 keyword — so the prefix is not a way round it. The global catalogue holds SD's
 own programs; on a managed computer it also holds the programs the SD Core for
 Linux server puts there, and only the server may.
