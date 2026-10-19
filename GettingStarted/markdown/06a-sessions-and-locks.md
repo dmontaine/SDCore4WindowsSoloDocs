@@ -293,9 +293,10 @@ session that took it is killed.
 
 A VOC record named `MASTER.LOGIN` in the SDSYS account (the `voc` file in
 `%USERPROFILE%\SDCoreSolo\sdsys`), if it is a paragraph (its first line is `PA`),
-is run **by each new session before the account's own `LOGIN` paragraph**. **An
-API session does not run it here.** There is none unless you write one, so
-nothing runs by default. It runs under the account's own switches: it can do no
+is run **by each new session before the account's own `LOGIN` paragraph**: a
+terminal session, a phantom, and an API session, which runs it when it first
+enters an account. A session shows what it is by `@tty` (`apisrvr` for the API).
+There is none unless you write one, so nothing runs by default. It runs under the account's own switches: it can do no
 more there than the account's user can.
 
 ## Which need `admin`
