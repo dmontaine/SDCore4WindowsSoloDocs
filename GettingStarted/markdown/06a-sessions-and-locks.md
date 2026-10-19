@@ -259,11 +259,41 @@ user number must be specified* — so there is no `unlock` that means
 > `list.locks` shows the number with an owner and `clear.locks` refuses it
 > because it is not yours. **`unlock tasklock` *n*** is the way out.
 
+## Keeping new sessions out while you work: `inhibit.login`
+
+```
+inhibit.login on        no new session until it is switched off
+inhibit.login off       allow them again
+inhibit.login           say which it is, and who set it
+```
+
+For maintenance that needs SD quiet. A new session that starts while it is on —
+the command prompt, an ssh sign-in, an API connection — is told *SD is not
+accepting new sessions: logins have been inhibited by* name *(inhibit.login). Try
+again later.* **Sessions already running are not touched**, and neither are the
+phantoms the session that set it starts. The refusals, and the `on` and `off`
+themselves, are on the audit trail (`login refused ... reason=logins are
+inhibited (inhibit.login)`).
+
+**On Solo no new session can switch it off, because no new session is an
+administrator**: `admin` is typed after sign-in, and the sign-in is what is
+refused. So **switch it off from the session that set it**, or end that session.
+The inhibit lapses by itself when the session that set it is gone, because the
+record names a user number *and* a process id and a process that is not there
+holds nothing. `inhibit.login on` while another live session holds it is refused
+(*Logins are already inhibited by* name*. Switch it off first (inhibit.login
+off)*).
+
+The record is the file `login.inhibit` in `%USERPROFILE%\SDCoreSolo\sdsys`. **It
+is not the hold that `backup.account` and `restore.account` take**, which keeps
+every new session out for as long as they run and lapses the same way when the
+session that took it is killed.
+
 ## Which need `admin`
 
 | | |
 |---|---|
-| **need `admin`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock` |
+| **need `admin`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `inhibit.login` |
 | **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` |
 
 Without it they answer *Command requires administrator privileges*. See
