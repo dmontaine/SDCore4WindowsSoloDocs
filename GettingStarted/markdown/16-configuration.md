@@ -167,7 +167,6 @@ reads.
 | `DUMPDIR` | empty | Where process dumps are written. Empty means the system directory, `sdsys` |
 | `TEMPDIR` | empty | Temporary files. Empty means the `TMP` environment variable, or `/tmp` if that is not set |
 | `SORTWORK` | empty | Work files for a sort that does not fit in memory. Empty means `TEMPDIR` |
-| `JNLDIR` | empty | Journal directory |
 | `TERMINFO` | empty | An additional terminfo directory. The shipped definitions are found without it |
 
 `<installation>` is the `SDCoreSolo` folder, found at run time from where SD's
@@ -235,7 +234,6 @@ so it is a decision about the computer.
 | `ERRLOG` | 50 kb | Size of the error log. A non-zero value below 10 KB is raised to 10 KB, and the oldest entries are discarded when it fills |
 | `PDUMP` | 0 | Bit flags controlling when a process dump is written |
 | `DEBUG` | unset | Bit flags enabling debugging features |
-| `JNLMODE` | 0 | Journalling mode |
 | `OBJECTS` | 0 (no limit) | Compiled programs held in memory at once |
 | `OBJMEM` | 0 (no limit) | Memory those programs may occupy, in KB |
 
@@ -272,8 +270,9 @@ changes SD's behaviour, and none should be offered as a control.
 
 | Parameter | Why it is inert |
 |---|---|
-| `NETFILES` | SDNet was removed from this port. `netfiles.c` is deleted, a `server;file` VOC reference is refused, and the request that reports open SDNet connections returns an empty list. The value is still stored and still reported, and setting it opens nothing |
 | `CREATUSR` | Nothing creates operating system accounts from `sd.conf`. The value is discarded as it is read |
+| `JNLMODE` | Stored and readable with `config('JNLMODE')`. Nothing acts on it: no journalling is done (read from the source, 20 October 2026) |
+| `JNLDIR` | Stored and readable with `config('JNLDIR')`. Nothing acts on it, for the same reason |
 | `CODEPAGE` | Stored, readable and settable. Nothing acts on it |
 | `EXCLREM` | Stored, readable and settable. It described exclusive access to a remote file, and there are no remote files |
 | `RINGWAIT` | Stored, readable and settable. Nothing acts on it |
@@ -282,6 +281,20 @@ changes SD's behaviour, and none should be offered as a control.
 `FILERULE` is **not** in this list, and is easy to mistake for it. Its remote
 bits died with SDNet, but bit 4 is live and decides whether a `PATH:` VOC
 reference may name a pathname directly.
+
+**`NETFILES` is not in this list either.** SDNet was removed from this port:
+`netfiles.c` is deleted, a `server;file` VOC reference is refused, and the
+request that reports open SDNet connections returns an empty list. The value is
+parsed, stored, shown by `config` and readable with `config('NETFILES')`.
+**One thing in the source still reads it:** the API server's request 29, "open
+an SDNet file", which opens the file that a VOC entry of the named account
+names. It is refused unless bit 2 of `NETFILES` is set. The delivered value is
+0, so as delivered the request is refused; leave it at 0 unless an API client
+needs it. With bit 2 set the request opens the file as any other file an API
+session opens, so the connection's containment applies: only the account the
+session stands in, the shared `SDSYS` entries (read only) and the directories
+named in `NETDIRS`. It asks nothing further about the account. This is read
+from the source (20 October 2026) and has not been run on an install.
 
 There is no licence parameter and no licence verb. SD Core Solo for Windows is
 GPL v3 and is not licensed per site or per user; `config gpl` displays the

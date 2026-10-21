@@ -109,8 +109,11 @@ commands are not among them; see
 | Parameters the `config` verb displays | **43** |
 | Parameters readable with `config()` | **49** |
 | Parameters settable for the current session | **28** |
-| Parameters accepted that do nothing | **6** |
+| Parameters accepted that do nothing | **7** |
 
-The six inert parameters, and why each is inert, are listed under
-*Configuration* in this set. `NETFILES` and `CREATUSR` are the two most likely
-to be in an existing `sd.conf`.
+The seven inert parameters, and why each is inert, are listed under
+*Configuration* in this set. `CREATUSR` is the one most likely to be in an
+existing `sd.conf`. `NETFILES` used to be counted here; it is not inert,
+because bit 2 gates API request 29, and *Configuration* says so. The count was 6
+until 20 October 2026, when `JNLMODE` and `JNLDIR`, which the Configuration page
+had listed as live, were found to be inert.
