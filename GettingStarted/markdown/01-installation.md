@@ -92,6 +92,30 @@ the API and ssh. With either off, or open to this computer only, the server
 cannot reach the computer until the choice is changed. An administrator who
 sets up many computers gives these two answers in the control file.
 
+### 3. Shell and OS access — on a new installation and on an upgrade
+
+A page of its own, **Shell and OS access**, with two boxes, both unticked:
+
+| | |
+|---|---|
+| **Shell (SH and !)** | turns on the `sh` switch: the `sh` verb and `!` |
+| **OS access (OS.EXECUTE, files outside the account, Python, editors)** | turns on the `os` switch: `OS.EXECUTE`, files and directories outside the account's own directory, the Python helper and the editors `edit` and `micro` |
+
+**Both are off as delivered**, and the default is no. The installer is the one
+place where a person who wants them says so once; the administrator can change
+either later with `set.os.access`. **Either switch lets whoever signs in to SD —
+at the keyboard, over ssh or through the API — do what your Windows user can
+do**: read [Operating system access](06b-operating-system-access.html) before
+ticking one.
+
+**An upgrade asks the same page.** Before this release the shell and OS access
+were always on, so an existing Solo would otherwise lose them without a word;
+tick each you want to keep. Unticked, an upgrade turns nothing on, and the
+switches stay as the account's record has them (off, unless an earlier
+`set.os.access` turned one on). A silent installation, which shows no page, turns
+nothing on either. The installer writes the answer with `set.os.access`, reads
+both switches back, and says what they are in `install-summary.log`.
+
 ### What is not asked, because it always happens
 
 | | |
@@ -173,6 +197,7 @@ only what it gives; its presence does not make a computer managed.
 | `api=` | `off`, `local` (this computer only) or `open` (other computers too) |
 | `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer |
 | `reload-data=` | `yes` or `no`, where the folder holds data kept by an earlier uninstall: reload it, or start clean (the kept data is moved aside, never deleted). Blank: the installer asks, or reloads when the file answers everything else too. Where nothing is kept it does nothing, so one file can say it for every computer |
+| `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade always asks |
 | `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed computers](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
 
 **The account password is deliberately not in it.** With a global password, the
@@ -183,8 +208,9 @@ global password the installer asks for the account password**, so an
 installation with no global password cannot run unattended.
 
 **A blank answer is asked for**, except the global password above, and so is
-one the installer cannot accept: a password that breaks the rules, or an `api=`
-or `ssh=` that is not `off`, `local` or `open`. When the file gives no global
+one the installer cannot accept: a password that breaks the rules, an `api=`
+or `ssh=` that is not `off`, `local` or `open`, or an `os-access=` that is not
+`none`, `sh`, `os` or `both`. When the file gives no global
 password the installer says that this computer will not be managed by an SD
 Core server, in `install-summary.log` and on its last page — a mistyped name
 ends the same way, so read it. The release carries `sd-solo-setup.conf.sample`,

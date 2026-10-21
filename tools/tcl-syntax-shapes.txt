@@ -140,6 +140,7 @@ select = **`select`** {**`dict`**} *file* {*selection*} {*list.no*}
 set = **`set`** *name* *value*
 set.backup.directory = **`set.backup.directory`** {*folder*}
 set.date =**`set.date`** *date*
+set.os.access = **`set.os.access`** | **`set.os.access sh on`** | **`set.os.access sh off`** | **`set.os.access os on`** | **`set.os.access os off`**
 set.password = **`set.password`** | **`set.password admin`** | **`set.password global`**
 set.exit.status =**`set.exit.status`** *n*
 set.file = **`set.file`** *account* *file* *pointer*

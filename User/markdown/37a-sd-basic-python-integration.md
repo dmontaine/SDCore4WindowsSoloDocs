@@ -32,8 +32,9 @@ returns `-12040` and nothing else about SD is affected -
 
 ## Access control
 
-**`PY_` access is gated exactly like `SH` and `OS.EXECUTE`** - the same
-`os.users` field 2 permission, checked once, the first time a session calls
+**`PY_` access is gated exactly like `OS.EXECUTE`** - the same permission
+(on Solo the `os` switch, `set.os.access os on`; on the multiuser product
+`os.users` field 2), checked once, the first time a session calls
 any `PY_` function, and the decision stands for the rest of the session:
 
 | Result | Meaning |
@@ -43,9 +44,10 @@ any `PY_` function, and the decision stands for the rest of the session:
 | `-12042` | SD could not determine the permission at all (a damaged or unreadable `os.users` record) - one line is written to the error log saying which |
 | `-12040` | the session **is** permitted, but the helper itself could not be started or has died - typically no usable Python on the machine |
 
-On Solo the permission is always given: `SH` and `OS.EXECUTE` are open to the
-one account, so a session normally sees the first row. `-12041` and `-12042`
-remain in the list because the check is still made.
+On Solo the permission is the account's `os` switch, **off as delivered**: a
+session sees the first row once the administrator has turned the switch on (or
+after `admin`), and `-12041` until then. `-12042` remains in the list because
+the check is still made.
 
 **This gate is Windows-specific and does not carry over to SD Core for
 Linux.** Confirmed against their source, not assumed: Linux's Python

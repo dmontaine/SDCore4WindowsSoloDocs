@@ -5,23 +5,32 @@ This page continues [Security](12-security.html).
 
 ## Reaching the operating system from inside SD
 
-**There are three ways out of SD onto the computer, and all three are open to
-your session with no `admin`.**
+**There are three ways out of SD onto the computer, and all three are off as
+delivered.** The administrator turns them on with `set.os.access`, in two
+switches, `sh` and `os`.
 
-| | What it is |
-|---|---|
-| **`sh`** and `!` | a shell at the `:` prompt |
-| `OS.EXECUTE` | the operating system from inside a BASIC program |
-| **`edit`** and **`micro`** | a text editor, running outside SD |
+| | What it is | Switch |
+|---|---|---|
+| **`sh`** and `!` | a shell at the `:` prompt | `sh` |
+| `OS.EXECUTE` | the operating system from inside a BASIC program | `os` |
+| **`edit`** and **`micro`** | a text editor, running outside SD | `os` |
 
-**They run as your Windows user, on an ordinary token.** Nothing in SD stands
-between a session and the computer beyond what Windows itself allows that
-user — see [Operating system access](06b-operating-system-access.html).
+**`os` also opens** the files and directories outside the account's own
+directory (by `OPENSEQ`, `OPENPATH`, `DIR()` and the other routes), the Python
+helper and a VOC pointer to a file outside the account. **The administrator
+needs no switch**: after `admin` a session passes both. The installer asks about
+both, on a new install and on an upgrade, and the default is no.
 
-**That applies to every kind of session**, ssh and the API included. Anyone
-who has the account password — and, over ssh, your Windows sign-in — can run
-Windows commands as you. That is why the account password matters, and why it
-should be one only you know.
+**When they are on, they run as your Windows user, on an ordinary token.**
+Nothing in SD then stands between a session and the computer beyond what Windows
+itself allows that user — see [Operating system
+access](06b-operating-system-access.html).
+
+**That applies to every kind of session**, ssh and the API included: the
+switches are read at sign-on, and the API server reads them when it enters the
+account. With a switch on, anyone who has the account password — and, over ssh,
+your Windows sign-in — can run Windows commands as you. That is why the account
+password matters, and why it should be one only you know.
 
 **On a managed computer**, the SD Core for Linux server can put `sh` on the
 list of denied commands, and `!` goes with it. **A program's `OS.EXECUTE` is

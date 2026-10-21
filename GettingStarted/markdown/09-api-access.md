@@ -104,8 +104,10 @@ no rule, and an *Allow* there makes rules open to any address.
 ## An API session is you
 
 **It runs as your Windows user**, in the account `sduser`, with the same
-rights as a session at the keyboard — including `sh` and `OS.EXECUTE`, which
-a remote client can therefore use. The part of SD that handles the network
+rights as a session at the keyboard — including `sh` and `OS.EXECUTE` **when
+the administrator has turned those switches on** (`set.os.access`; both are off
+as delivered, and the API server reads them when it enters the account), which
+a remote client can then use. The part of SD that handles the network
 encryption runs on a restricted copy of your Windows token that cannot read
 your files; the session itself is ordinary and unelevated.
 

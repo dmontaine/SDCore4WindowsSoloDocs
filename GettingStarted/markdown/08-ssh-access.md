@@ -128,7 +128,8 @@ shell. That is the accepted cost of landing in SD.
 connecting outward, is an ssh *client* and is not affected. So copy files by
 pulling them from here.
 
-**To reach Windows from an ssh session, use `sh`** inside SD — see
+**To reach Windows from an ssh session, use `sh`** inside SD, once the
+administrator has turned it on (`set.os.access sh on`) — see
 [Operating system access](06b-operating-system-access.html).
 
 ## Reaching the computer from the network

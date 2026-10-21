@@ -125,14 +125,17 @@ token** — another `~`, a backtick, a `!`, a `-`, a `,`, or a mark. Everywhere
 else a tilde is left exactly as you wrote it, so `a~b` is still `a~b` and
 ordinary source reads normally.
 
-## Nothing to unlock, and one condition
+## The OS switch, and one condition
 
-**On Solo both editors run in your session with nothing to unlock** — no
-`admin`, no permission to be granted. An editor runs outside SD, as your
-Windows user, and the operating system is yours already; see *Operating system
-access* in the GettingStarted set. (The multiuser SD Core for Windows gates
-them with a permission an administrator grants per account; there is no such
-list on Solo.)
+**On Solo both editors need the `os` switch.** An editor runs outside SD, as your
+Windows user, so it is a way out of SD like `OS.EXECUTE`: the switch is **off as
+delivered**, and the administrator turns it on with `set.os.access os on` (the
+installer asks too). The administrator passes it after `admin`. Without it the
+verb says that it needs `OS.EXECUTE` permission and names the command; nothing
+is written. `ed`, the line editor, needs none of this. See *Operating system
+access* in the GettingStarted set. (The multiuser SD Core for Windows gates them
+with a permission an administrator grants per account; on Solo the one account
+has the switch.)
 
 **The condition is a terminal.** A session with no terminal is refused before
 anything is written — an API session, or a script driving SD down a pipe:

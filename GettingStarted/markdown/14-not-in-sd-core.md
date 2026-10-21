@@ -119,8 +119,9 @@ same process at all.
 and so on) — there is no TCL verb, so this is a programming capability, not
 a command you type at the prompt. A session may start the helper on the same
 terms as `OS.EXECUTE`, checked once, at the moment Python starts; on Solo that
-is always allowed, because the operating system is yours already — see
-[Operating system access](06b-operating-system-access.html). All
+is the `os` switch, off as delivered and turned on by the administrator with
+`set.os.access` — see [Operating system
+access](06b-operating-system-access.html). All
 twenty-one functions, their arguments and their error codes are in the User
 set's *SD BASIC - Python Integration* chapter.
 

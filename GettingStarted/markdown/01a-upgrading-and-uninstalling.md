@@ -6,9 +6,14 @@ This page continues [Installing](01-installation.html).
 ## Upgrading
 
 **Run the new installer while the old release is installed.** It recognises
-the installation and upgrades it. It asks nothing — no passwords, no API or ssh
+the installation and upgrades it. It asks no passwords and no API or ssh
 choices — and it keeps them all. It never adds, changes or removes the global
-password.
+password. **It asks one question: *Shell and OS access*.** Before this release
+the shell and OS access were always on; now they are off unless the administrator
+turns them on, so an upgrade asks which you want to keep, with both boxes
+unticked (see [Installation](01-installation.html)). Unticked, nothing is turned
+on and nothing already turned on is turned off. A silent upgrade shows no page
+and turns nothing on.
 
 **SD is stopped first**, because an upgrade replaces `sd-solo.exe`. It starts again
 at the next Windows start-up, or with `sd-solo -start` (see

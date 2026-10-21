@@ -38,6 +38,7 @@ password is never displayed, stored or logged.
 | | |
 |---|---|
 | `set.password admin` | change the administrator password — [The account and its passwords](05-account-types.html) |
+| `set.os.access` | show or change the `sh` and `os` switches — [Operating system access](06b-operating-system-access.html) |
 | `CONFIG` | report or set configuration — except `CONFIG GPL` and `CONFIG CONTRIB`, which need nothing |
 | `SET.DATE` | set the session's date |
 | `CLEAN.ACCOUNT` | empty the account's scratch files |
@@ -60,8 +61,10 @@ Core for Linux server's — see [Managed computers](15-managed-mode.html).
 
 **`LOGOUT` on its own needs nothing** — it ends your own session, like
 `QUIT` — **and nor does `LOGOUT` *n***, because every session on a Solo
-computer runs as `sduser`. **`sh` needs nothing either**; see
-[Operating system access](06b-operating-system-access.html). **Nor does
+computer runs as `sduser`. **`sh` needs `admin` only to be turned on**: it is
+off as delivered, and `set.os.access` (an administrator command) switches it,
+and the `os` switch, on and off; see [Operating system
+access](06b-operating-system-access.html). **Nor does
 `set.password`** for your own account password — it asks for the current one
 instead; see [The account and its passwords](05-account-types.html).
 

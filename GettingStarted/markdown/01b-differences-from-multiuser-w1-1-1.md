@@ -13,7 +13,7 @@ product. The User set applies to both.
 | many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `WHO` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
 | SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in to it; the administrator commands run from your own account |
 | `create.account`, `delete.account`, `modify.account`, `grant`, `revoke`, `list.grants`, `modify.password`, `logto` | **gone.** Solo has one account, so `logto` had nowhere to go (removed in WS1.1-3; typing it answers `logto is not in your VOC`) |
-| Windows groups `sdusers`, `sdssh`, `sdapi`, `sdsshonly`; the `os.users` and `batch.jobs` permit lists; console and Remote Desktop denied to SD accounts | **gone.** There is one Windows user, and it is yours |
+| Windows groups `sdusers`, `sdssh`, `sdapi`, `sdsshonly`; the `os.users` and `batch.jobs` permit lists; console and Remote Desktop denied to SD accounts | **gone.** There is one Windows user, and it is yours. The shell and OS access are the exception to "yours to use": two switches, `sh` and `os`, off as delivered, turned on by the administrator with `set.os.access` (see [Operating system access](06b-operating-system-access.html)) |
 
 ## Passwords
 
