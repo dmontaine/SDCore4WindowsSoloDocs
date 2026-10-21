@@ -182,8 +182,8 @@ ends.
 | `SD_XORBYTES` | 108 | two equal-length values | Their exclusive-or |
 | `SD_CTEQUAL` | 109 | two values | `1` or `0`, compared in constant time |
 | `SD_TLS_CBIND` | 110 | none | The API session's channel-binding value, for the SCRAM login. Empty when the session is not TLS |
-| `SD_DPAPI_PROTECT` | 111 | one | Encrypts the argument with Windows' DPAPI, for this Windows user; the result is base64. **`$internal` callers only** |
-| `SD_DPAPI_UNPROTECT` | 112 | one | The reverse. **`$internal` callers only** |
+| `SD_DPAPI_PROTECT` | 130 | one | Encrypts the argument with Windows' DPAPI, for this Windows user; the result is base64. **`$internal` callers only** |
+| `SD_DPAPI_UNPROTECT` | 131 | one | The reverse. **`$internal` callers only** |
 | `SD_KEYRING` | 120 | `set` name key · `clear` name · `list` | The key ring of the XE conversion: the key id, the number removed, or one field per key. Reached only through `!keyset`, `!keyclear` and `!keylist` |
 
 `SD_CTEQUAL` reports a malformed argument as an error rather than as `0`,
@@ -192,7 +192,9 @@ server's own — a decode failure there is a defect, not a wrong password. A
 caller deciding whether to admit a login must still treat the error as a
 refusal.
 
-**The two DPAPI keys are the kept copy of your account password.** DPAPI
+**The two DPAPI keys are the kept copy of your account password.** (They were
+111 and 112 until 20 October 2026; 130 to 139 are the numbers reserved for keys
+that exist only on Windows.) DPAPI
 encrypts for a Windows user, so what the first produces only that user can turn
 back. It is Solo's, not the multiuser SD's, and the plaintext each one held is
 wiped after use.
