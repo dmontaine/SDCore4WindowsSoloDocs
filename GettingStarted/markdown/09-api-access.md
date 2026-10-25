@@ -131,6 +131,43 @@ this confinement, not a missing file.
 catalogue and its account register are never reachable from an API session,
 and cannot be added to `NETDIRS`. A server session may reach `global.bp.out`.
 
+## Request 29, the NET gate and `NETFILES`
+
+**Request 29 opens an `account;file` file for a client** — the one door of SDNet
+that is still in the server. **It is shut as delivered, and two things have to be
+turned on, by the administrator, before it opens anything:** bit 2 of `NETFILES`
+in `sd.conf` (`NETFILES=2`; the default is 0) and **the account's NET gate**,
+which `set.net.access` turns on (`set.net.access on` after `admin`; with no
+argument it shows where the gate stands). The gate is off as delivered, is kept in field
+15 of the register record, is read when the request is asked (so a change reaches
+a client that is already signed in), and only the word `yes` means on.
+
+With both on, the request still refuses, with no file number and a line in the
+audit trail that says why: when `SDCLIENT` is not 0 (as an ordinary open is);
+when the account is named by a **path** (a path names no register record, so
+nothing says who may enter it); when it names **another account or SDSYS** (the
+one account a session may enter is its own); and when the account is
+**suspended**. A refusal of the account rule is *User not allowed in requested
+account*, whatever the reason, as for request 3.
+
+**Where the file is.** The request asks the account's `os` switch
+(`set.os.access os on`) as `dir`, `openseq`, `openpath` and the OSCOPY verbs do.
+A file the account's VOC names with an F-pointer must lead **inside the account's
+own folder**, with `..` and links resolved, unless the account has the `os` switch
+on: a pointer at an absolute path outside the account, a relative path that climbs
+out, a link to the outside, the folder next door whose name merely begins with the
+account's own, a system folder, or a dictionary half that leads out (though its data
+half is inside), is refused. The refusal is error ELSE with status 3035 (permission),
+no file number comes back, and the audit trail gets
+`api refused request=29 reason=os gate off user=... account=... path=...`. The switch
+is read from the register record when the request is asked, so taking it off reaches a
+client that is already signed in. The pointers SD itself puts in the VOC (`syscom`,
+`newvoc`, `sd.voclib` and the like) lead out of the account and are refused here too:
+a client of request 29 has no use for them. A pointer that opened before and leads out
+of an account whose `os` switch is off stops opening: turn the switch on if that was
+intended. Solo has no SDSYS exemption, because SDSYS is never a target of the request.
+This is read from the source and compiled; it has not been run on an install.
+
 ## Client libraries
 
 | | |

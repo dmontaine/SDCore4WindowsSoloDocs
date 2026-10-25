@@ -153,10 +153,21 @@ DOCS = [
    clear.locks inhibit.login list.locks list.readu listu lock logout unlock
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
-   sh !
+   sh ! set.os.access
+ """),
+ ('User', '06a-sd-basic-encryption.md', """
+   encrypt.key
  """),
  ('GettingStarted', '15-managed-mode.md', """
    deny.verbs sync.global.catalog
+ """),
+ # 25 Oct 26 SDNet carry (RELEASE_1.1 171): the SDNet client's five verbs are explained on the User page for files on another SD server,
+ # and set.net.access (the NET gate of API request 29) on the API page.
+ ('User', '42-sd-sdnet.md', """
+   set.server delete.server list.servers set.netlogin delete.netlogin
+ """),
+ ('GettingStarted', '09-api-access.md', """
+   set.net.access
  """),
 ]
 

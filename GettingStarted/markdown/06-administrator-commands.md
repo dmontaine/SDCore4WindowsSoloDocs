@@ -39,6 +39,8 @@ password is never displayed, stored or logged.
 |---|---|
 | `set.password admin` | change the administrator password — [The account and its passwords](05-account-types.html) |
 | `set.os.access` | show or change the `sh` and `os` switches — [Operating system access](06b-operating-system-access.html) |
+| `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`; every remote file) — [API access](09-api-access.html) |
+| `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
 | `CONFIG` | report or set configuration — except `CONFIG GPL` and `CONFIG CONTRIB`, which need nothing |
 | `SET.DATE` | set the session's date |
 | `CLEAN.ACCOUNT` | empty the account's scratch files |

@@ -54,22 +54,33 @@ SD could open a file held on another SD server by putting `server;file` in a
 VOC entry. **That is gone. A VOC entry containing a semicolon is now simply a
 file name that does not resolve.**
 
-`SET.SERVER`, `DELETE.SERVER` and `LIST.SERVERS` have gone with it. **Two of
-those three had never worked in any case** — their VOC entries were malformed.
-
 **Why it went:** each server's user name and password were kept in `sd.conf`,
 obscured with a simple letter substitution that is not encryption, and the
 session ran over port 4245. There was also no way to switch the feature off —
 the `NETFILES` setting was read at start-up and then never consulted.
 
+`set.server`, `delete.server` and `list.servers` went with it, **and came back
+in a new form**: an SDNet **client** that reaches another SD server over its API
+(TLS 1.3 and a SCRAM login), through a VOC pointer of type `N`, with the
+administrator defining each server (`set.server`, pinned to the hash of the
+server's public key), each person keeping their own login on it
+(`set.netlogin`, kept as values derived from the password, never the password)
+and the NET gate (`set.net.access on`) switched on. **All of it is off as
+delivered.** See the SDNet page of the User set. Nothing from the old version
+is back: no `;` in a path, no port 4245, no password in any file.
+
 **The API is not affected.** `SDClient` and the remote API are a separate
 mechanism and are unchanged. See [API access](09-api-access.html).
 
-**`NETFILES` is still accepted in `sd.conf`**, so an existing configuration file
-will not stop SD starting. Nothing in SDNet uses it. The one thing that reads it
-is the API server's request to open an SDNet file, which is refused unless
-bit 2 of `NETFILES` is set; the value is 0 unless `sd.conf` sets it. The
-*Configuration* page has the detail.
+**One door of SDNet is still in the server: API request 29**, which opens an
+`account;file` file for an API client. **`NETFILES` in `sd.conf` is what it is
+behind**: bit 2 of it opens the request, and it is 0 as delivered, so the request
+is refused. With the bit set, it still refuses unless the account's NET gate is
+on (`set.net.access on`, an administrator command, off as delivered), and it
+refuses under `SDCLIENT`, an account named by a path, another account, SDSYS and a
+suspended account, and a file the VOC reaches through a pointer that leads out of
+the account, unless the account has the `os` switch on. The *Configuration* page
+has the detail.
 
 ## Virtual file systems
 

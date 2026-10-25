@@ -39,8 +39,8 @@ which has the full story of each change: what it does, why, and what it does not
 
 **[New Features Unique to SD Core](#new-features-unique-to-sd-core)**, not part of openQM and not on the spreadsheet:
 [Administration](#administration) · [API and client library](#api-and-client-library) · [Encryption](#encryption) ·
-[Files](#files-1) · [Installer](#installer) · [Screen library and terminals](#screen-library-and-terminals) · [Security](#security) ·
-[System](#system-1).
+[Files](#files-1) · [Installer](#installer) · [Screen library and terminals](#screen-library-and-terminals) · [SDNet](#sdnet) ·
+[Security](#security) · [System](#system-1).
 
 **[NO CHANGE](#no-change)**: openQM items that needed nothing.
 
@@ -414,12 +414,37 @@ The screen statement and its library, and what changed in the terminal handling 
 | themes | Added | `mono` (the default), `classic` and `blue`; `screentheme=` in `sd.conf` chooses the default; a colour theme is refused where the terminal cannot show colour |
 | window size | Changed | SD reads the terminal's window size at the start and when it is resized; `kernel(k$winsize)` answers it; `term w,h` holds until the next resize |
 
+### SDNet
+
+Files on another SD server. All of it is off as delivered. The client is Linux Solo's, carried here; it is compiled and its
+free checks pass, and it has not been run against another server.
+
+| Name | Change | What |
+|---|---|---|
+| `list.servers`, `delete.server` | Added | the administrator's list of defined servers, and removal of one <!--s g52 g26--> |
+| `net` gate | Added | `set.net.access on`: one of the four things that must all be true before a remote file opens (the gate, a defined server, your login on it, a VOC pointer) |
+| `netwait`, `netreply` | Added | `sd.conf` settings, 1 to 3600 seconds, for a connection and a reply; a silent server is given up on <!--s 235 g291--> |
+| `open.socket` | Changed | the fourth argument is the number of seconds to wait for the connection, zero for no limit of SD's own; it was the unused security context <!--s 174--> |
+| remote files, a pointer | Added | a VOC entry whose first field is `n` points to a file on another server |
+| remote files, cache | Added | a short record cache; `logto` closes the connections |
+| remote files, query | Added | `list`, `count`, `sort`, `select`, `list.item`, `list dict` on a remote file; `fileinfo` type 7 |
+| remote files, refusal | Changed | the server's own words are shown, not `status 0`; a lost connection is an error <!--s 256--> |
+| remote files, reply checked | Changed | a reply that cannot be true is a lost connection at once |
+| remote files, write | Added | for a server defined `write`: `write`, `delete`, `clearfile`, the locking reads and release |
+| remote lock functions | Added | `recordlocked()`, `getlocks()`, `filelock`, `fileunlock`: work on a remote file |
+| remote `select` | Changed | fixed: a server error stopped the program with an abort |
+| SDNet logins | Added | `set.netlogin`, `delete.netlogin`: a person's login on a server, kept as derived values and never the password |
+| `set.server` | Added | defines a server; `connect` shows its key hash for you to confirm <!--s g84 147--> |
+| `settings.report` | Changed | the `[api]` section shows the hash of the API's public key, the figure another administrator pins |
+| tls reads | Changed | fixed: a half record or a late ticket made a read wait without limit |
+
 ### Security
 
 Fixes that close a way round a gate, and what the gates now ask.
 
 | Name | Change | What |
 |---|---|---|
+| api request 29 | Changed | fixed: it opened a file for any login once `netfiles` bit 2 was set; it now needs the account's `net` gate (`set.net.access on`), and a VOC pointer that leads out of the account needs the `os` switch |
 | API `clearfile` | Changed | fixed: it cleared whichever file a stale counter pointed at instead of the file the client named |
 | operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes |
 | the VOC and the server's files | Changed | `get.list ... deleting`, `save.list`, `delete.list`, `sort.list`, `copy.list`, `map file`, `format`, `fixdir`, `generate`, `compile.dict data`, `set.trigger`, `reformat ... to`, the `pageseq` clause of a report, `sp.view` (deleting the item shown), `como ... in`, `basic`'s object file, `create.file` on an existing file, and over the API `write`, `delete` and `clearfile`, each now ask before they change anything and say why when they refuse |

@@ -140,6 +140,8 @@ reads.
 | `NUMLOCKS` | 100 | Maximum record locks across all sessions |
 | `MAXCALL` | 10000 | Maximum subroutine call depth. Range 10 to 1000000 |
 | `CMDSTACK` | 99 | Depth of the command stack |
+| `NETWAIT` | 5 | Seconds to wait for a connection to a server defined for SDNet (`set.server`, `set.netlogin`, a file opened through an `N` pointer): the TCP connection, then the TLS handshake, each. 1 to 3600; zero is refused |
+| `NETREPLY` | 30 | Seconds to wait for each reply of such a server. 1 to 3600; zero is refused. `config('NETWAIT')` and `config('NETREPLY')` read them. See the SDNet page of the User set |
 | `FDS` | unset | Limit on file descriptors. No limit when unset |
 | `FIXUSERS` | unset | `base,range` — user numbers reserved for sessions that ask for a specific number |
 | `PORTMAP` | unset | `base_port,base_user,range` — gives a session a fixed user number derived from the port its connection arrived on. Refused if the range overlaps `FIXUSERS` |
@@ -282,19 +284,22 @@ changes SD's behaviour, and none should be offered as a control.
 bits died with SDNet, but bit 4 is live and decides whether a `PATH:` VOC
 reference may name a pathname directly.
 
-**`NETFILES` is not in this list either.** SDNet was removed from this port:
-`netfiles.c` is deleted, a `server;file` VOC reference is refused, and the
-request that reports open SDNet connections returns an empty list. The value is
-parsed, stored, shown by `config` and readable with `config('NETFILES')`.
-**One thing in the source still reads it:** the API server's request 29, "open
-an SDNet file", which opens the file that a VOC entry of the named account
-names. It is refused unless bit 2 of `NETFILES` is set. The delivered value is
-0, so as delivered the request is refused; leave it at 0 unless an API client
-needs it. With bit 2 set the request opens the file as any other file an API
-session opens, so the connection's containment applies: only the account the
+**`NETFILES` is not in this list either.** A `server;file` VOC reference is
+refused whatever it holds (the old SDNet is gone), and the value is parsed,
+stored, shown by `config` and readable with `config('NETFILES')`. **One thing
+still reads it:** the API server's request 29, "open an SDNet file", which
+opens the file that a VOC entry of the named account names, for a client that
+has signed in. It is refused unless bit 2 of `NETFILES` is set. The delivered
+value is 0, so as delivered the request is refused; leave it at 0 unless an API
+client needs it. With bit 2 set the request is still refused unless the
+account's NET gate is on (`set.net.access on`, an administrator command, off as
+delivered), and under `SDCLIENT`; a pointer in the account's VOC that leads out
+of the account is refused too, unless the account has the `os` switch on. When
+it opens the file, the connection's containment applies: only the account the
 session stands in, the shared `SDSYS` entries (read only) and the directories
-named in `NETDIRS`. It asks nothing further about the account. This is read
-from the source (20 October 2026) and has not been run on an install.
+named in `NETDIRS`. This is read from the source and has not been run on an
+install. The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
+type `N`) does not read `NETFILES`; see the SDNet page of the User set.
 
 There is no licence parameter and no licence verb. SD Core Solo for Windows is
 GPL v3 and is not licensed per site or per user; `config gpl` displays the
