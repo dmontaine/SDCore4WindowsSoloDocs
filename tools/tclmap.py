@@ -121,6 +121,13 @@ DOCS = [
  ('User', '27-sd-tcl-micro.md', """
    micro
  """),
+ # 26 Oct 26 SED and CED pages (RELEASE_1.1 172), from the Windows Core pages with Solo's os switch
+ ('User', '27a-sd-tcl-sed.md', """
+   sed
+ """),
+ ('User', '27b-sd-tcl-ced.md', """
+   ced
+ """),
  ('User', '28-sd-tcl-printing-and-spooling.md', """
    block.print block.term printer set.queue setptr sp.assign sp.close sp.open
    sp.view spool como report.style
