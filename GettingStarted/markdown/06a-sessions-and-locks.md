@@ -299,11 +299,67 @@ enters an account. A session shows what it is by `@tty` (`apisrvr` for the API).
 There is none unless you write one, so nothing runs by default. It runs under the account's own switches: it can do no
 more there than the account's user can.
 
+## Sessions and locks on one screen: `tool.sessions`
+
+```
+tool.sessions
+```
+
+**A full-screen page for the administrator**: type `admin` first; without it the page is
+refused before it reads anything. It needs a window of 140 columns by 43 lines. The top list
+is every session: user number, Windows process number (`Pid`), when it signed on, its kind
+(user, phantom, API or SDNet), the login user, the account it is in, where it came
+from, and whether it is yours (a star) or a logout is pending. The lower list is every lock:
+the user, the file number and path, the type (`FX` and `SX` lock a whole file, `RU` is read
+and update, `RL` is read, `WAIT` is a session waiting for a lock), the record id, since when,
+and whether a session with that user number is still signed on. Under the sessions the page
+says whether logins are inhibited and by whom, and under the locks it gives the lock limit,
+the number held now and the most there have been. **Both lists are read again every three
+seconds, with no key pressed, and on F5, and a refresh keeps the cursor on the same user or
+the same lock, not on the same row number.** A box under the lists explains the row under the
+cursor in plain sentences and shows the exact command its key would run.
+
+| Key | What it does |
+|---|---|
+| arrows, Page Up, Page Down, Home, End, a click | move in the list that has the focus |
+| Tab | change to the other list |
+| L (sessions) | `logout` the selected session; the user number is typed again to confirm. For a session whose process is gone the entry is cleared and its locks are released |
+| U (locks) | `unlock` the selected lock; the holder is not told |
+| I | `inhibit.login on` when logins are allowed, `off` when they are inhibited |
+| F5 | read again |
+| F1, ?, a click on the [?] | explain the page |
+| Ctrl-Q | leave |
+
+**The page changes nothing by itself.** Each of the three keys builds one command from values
+the page has read and checked, shows it in a box with what it does, and runs it only when you
+answer Run; Cancel is what Enter chooses. Those three commands are the only ones the page can
+run. **`logout` and `unlock` write no audit line of their own, so the page writes one for
+every command it ran** (`tool run app=tool.sessions command=... status=...`), as well as the
+line that says it was started (`tool start app=tool.sessions`); `inhibit.login` writes its
+own as well.
+
+What each key refuses, in words, before any box opens: `L` on the session the page runs in
+(leave it with Ctrl-Q); `U` on a `WAIT` row, which is a session waiting for a lock and not a
+lock; `U` on a record id with a character the page will not put in a command (only lower-case
+letters, digits, dot, dash and underscore go through) or an id that is one of the words
+`unlock` reads as a keyword (`all`, `file`, `user`, `filelock`, `tasklock`): release those at
+the prompt with `unlock`. The lock table keeps record ids in upper case and shows them so; the
+page sends the id in lower case, which the verb folds.
+
+**`logout` ends a session by signalling its process**, so work that session has not saved is
+lost; the box says so before you answer Run. **While `inhibit.login` is on, only this session
+and the phantoms it starts can sign in, and if this session is lost the hold lapses**: the
+page's box says that too.
+
+**Not on the page:** a message to a user, `logout all`, and `unlock tasklock`.
+
+*Carried from the Linux product's page and not yet run on Windows.*
+
 ## Which need `admin`
 
 | | |
 |---|---|
-| **need `admin`** | `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `inhibit.login` |
+| **need `admin`** | `tool.sessions`, `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `inhibit.login` |
 | **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` |
 
 Without it they answer *Command requires administrator privileges*. See

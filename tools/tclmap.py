@@ -155,10 +155,10 @@ DOCS = [
    backup.account restore.account set.backup.directory settings.report
  """),
  ('GettingStarted', '06a-sessions-and-locks.md', """
-   clear.locks inhibit.login list.locks list.readu listu lock logout unlock
+   clear.locks inhibit.login list.locks list.readu listu lock logout tool.sessions unlock
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
-   sh ! set.os.access
+   sh ! load.help set.os.access tool.gates
  """),
  ('User', '06a-sd-basic-encryption.md', """
    encrypt.key
