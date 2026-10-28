@@ -130,8 +130,9 @@ a pipe, a phantom or an API server.
 Every tile is on as delivered, and the administrator can turn a tile off for the account
 with **`set.tile sduser tile off`** (or on the *Menu management* page): it is then not
 on the page, and its menu entry cannot be chosen. The tile ids are `editor`, `ide`, `ced`,
-`terminal`, `keys` and `signout`; **sign out cannot be turned off**. `set.tile` alone
-says what is off.
+`terminal`, `keys` and `signout`, and `recent` (the Recent group, below); **sign out
+cannot be turned off**, and neither can the Back tile of a sub-menu page. `set.tile`
+alone says what is off.
 
 If the **Terminal** tile is off and the session starts in the home screen, you are never
 given the command prompt: when the screen ends (a window too small, an error, the cursor
@@ -183,8 +184,33 @@ of the system directory.
 - **Opening a document from a help box.** The guide pages are not opened from SD, and there
   is no `pdf` verb. Read them as ordinary files.
 
+## The Recent group
+
+**View > Recent group** turns on a group at the top of the home screen with the tiles
+started last, **newest first, six at most**; the same entry turns it off. **It is off
+as delivered.** The list is the record `recent` of the file `&menus&` in the account
+(the file is made as `my.menu` makes it). It holds tile ids and never a command: each
+recent tile is built from the page as it is now, so a tile that is turned off is not
+offered, and a record edited by hand cannot start anything the page does not offer.
+The programs added with `my.menu` are not kept in it. Turning the group off forgets
+the list, and while it is off nothing is written.
+
+The administrator can forbid it: `set.tile sduser recent off`. The group is then not
+on the page, nothing is read or written for it, and the View entry cannot be chosen.
+
+## Sub-menus
+
+A tile whose action is `menu:name` opens a page of its own: the groups of the page
+table that belong to that menu. The new page has a **Back** tile at the left of the
+header (the name moves right to make room), and the status line shows the way in, for
+example `Home > Develop`. **Esc, Backspace, the Back tile and Go > Back** each go back
+one page, with the tile that was selected. Eight pages are the most; a page that is
+already open above cannot be opened again; and a menu none of whose tiles is on the
+page has no tile to open it. The Back tile cannot be turned off with `set.tile`.
+**The delivered page has no sub-menu yet**: this is the mechanism, in the page table of
+the `tool_home` program, for a page that wants one.
+
 ## Not yet
 
-Programs the administrator assigns to the account, sub-menus that open and return, a
-group of the last commands you ran, and a live line on a tile are planned and not
-built.
+Programs the administrator assigns to the account and a live line on a tile are
+planned and not built.
