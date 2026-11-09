@@ -84,6 +84,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`deny.verbs`** | **`deny.verbs`** \| **`deny.verbs add`** *verb*{`,`*verb* …} \| **`remove`** *verb*{`,`*verb* …} \| **`set`** {*verb*{`,`*verb* …}} |
 | **`disable.index`** | **`disable.index`** *file* *index* … \| **`all`** |
 | **`display`** | **`display`** *text* |
+| **`docs.install`** | **`docs.install`** *directory*  —  copy the PDF files of a directory into the pdf directory of the install directory (administrator) |
 | **`dump`** | **`dump`** {**`dict`**} *file* {*id* … \| **`*`**} {**`(options`**} |
 | **`echo`** | **`echo on`** \| **`off`** \| **`echo`** to toggle |
 | **`ed`** | **`ed`** {**`dict`**} *file* {*id* …} |
@@ -136,6 +137,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`off`** | **`off`** |
 | **`option`** | **`option`** *name* {**`on`** \| **`off`** \| **`display`**}  ·  **`option all off`**  ·  **`option`** |
 | **`pause`** | **`pause`** {*seconds*} |
+| **`pdf`** | **`pdf`** {*name*}  —  show a documentation PDF in the installed reader, whatever the account's os switch says (the administrator allows the reader: **`set.viewer`**); without a name, lists the documents |
 | **`pdebug`** | **`pdebug`** {*command*} |
 | **`pdump`** | **`pdump`** *n* |
 | **`phantom`** | **`phantom`** {**`no.msg`**} {**`data`**} {**`group`**} {**`user`** *n*} {**`log`** *file*} *command* |
@@ -169,6 +171,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`set.os.access`** | **`set.os.access`** \| **`set.os.access sh on`** \| **`set.os.access sh off`** \| **`set.os.access os on`** \| **`set.os.access os off`** |
 | **`set.password`** | **`set.password`** \| **`set.password admin`** \| **`set.password global`** |
 | **`set.trigger`** | **`set.trigger`** *file* *name* {*modes*} |
+| **`set.viewer`** | **`set.viewer`** {{**`add`** \| **`remove`**} **`pdf`** *program*}  —  the programs that may be started without the **`os`** switch to show a document (none is allowed as delivered); without arguments, lists them |
 | **`setptr`** | **`setptr`** *unit* \| **`default`**`,`*width*`,`*depth*`,`*top*`,`*bottom*`,`*mode* {`,`*options*}  ·  **`setptr display`**  ·  **`setptr`** *unit*`,`**`display`** |
 | **`settings.report`** | **`settings.report`** {*folder*} |
 | **`sh`** | **`sh`** *command* |

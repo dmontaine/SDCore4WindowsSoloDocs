@@ -173,16 +173,30 @@ group and `my.menu` says it is not allowed (the list stays in your file).
 ## Help on a setting
 
 On the *Menu management* page every setting has a **`[?]`** at the end of its row; F1,
-`?` or a click opens a box that says what it means. The text is the file `context.help`
+`?` or a click opens a box that says what it means, with a *Documentation* button that
+shows the guide page in the PDF reader (`pdf`, below). The text is the file `context.help`
 of the system directory.
+
+```
+pdf
+pdf name
+```
+
+`pdf` alone lists the documents (the PDF files in the `pdf` directory of the install
+directory) and `pdf name` shows one in the PDF reader of the computer you are sitting at.
+It works even when the account has no `os.execute` switch, because the reader it starts is
+one the administrator allowed for this one purpose (`set.viewer`), and the document is
+always one of those files, never a path you type. With no reader allowed (the delivered
+state) it says `No viewer has been allowed for documents`; over ssh, or in a session that is
+not at the computer, it says so and does nothing.
 
 ## Not in this product
 
 - **The AI line.** The AI is not part of SD Core Solo for Windows. The AI item of the
   menu bar is shown and says `AI is off`; it cannot be chosen, and the home screen has no
   `AI>` row.
-- **Opening a document from a help box.** The guide pages are not opened from SD, and there
-  is no `pdf` verb. Read them as ordinary files.
+- **The Bypass programs page.** `tool.viewers` is not built; the readers `pdf` may start
+  are named with `set.viewer`.
 
 ## The Recent group
 

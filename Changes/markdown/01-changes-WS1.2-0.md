@@ -364,8 +364,11 @@ were built, with the changes they made.
 
 | Name | Change | What |
 |---|---|---|
+| `docs.install` | Added | the administrator copies a directory of PDF files in, for the `pdf` verb to show |
+| `pdf` | Added | shows a document in the PDF reader the administrator has allowed, even for an account that may not run programs; no reader is allowed as delivered, and it does nothing over ssh |
 | `restore.account` | Changed | fixed: no longer overwrites a different global program of the same name |
 | `set.os.access` | Added | administrator command: `sh on`, `sh off`, `os on`, `os off`; with no argument it shows both; it writes the account's register record and the audit trail, and a change is seen at the next sign-on |
+| `set.viewer` | Added | allows one PDF reader for the `pdf` verb, by its full path; it must be an .exe under Program Files or the Windows folder that only the system and the Administrators can change; none is allowed as delivered |
 | `sh` and `os` switches | Added | two per-account switches, both off as delivered: `sh` for the `sh` verb and `!`, `os` for `os.execute`, the Python helper, the editors `edit` and `micro`, and files and directories outside the account by path; after `admin` the session passes both, except that the `sh` verb still refuses a command with a shell metacharacter unless the `sh` switch is on; the API server reads them when it enters the account |
 
 ### API and client library

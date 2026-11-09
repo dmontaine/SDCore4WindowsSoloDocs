@@ -232,6 +232,77 @@ it was.
 denied `sh` needs `admin` even when the switch is on, and `set.os.access` is
 itself an administrator command.
 
+## The one bypass: showing a document with `pdf`
+
+```
+pdf
+pdf name
+set.viewer
+set.viewer add pdf program
+set.viewer remove pdf program
+docs.install directory
+load.help
+```
+
+**`pdf name` shows a documentation PDF in a PDF reader, whatever the `sh` and `os`
+switches say.** It is the one place where SD starts a program outside itself for an
+account that may not run programs, so it is held narrow and it is **off as delivered**:
+until you name a reader, `pdf` says that no viewer has been allowed and starts nothing.
+The installer does not name one for you.
+
+**What `pdf` starts, and with what.**
+
+* **The program** is the first one on *your* list for `pdf` that passes the test below
+  **at the moment it is started**, not only when it was added. The list is the file
+  `viewers` in the SD system directory, one line to a program:
+  `pdf C:/Program Files/Some Reader/reader.exe`.
+* **The document** is a regular file of the `pdf` directory of the SD system directory,
+  found by its name in lower case letters, digits, dot, dash and underscore. The caller
+  never supplies a path; a link or a directory in that directory is not a document.
+* **The command** is built from those two parts alone, started with PowerShell's
+  `Start-Process`, so a reader that stays open does not hold the session. The reader is
+  given the document as its one argument, in quotes.
+* **A session that is not at the computer** (an ssh session, or one that runs in the
+  background) is told so, and nothing is started.
+* **One audit line**: `pdf open file=name viewer=C:/Program Files/Some Reader/reader.exe`.
+
+**The test a program must pass** (made by `set.viewer add` and again by `pdf`): the full
+path of an `.exe` of letters, digits, space and `: / . _ + - ( )` with no `..`; under
+`Program Files`, `Program Files (x86)` or the Windows folder; an existing regular file (not a
+folder, link or reparse point); owned by SYSTEM, the Administrators or TrustedInstaller;
+and no other user or group has an *Allow* entry that writes, appends, deletes, changes
+permissions or takes ownership of it. **It does not say a program is safe.** A graphical
+reader can open other files its user may read and follow links, so allow only readers you
+trust, and never a shell or an editor.
+
+### Naming a reader: `set.viewer`
+
+```
+set.viewer                                                    says which programs are allowed
+set.viewer add pdf "C:/Program Files/Some Reader/reader.exe"   allows it
+set.viewer remove pdf "C:/Program Files/Some Reader/reader.exe" stops allowing it
+```
+
+An administrator command (`admin` first; without it: *Command requires administrator
+privileges*). The program is always a full path, with `/` or `\`; the double quotes are
+optional and take the spaces. Takes effect at once.
+
+### Where the documents come from: `docs.install`
+
+The PDFs are generated from the documentation and are not part of the source tree, so
+they reach the `pdf` directory by the administrator:
+
+```
+docs.install C:/path/to/the/pdf/files
+```
+
+copies every `*.pdf` of that directory into the `pdf` directory of the SD system
+directory (which the installer makes). A file is copied only if its name is lower case
+letters, digits and `. _ -`, ends in `.pdf` and does not begin with a dot, and the file
+begins with `%PDF-`; anything else is skipped and named. A document already there is
+replaced. `pdf` alone lists what is installed. `docs.install` is an administrator command
+(`admin` first).
+
 ## The context help: `load.help`
 
 ```

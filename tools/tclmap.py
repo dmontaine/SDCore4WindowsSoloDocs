@@ -134,7 +134,7 @@ DOCS = [
  """),
  ('User', '29-sd-tcl-the-terminal-and-the-session.md', """
    autologout bell clear.prompts command.logging date
-   date.format echo hush list.term.types logmsg nls pterm sleep term time
+   date.format echo hush list.term.types logmsg nls pdf pterm sleep term time
  """),
  # 26 Oct 26 the home screen page (Linux Solo carry 14; RELEASE_1.1 172)
  ('User', '29a-sd-tcl-the-home-screen.md', """
@@ -165,7 +165,7 @@ DOCS = [
    clear.locks inhibit.login list.locks list.readu listu lock logout tool.sessions unlock
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
-   sh ! load.help set.os.access tool.gates
+   sh ! docs.install load.help set.os.access set.viewer tool.gates
  """),
  ('User', '06a-sd-basic-encryption.md', """
    encrypt.key
