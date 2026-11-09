@@ -155,9 +155,6 @@ because the record itself is valid PROC and it is the interpreter that is gone.
 Nothing that ships is type `PQ`, so this can only be met in a VOC record
 somebody wrote.
 
-**`menu` records are dispatched but no menu ships.** Type `M` is handled and
-there is no shipped example to look at.
-
 ## Who has these verbs
 
 Your account has every verb on this page, and none of them needs `admin`:

@@ -20,8 +20,7 @@ A name that matches exactly still wins, so nothing that works today changes. A
 name that exists in **no** case is still reported as not found.
 
 This order is used everywhere: the parser, the query processor, `RUN`,
-multifile resolution, the `LOGIN` paragraph lookup, and `SET.FILE`'s default
-`qfile` pointer.
+the `LOGIN` paragraph lookup, and `SET.FILE`'s default `qfile` pointer.
 
 ## What is spelled in lower case
 
@@ -36,7 +35,7 @@ multifile resolution, the `LOGIN` paragraph lookup, and `SET.FILE`'s default
 | Files in the account | created with lower-case names on disk |
 
 **Renaming these is cosmetic for resolution** — NTFS matches without being
-asked — but the stored path text is user-visible through `listf` and the
+asked — but the stored path text is user-visible through `list voc with type = "F"` and the
 current-directory reporting, which is the point.
 
 ## Record ids in directory files are not case sensitive
@@ -46,10 +45,10 @@ Two changes that go together:
 - **Record ids in directory files** are matched case insensitively.
 - **Queries against a directory file** match ids the same way.
 
-**`create.file`** also takes a `no.case` option, which creates a file whose record
-ids are treated as case insensitive: SD writes records preserving the casing
-given by whatever performs the write, and reads locate records regardless of
-casing.
+Every file `create.file` makes treats record ids as case insensitive (there is
+no `no.case` or `case` word to give it): SD writes records preserving the
+casing given by whatever performs the write, and reads locate records
+regardless of casing.
 
 ## One correction worth reading
 

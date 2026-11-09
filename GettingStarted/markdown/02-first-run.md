@@ -30,7 +30,7 @@ The sign-on banner names the product and its version, `WS1.1-3`.
 
 ```
 who
-listf
+list voc with type = "F"
 term
 ```
 

@@ -83,10 +83,9 @@ argument asks without setting:
 So the way to change it temporarily is to keep what the setting call returned
 and pass it back.
 
-## SENTENCE() and the @variables
+## @SENTENCE and the other @variables
 
-`sentence()` and `@sentence` are the same thing. Both hold
-the command line that started the program: `RUN BP ZZMATH`.
+`@sentence` holds the command line that started the program: `RUN BP ZZMATH`.
 
 | | Value |
 |---|---|
@@ -192,9 +191,6 @@ table still holds it.
 each needs something outside SD before it can do anything: `sendmail` a mail
 relay, `chgphant` a phantom to change, and `ccall` a C function registered into
 the executable. Nothing on this page depends on them.
-
-**`procread` and `procwrite`** belong to the PROC language rather than to BASIC
-and are only meaningful inside one.
 
 ## See also
 

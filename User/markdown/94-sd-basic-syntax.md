@@ -92,12 +92,10 @@ exist.**
 | **`clearfile`** | `clearfile` *file.var* {`on error` …} |
 | **`clearinput`** | `clearinput` |
 | **`clearselect`** | `clearselect` {*list.no*} |
-| **`close`** | `close` *file.var* {`on error` …} |
+| **`close`** | `close` *file.var* {`on error` …} — closes any file variable, sequential or not |
 | **`close.socket`** | `close.socket` *socket* |
-| **`closeseq`** | `closeseq` *file.var* |
 | **`col1`** | `col1()` |
 | **`col2`** | `col2()` |
-| **`com`** | `com` `/`*name*`/` *var*, … — synonym of `common` |
 | **`commit`** | `commit`, inside `begin transaction` … `end transaction` |
 | **`common`** | `common` `/`*name*`/` *var*, *matrix*`(`*n*`)`, … |
 | **`compare`** | `compare(`*a*, *b* {, *justification*}`)` |
@@ -113,7 +111,7 @@ exist.**
 | **`crop`** | `crop(`*a*`)` |
 | **`crt`** | `crt` *expr* {`:` …} {`:`} |
 | **`csvdq`** | `csvdq(`*line* {, *delimiter*}`)` |
-| **`current.level`** | clause of `enter` — run at the current command level ***(clause word)*** |
+| **`current.level`** | clause of `execute` — run at the current command level ***(clause word)*** |
 
 ## D
 
@@ -125,12 +123,11 @@ exist.**
 | **`debug`** | `debug` — needs `basic` *file* *record* `debugging` |
 | **`deffun`** | `deffun` *name*`(`*arg*, …`)` {`calling` *"cat.name"*} {`local`} |
 | **`del`** | `del` *arr*`<`*f* {, *v* {, *sv*}}`>` |
-| **`delete`** | `delete` *file.var*, *id* {`on error` …}   ·   `delete(`*arr*, *f* {, *v* {, *sv*}}`)` |
+| **`delete`** | `delete` *file.var*, *id* {`on error` …} |
 | **`deletelist`** | `deletelist` *name* `then` … `else` … |
 | **`deleteseq`** | `deleteseq` *path* {`on error` …} `then` … `else` … |
 | **`deleteu`** | `deleteu` *file.var*, *id* {`on error` …} |
 | **`dim`** | `dim` *name*`(`*rows* {, *cols*}`)`, … |
-| **`dimension`** | `dimension` *name*`(`*rows* {, *cols*}`)`, … — synonym of `dim` |
 | **`dir`** | `dir(`*a*`)` |
 | **`disinherit`** | `disinherit` *object* |
 | **`display`** | `display` *expr* {`:` …} {`:`} |
@@ -139,7 +136,6 @@ exist.**
 | **`downcase`** | `downcase(`*a*`)` |
 | **`dparse`** | `dparse` *string*, *delimiter*, *var*, … |
 | **`dparse.csv`** | `dparse.csv` *line*, *delimiter*, *var*, … |
-| **`dquote`** | `dquote(`*a*`)` |
 | **`dtx`** | `dtx(`*n* {, *digits*}`)` |
 
 ## E
@@ -151,15 +147,12 @@ exist.**
 | **`edit`** | clause of `keyedit`, and the `edit` verb at the command prompt ***(clause word)*** |
 | **`else`** | clause of `if`, and of every statement that has a `then` |
 | **`end`** | `end` — closes a program, a `then`, an `else`, a `case`, a transaction |
-| **`enter`** | `enter` *name*   ·   `enter @`*var* |
 | **`env`** | `env(`*a*`)` |
 | **`eqs`** | `eqs(`*a*, *b*`)` |
-| **`equ`** | `equ` *name* `to` *value* — synonym of `equate` |
 | **`equate`** | `equate` *name* `to` *value* {, *name* `to` *value*} … |
 | **`execute`** | `execute` *cmd* {`capturing` *v*} {`returning` *v*} {`passlist` {*l*}} {`rtnlist` {*v*}} |
 | **`exit`** | `exit` — leave the enclosing `loop` or `for` |
 | **`exp`** | `exp(`*a*`)` |
-| **`extract`** | `extract(`*arr*, *f* {, *v* {, *sv*}}`)` |
 
 ## F
 
@@ -196,7 +189,6 @@ exist.**
 | **`getnls`** | `getnls(`*a*`)` |
 | **`getpu`** | `getpu(`*a*, *b*`)` |
 | **`getrem`** | `getrem(`*a*`)` |
-| **`go`** | `go` *label* — synonym of `goto` |
 | **`gosub`** | `gosub` *label* {, *arg*, …} |
 | **`goto`** | `goto` *label* |
 | **`gts`** | `gts(`*a*, *b*`)` |
@@ -227,12 +219,10 @@ exist.**
 | **`inmat`** | `inmat()`   ·   `inmat(`*matrix*`)` |
 | **`input`** | `input` *var* {, *length*} {`:`} {`_`} {`hidden`} {`overlay`} {`upcase`} {`waiting` *n*} |
 | **`inputblk`** | `inputblk(`*a*`)` |
-| **`inputclear`** | `inputclear` |
 | **`inputcsv`** | `inputcsv` *var*, … |
 | **`inputerr`** | `inputerr` *message* |
 | **`inputfield`** | `inputfield` *var*, *length* {, *mask*} |
 | **`ins`** | `ins` *value* `before` *arr*`<`*f* {, *v* {, *sv*}}`>` |
-| **`insert`** | `insert(`*arr*, *f* {, *v* {, *sv*}}, *value*`)` |
 | **`int`** | `int(`*a*`)` |
 | **`itype`** | `itype(`*compiled.i.type*`)` |
 
@@ -299,7 +289,6 @@ exist.**
 | **`nes`** | `nes(`*a*, *b*`)` |
 | **`next`** | `next` *var* — closes a `for` |
 | **`nobuf`** | `nobuf` *file.var* `then` … `else` … |
-| **`nocaseinvert`** | clause of `input` — do not invert the case of typed letters ***(clause word)*** |
 | **`not`** | `not(`*a*`)` |
 | **`nots`** | `nots(`*a*`)` |
 | **`null`** | `null` — does nothing; the empty statement |
@@ -332,18 +321,14 @@ exist.**
 |---|---|
 | **`page`** | `page` {*n*} |
 | **`panning`** | clause of `input` — pan a field wider than the screen ***(clause word)*** |
-| **`passlist`** | clause of `execute` — hand the active select list to the command ***(clause word)*** |
+| **`passlist`** | clause of `execute` — the select list held in a variable becomes the command's default list ***(clause word)*** |
 | **`pause`** | `pause` {*seconds*} |
-| **`perform`** | `perform` *command* |
 | **`precision`** | `precision` *n* |
 | **`print`** | `print` *expr* {`:` …} {`:`}   ·   `print on` *unit* *expr* |
 | **`printcsv`** | `printcsv` {`on` *unit*} *value*, … {`:`} |
 | **`printer`** | `printer on`   ·   `printer off`   ·   `printer close`   ·   `printer file on` *unit* *file*, *record* |
 | **`printer.setting`** | `printer.setting(`*a*, *b*, *c*`)` |
-| **`printerr`** | `printerr` *message* |
 | **`private`** | `private` *var*, … |
-| **`procread`** | `procread` *var* `then` … `else` … |
-| **`procwrite`** | `procwrite` *var* |
 | **`program`** | `program` *name* |
 | **`public`** | `public` *var*, … |
 | **`pwr`** | `pwr(`*a*, *b*`)` |
@@ -379,18 +364,15 @@ exist.**
 | **`recordlocku`** | `recordlocku` *file.var*, *id* {`locked` …} {`on error` …} |
 | **`release`** | `release` {*file.var* {, *id*}} {`on error` …} — bare `release` releases everything |
 | **`rem`** | `rem(`*a*, *b*`)` |
-| **`remark`** | `remark` *text* — synonym of `rem` |
 | **`remove`** | `remove` *value* `from` *arr* `setting` *delimiter.code* |
 | **`remove.break.handler`** | `remove.break.handler` |
 | **`repeat`** | `repeat` — closes a `loop` |
-| **`replace`** | `replace(`*arr*, *f* {, *v* {, *sv*}}, *value*`)` |
 | **`restore.screen`** | `restore.screen` *image*, *restore.cursor* |
 | **`return`** | `return` {`to` *label*}   ·   `return(`*value*`)` from a function |
 | **`returning`** | clause of `execute` — take the command's error text ***(clause word)*** |
 | **`reuse`** | `reuse(`*a*`)` |
 | **`rnd`** | `rnd(`*a*`)` |
 | **`rollback`** | `rollback`, inside `begin transaction` … `end transaction` |
-| **`rqm`** | `rqm` {*seconds*} |
 | **`rtnlist`** | clause of `execute` — take the list the command left ***(clause word)*** |
 | **`rtrans`** | `rtrans(`*file.var*, *id*, *field*, *action*`)` |
 
@@ -415,7 +397,6 @@ exist.**
 | **`selectright`** | `selectright` *index* `from` *file.var* `setting` *var* `to` *list.no* — ***no `then`/`else`*** |
 | **`selectv`** | `selectv` {*file.var*} `to` *var* — read it back with `readnext … from` |
 | **`sendmail`** | `sendmail` *to*, *from*, *subject*, *body* {, *attachments*} `then` … `else` … |
-| **`sentence`** | `sentence()` — the same value as `@sentence` |
 | **`seq`** | `seq(`*a*`)` |
 | **`server.addr`** | `server.addr(`*a*`)` |
 | **`set`** | `set` *var* `on` *object* `to` *value* |
@@ -447,14 +428,11 @@ exist.**
 | **`stop`** | `stop` {*message*} |
 | **`str`** | `str(`*a*, *b*`)` |
 | **`strs`** | `strs(`*a*, *b*`)` |
-| **`sub`** | `sub` *name*`(`*arg*, …`)` — synonym of `subroutine` |
-| **`subr`** | `subr(`*"name"* {, *arg*, …}`)` |
 | **`subroutine`** | `subroutine` *name*`(`*arg*, …`)` |
 | **`substitute`** | `substitute(`*arr*, *from*, *to*, *delimiter*`)` |
 | **`substrings`** | `substrings(`*a*, *b*, *c*`)` |
 | **`sum`** | `sum(`*a*`)` |
 | **`summation`** | `summation(`*a*`)` |
-| **`swap`** | `swap(`*string*, *from*, *to* {, *occurrences* {, *start*}}`)` |
 | **`swapcase`** | `swapcase(`*a*`)` |
 | **`sysmsg`** | `sysmsg(`*number* {, *substitution*, …}`)` |
 | **`system`** | `system(`*a*`)` |
@@ -464,7 +442,6 @@ exist.**
 | | |
 |---|---|
 | **`tan`** | `tan(`*a*`)` |
-| **`tclread`** | `tclread` *var* |
 | **`terminfo`** | `terminfo(`*capability* {, *arg*, …}`)` |
 | **`then`** | clause of `if`, and of every statement that has an `else` ***(clause word)*** |
 | **`time`** | `time()` |
@@ -521,7 +498,6 @@ exist.**
 
 | | |
 |---|---|
-| **`xlate`** | `xlate(`{*dict*`,`} *file.name*, *id*, *field*, *action*`)` |
 | **`xtd`** | `xtd(`*a*`)` |
 
 ## See also

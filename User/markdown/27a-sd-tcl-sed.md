@@ -271,7 +271,6 @@ blanks:
 | **`word`** · **`bword`** | search for whole words, or whole SD BASIC words |
 | **`syntax`** · **`no.syntax`** · **`syntax.light`** | colour on or off at the start; light palette |
 | **`mouse`** · **`no.mouse`** | the mouse on (the default) or off at the start |
-| **`no.invert`** | leave the case of typed letters alone |
 
 **`&sed.bindings&`** is a file of key sets. SED loads the first that exists of:
 the record named in field 3 of `&sed.options&`; one named *login*-*terminal

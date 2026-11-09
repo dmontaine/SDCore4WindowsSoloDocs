@@ -223,19 +223,18 @@ With no record name it uses the active select list.
 ## Compiling dictionaries
 
 ```
-cd {dict | data} file {i-type}... {no.query} {no.page}
-cd local
-cd all
+compile.dict {dict | data} file {i-type}... {no.query} {no.page}
+compile.dict local
+compile.dict all
 ```
 
-`compile.dict` is the same verb under its longer name. It compiles the A, C, I
-and S-type entries in a dictionary; with no names it does all of them, or uses
+It compiles the I-type entries in a dictionary; with no names it does all of them, or uses
 the active select list if there is one.
 
 | | |
 |---|---|
-| **`cd local`** | every dictionary in the account |
-| **`cd all`** | every dictionary visible from the account |
+| **`compile.dict local`** | every dictionary in the account |
+| **`compile.dict all`** | every dictionary visible from the account |
 
 Compiling a dictionary is a performance step, not a correctness one: it is what
 a query using those entries runs against.

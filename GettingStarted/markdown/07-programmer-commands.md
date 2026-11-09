@@ -11,8 +11,8 @@ up: **the global catalogue**, which nobody changes from your account, and
 | | |
 |---|---|
 | **`basic`** | compile SD BASIC source |
-| **`catalog`** · **`catalogue`** | add to the catalogue |
-| **`delete.catalog`** · **`delete.catalogue`** | remove from it |
+| **`catalog`** | add to the catalogue |
+| **`delete.catalog`** | remove from it |
 | **`compile.dict`** | compile dictionary items |
 | **`run`** | run a compiled program |
 | **`map`** | show a program's map |
@@ -126,7 +126,7 @@ names `ed`**, which needs none of this. Text marks are not converted, and are
 covered by the same refusal.
 
 **A compiled dictionary record is truncated to its first 15 fields** while
-you edit it, and recompiled with `cd` when you save.
+you edit it, and recompiled with `compile.dict` when you save.
 
 **Editing the VOC needs `admin`**, whichever editor does it — see
 [Administrator commands](06-administrator-commands.html).
@@ -154,29 +154,28 @@ and are not coming back. See [Not in SD Core](14-not-in-sd-core.html).
 |---|---|
 | **`create.file`** · **`delete.file`** · **`clear.file`** | the life of a file |
 | **`configure.file`** | change a file's configuration |
-| **`analyse.file`** · **`analyze.file`** | report on a file's internals |
+| **`analyze.file`** | report on a file's internals |
 | **`fstat`** | file statistics |
 | **`hsm`** | hashed-file statistics monitoring |
 | **`set.trigger`** | attach a trigger |
-| **`cd`** | change directory |
+| **`compile.dict`** | compile the I-types of a dictionary |
 
 `create.file` writes the file's entry into the VOC for you; that side effect
 needs no `admin`.
 
 ## Indexes
 
-**`create.index`** · **`delete.index`** · **`build.index`** · **`make.index`** · **`list.index`**
+**`create.index`** · **`delete.index`** · **`build.index`** · **`list.index`**
 
 ## Bulk record editing
 
 | | |
 |---|---|
-| **`copy`** · **`copyp`** | copy records |
+| **`copy`** | copy records |
 | **`delete`** | delete records |
-| **`rename`** | rename records |
 | **`reformat`** · **`sreformat`** | reformat |
 | **`sort.item`** | sort |
-| **`cname`** | change a record's name |
+| **`cname`** | rename a file or change a record's name |
 | **`delete.common`** | clear a common block |
 
 **Copying into the VOC, or deleting from it, needs `admin`**, like any other
