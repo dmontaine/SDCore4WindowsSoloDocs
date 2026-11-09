@@ -18,7 +18,7 @@ server puts them there. See [Managed computers](15-managed-mode.html).
 | | |
 |---|---|
 | `catalog bp myprog global` | the spelled-out form |
-| `catalog bp myprog` with a name beginning `*`, `!`, `_` or `$` | the same thing, spelled with a prefix |
+| `catalog bp myprog` with a name beginning `!`, `_` or `$` | the same thing, spelled with a prefix |
 | `delete.catalog` of a global entry | |
 
 **Nothing changes for local and private cataloguing**, which is what
@@ -30,7 +30,7 @@ catalog bp myprog local    your VOC
 ```
 
 Both work, and need no `admin`. The only thing you cannot do is catalogue a
-program whose name starts with `*`, `!`, `_` or `$` — those characters mean
+program whose name starts with `!`, `_` or `$` — those characters mean
 *system-wide*. Name it without one. You may **run** a globally catalogued
 program.
 

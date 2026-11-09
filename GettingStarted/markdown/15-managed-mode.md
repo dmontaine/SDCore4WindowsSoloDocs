@@ -92,8 +92,9 @@ computer's keyboard, the global password is the only one accepted.
 ## The server's programs: `global.bp.out`
 
 **The global catalogue of a managed computer holds the server's programs.**
-The user can run them — `CALL *name` — and cannot add, replace or remove any,
-with or without `admin`.
+The user can run them — `CALL name` — and cannot add, replace or remove any,
+with or without `admin`. A program of the same name in the account's own
+catalogue is found first.
 
 | | |
 |---|---|
@@ -107,25 +108,26 @@ runs `sync.global.catalog`:
 ```
 :copy from bp.out to global.bp.out myprog overwriting
 :sync.global.catalog
-catalogued *myprog
+catalogued myprog
 sync global catalog done 1 catalogued 0 removed 0 refused
 ```
 
 **To remove one**, delete it from `global.bp.out` and run
-`sync.global.catalog` again; the `*myprog` entry goes:
+`sync.global.catalog` again; the `myprog` entry goes:
 
 ```
 :delete global.bp.out myprog
 :sync.global.catalog
-removed *myprog
+removed myprog
 sync global catalog done 0 catalogued 1 removed 0 refused
 ```
 
 **What `sync.global.catalog` does:** every object in `global.bp.out` is
-catalogued as `*<name>`, in lower case, replacing any older copy; every `*`
-entry with no object left in `global.bp.out` is removed. SD's own system
-programs in the catalogue are never touched. An object it cannot load is
-refused by name and the rest still go in. The last line always reads
+catalogued under its own name, in lower case, replacing any older copy; every
+entry with no `$`, `!` or `_` prefix and no object left in `global.bp.out` is
+removed. SD's own system programs in the catalogue are never touched. An object
+it cannot load, or whose name begins with `$`, `!`, `_`, `*` or `-`, is refused
+by name and the rest still go in. The last line always reads
 `sync global catalog done <n> catalogued <n> removed <n> refused`.
 
 **An upgrade catalogues them again for you.** It replaces the global catalogue

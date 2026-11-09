@@ -21,7 +21,7 @@ up: **the global catalogue**, which nobody changes from your account, and
 
 > **Catalogue locally or privately; the global catalogue is not yours.**
 > `catalog` and `delete.catalog` work for local and private entries.
-> `catalog ... global`, a name beginning `*`, `!`, `_` or `$`, and
+> `catalog ... global`, a name beginning `!`, `_` or `$`, and
 > `delete.catalog` of a global entry are refused for every session, `admin`
 > or not: *The global catalogue holds the SD Core server's programs from
 > global.bp.out and is changed only by sync.global.catalog*. On a managed
