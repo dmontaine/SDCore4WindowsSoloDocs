@@ -1,8 +1,7 @@
 Title: Operating System Access
 Subtitle: The two switches, sh and os, that decide whether SD can reach the operating system: off as delivered, turned on by the administrator.
 
-`sh` runs a Windows command from the SD prompt. `!` is the same verb under a
-shorter name. `OS.EXECUTE` is the way from a program, and a program can also
+`sh` runs a Windows command from the SD prompt. `OS.EXECUTE` is the way from a program, and a program can also
 reach the operating system by naming a file or directory outside the account.
 **All of it is off as delivered**, and the administrator turns it on, in two
 independent switches, with `set.os.access`.
@@ -11,16 +10,14 @@ independent switches, with `set.os.access`.
 
 | Switch | What it lets the account do |
 |---|---|
-| **`sh`** | the `sh` verb and `!` |
+| **`sh`** | the `sh` verb |
 | **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the Python helper; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
 
 **Both are off as delivered, on a new install and on an upgrade unless you said
 yes when the installer asked.** The account's own directory is never asked
 about: inside it everything works whatever the switches say. **The
 administrator needs no switch**: after `admin` the session passes both for as
-long as it lasts. One difference remains for the shell: an administrator who has
-not been given the `sh` switch may use `sh` and `!`, but only for a plain command
-(see *A filter on the command*, below).
+long as it lasts.
 
 **What they run as, when they are on:** your Windows user, on an ordinary
 unelevated token — even when your Windows account is an administrator, because
@@ -108,7 +105,7 @@ says so and opens no box.
 
 ## What a refusal looks like
 
-With both switches off, `sh` and `!` answer:
+With both switches off, `sh` answers:
 
 ```
 sduser is not permitted to use the operating system shell
@@ -129,11 +126,10 @@ sduser has no OS access, so a file or directory outside its own account cannot b
 `edit` and `micro` say that they need OS.EXECUTE permission and name
 `set.os.access os on`. `ed`, SD's own line editor, needs none of it.
 
-## The two verbs
+## The verb
 
 ```
 sh command
-! command
 ```
 
 With `sh` on, everything after the verb is handed to the shell as typed:
@@ -141,8 +137,6 @@ With `sh` on, everything after the verb is handed to the shell as typed:
 ```
 :sh echo hello-from-the-shell
 hello-from-the-shell
-:! echo via-the-bang-form
-via-the-bang-form
 ```
 
 **Never type `sh` with nothing after it in a script.** The configured shell
@@ -159,41 +153,27 @@ which is what `sh command` uses, is `-NonInteractive`.
 
 ## A filter on the command
 
-**An account that has the `sh` switch gets a real shell**: pipes, redirection and
-chaining work (below). **An administrator who has not been given the switch does
-not**: `sh` and `!` refuse a command that contains a shell metacharacter, with
-`Error 2 executing operating system command`. The filter stops a one-line command
-being turned into two by accident, and it is why giving the `sh` switch is the
-step that matters even for the administrator.
+**No session gets a pipe, a redirect or a chain at the prompt.** `sh` refuses a
+command that holds `;`, `|`, `&`, `$`, a backquote, `<`, `>` or a line break, for
+everyone, the administrator included and switch or no switch, with `Error 2
+executing operating system command`. The filter stops a one-line command being
+turned into two. For more than one step, write a script and run the script:
+`sh powershell -File .\nightly.ps1`. **`sh` with nothing after it** starts the
+interactive shell, where you may type what you like.
 
 ## The shell you get is Windows PowerShell 5.1
 
-Not `pwsh`, and the difference bites:
+Not `pwsh`. Inside a script, **`&&` and `||` do not exist**, nor do the ternary,
+null-coalescing or null-conditional operators. Chain with `;`, and test with
+`if ($?) { … }`.
+
+Each `sh` is a new shell, but **the working directory persists between them**:
 
 ```
-:sh echo delta && echo epsilon
-At line:1 char:12
-+ echo delta && echo epsilon
-+            ~~
-The token '&&' is not a valid statement separator in this version.
-```
-
-**`&&` and `||` do not exist there.** Nor do the ternary, null-coalescing or
-null-conditional operators. Chain with `;`, and test with `if ($?) { … }`.
-
-**Pipes and redirection work:**
-
-```
-:sh echo alpha-beta | findstr alpha
-alpha-beta
-:sh echo gamma > zzsh.txt
+:sh Set-Content zzsh.txt gamma
 :sh Get-Content zzsh.txt
 gamma
 ```
-
-The second and third lines are separate `sh` invocations, so **the working
-directory persists between them** — the file written by one was read by the
-next.
 
 ## SD refuses to nest
 
@@ -234,7 +214,7 @@ password; see [Security](12-security.html).
 ## At install and at upgrade
 
 **The installer asks**, on a new install and on an upgrade, on one page, **Shell
-and OS access**, with two boxes, both unticked: *Shell (SH and !)* and *OS access
+and OS access**, with two boxes, both unticked: *Shell (SH)* and *OS access
 (OS.EXECUTE, files outside the account, Python, editors)*. **Before this release
 the shell and OS access were always on**, so an upgrade asks the same, and an
 existing Solo would otherwise lose them without a word: tick each you want to
@@ -248,8 +228,7 @@ it was.
 ## On a managed computer
 
 **The SD Core for Linux server can put `sh` on the list of denied commands**
-(see [Managed computers](15-managed-mode.html)); it and `!`, which runs the same
-command, then need `admin` first. That list is separate from the switches: a
+(see [Managed computers](15-managed-mode.html)); it then needs `admin` first. That list is separate from the switches: a
 denied `sh` needs `admin` even when the switch is on, and `set.os.access` is
 itself an administrator command.
 

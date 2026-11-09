@@ -95,11 +95,8 @@ switches given). **Make the firewall rule first** — `-Restrict` or `-Open`, ab
 because Windows asks whether to allow a program the first time it listens with
 no rule, and an *Allow* there makes rules open to any address.
 
-> **`APILOGIN` is retired.** The API always demands the account's password,
-> whatever `sd.conf` says, and `APILOGIN=0` never weakened that. An old
-> `sd.conf` that still has the line keeps working and the line is ignored; the
-> installer no longer writes it and `CONFIG` no longer prints it. To turn the
-> API off, take away its listener, `APIPORT`.
+> **The API always demands the account's password.** To turn the API off, take
+> away its listener, `APIPORT`.
 
 ## An API session is you
 
@@ -118,7 +115,7 @@ the administrator commands unlocked. See [Managed computers](15-managed-mode.htm
 
 | | |
 |---|---|
-| **Allowed** | everything inside the account, and the SD system files every account needs — messages, `syscom`, the dictionaries, `sd.voclib` |
+| **Allowed** | everything inside the account, and the SD system files every account needs — messages, `syscom`, the dictionaries |
 | **Refused** | opening, renaming, deleting or listing anything else |
 
 **A refused `OPEN` takes the `ELSE` branch and `STATUS()` is 3035** — *not
@@ -162,7 +159,7 @@ no file number comes back, and the audit trail gets
 `api refused request=29 reason=os gate off user=... account=... path=...`. The switch
 is read from the register record when the request is asked, so taking it off reaches a
 client that is already signed in. The pointers SD itself puts in the VOC (`syscom`,
-`newvoc`, `sd.voclib` and the like) lead out of the account and are refused here too:
+`newvoc` and the like) lead out of the account and are refused here too:
 a client of request 29 has no use for them. A pointer that opened before and leads out
 of an account whose `os` switch is off stops opening: turn the switch on if that was
 intended. Solo has no SDSYS exemption, because SDSYS is never a target of the request.

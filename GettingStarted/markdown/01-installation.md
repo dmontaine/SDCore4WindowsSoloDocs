@@ -98,7 +98,7 @@ A page of its own, **Shell and OS access**, with two boxes, both unticked:
 
 | | |
 |---|---|
-| **Shell (SH and !)** | turns on the `sh` switch: the `sh` verb and `!` |
+| **Shell (SH)** | turns on the `sh` switch: the `sh` verb |
 | **OS access (OS.EXECUTE, files outside the account, Python, editors)** | turns on the `os` switch: `OS.EXECUTE`, files and directories outside the account's own directory, the Python helper and the editors `edit` and `micro` |
 
 **Both are off as delivered**, and the default is no. The installer is the one

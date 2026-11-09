@@ -268,8 +268,7 @@ program in a phantom process"*. The debugger itself is covered in
 ## Who has these verbs
 
 **Your account has all of them**: `format`, `list.common`, `basic`,
-`catalog`, `catalogue`, `cd`, `compile.dict`, `debug`, `delete.catalog`,
-`delete.catalogue`, `delete.common`, `find.program`, `generate`, `map`, `run`.
+`catalog`, `compile.dict`, `debug`, `delete.catalog`, `delete.common`, `find.program`, `generate`, `map`, `run`.
 
 **Running a catalogued program never needed any of these anyway** — a
 catalogued name runs by being typed, with no VOC record of its own — so an

@@ -37,7 +37,7 @@ term
 | | |
 |---|---|
 | **`who`** | the account — always `sduser` |
-| `listf` | the files in it |
+| `list voc with type = "F"` | the files in it |
 | **`term`** | your terminal type and page size — should say `Device : windows` |
 
 **If `term` says something else and your arrow keys do not work**, run

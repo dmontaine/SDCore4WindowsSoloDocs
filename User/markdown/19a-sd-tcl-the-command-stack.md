@@ -163,9 +163,9 @@ Your account has every verb on this page, and none of them needs `admin`:
 |---|---|
 | **your account** | `abort` `alias` `clear.abort` `clear.stack` `display` `get.stack` `go` `if` `list.vars` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
 
-**The two `OS` verbs are the exception and are not documented here.** `sh` and
-`!` reach the Windows shell. They are in the GettingStarted set, under
-*Operating system access*, and on Solo they need nothing to use.
+**The `OS` verb is the exception and is not documented here.** `sh` reaches
+the Windows shell. It is in the GettingStarted set, under *Operating system
+access*.
 
 ## See also
 

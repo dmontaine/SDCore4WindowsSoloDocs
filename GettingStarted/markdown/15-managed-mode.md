@@ -157,21 +157,20 @@ that list until a new installation.
 
 ```
 deny.verbs                       list them
-deny.verbs add listf,create.file add to the list
-deny.verbs remove listf          take one off
-deny.verbs set listf,copy        replace the list
+deny.verbs add list,create.file  add to the list
+deny.verbs remove list           take one off
+deny.verbs set list,copy         replace the list
 ```
 
 **Every form answers with the list as it now stands:**
 
 ```
-deny.verbs 2: listf,copy
+deny.verbs 2: list,copy
 ```
 
-**A command is denied under every name that runs it.** Denying `SH` denies
-`!`, and denying `CATALOG` denies `CATALOGUE`, because each pair runs the same
-command. Some names that look different share one: `EDIT`, `NANO` and
-`MICRO` all run SD's editor program, so denying one denies all three. The
+**A command is denied under every name that runs it.** Some names that look
+different share one program: `EDIT` and `MICRO` both run SD's editor program,
+so denying one denies the other. The
 answer says what else was taken:
 
 ```

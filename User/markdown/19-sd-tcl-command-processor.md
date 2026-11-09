@@ -119,7 +119,7 @@ Field 2 of a verb record says how to run it, and field 3 says what to run:
 |---|---|---|
 | `CA` | *name* | a catalogued program — 95 of the shipped verbs |
 | `IN` | *n* | internal verb *n*, handled by the command processor itself — 42 |
-| `OS` | *text* | an operating-system command — `sh` and `!` |
+| `OS` | *text* | an operating-system command — `sh` |
 | `CS` | *path* | a locally catalogued function |
 
 Field 4 carries dispatch options and **field 5 names a security subroutine**. If

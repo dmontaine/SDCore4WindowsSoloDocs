@@ -26,13 +26,11 @@ name is simply not recognised.** Solo has one account, and it has all
 
 | | syntax |
 |---|---|
-| **`!`** | **`!`** *command* |
 | **`abort`** | **`abort`** {*message*} |
 | **`admin`** | **`admin`** \| **`admin off`** |
 | **`alias`** | **`alias`** *command* *target* |
-| **`analyse.file`** | **`analyse.file`** {**`dict`**} *file* {**`statistics`**} {**`lptr`**} |
 | **`analyse.index`** | **`analyse.index`** *file* {*index* {**`statistics`**} {**`detail`**}} {**`lptr`** {*n*}} {**`no.page`**} |
-| **`analyze.file`** | **`analyze.file`** — the same verb as **`analyse.file`** |
+| **`analyze.file`** | **`analyze.file`** {**`dict`**} *file* {**`statistics`**} {**`lptr`**} |
 | **`append.sd.path`** | **`append.sd.path`** {**`on`** \| **`off`**} |
 | **`autologout`** | **`autologout`** {*minutes*} |
 | **`backup.account`** | **`backup.account`** {*account*} {**`to`** *folder*} |
@@ -68,8 +66,6 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`configure.file`** | **`configure.file`** {**`dict`**} *voc.name* {*parameters*} \| **`default`** |
 | **`copy`** | **`copy from`** {**`dict`**} *src* {**`to`** {**`dict`**} *tgt*} {*id* …} {**`(options`**} |
 | **`copy.list`** | **`copy.list`** *list* {**`,`***new*} {**`from`** *src*} {**`to`** *tgt*} {*options*} |
-| **`copy.listp`** | **`copy.listp`** {{**`dict`**} *file*} {*name* … \| **`*`**} {**`(`***options*} |
-| **`copyp`** | **`copyp`** {**`dict`**} *file* *id* … {**`(options`**} |
 | **`count`** | **`count`** {**`dict`**} *file* {*selection*} |
 | **`create.file`** | **`create.file`** {**`dict`**} *voc.name* {**`directory`**} {*parameters*} |
 | **`create.index`** | **`create.index`** *file* *field* … {**`no.nulls`**} {**`pathname`** *path*} |
@@ -81,7 +77,6 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`decatalog`** | **`decatalog`** {*file*} *name* … |
 | **`delete`** | **`delete`** {**`dict`**} *file* {*id* …} {**`no.query`**} |
 | **`delete.catalog`** | **`delete.catalog`** *name* … {**`global`** \| **`local`**} |
-| **`delete.catalogue`** | **`delete.catalogue`** — the same verb as **`delete.catalog`** |
 | **`delete.common`** | **`delete.common`** *name* |
 | **`delete.file`** | **`delete.file`** {**`dict`** \| **`data`**} *voc.name* {**`force`**} {**`no.query`**} |
 | **`delete.index`** | **`delete.index`** *file* *field* … \| **`all`** |
@@ -136,7 +131,6 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`message`** | **`message`** *user.no* {**`immediate`**} {*text*} |
 | **`micro`** | **`micro`** {**`dict`**} *file* *record* |
 | **`move.list`** | **`move.list`** *n* **`to`** *m* {**`keep`**} |
-| **`nano`** | **`nano`** {**`dict`**} *file* *record* |
 | **`nls`** | **`nls`** {**`currency`** \| **`thousands`** \| **`decimal`** {*value*}}  ·  **`nls default`** |
 | **`nselect`** | **`nselect`** *file* {*list.no*} |
 | **`off`** | **`off`** |
@@ -174,7 +168,6 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`set.file`** | **`set.file`** *account* *file* *pointer* |
 | **`set.os.access`** | **`set.os.access`** \| **`set.os.access sh on`** \| **`set.os.access sh off`** \| **`set.os.access os on`** \| **`set.os.access os off`** |
 | **`set.password`** | **`set.password`** \| **`set.password admin`** \| **`set.password global`** |
-| **`set.queue`** | **`set.queue`** *queue* {, *width*, *depth*, *top*, *bottom*, *mode* {, *options*}}  ·  **`set.queue display`** {**`lptr`** {*unit*}}  ·  **`set.queue deleting`** *queue* |
 | **`set.trigger`** | **`set.trigger`** *file* *name* {*modes*} |
 | **`setptr`** | **`setptr`** *unit* \| **`default`**`,`*width*`,`*depth*`,`*top*`,`*bottom*`,`*mode* {`,`*options*}  ·  **`setptr display`**  ·  **`setptr`** *unit*`,`**`display`** |
 | **`settings.report`** | **`settings.report`** {*folder*} |
@@ -186,7 +179,6 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`sort.item`** | **`sort.item`** {**`dict`**} *file* {*selection*} |
 | **`sort.label`** | **`sort.label`** {**`dict`**} *file* {*selection*} {*fields*} |
 | **`sort.list`** | **`sort.list`** *name* {**`from`** *file*} |
-| **`sp.assign`** | **`sp.assign`** {*options*} {, *setptr options*} |
 | **`sp.close`** | **`sp.close`** |
 | **`sp.open`** | **`sp.open`** |
 | **`sp.view`** | **`sp.view`** |

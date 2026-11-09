@@ -51,7 +51,7 @@ A dynamic file is divided into **groups**. Each group is a bucket holding the
 records that hash to it. `analyze.file` reports the structure of a real file:
 
 ```
-:analyse.file zzauditf
+:analyze.file zzauditf
 Account           : /cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser
 File name         : zzauditf
 Path name         : /cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser/ZZAUDITF

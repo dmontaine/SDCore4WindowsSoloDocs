@@ -106,7 +106,6 @@ point at files in the system directory that the account needs; the eighth,
 | `syscom` | `@SDSYS/syscom` | |
 | `$map` | `@SDSYS/$map` | `@SDSYS/$map.dic` |
 | `dict.dict` | `@SDSYS/dict.dic` | `@SDSYS/dict.dic` |
-| `sd.voclib` | `@SDSYS/sd.voclib` | `@SDSYS/voc.dic` |
 | `global.bp.out` | `@SDSYS/global.bp.out` | |
 
 These are **read-only to a network session**. The account-root gate in the
@@ -143,7 +142,7 @@ target, and the remaining fields carry options.
 |---|---|---|
 | `CA` | *catalogue name* | a catalogued program — 99 of the shipped verbs |
 | `IN` | *number* | internal verb *n*, handled by the command processor itself — 41 verbs |
-| `OS` | *text* | an operating-system command — `sh` and `!`, and nothing else |
+| `OS` | *text* | an operating-system command — `sh`, and nothing else |
 | `CS` | *path* | a locally catalogued function |
 
 The first three rows account for all 142 shipped `V` records; none is `CS`.

@@ -11,7 +11,7 @@ switches, `sh` and `os`.
 
 | | What it is | Switch |
 |---|---|---|
-| **`sh`** and `!` | a shell at the `:` prompt | `sh` |
+| **`sh`** | a shell at the `:` prompt | `sh` |
 | `OS.EXECUTE` | the operating system from inside a BASIC program | `os` |
 | **`edit`** and **`micro`** | a text editor, running outside SD | `os` |
 
@@ -33,7 +33,7 @@ your Windows sign-in — can run Windows commands as you. That is why the accoun
 password matters, and why it should be one only you know.
 
 **On a managed computer**, the SD Core for Linux server can put `sh` on the
-list of denied commands, and `!` goes with it. **A program's `OS.EXECUTE` is
+list of denied commands. **A program's `OS.EXECUTE` is
 not a command the list can hold**, so the list alone does not close the
 computer off from a program. See [Managed computers](15-managed-mode.html).
 

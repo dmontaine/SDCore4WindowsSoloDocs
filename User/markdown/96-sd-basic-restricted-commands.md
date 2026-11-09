@@ -212,8 +212,8 @@ itself administrator rights. That was demonstrated, not theorised.
 
 ## See also
 
-*Operating System Access* in the Getting Started set covers the `sh` and `!`
-verbs. *Encryption and the SDEXT interface*, in the same set, explains why
+*Operating System Access* in the Getting Started set covers the `sh`
+verb. *Encryption and the SDEXT interface*, in the same set, explains why
 `sdext` is on this page and what it costs an application.
 
 The User set's *SD Basic - Syntax* card carries everything an application may
