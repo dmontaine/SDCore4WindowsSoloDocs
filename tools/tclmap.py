@@ -156,7 +156,7 @@ DOCS = [
    set.password
  """),
  ('GettingStarted', '06-administrator-commands.md', """
-   admin append.sd.path clean.account config set.date update.accounts
+   admin append.sd.path clean.account config list.voc.removed restore.voc set.date update.accounts
  """),
  ('GettingStarted', '06c-backup-and-restore.md', """
    backup.account restore.account set.backup.directory settings.report
@@ -165,7 +165,7 @@ DOCS = [
    clear.locks inhibit.login list.locks list.readu listu lock logout tool.sessions unlock
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
-   sh ! docs.install load.help set.os.access set.viewer tool.gates
+   sh docs.install load.help set.os.access set.viewer tool.gates
  """),
  ('User', '06a-sd-basic-encryption.md', """
    encrypt.key

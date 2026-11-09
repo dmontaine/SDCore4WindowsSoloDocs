@@ -30,7 +30,7 @@ exist, and this account may not call it.
 **`$internal` needs both halves.** `BCOMP` tests
 `kernel(K$INTERNAL, -1) and kernel(K$ADMINISTRATOR, -1)` — internal mode alone
 was enough until 13 Aug 2026, and it was not safe: internal programs are the
-only ones that may set the administrator flag, and `sd-solo -internal` is not itself
+only ones that may set the administrator flag, and `sd -internal` is not itself
 gated, so any account could have compiled a three-line program that granted
 itself administrator rights. That was demonstrated, not theorised.
 
@@ -175,15 +175,12 @@ itself administrator rights. That was demonstrated, not theorised.
 |---|---|
 | **`scan`** | `scan(`*a* {, *matrix*}`)` — *matrix* is a `dim`med one-dimensional name ***(internal)*** |
 | **`sdext`** | `sdext(`*a*, *b*, *c*`)` ***(internal)*** |
+| **`sdpyobj`** | `sdpyobj(`*a*, *b*, *c*, *d*`)` ***(internal)*** |
 | **`set.modes`** | `set.modes` *mask* ***(restricted)*** |
 | **`set.status`** | `set.status` *n* ***(restricted)*** |
 | **`set.trigger`** | `set.trigger` *file.var*, *mode*, *program* {, *modes*} ***(restricted)*** |
 | **`set.unassigned`** | `set.unassigned` *var* ***(restricted)*** |
-| **`sortadd`** | `sortadd` *key*, *data* ***(restricted)*** |
-| **`sortclear`** | `sortclear` ***(restricted)*** |
-| **`sortdata`** | `sortdata()` ***(internal)*** |
 | **`sortinit`** | `sortinit` *keys*, *memory* ***(restricted)*** |
-| **`sortnext`** | `sortnext(`*matrix*`)` — *matrix* is a `dim`med one-dimensional name ***(internal)*** |
 
 ## T
 
@@ -212,8 +209,8 @@ itself administrator rights. That was demonstrated, not theorised.
 
 ## See also
 
-*Operating System Access* in the Getting Started set covers the `sh`
-verb. *Encryption and the SDEXT interface*, in the same set, explains why
+*Operating System Access* in the Getting Started set covers the `sh` and `!`
+verbs. *Encryption and the SDEXT interface*, in the same set, explains why
 `sdext` is on this page and what it costs an application.
 
 The User set's *SD Basic - Syntax* card carries everything an application may

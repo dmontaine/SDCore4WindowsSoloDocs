@@ -108,8 +108,11 @@ ends.
 ## OS.EXECUTE
 
 ```
-os.execute command {capturing variable}
+os.execute command {capturing variable | silent}
 ```
+
+`capturing` puts the command's output in the variable; `silent` throws it
+away, so nothing of it reaches the terminal.
 
 **On Solo it is always allowed.** SD runs as your Windows user, and the
 operating system is yours already, so there is no permission to grant and no

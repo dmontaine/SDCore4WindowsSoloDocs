@@ -139,11 +139,47 @@ missing and leaving your own VOC records alone. An upgrade runs it for you,
 so you will not normally type it. With one account, `all` and no keyword do
 the same thing.
 
-**It never takes anything away.** A record you removed stays removed. To keep
+**The copy only adds and changes.** A record you removed stays removed. To keep
 your own version of one of SD's records, put `[locked]` in field 1 **after the
 type code** — `V[locked]`, `PA[locked]` — and it is left alone. **A verb is
 updated anyway**, because a locked verb would go on naming a program this
 release replaced; you are told which ones.
+
+**What it takes away: the deletion list.** A record SD has **stopped shipping**
+would stay in every account that already had it, so SD ships a second thing
+next to the VOC records: a list of the records a release has withdrawn. After
+the copy, `update.accounts` removes a listed record from the account's VOC,
+**but only when it is the record SD shipped.** Each removal is checked, saved,
+reported and audited:
+
+- **It must be the shipped record** (its type and, for a keyword, its number). A
+  record of your own with the same name is **kept**, and the update says so
+  (12906).
+- **A record marked `[locked]` is kept** (12907), except a verb, which is
+  removed all the same (12908).
+- **A copy is saved first**, in `sdsys\voc_removed.saved` under the account's
+  name, the record's id, the date and the time. If it cannot be saved the
+  record is not removed (12909).
+- **It is reported** (`3 VOC record(s) removed, because SD no longer ships them:
+  margin stats supp`, 12905) and one line goes to the audit trail.
+
+The list can be read, and every removal undone (`admin` first):
+
+```
+list.voc.removed {account}
+restore.voc account id | restore.voc account all
+```
+
+`list.voc.removed` prints the records SD no longer ships, with the release each
+went in and what to write instead; with an account it also says what the next
+update would do there (removed, kept because it is not the shipped record,
+kept because it is locked, or absent) and **changes nothing**. `restore.voc`
+puts back the newest saved copy of a record, as it was, and never overwrites a
+record of that name that is there now (12923); `all` puts back every record of
+the account that has a saved copy. The next `update.accounts` removes a
+restored record again, because the list has the last word, so give a record you
+want to keep a name SD does not ship. The saved copies stay when you keep your
+data at an uninstall.
 
 ### `APPEND.SD.PATH`
 
