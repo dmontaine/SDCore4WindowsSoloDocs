@@ -45,6 +45,12 @@ still attached; the count of those is printed so you can decide.
 **`sd-solo -stop` checks that the daemon actually stopped**, and warns with its
 process id if it did not.
 
+**A session still running ten seconds after the stop is ended.** `sd-solo -stop`
+and `sd-solo -restart` end it with SIGKILL and say how many they ended, for
+example `1 process(es) still running after ten seconds were ended with SIGKILL`.
+A process whose program is not in SD's own folder is not touched. A session
+ended this way does not run its own logout.
+
 > **Known limit.** If the shared memory has already gone, `sd-solo -stop` has
 > nowhere left to read the daemon's process id from and cannot report on it.
 > Check by hand:
