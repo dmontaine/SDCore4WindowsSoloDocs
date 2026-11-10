@@ -1,5 +1,6 @@
 Title: Changes in WS1.2-0 (SD Core Solo for Windows)
 Subtitle: What was added, changed and removed since WS1.1-3 (10 October 2026), by section and in alphabetical order.
+Columns: 23 11 66
 
 **This is the list of what changed between WS1.1-3 (10 October 2026) and WS1.2-0.** It is kept up to date as the
 release is built. It was started on 25 October 2026 from the list for SD Core for Windows (both carry the same
