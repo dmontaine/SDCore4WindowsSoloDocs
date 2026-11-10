@@ -244,11 +244,17 @@ its text says the one-argument form gives a null string for a sort with no data
 element, while its own example uses that form to read the keys back. SD follows
 the example.
 
-**Equal keys.** In a sort that stays in memory, keys that compare as equal come
-out newest first. A sort that is large enough to spill to a work file (the
-`SORTMEM` setting) may give equal keys in another order, and with `srt$unique`
-may keep another one of the duplicates. The order of equal keys is not
-something to rely on; the order of *different* keys is the same either way.
+**Equal keys.** Keys that compare as equal come out newest first, and with
+`srt$unique` the duplicate that arrived first is the one kept. That is meant to hold
+whether the sort stays in memory or is large enough to spill to work files (the
+`SORTMEM` setting), and however many files `SORTMRG` merges at once. Before the
+change of 25 Oct 2026 a sort that spilled could give equal keys in another order and
+keep a later duplicate, and the order depended on `SORTMEM` and `SORTMRG`. **This
+change is in SD Core Solo for Windows's source and has not been run on a Windows
+install yet.** The one exception is a right justified key that holds numbers and text
+together: the comparison of a number with text is not consistent, so there the order
+depends on how the sort was cut into runs. Do not rely on the order of equal keys
+beyond that; the order of *different* keys is the same either way.
 
 **The values of *flags*.** `srt$left` 0, `srt$right` 1, `srt$compound` 2,
 `srt$right.float` 3 and `srt$strict` 4 choose how two keys are compared, the
