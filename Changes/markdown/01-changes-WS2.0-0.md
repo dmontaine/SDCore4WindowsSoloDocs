@@ -1,10 +1,10 @@
-Title: Changes in WS1.2-0 (SD Core Solo for Windows)
+Title: Changes in WS2.0-0 (SD Core Solo for Windows)
 Subtitle: What was added, changed and removed since WS1.1-3 (10 October 2026), by section and in alphabetical order.
 Columns: 23 11 66
 
-**This is the list of what changed between WS1.1-3 (10 October 2026) and WS1.2-0.** It is kept up to date as the
+**This is the list of what changed between WS1.1-3 (10 October 2026) and WS2.0-0 (called WS1.2-0 until 10 November 2026).** It is kept up to date as the
 release is built. It was started on 25 October 2026 from the list for SD Core for Windows (both carry the same
-openQM items) and the release changelog (`sdsys/changelog`, section "WS1.2-0 - SD Core Solo for Windows, in progress"),
+openQM items) and the release changelog (`sdsys/changelog`, section "WS2.0-0 - SD Core Solo for Windows, in progress"),
 which has the full story of each change: what it does, why, and what it does not do. This document is the short form.
 **Nothing in it has been run on a real Windows installation yet.**
 
