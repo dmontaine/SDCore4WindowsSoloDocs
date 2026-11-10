@@ -172,6 +172,13 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 | `sd-tls` | the API's TLS key, made the first time a client connects |
 | `install-summary.log` | what every installer step did — read this first when something did not work |
 
+**The source is beside the installer, not installed.** SD Core Solo is free
+software under the GNU General Public License, version 3 or later. Its complete
+source - the C, the system programs' BASIC (`gpl.bp`) and the build and
+installer scripts - is `SDCore4WindowsSolo-source-<version>.zip` beside
+`sd-solo-setup-<version>.exe`, with a `.txt` file naming the commit it was
+built from.
+
 **Uninstalling asks to keep or delete your data and configuration.** Keep leaves
 the account and `sd.conf` and removes the passwords, audit trail, deny list,
 `global.bp.out`, the API's TLS key, your ssh key file, the system files and the

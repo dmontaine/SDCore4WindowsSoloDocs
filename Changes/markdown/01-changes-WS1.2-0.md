@@ -403,6 +403,7 @@ Three simple layers, with no vault and nothing on by default.
 | Name | Change | What |
 |---|---|---|
 | Shell and OS access page | Added | the installer asks, on a new installation and on an upgrade, with two boxes, both unticked; the control file's `os-access=` (`none`, `sh`, `os` or `both`) answers it on a new installation; a silent installation, or an unticked page, turns nothing on |
+| source | Added | the complete source (C, `gpl.bp`, build and installer scripts) is `SDCore4WindowsSolo-source-<version>.zip` beside the installer; none of it is installed |
 
 ### Screen library and terminals
 
