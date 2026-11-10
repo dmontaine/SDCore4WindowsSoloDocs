@@ -141,7 +141,7 @@ none is mangled. The full rules are on
 
 **Your account has `micro`, `edit` and `ed`.** All three run with nothing to
 unlock — see [SD TCL - The edit Screen
-Editor](26-sd-tcl-edit.html#nothing-to-unlock-and-one-condition); `ed` is the
+Editor](26-sd-tcl-edit.html#the-os-switch-and-one-condition); `ed` is the
 one that also works with no terminal.
 
 ## See also

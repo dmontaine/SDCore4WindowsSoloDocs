@@ -181,6 +181,7 @@ Data collections, JSON, XML, CSV and the verbs that import them.
 | collection files | Added | `create.file name collection`; records are collections stored as JSON; `read` and `write` them whole; `ct` shows JSON <!--s 304--> |
 | `collection()` and `c{name}` | Added | a collection is a set of named values read and written by name; `enumerate()`, `element.exists()` <!--s 311 518 529 339--> |
 | `csv.mode` | Added | how `printcsv`, `writecsv` and `formcsv()` quote, with a delimiter, quote and escape character <!--s 173 200--> |
+| `d` conversion: `i` code | Changed | fixed: the ISO week number is worked out without `yi` beside it (it gave whatever number was left in memory) |
 | `element` keyword in queries | Added | names an element of a collection file by its path, in a display list, `with`, `by`, `sum` and the like |
 | `expand()` and links | Added | a link `"file:id"` is followed; `trans()` of an `e` item |
 | file variable in a collection | Changed | a collection holding a file variable is written to a collection file as a null |
@@ -455,6 +456,8 @@ Fixes that close a way round a gate, and what the gates now ask.
 | api request 29 | Changed | fixed: it opened a file for any login once `netfiles` bit 2 was set; it now needs the account's `net` gate (`set.net.access on`), and a VOC pointer that leads out of the account needs the `os` switch |
 | API `clearfile` | Changed | fixed: it cleared whichever file a stale counter pointed at instead of the file the client named |
 | operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes |
+| hang-up and fault | Changed | fixed: a session whose console closed while it was writing the error log or the audit trail waited for itself for ever, and every other session behind it; the "Received termination signal" line is now written outside the signal, and a session that faults gives back its locks before it logs |
+| phantom debugger messages | Changed | `pdebug` and the phantom it debugs leave each other their messages in `sd\pdebug` in the `AppData\Local` folder of the user's profile (a private folder, made with access for that user, SYSTEM and Administrators only), not in `$ipc`; message 12953 when the store cannot be set up |
 | `phantom` start-up records | Changed | `$ipc` is a file every SD user can write, so the records a new phantom runs, stacks and sets (command, `DATA` lines, log file, options) are sealed with a secret given only to the new process in its environment; a phantom whose records do not check runs nothing, says so and writes `phantom refused` to the audit trail |
 | the VOC and the server's files | Changed | `get.list ... deleting`, `save.list`, `delete.list`, `sort.list`, `copy.list`, `map file`, `format`, `fixdir`, `generate`, `compile.dict data`, `set.trigger`, `reformat ... to`, the `pageseq` clause of a report, `sp.view` (deleting the item shown), `como ... in`, `basic`'s object file, `create.file` on an existing file, and over the API `write`, `delete` and `clearfile`, each now ask before they change anything and say why when they refuse |
 
