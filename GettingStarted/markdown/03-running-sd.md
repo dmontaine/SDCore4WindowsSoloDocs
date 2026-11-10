@@ -136,5 +136,14 @@ up. **That failure makes SD report "SD has not been started" while it is
 running**, which is worth recognising because it looks like nothing else.
 The whole `SDCoreSolo` folder can be moved; its parts cannot be separated.
 
-**There is no Start Menu entry.** `sd-solo` is on your PATH; open a window and type
+**The Start Menu has an entry, SD Core Solo**, in your own Start Menu (the
+uninstaller removes it). `sd-solo` is also on your PATH: open a window and type
 it.
+
+**The full-screen pages need a window of at least 140 columns by 43 lines.**
+When `sd-solo` starts in a classic console window smaller than that (the one
+the Start Menu entry opens, or one you typed in), **it makes the window 140 by
+43**, or as big as the screen allows; it never makes a window smaller. **In
+Windows Terminal it leaves the window alone**: the window is the terminal's, so
+make it big enough yourself. For full screen, press **F11** in Windows Terminal
+and **Alt+Enter** in a classic console window, where F11 goes to SD instead.
