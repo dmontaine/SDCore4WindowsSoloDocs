@@ -14,7 +14,7 @@ knew what they were doing.
 |---|---|
 | `sd-path.ps1` | `append.sd.path on` \| `off` — puts SD's program folder on **your** PATH, or takes it off |
 | `micro-home.ps1` | the editor programs, before `micro` starts — see below |
-| `solo-sshkey.ps1` | the API's ssh key request (49), on a managed computer — see below |
+| `solo-sshkey.ps1` | the API's ssh key request (72), on a managed computer — see below |
 | `sd-account-archive.ps1` | `backup.account` and `restore.account` — see below |
 | `sd-settings-os.ps1` | `settings.report` — see below |
 | `sd-backupdir.ps1` | `set.backup.directory` — see below |

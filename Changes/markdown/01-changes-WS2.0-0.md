@@ -62,6 +62,7 @@ The server side of the API, the client library and the language headers.
 | Name | Change | What |
 |---|---|---|
 | `master.login` | Changed | the paragraph runs for API connections as for interactive and phantom sessions <!--s 170--> |
+| `SrvrSshKey` | Changed | the API's ssh key request is 72 (it was 49), and request 49 is the server's revision, as in SD Core; a script written for WS1.1-3 that sends 49 to install a key must send 72 |
 
 ## BASIC
 
