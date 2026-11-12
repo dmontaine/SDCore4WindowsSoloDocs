@@ -170,6 +170,7 @@ Statements, functions, `$mode` words and compiler directives.
 | `trans()` family | Changed | `trans()`, `rtrans()`, `xlate()`: accept `a`, `s` and `c` items and an `l` link; a file that will not open takes the error action of the call <!--s 43 182 7--> |
 | variable names | Changed | a name with two or more underscores together (`a__b`) is valid <!--s 336--> |
 | `watch` | Changed | the debugger's `watch variable operator value` stops only when the condition is met <!--s 45--> |
+| `write ... creating.seqkey` | Added | the hashed file's counter gives the record id and puts it in a variable; an id already in use is skipped; `fileinfo(f, 1031)` is the last one given |
 
 ## DATA
 
@@ -204,6 +205,7 @@ File handling: opening, indexes, triggers, print files, sorting, sequential file
 | `analyse.index` | Added | every index with its number of values and spread <!--s g9--> |
 | `catalog -name` | Added | a hyphen is a global catalogue prefix; `delete.catalog -name` removes it <!--s 217--> |
 | `clear.file` | Changed | fixed: a `no.resize` file keeps its modulus <!--s 590--> |
+| `configure.file ... next` | Added | `next n` sets and `next query` shows the next id `write ... creating.seqkey` gives; a rebuild keeps it |
 | `configure.file ... reporting` | Added | shows how many records have been converted <!--s 172--> |
 | `create.file` | Added | `comment`, `multifile` and a relative `pathname` kept relative in the VOC <!--s 383 522 278--> |
 | `create.index`, `make.index` | Added | `no.case`: keys that differ only in case are one key; `deleting` replaces an index; a default location in `$index.path` <!--s 54 424 184--> |
@@ -312,6 +314,7 @@ Commands and VOC verbs that every account has, and the command language.
 | `compare.files` | Added | counts the records only in one, only in the other, in both but different <!--s 534--> |
 | `copy.listp` | Added | the Pick form of `copy.list` <!--s 72--> |
 | `ct` | Changed | `id.sup`, `num.sup`; lower case file names; the object code of a compiled dictionary item is not shown <!--s 242 347 373--> |
+| `creating.seqkey` in `ed` and `sed` | Added | in the place of a record name: a new record under the file's next sequential id |
 | `decatalog` | Added | deletes a local catalogue entry and its object code <!--s 576--> |
 | `delete` | Changed | a record another user holds locked is reported and skipped <!--s 50--> |
 | `delete.account` | Changed | not stopped by a file it cannot open when it looks for references <!--s 348--> |
