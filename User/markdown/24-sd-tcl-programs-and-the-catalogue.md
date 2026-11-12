@@ -40,6 +40,12 @@ not the presence of output.**
 `@system.return.code` is the number of programs compiled, and negative on a
 fatal error.
 
+**`basic ... no.catalog` compiles and catalogs nothing.** A `$catalog` line in
+the source or in a file it includes, or a `CATALOG` line in the `$BASIC.OPTIONS`
+record, makes the compile catalog the program as well; with `no.catalog` none
+of them is acted on, and the compile says so
+(`zzprog compiled; its catalog directive was not run (no.catalog)`).
+
 **The object code goes into `bp.out`**, a separate file beside `bp`, one record
 per program. **Its name is lower case even when the source record is not** —
 a source record `ZZPROG` compiles to an object record `zzprog`. That is this

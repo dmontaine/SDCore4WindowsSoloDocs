@@ -189,6 +189,53 @@ account needs, but cannot open, rename, delete or list anything else.
 | `SDClearSelect(listNo)` | none | clear a select list |
 | `SDRelease(fileNo, id)` | none | release a read lock |
 
+### The server: revision, variables, SYSTEM(), TRANS() and transactions
+
+| Function | Returns | Description |
+|---|---|---|
+| `SDRevision()` | String | the client's revision on its own before a connection; once connected, the client's and the server's, as two values separated by a value mark. Works without a connection |
+| `SDGetVar(name)` | String | the value of an `@` variable on the server, with or without the `@`, in either case. The names it knows are `@SELECTED`, `@LOGNAME` (also `@USER`), `@WHO`, `@PATH`, `@USERNO`, `@TTY`, `@DS`, `@SENTENCE`, `@COMMAND`, `@SYSTEM.RETURN.CODE`, `@USER.RETURN.CODE`, `@DATE`, `@TIME`, `@ID`, `@ANS` and `@USER0` to `@USER4`; any other name gives the null string, not an error |
+| `SDSystem(key)` | String | `system(key)` on the server |
+| `SDTrans(file, id, field, action)` | String | `trans()` on the server. `field` is a dictionary name, a field number or -1 for the whole record; `id` may be several ids separated by value marks; `action` is `X` (null if the record is missing, the default) or `C` (the id). The marks of the answer are lowered one level, as `trans()` lowers them. The `B` (binary open) action is refused |
+| `SDRTrans(file, id, field, action)` | String | the same with the marks left as they are |
+| `SDTxn(mode)` | none | **1** start a transaction, **2** commit, **3** abort, **4** commit *non-durably*: a transaction nested in another is merged into its parent, which alone writes to the files (see *Locks and transactions*). Modes 2 to 4 need a transaction to be running; a mode out of range or a commit with nothing to commit is refused with a message and the session goes on |
+
+`SDTrans` and `SDRTrans` open the file and its dictionary on the server, so a session restricted with `SDCLIENT` is refused them (message 5262, "File access is disabled").
+
+### Dictionary items and conversions
+
+| Function | Returns | Description |
+|---|---|---|
+| `SDEvaluate(dictFileNo, names, data, id)` | String | evaluate dictionary items on the server against a record. `dictFileNo` is the number `SDOpen("DICT name")` gave, `names` one name or several separated by value marks, `data` the record (it becomes `@RECORD`) and `id` its id (`@ID`; pass the null string when the item does not use it). The answers come back joined by **item marks** (character 255). D and I items work; an I-type that is not compiled is compiled for the call and the dictionary is **not written to**. A name that is not in the dictionary gives the null string; a phrase or other item that defines no data, and an expression that will not compile, give the null string with `SDError()` saying which. Conversion codes in the item are *not* applied |
+| `SDEvalConv(dictFileNo, names, data, id)` | String | the same, and the item's output conversion is applied to each value of its answer |
+| `SDIConv(data, code)` | String | `iconv()` on the server, which has every conversion code |
+| `SDOConv(data, code)` | String | `oconv()` on the server |
+| `SDIConvs(data, code)` | String | `iconvs()`: the conversion is applied to each element of a dynamic array in turn |
+| `SDOConvs(data, code)` | String | `oconvs()` |
+
+After a conversion `SDStatus()` is **the conversion's own status** - 0 after a successful one, otherwise as `iconv()` and `oconv()` describe it - and it is for that call alone: the next successful conversion leaves it 0. These need a connection. **A session restricted with `SDCLIENT` cannot reach a file or call a program, so it is refused a conversion code that does either** - a `T` code with a file in it, or a `U` code; the ordinary codes (dates, masked decimals, case) are not affected.
+
+### Sequential files
+
+| Function | Returns | Description |
+|---|---|---|
+| `SDOpenSeq(file, id, modes)` | Integer | open a sequential file, as `openseq` does. With an `id`, `file` is the name of a **directory file** and `id` the item in it; with a **null `id`**, `file` is a **pathname**. Returns a file number, or **0** with `SDStatus()` and `SDError()` saying why. A file that is not there yet gets a number and is made by the first write. `modes` is added up from: **2** give up with a locked answer if another process has the file (without it the call waits), **16** read only, **256** append, **512** overwrite (empty the file on opening), **1024** flush after every write, **4096** shared (append, for several writers) |
+| `SDReadSeq(fileNo, err)` | String | the next line, without its terminator. `err` is the server's answer: **2** at the end of the file, where the string is empty |
+| `SDReadBlk(fileNo, bytes, actual)` | String | up to *bytes* bytes (1 to 100,000,000). `actual` is how many came back: fewer at the end of the file, **0** with nothing left. The data may hold any byte, zero included, so read it by `actual` and not by its terminator |
+| `SDWriteSeq(fileNo, rec)` | none | write a line and a terminator |
+| `SDWriteBlk(fileNo, rec, bytes)` | none | write exactly *bytes* bytes, no terminator added |
+| `SDSeek(fileNo, offset, relTo)` | none | position: *relTo* **0** from the start, **1** from here, **2** from the end (a negative offset counts back) |
+| `SDWeofSeq(fileNo)` | none | cut the file off at the current position |
+| `SDClose(fileNo)` | none | close it (the same function as for any file) |
+| `SDWriteSeqKey(fileNo, rec)` | String | **not a sequential file function**: write *rec* to the **hashed** file `SDOpen` gave, under the id the file's own counter gives it (`write ... creating.seqkey`), and return that id. The update lock the write takes is released before the call returns. A directory file is refused, with the null string and `SDError()` saying a hashed file is needed. **On SD Core Solo only a session signed in with the global password may send it** (the SD Core server that manages this computer); any other is refused with *This session cannot administer files here: sign in with the global password* |
+| `SDWriteuSeqKey(fileNo, rec)` | String | the same, and the update lock is **kept** (`writeu`) |
+
+Their numbers begin at 10001 and are not those of `SDOpen`, so a number of one kind given to a function of the other is refused. The counter starts at 1 and is set with `configure.file ... next` ([SD Basic - File Handling](07-sd-basic-file-handling.html)).
+
+**The gates are the ones `openseq` has for any program.** A session restricted with `SDCLIENT` cannot open any file. An item of a directory file is an SD file and is opened through the VOC, as `openseq` opens it; a file that the session may not change (the VOC without `admin`, the global files without the global password) is opened for reading only. **A bare pathname is a Windows file, and while the account's `os` switch is off it reaches only the account's own directory by it**: a file elsewhere on the disk and a path that climbs out with `..` are refused with *... is not a file this account may open* (message 12350), and nothing is made. The switch is turned on with `set.os.access` (see *Operating system access* in the Getting Started set).
+
+**Not run on SD Core Solo for Windows yet.** These functions and the requests behind them are SD Core for Windows' and Linux Solo's, and compile here; they have not been run against a Solo server.
+
 ### Session and package management
 
 | Function | Returns | Description |
@@ -208,10 +255,12 @@ account needs, but cannot open, rename, delete or list anything else.
 
 ## Language bindings
 
-The API headers define bindings for four languages. The function
+The API headers define bindings for six languages. The function
 signatures are identical in meaning; the syntax differs. **The installation
-carries the C header and the Gambas and PureBasic bindings**, in
-`sdsys\syscom`; the others are in the source repository.
+carries all of them**, in `sdsys\syscom`: the C header `sdclilib.h`, Gambas
+(`sdclient.module`), PureBasic (`sdclient.pb`), Free Pascal
+(`sdclilibbind.pas`), Python (`sdclient.py`), C# (`sdclient.cs`) and PHP
+(`sdclient.php`).
 
 ### Gambas3
 
@@ -266,6 +315,44 @@ SDRead.restype = ctypes.c_char_p
 
 Per-arity `CFUNCTYPE` definitions are provided for `SDCall` and
 `SDCallx` wrappers.
+
+### C# and .NET (P/Invoke)
+
+`syscom\sdclient.cs`:
+
+```csharp
+using static SDClient;
+
+if (SDConnect(Z("server"), 4249, Z("user"), Z("password"), Z("account")) != 0)
+{
+    int fno = SDOpen(Z("CUSTOMERS"));
+    string rec = Str(SDRead(fno, Z("1001"), out int err));
+    SDDisconnect();
+}
+```
+
+**Strings are bytes.** SD strings carry the marks `0xFB` to `0xFF`, and a UTF-8 conversion by .NET would damage them, so every string parameter is a `byte[]` and every string result an `IntPtr`; `Z(s)` makes the NUL-terminated bytes of a string (one byte for each character; characters above 255 are not allowed) and `Str(p)` / `StrN(p, n)` read a result the same way and give the library's memory back with `SDFree`. `FM`, `VM` and `SVM` are the marks as characters. An `int *` parameter is an `out int`. Variadic C functions cannot be declared in C#, so `SDCall` and `SDCallx` are `SDCall0` to `SDCall20` and `SDCallx0` to `SDCallx20`, all the same entry point; **`SDCall` writes the subroutine's results back into the buffers you give it with no check of their size, so use `SDCallx` and read the arguments with `SDGetArg`.**
+
+The library is loaded by the name `sdclilib`, so .NET looks for `sdclilib.dll` where it looks for any native library: the program's directory or `PATH` (the installer puts `%USERPROFILE%\SDCoreSolo\usr\bin` on your `PATH`), or where a resolver you set with `NativeLibrary.SetDllImportResolver` points. The calling convention is `cdecl`. A 64-bit program needs the 64-bit library.
+
+### PHP (FFI)
+
+`syscom\sdclient.php`, for PHP 7.4 and later with the FFI extension enabled:
+
+```php
+require 'sdclient.php';
+$sd = SDClient::load(getenv('USERPROFILE') . '\\SDCoreSolo\\usr\\bin\\sdclilib.dll');
+if ($sd->SDConnect('server', 4249, 'user', 'password', 'account')) {
+    $fno = $sd->SDOpen('CUSTOMERS');
+    $err = SDClient::intRef();
+    $rec = SDClient::str($sd->SDRead($fno, '1001', FFI::addr($err)));
+    $sd->SDDisconnect();
+}
+```
+
+A PHP string is already a string of bytes, so the marks pass through unchanged. `SDClient::str($p)` copies a result into a PHP string and frees the library's copy; `strn($p, $n)` does the same for `$n` bytes that may hold zeros (`SDReadBlk`). Use `SDCallx` and `SDGetArg` rather than `SDCall`, which writes into the buffers it is given and must not be given a PHP string.
+
+**Neither of these two files has been run.** They are held to the library's header by a check (`gplbld\test-clientheaders-units.py`: every function, every parameter and result type, the calling convention, the status constants, and the PHP declarations read by a C compiler beside the header itself), which is not the same as a program having called the library.
 
 ## What the API cannot do
 

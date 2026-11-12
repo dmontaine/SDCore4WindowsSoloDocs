@@ -61,6 +61,11 @@ The server side of the API, the client library and the language headers.
 
 | Name | Change | What |
 |---|---|---|
+| client library headers | Added | all six language bindings are installed in `sdsys\syscom`: C, Gambas, PureBasic, Free Pascal, Python, and now C# (`sdclient.cs`) and PHP (`sdclient.php`); neither of the last two has been run against a runtime |
+| client library: dictionary | Added | `sdevaluate`, `sdevalconv`, `sdiconv`, `sdoconv`, `sdiconvs`, `sdoconvs` |
+| client library: files | Added | `sdopenseq`, `sdreadseq`, `sdreadblk`, `sdwriteseq`, `sdwriteblk`, `sdseek`, `sdweofseq`; `sdwriteseqkey` and `sdwriteuseqkey`, which only a session signed in with the global password may send to a Solo server |
+| client library: more functions | Added | `sdrevision`, `sdgetvar`, `sdsystem`, `sdindices`, `sdtrans`, `sdrtrans`, `sdtxn` (mode 4 commits a nested transaction non-durably) |
+| client library: threads | Added | each thread has its own session, transfer buffer and arguments; several threads may use the library |
 | `master.login` | Changed | the paragraph runs for API connections as for interactive and phantom sessions <!--s 170--> |
 | `SrvrSshKey` | Changed | the API's ssh key request is 72 (it was 49), and request 49 is the server's revision, as in SD Core; a script written for WS1.1-3 that sends 49 to install a key must send 72 |
 
@@ -303,6 +308,7 @@ Commands and VOC verbs that every account has, and the command language.
 
 | Name | Change | What |
 |---|---|---|
+| `basic ... no.catalog` | Added | compiles and does not run the program's catalog directive; the compile says so |
 | `block.print`, `block.term` | Added | print text, or show it on the terminal, in letters seven rows high <!--s g11 g12--> |
 | `catalog ... local relative` | Added | stores the object file's path relative to the account <!--s 131--> |
 | `catalog` overwrite | Changed | pointing a local catalogue entry at a different object file asks first <!--s 490--> |
