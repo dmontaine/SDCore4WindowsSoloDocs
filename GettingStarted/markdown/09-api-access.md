@@ -66,7 +66,20 @@ rule, named `SD-Solo-API-In-TCP`:
 | **Let other computers reach it** | the installer asks, or `api=open` in the control file. Unticked, or `api=local`, the rule allows this computer only |
 | **A managed computer** | needs it open. Nothing opens it for you |
 
-**To change it afterwards**, from an elevated PowerShell:
+**To change it afterwards from SD**, after `admin`: `remote.api open`, `remote.api local` or
+`remote.api off` (or the A key of `tool.remote`). With no word, `remote.api` reports what is
+installed. A change asks for the administrator password again and is made by the doors
+helper the installer set up. It works from any session, at this computer or over ssh or the API,
+and needs no elevated window. Off also turns the listener off, and an API change to or from off
+takes effect at the next `sd-solo -stop` and `sd-solo -start`. Both the change and its result are
+on the audit trail.
+
+> **The doors helper is a deliberate trade.** It does machine-wide changes (the firewall rule,
+> the listener) for anyone who knows the administrator password, from any session, without a
+> Windows prompt. Solo keeps that password in your own folder, so a program running as you could
+> replace it; that is the security Solo has by design, and less than SD Core's.
+
+**Or, from an elevated PowerShell:**
 
 ```
 powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\api-firewall.ps1" -Open

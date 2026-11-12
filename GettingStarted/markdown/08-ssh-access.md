@@ -147,7 +147,17 @@ Windows does not filter traffic that never leaves the computer.
 **The rule is Solo's own, named `SD-Solo-SSH-In-TCP`**, and creating it needs an
 administrator: a firewall rule is machine-wide. The uninstaller removes it.
 
-**To change it afterwards**, from an elevated PowerShell:
+**To change it afterwards from SD**, after `admin`: `remote.ssh open`, `remote.ssh local` or
+`remote.ssh off` (or the S key of `tool.remote`). With no word, `remote.ssh` reports what is
+installed. A change asks for the administrator password again and is made by the doors helper the
+installer set up, from any session and with no elevated window:
+- off stops Solo's ssh server and keeps its folder and host key;
+- local or open starts it, and sets it up first, as the installer would, if ssh was not chosen when
+  installing.
+
+The doors helper's trade is described on the API page (09).
+
+**Or, from an elevated PowerShell:**
 
 ```
 powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-firewall.ps1" -Restrict

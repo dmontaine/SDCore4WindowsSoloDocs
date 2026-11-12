@@ -182,8 +182,12 @@ DOCS = [
  ('User', '42-sd-sdnet.md', """
    set.server delete.server list.servers set.netlogin delete.netlogin
  """),
+ # 12 Nov 26 SOLO 62: the doors.  REMOTE.API and TOOL.REMOTE are explained on the API page, REMOTE.SSH on the ssh page.
  ('GettingStarted', '09-api-access.md', """
-   set.net.access
+   set.net.access remote.api tool.remote
+ """),
+ ('GettingStarted', '08-ssh-access.md', """
+   remote.ssh
  """),
 ]
 

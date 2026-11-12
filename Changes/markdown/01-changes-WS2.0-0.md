@@ -386,6 +386,8 @@ were built, with the changes they made.
 | `tool.audit` | Added | administrator page: the audit trail from its newest line, with filters, a go-to-date, a follow mode and the lines shown saved to a record |
 | `tool.backups` | Added | administrator page: the backup directory, the archives in it with what each holds, and `backup.account`, `restore.account` and `set.backup.directory` behind a box |
 | `tool.config` | Added | administrator page: every parameter of `sd.conf` with the value SD runs with, the file's value and the default; `E` changes one of the 14 through `set.config` |
+| `remote.api`, `remote.ssh` | Added | administrator commands: report each door, or set it off, local or open, from any session, through a doors helper the installer sets up; the administrator password is asked again; `remote.ssh local` or `open` sets ssh up if it was not chosen at install |
+| `tool.remote` | Added | administrator page: the two doors, the SDNet servers, the sessions now and this computer's TLS identity; `A` and `S` change a door through `remote.api` and `remote.ssh` |
 | `set.viewer` | Added | allows one PDF reader for the `pdf` verb, by its full path; it must be an .exe under Program Files or the Windows folder that only the system and the Administrators can change; none is allowed as delivered |
 | `sh` and `os` switches | Added | two per-account switches, both off as delivered: `sh` for the `sh` verb and `!`, `os` for `os.execute`, the Python helper, the editors `edit` and `micro`, and files and directories outside the account by path; after `admin` the session passes both, except that the `sh` verb still refuses a command with a shell metacharacter unless the `sh` switch is on; the API server reads them when it enters the account |
 
