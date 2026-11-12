@@ -457,7 +457,9 @@ free checks pass, and it has not been run against another server.
 | `net` gate | Added | `set.net.access on`: one of the four things that must all be true before a remote file opens (the gate, a defined server, your login on it, a VOC pointer) |
 | `netwait`, `netreply` | Added | `sd.conf` settings, 1 to 3600 seconds, for a connection and a reply; a silent server is given up on <!--s 235 g291--> |
 | `open.socket` | Changed | the fourth argument is the number of seconds to wait for the connection, zero for no limit of SD's own; it was the unused security context <!--s 174--> |
+| remote files, administration | Added | on a remote file: `analyze.file`, `configure.file`, the index verbs, `fcontrol()`, `write ... creating.seqkey`; `create.file name ... server srv {as remote}` makes the file there and the pointer here, and `delete.file` of a pointer deletes both; the other machine decides (a Solo server serves them only to a session signed in with the global password) |
 | remote files, a pointer | Added | a VOC entry whose first field is `n` points to a file on another server |
+| remote files, indices | Added | `indices()`, `selectindex`, `setleft`, `setright`, `selectleft`, `selectright` ask the other machine, so a query on a remote file uses its indices |
 | remote files, cache | Added | a short record cache; `logto` closes the connections |
 | remote files, query | Added | `list`, `count`, `sort`, `select`, `list.item`, `list dict` on a remote file; `fileinfo` type 7 |
 | remote files, refusal | Changed | the server's own words are shown, not `status 0`; a lost connection is an error <!--s 256--> |

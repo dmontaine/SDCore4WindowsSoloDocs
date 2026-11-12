@@ -13,8 +13,8 @@ Solo is a **client** of SDNet here, and it is also a **target**:
 
 | | |
 |---|---|
-| Solo reaches a server (**Solo to Core**, **Solo to Solo**) | **limited**: a program may read, select and query the remote files; and, **only for a server the administrator defined `write`**, write, delete and lock. Nothing else crosses: no commands, no programs, no operating system paths. |
-| A SD Core server reaches Solo | through Solo's API login, as any API client does; see *API access* in the GettingStarted set for what that login gives and for API request 29. |
+| Solo reaches a server (**Solo to Core**, **Solo to Solo**) | **limited**: a program may read, select and query the remote files and their indices; and, **only for a server the administrator defined `write`**, write, delete and lock, and administer a file where the other machine allows it ([the next page](42a-sd-sdnet-administration.html)). Nothing else crosses: no other commands, no programs, no operating system paths. |
+| A SD Core server reaches Solo | through Solo's API login, as any API client does; see *API access* in the GettingStarted set for what that login gives and for API request 29. A session signed in with the **global password** (managed mode) may also administer the account's files; one signed in with the account password may not. |
 
 Commands are shown here in lower case. *Italics* mark something you supply.
 
@@ -163,53 +163,8 @@ changes nothing. `getlocks()` of a remote file is the local view only.
 - **Solo does not ask an "edit" question** (SD Core asks one for a remote file whose *name* says it is a VOC, a dictionary
   or a program file): Solo has no edit gates, so for such a name the other server's own gates decide.
 
-## The two waits: `NETWAIT` and `NETREPLY`
+## Continued in
 
-Two `sd.conf` parameters, in seconds, 1 to 3600 (zero is refused): **`NETWAIT`** (5 unless you say otherwise) is how
-long to wait for a connection to a remote server, **`NETREPLY`** (30) how long to wait for each reply to a request. `config('NETWAIT')`
-and `config('NETREPLY')` read them.
-
-**A server that goes silent is given up on at those times.** `NETWAIT` bounds the TCP connection and then the TLS
-handshake, each: a server that accepts the connection and never answers the hello is given up on after `NETWAIT`, not
-after 15 seconds fixed. `NETREPLY` bounds each read, including the first reply of the login after the handshake. A TLS 1.3
-server sends its session tickets after the handshake, and a server or a link can stop in the middle of a TLS record;
-neither uses up the wait or lets the read run on without a limit. A reply that stops in the middle of its body is a lost
-connection, like a reply that never starts: message 12502 for a read, 12514 for a change (whose outcome is then unknown),
-and the connection is dropped. A server that answers late but inside `NETREPLY` is read as before. The limit is for each
-read, not for a whole reply: a server that sends one byte at a time and never stops is still waited for one read at a time.
-
-`OPEN.SOCKET` takes the same number as its fourth argument (seconds to wait for the connection, zero for no limit of SD's
-own); every SDNet caller passes `NETWAIT`.
-
-## What is audited
-
-| line | when |
-|---|---|
-| `set.server name=... host=... port=... mode=... replaced=... pin=typed|confirmed` | a definition is made or replaced |
-| `delete.server name=... host=... port=...` | a definition is removed |
-| `set.netlogin server=... remote=...` | a login is stored |
-| `delete.netlogin server=...` | a login is removed |
-| `netfile open server=... file=...` (and `mode=write`) | a remote file is opened, once |
-| `netfile refused server=... reason=...` | an open is refused, with the reason (gate, list, login, pin, limit) |
-| `netfile clear server=... file=...` | a `clearfile` of a remote file |
-
-No password, key, hash, record id or record is ever audited.
-
-## What is not here
-
-- **No files-only route on a Solo server.** SD Core has one (the Windows groups `sdfiles` and `sdfileswrite`); Solo has one
-  account and one Windows user, and its API login is the account's own login. API request 29 is behind the NET gate and
-  `NETFILES` bit 2, as the Getting Started set explains.
-- **A remote file does not follow you across an account change**: the process's connections are dropped when the account
-  is entered again (the NET gate is set), so a remote file variable from before is stale.
-- Select by index, and a server's own indices, are not used for a remote file. Creating, configuring, indexing or deleting
-  a remote file, `FCONTROL` of one and `WRITE ... CREATING.SEQKEY` are not here.
-- **Not run on Windows yet.** The paths above are compiled and the checks that need no installed system pass. The
-  test of a stored login's access list was run against real Windows access lists (your own file passes; one that admits
-  Everyone or another group, a junction, the wrong kind of object, a missing path and a file someone else owns are refused).
-  Nothing has been run between this Solo and another server.
-
-## See also
-
-*API access* and *SDSYS and the administrator* (GettingStarted): `set.net.access`, API request 29 and the OS switch.
-*Locks*, *Files and records* and *The query processor* (this set): the statements and verbs a remote file works with.
+[SDNet - Administering a Remote File](42a-sd-sdnet-administration.html) —
+administering a remote file, its indices, the two waits, the audit and what is
+not here
