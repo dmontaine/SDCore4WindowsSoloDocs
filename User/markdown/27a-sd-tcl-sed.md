@@ -11,7 +11,7 @@ sed
 BASIC and runs **inside** SD, as [ed](25-sd-tcl-ed.html) does, so it is not a
 program SD hands the record to: **it needs no operating-system permission** for
 a record of an SD file, where [edit](26-sd-tcl-edit.html) and
-[micro](27-sd-tcl-micro.html) need the `os` switch (`set.os.access os on`, off as delivered). It draws the
+[micro](27-sd-tcl-micro.html) need the account's `os-on` switch. It draws the
 whole screen, so it wants a terminal; for a phantom, an API session or a script
 use `ed`.
 
@@ -19,13 +19,13 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **SED was removed from SD Core Solo for Windows once and is back.** It was taken out
-> because its Emacs-style keys are hard to remember. It returned (25 October 2026,
-> carried from SD Core Solo for Linux) with a menu bar on the top line that shows the
-> key of every action, and with the keys most editors have. The old Emacs layout
-> is still there for anyone who wants it (see *Options*, below).
+> **SED is SD Core's editor here too.** Since 11 November 2026 the `sed` command in
+> SD Core Solo for Windows opens the same editor as SD Core and SD Core for Linux
+> Solo: a menu bar on the top line that shows the key of every action, and the keys
+> most editors have. The old Emacs layout is still there for anyone who wants it
+> (see *Options*, below).
 
-> **Not run on Windows yet.** SED is SD Core Solo for Linux's program, carried here
+> **Not run on Windows yet.** SED is SD Core for Linux's program, carried here
 > unchanged and compiled. Its key table and its `path:` form were read from the
 > source; nothing on this page has been seen on a Windows console.
 
@@ -38,7 +38,7 @@ marks a word typed as it stands; braces mark an optional part.
 | `sed bp creating.seqkey` | edit a new record under the file's next sequential id (the counter `write … creating.seqkey` uses); also with `dict`, and typed at the *Record name* prompt. The id is taken when the edit begins, so a record never filed leaves a gap. A directory file or a file opened read only is refused; in quotes it is an ordinary id |
 | `sed` *file* | with a select list active, SED offers to edit its records one after another; with none, it asks for the record names until you give a null one |
 | `sed` | asks for the file name, then the record name |
-| a file name written `path:C:/Users/pat/notes.txt` | an operating-system file by its path. A path outside the account's own directory needs the `os` switch (`set.os.access os on`); without it SED says there is no OS access |
+| a file name written `path:C:/Users/pat/notes.txt` | **no longer opens anything**. The `path:` form of a file name went with `FILERULE` when the second ways of naming a file were removed in 1.2-0; SED still asks the account's OS gate first (an account without `os-on` is told it has no OS access) and then cannot open the file. [micro](27-sd-tcl-micro.html) edits operating-system files |
 
 With a select list, SED shows the first id and asks whether to use the list
 (`Y` or `N`). Leaving one record goes on to the next.
@@ -289,6 +289,11 @@ the record while it is open. **A second user who opens a record someone else
 holds gets it read-only**, and cannot save it; a record that does not exist yet
 and is being created by someone else is refused. *Release lock*, on the Tools
 menu, gives your own lock up.
+
+**Saving, exporting and deleting a record of the VOC needs the administrator**
+(type `admin` and the administrator's password first): otherwise SED says so in its
+message line and does not save. A dictionary or a program file of your account is
+yours to change.
 
 For a program record the Tools menu **compiles** it with error tracking: when
 the compile fails, each error is put into the text as a line beginning `!!ERROR:`
