@@ -164,6 +164,10 @@ DOCS = [
  ('GettingStarted', '06a-sessions-and-locks.md', """
    clear.locks inhibit.login list.locks list.readu listu lock logout tool.sessions unlock
  """),
+ # 11 Nov 26 SOLO 57 (Linux Solo S.211): the MCP door
+ ('GettingStarted', '20-the-mcp-door.md', """
+   mcp.call set.mcp
+ """),
  ('GettingStarted', '06b-operating-system-access.md', """
    sh docs.install load.help set.os.access set.viewer tool.gates
  """),

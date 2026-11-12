@@ -237,6 +237,20 @@ for your Windows user. See [Scheduled jobs](04-scheduled-jobs.html).
 
 **To settle it.** Create such a task and see whether the command runs.
 
+## The MCP door
+
+### An agent's MCP client through the door
+
+**Known.** The launcher `solo-mcp.py` was run as an MCP client runs it, on pipes, against a stand-in for `sd-solo`
+that answers as `mcp.call` does: the messages, the tools offered, the request it writes, the cuts and the
+refusals; the rules inside `set.mcp` and `mcp.call` are checked in their source. See [The MCP door](20-the-mcp-door.html).
+
+**Not known.** **Any call through the door on an installed SD Core Solo, from a real MCP client** - the
+switches turned on and off, a tool's answer, a refused word, the audit line.
+
+**To settle it.** Turn the door on with `set.mcp on`, add the launcher to an MCP client, call each tool once,
+then `set.mcp off` and see the next call refused.
+
 ## SD BASIC statements that compile but were never run
 
 | | why not |

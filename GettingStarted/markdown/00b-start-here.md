@@ -73,6 +73,7 @@ that no page runs longer than a reader will scroll.
 | **17b** | [The scripts a verb calls](17b-scripts-a-verb-calls.html) | The ones a verb runs, and the one SD runs as it starts |
 | **18** | [Encryption and the SDEXT interface](18-encryption.html) | What encryption SD has, and the interface behind it |
 | **19** | [Features the developers could not test](19-features-the-developers-could-not-test.html) | What nobody has watched work |
+| **20** | [The MCP door](20-the-mcp-door.html) | Letting an AI agent's MCP client use your account through read-only tools: the two switches (both off), the audit line, and what the door does not add |
 
 ## The five things most likely to surprise you
 
