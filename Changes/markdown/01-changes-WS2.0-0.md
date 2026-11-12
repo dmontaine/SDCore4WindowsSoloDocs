@@ -411,6 +411,8 @@ Three simple layers, with no vault and nothing on by default.
 
 | Name | Change | What |
 |---|---|---|
+| group size of a new file | Changed | `grpsize` is 4 (KB) in the shipped `sd.conf` and the built-in value when it is absent; it was 2 and 1. An installed Solo keeps its `sd.conf`, and a file keeps the size it was made with |
+| right justified index keys | Changed | a right justified index made now keeps its keys in one order: the empty key, numbers by value (decimals too), then text, so 1, 01 and +1 are one key and `build.index` loses no id. An index made before keeps the old order; an index made on SD Core for Linux or its Solo since 25 Oct 2026 now opens here, and an index made here now cannot be opened by an older release |
 | `sdfix`, `sdidx`, `sdconv` | Changed | fixed several faults (see the changelog); `sdidx -m` says why it cannot make the directory |
 | sort of equal or ordered keys | Changed | fixed: a long run of equal or already ordered keys took minutes; now a fraction of one |
 
@@ -478,6 +480,8 @@ Fixes that close a way round a gate, and what the gates now ask.
 
 | Name | Change | What |
 |---|---|---|
+| audit trail, control characters | Changed | fixed: a value written to the audit trail that held a newline started a false line; a control character, DEL or a mark is now written as `?` |
+| `kernel(k$internal, n)` | Changed | only a program compiled in internal mode may set internal mode; reading it (`-1`) is unchanged |
 | api request 29 | Changed | fixed: it opened a file for any login once `netfiles` bit 2 was set; it now needs the account's `net` gate (`set.net.access on`), and a VOC pointer that leads out of the account needs the `os` switch |
 | API `clearfile` | Changed | fixed: it cleared whichever file a stale counter pointed at instead of the file the client named |
 | operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes |

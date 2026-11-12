@@ -32,7 +32,7 @@ a whole `SDCoreSolo` folder can be moved.
 
 ```
 [sd]
-GRPSIZE=2
+GRPSIZE=4
 NUMUSERS=20
 SORTMEM=4096
 ERRLOG=50
@@ -248,7 +248,7 @@ something SD does; none is a door, a path, a command, a log or a security settin
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `GRPSIZE` | 2 | Default group size for a new dynamic file, in 1 KB units. Read by `create.file` and `configure.file` when no group size is given |
+| `GRPSIZE` | 4 | Default group size for a new dynamic file, in 1 KB units. Read by `create.file` and `configure.file` when no group size is given. **4 since 12 Nov 2026** (the shipped `sd.conf` said 2). A Solo that is already installed keeps the `sd.conf` it has, and so keeps 2 until you change it; a file keeps the size it was made with |
 | `MAXIDLEN` | 63 | Maximum record id length. 63 is also the lower bound |
 | `MUSTLOCK` | 0 | When 1, a `write` or `delete` requires the record to be locked first |
 | `DEADLOCK` | 0 | When 1, SD traps deadlocks |
