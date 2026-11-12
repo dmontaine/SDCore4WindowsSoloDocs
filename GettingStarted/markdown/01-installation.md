@@ -116,6 +116,20 @@ switches stay as the account's record has them (off, unless an earlier
 nothing on either. The installer writes the answer with `set.os.access`, reads
 both switches back, and says what they are in `install-summary.log`.
 
+### 4. Where sessions start — on a new installation only
+
+A page of its own, **Where sessions start**, with one box, unticked:
+**Start new sessions at the command prompt, not the home screen**.
+
+**Unticked, a session starts at the home screen**, the full-screen menu of
+tiles, as delivered; nothing is written. **Ticked, it starts at the command
+prompt**: the installer runs `set.start.default terminal` and reads the file it
+writes back, and `install-summary.log` says which was chosen. The administrator
+can change it later with `set.start.default menu` or `set.start.default
+terminal`, or on the Starts in row of `tool.menus`. **An upgrade does not ask**:
+it keeps the start the installation has. A silent installation, which shows no
+page, keeps the home screen.
+
 ### What is not asked, because it always happens
 
 | | |
@@ -205,6 +219,7 @@ only what it gives; its presence does not make a computer managed.
 | `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer |
 | `reload-data=` | `yes` or `no`, where the folder holds data kept by an earlier uninstall: reload it, or start clean (the kept data is moved aside, never deleted). Blank: the installer asks, or reloads when the file answers everything else too. Where nothing is kept it does nothing, so one file can say it for every computer |
 | `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade always asks |
+| `start=` | `menu` (the home screen) or `terminal` (the command prompt): where new sessions start (see *Where sessions start* above). Blank: the installer asks. Used on a new installation only; an upgrade keeps what the installation has |
 | `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed computers](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
 
 **The account password is deliberately not in it.** With a global password, the
@@ -216,8 +231,8 @@ installation with no global password cannot run unattended.
 
 **A blank answer is asked for**, except the global password above, and so is
 one the installer cannot accept: a password that breaks the rules, an `api=`
-or `ssh=` that is not `off`, `local` or `open`, or an `os-access=` that is not
-`none`, `sh`, `os` or `both`. When the file gives no global
+or `ssh=` that is not `off`, `local` or `open`, an `os-access=` that is not
+`none`, `sh`, `os` or `both`, or a `start=` that is not `menu` or `terminal`. When the file gives no global
 password the installer says that this computer will not be managed by an SD
 Core server, in `install-summary.log` and on its last page — a mistyped name
 ends the same way, so read it. The release carries `sd-solo-setup.conf.sample`,

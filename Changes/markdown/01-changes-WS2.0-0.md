@@ -414,6 +414,7 @@ Three simple layers, with no vault and nothing on by default.
 |---|---|---|
 | Shell and OS access page | Added | the installer asks, on a new installation and on an upgrade, with two boxes, both unticked; the control file's `os-access=` (`none`, `sh`, `os` or `both`) answers it on a new installation; a silent installation, or an unticked page, turns nothing on |
 | source | Added | the complete source (C, `gpl.bp`, build and installer scripts) is `SDCore4WindowsSolo-source-<version>.zip` beside the installer; none of it is installed |
+| Where sessions start page | Added | on a new installation, one unticked box: start new sessions at the command prompt instead of the home screen (`set.start.default terminal`); the control file's `start=` (`menu` or `terminal`) answers it; an upgrade keeps the start the installation has |
 
 ### Screen library and terminals
 
