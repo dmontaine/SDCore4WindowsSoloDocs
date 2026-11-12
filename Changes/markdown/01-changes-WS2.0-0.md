@@ -375,7 +375,11 @@ were built, with the changes they made.
 | `mcp.call` | Added | the work of every call of the MCP launcher `solo-mcp.py` - the gate, the checks of every word, the work and the audit line; not typed by a person |
 | `restore.account` | Changed | fixed: no longer overwrites a different global program of the same name |
 | `set.mcp` | Added | administrator only: opens the MCP door for an AI agent's MCP client (`set.mcp on`) and gives it the write tool (`set.mcp write on`); both off as delivered; Getting Started page 20, The MCP door |
+| `set.config` | Added | administrator command: changes one of 14 tuning parameters of `sd.conf` in the Solo folder, within the range SD enforces, keeps the old file as `sd.conf.bak` and writes one audit line; the change takes effect at the next `sd-solo -start` |
 | `set.os.access` | Added | administrator command: `sh on`, `sh off`, `os on`, `os off`; with no argument it shows both; it writes the account's register record and the audit trail, and a change is seen at the next sign-on |
+| `tool.audit` | Added | administrator page: the audit trail from its newest line, with filters, a go-to-date, a follow mode and the lines shown saved to a record |
+| `tool.backups` | Added | administrator page: the backup directory, the archives in it with what each holds, and `backup.account`, `restore.account` and `set.backup.directory` behind a box |
+| `tool.config` | Added | administrator page: every parameter of `sd.conf` with the value SD runs with, the file's value and the default; `E` changes one of the 14 through `set.config` |
 | `set.viewer` | Added | allows one PDF reader for the `pdf` verb, by its full path; it must be an .exe under Program Files or the Windows folder that only the system and the Administrators can change; none is allowed as delivered |
 | `sh` and `os` switches | Added | two per-account switches, both off as delivered: `sh` for the `sh` verb and `!`, `os` for `os.execute`, the Python helper, the editors `edit` and `micro`, and files and directories outside the account by path; after `admin` the session passes both, except that the `sh` verb still refuses a command with a shell metacharacter unless the `sh` switch is on; the API server reads them when it enters the account |
 
@@ -419,7 +423,11 @@ The screen statement and its library, and what changed in the terminal handling 
 |---|---|---|
 | AccuTerm terminal types | Removed | the eleven `-at` terminal types and AccuTerm's escape sequences |
 | `debugger` full-screen display | Added | on a terminal that reports its size and has an alternate screen the debugger takes the whole screen; F1 help, F4 the program's screen; a terminal without one (the `windows` type today) keeps the line-by-line debugger |
+| development pages | Added | `tool.files`, `tool.voc`, `tool.dict`, `tool.query`, `tool.bulk`, `tool.catalog` and `tool.test`, each a tile of the home screen |
+| full-screen pages | Changed | every page has the same frame: a menu bar (Esc or F10), F6 and Shift-F6 between the boxes, Ctrl-T the theme, Ctrl-K the keys, F1 the help of the box with the keys of that box above it; a larger window is used whole |
 | home screen | Added | a tile whose action is `menu:name` opens a page of its own with a Back tile (Esc, Backspace go back); **View > Recent group** keeps the tiles started last, off as delivered; `set.tile sduser recent off` forbids it |
+| home screen | Changed | a menu bar, boxed tiles in the paper and night themes, and the development pages' tiles; a home screen that cannot open (a window too small) signs the session out when the account starts there |
+| `sp.view` | Changed | on a window of 140 by 43 or more, the pages' look: a menu bar, the theme, Ctrl-K the keys; F5 or Ctrl-L redraws |
 | immediate messages | Changed | `message ... immediate` is shown in a box over the alternate screen, or as lines and `Press return to continue` |
 | `option debug.rebind.keys` | Removed | still accepted, no longer does anything |
 | screen save and restore | Removed | `save.screen()` and `restore.screen`: still exist and do nothing the terminal could see |

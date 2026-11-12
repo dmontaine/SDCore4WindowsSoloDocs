@@ -109,7 +109,9 @@ of contributors.
 ## Changing a parameter
 
 Editing `sd.conf` and restarting SD is the durable route, and for most
-parameters it is the only one.
+parameters it is the only one. Fourteen tuning parameters can also be changed
+from SD itself, with `set.config` or the `E` key of `tool.config` (see
+*Changing a parameter from SD*, below).
 
 **28 parameters can also be changed for the current session:**
 
@@ -127,9 +129,105 @@ The 28 are `CODEPAGE`, `DUMPDIR`, `EXCLREM`, `FILERULE`, `FLTDIFF`, `FSYNC`,
 `SH1`, `SORTMEM`, `SORTMRG`, `SORTWORK`, `SPOOLER`, `TEMPDIR`, `TERMINFO` and
 `YEARBASE`.
 
-Everything else takes effect only when SD is next started. That includes every
-limit which sizes the shared memory segment and every setting the API listener
-reads.
+Everything else takes effect only when SD is next started (`sd-solo -stop`, then
+`sd-solo -start`). That includes every limit which sizes the shared memory
+segment and every setting the API listener reads.
+
+**In Solo every change to `sd.conf` waits for the next start.** SD reads the file
+once, when it starts, and keeps the settings in shared memory; a new session copies
+them from there and does not read the file itself. (The multiuser SD Core has each
+session read `sd.conf` when it starts, so there an edit reaches the sessions
+started after it.) So `tool.config` says `restart` for every parameter it can
+change, and `set.config` says so after each change.
+
+## The parameters on one screen: `tool.config`
+
+```
+tool.config
+```
+
+A full-screen page for the administrator (`admin` first; a window of 140 columns by 43 lines or
+more). **It looks, and it can change 14 of the parameters**; it writes no file itself. A change is
+made by the verb `set.config` (below), and only after you have typed a value, the page has checked
+it against the range SD enforces and a box has shown the exact command and been answered Run. The
+other parameters are not changed from SD; editing the file and restarting SD stays the way to change
+them.
+
+The page has three views. **P, the parameters**: one row for every parameter SD knows, from the table
+`config.table` in the `sdsys` folder, which names every parameter SD reads. The columns are the value
+this SD is running with (what `config()` reports), the value `sd.conf` says now (the file is read
+again, a parameter written twice counted the way SD counts it, the flag parameters added up), the
+default (what SD uses when the file does not say), when a change takes effect and whether anything
+acts on it. A row marked `*` is one where the file and the running SD disagree. **A name in the file
+that SD does not know is listed at the end as `unknown`, and the top of the page names it**: SD does
+not start with it (the section *A name SD does not recognise stops it starting* above). `D` shows only
+the rows where the file and SD disagree, and `S` only the parameters the file sets. The last column,
+`Change`, says `e` for a parameter the page can change (press `E`) and `by hand` for every other.
+
+**B, the backup directory**: the directory saved with `set.backup.directory` and whether it is there;
+**R, the report**: the operating system part of `settings.report`, made when the view is opened and
+on F5. It holds no key and no password hash. `F5` reads the file, the backup directory and the report
+again; `E` changes the parameter under the cursor, or says why it cannot be changed here; `F1`
+explains the page; `Ctrl-Q` leaves. Opening the page writes the audit line
+`tool start app=tool.config`; a change writes the line of `set.config` (below), and nothing else the
+page does is written.
+
+### Changing a parameter from SD: `set.config` and the `E` key
+
+```
+set.config cleanup 600
+```
+
+The administrator's verb (`admin` first). It changes **one** line of `sd.conf` in the Solo folder
+(`%USERPROFILE%\SDCoreSolo\sd.conf`): the first word is a parameter name (letters and digits; SD makes
+it capitals, as the file spells it) and the second a whole number of up to seven digits. It runs
+`sd-confset.ps1`, in the Solo folder beside `sd.conf`, as you, since the file is yours; nothing runs
+elevated. The script checks everything again and is the authority. `set.config` prints
+`CLEANUP is now 600 in sd.conf` and that it takes effect when SD is next stopped and started. A
+refusal prints the script's own sentence after `sd.conf was not changed:` and writes nothing.
+
+**What the script does.** It accepts only the 14 parameters below, and only a value inside the range
+SD itself enforces for that parameter when SD starts (so it cannot accept what SD would refuse). It
+adds or replaces the line **inside the `[sd]` section**, the only place SD reads; a second line for
+the same parameter in that section is dropped, because SD keeps the last one; every other line,
+comments included, is kept exactly as it was, with the file's own line ends. The new file is written
+beside the old one and put in its place by one Windows replace, which keeps the old file's
+permissions. **The file as it was is kept as `sd.conf.bak`** (one generation; a second change
+replaces it with the file as it was before that change). A change that says what the file already says
+writes nothing. A file holding anything but plain ASCII is refused, not rewritten. When the session
+reads another file (the `SD_CONFIG` variable), the page says so in its box: `set.config` changes the
+Solo folder's `sd.conf` only. SD has no key that puts `sd.conf.bak` back; from PowerShell,
+`Copy-Item $env:USERPROFILE\SDCoreSolo\sd.conf.bak $env:USERPROFILE\SDCoreSolo\sd.conf` does.
+
+**One audit line** for each change asked for: `set.config key=cleanup value=600 status=ok`, or
+`status=refused`.
+
+**On the page.** `E` on a row whose `Change` column says `e` asks for the new value (the question
+shows what SD runs with and what the file says), checks that it is a whole number inside the range
+before anything else happens, and then shows the exact command in the toolkit's box with a plain
+sentence about when it takes effect. Cancel, which is what Enter chooses, runs nothing. `E` on any
+other row writes nothing: it shows why the parameter is not changed from SD, and the exact line to
+add by hand in the `[sd]` section.
+
+**The 14 parameters** are the tuning ones: each is range-checked by SD and each only sizes or times
+something SD does; none is a door, a path, a command, a log or a security setting:
+
+| Parameter | Range |
+|---|---|
+| `CLEANUP` | 30 to 3600 |
+| `DHCACHE` | 0 to 1024 |
+| `GRPSIZE` | 1 to 8 |
+| `LGNWAIT` | 0 to 32767 |
+| `LPTRHIGH` | 10 to 32767 |
+| `LPTRWIDE` | 10 to 1000 |
+| `MAXCALL` | 10 to 1000000 |
+| `MAXRLOCK` | 0 to 100000 |
+| `NETREPLY` | 1 to 3600 |
+| `NETWAIT` | 1 to 3600 |
+| `NUMLOCKS` | 1 to 32767 |
+| `RECCACHE` | 0 to 32 |
+| `SORTMRG` | 2 to 10 |
+| `USPLIT` | 0 to 1 |
 
 ## Sessions and limits
 
