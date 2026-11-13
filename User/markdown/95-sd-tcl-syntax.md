@@ -141,6 +141,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`nselect`** | **`nselect`** *file* {*list.no*} |
 | **`off`** | **`off`** |
 | **`option`** | **`option`** *name* {**`on`** \| **`off`** \| **`display`**}  ·  **`option all off`**  ·  **`option`** |
+| **`oscopy`** | **`oscopy`** *source* *target* {**`overwrite`** \| **`append`**} |
 | **`pause`** | **`pause`** {*seconds*} |
 | **`pdebug`** | **`pdebug`** {*command*} |
 | **`pdf`** | **`pdf`** {*name*}  —  show a documentation PDF in the installed reader, whatever the account's os switch says (the administrator allows the reader: **`set.viewer`**); without a name, lists the documents |
