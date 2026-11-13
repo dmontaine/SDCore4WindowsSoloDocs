@@ -98,9 +98,10 @@ and pass it back.
 | `@user.return.code` | `0` |
 | `@crtwide` / `@crthigh` | `200` / `9999` — whatever `TERM` last set |
 
-**On the multiuser SD Core for Windows `@who` and `@logname` differ in case for
-the same account**, so a program shared between the two should compare them with
-`upcase()` on both sides.
+**`@who` is lower case here and on the multiuser SD Core for Windows**, as on
+SD Core for Linux (before this release it was upper case on both Windows
+products). A program that compares it with `@logname` should use `downcase()`
+on both sides.
 
 `set.exit.status` sets what SD returns to the operating system when the session
 ends.
