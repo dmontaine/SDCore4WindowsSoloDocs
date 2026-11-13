@@ -93,7 +93,7 @@ DOCS = [
    analyze.file clear.file cname compare.files configure.file
    convert.data copy create.file ct delete delete.file dump file.stat find.file fixdir fstat
    fstat.user hsm import.csv import.json import.xml list.files list.triggers profiler
-   set.file set.trigger
+   set.file set.trigger oscopy
  """),
  ('User', '21-sd-tcl-query-processor.md', """
    count list list.item list.label reformat scan search show sort sort.item
@@ -141,6 +141,10 @@ DOCS = [
    exit home ide menu my.menu set.pins set.start.default set.tile tool.keys
    tool.menus
  """),
+ # 13 Nov 26 (RELEASE_1.1 269): the development tools page, from Linux Solo (SOLO 56 carried the pages, not their documentation)
+ ('User', '29c-sd-tcl-the-development-tools.md', """
+   tool.bulk tool.catalog tool.dict tool.files tool.query tool.test tool.voc
+ """),
  ('User', '30-sd-tcl-processes-and-phantoms.md', """
    list.phantoms pdebug pdump phantom pstat status
  """),
@@ -159,7 +163,13 @@ DOCS = [
    admin append.sd.path clean.account config list.voc.removed restore.voc set.date update.accounts
  """),
  ('GettingStarted', '06c-backup-and-restore.md', """
-   backup.account restore.account set.backup.directory settings.report
+   backup.account restore.account set.backup.directory settings.report tool.backups
+ """),
+ ('GettingStarted', '12a-security-and-the-operating-system.md', """
+   tool.audit
+ """),
+ ('GettingStarted', '16-configuration.md', """
+   set.config tool.config
  """),
  ('GettingStarted', '06a-sessions-and-locks.md', """
    clear.locks inhibit.login list.locks list.readu listu lock logout tool.sessions unlock

@@ -44,22 +44,20 @@ valid PROC and it is the interpreter that is gone.
 ### What the shipped VOC holds
 
 Counted directly from `newvoc` in the system directory — the VOC a new account
-starts with, 419 records:
+starts with, 429 records:
 
 | Type | Count |
 |---|---|
-| `V` | 142 |
-| `K` | 249 |
-| `F` | 8 |
-| `R` | 10 |
+| `V` | 198 |
+| `K` | 218 |
+| `F` | 7 |
 | `PA` | 1 |
-| `PH` | 2 |
-| `S` | 2 |
-| `Q` | 2 |
+| `S` | 1 |
+| `Q` | 1 |
 | `X` | 3 |
 
-**The four keyword-verbs are among the 249 `K` records.** They are counted as
-keywords here and are also verbs, so Solo has 142 + 4 = **146 verbs**.
+**The four keyword-verbs are among the 218 `K` records.** They are counted as
+keywords here and are also verbs, so Solo has 198 + 4 = **202 verbs**.
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
 is yours. The account and grant commands are not in it — see
@@ -140,8 +138,8 @@ target, and the remaining fields carry options.
 
 | Field 2 | Field 3 | What it does |
 |---|---|---|
-| `CA` | *catalogue name* | a catalogued program — 99 of the shipped verbs |
-| `IN` | *number* | internal verb *n*, handled by the command processor itself — 41 verbs |
+| `CA` | *catalogue name* | a catalogued program — 161 of the shipped verbs |
+| `IN` | *number* | internal verb *n*, handled by the command processor itself — 36 verbs |
 | `OS` | *text* | an operating-system command — `sh`, and nothing else |
 | `CS` | *path* | a locally catalogued function |
 

@@ -56,10 +56,12 @@ anything.
 An unrecognised parameter is not ignored. The parser abandons the file with
 `Unrecognised configuration parameter`, and SD does not start.
 
-That is why obsolete names are still parsed rather than deleted. `CREATUSR` has
-done nothing since 14 August 2026, but a configuration file copied from a Linux
-installation still carries it, and removing the branch would turn a tidy-up
-into a failure to start.
+That is why a name SD has dropped has to be taken out of the file. On 8 November
+2026 twelve parameters were removed (`APILOGIN`, `CODEPAGE`, `CREATUSR`,
+`EXCLREM`, `FIXUSERS`, `GDI`, `JNLDIR`, `JNLMODE`, `PORTMAP`, `RINGWAIT`,
+`TXCHAR` and `FILERULE`), and `INVCASE` before them. The installer removes those
+lines from an `sd.conf` it keeps across a re-install or an upgrade. A file copied
+in by hand must have them taken out before SD will start.
 
 Range failures behave the same way. `GRPSIZE`, `INTPREC`, `LPTRHIGH`,
 `LPTRWIDE`, `MAXCALL`, `RECCACHE`, `SORTMRG` and `MAXIDLEN` are bounds-checked
@@ -113,7 +115,7 @@ parameters it is the only one. Fourteen tuning parameters can also be changed
 from SD itself, with `set.config` or the `E` key of `tool.config` (see
 *Changing a parameter from SD*, below).
 
-**28 parameters can also be changed for the current session:**
+**23 parameters can also be changed for the current session:**
 
 ```
 config sortmem 8192
@@ -123,11 +125,10 @@ That writes to the session's own copy of the settings, taken from shared memory
 when the session started. It does not reach `sd.conf`, it does not affect any
 other session, and it is gone when the session ends.
 
-The 28 are `CODEPAGE`, `DUMPDIR`, `EXCLREM`, `FILERULE`, `FLTDIFF`, `FSYNC`,
-`GDI`, `GRPSIZE`, `INTPREC`, `LPTRHIGH`, `LPTRWIDE`, `MAXCALL`, `MUSTLOCK`,
-`OBJECTS`, `OBJMEM`, `RECCACHE`, `RINGWAIT`, `SAFEDIR`, `SDCLIENT`, `SH`,
-`SH1`, `SORTMEM`, `SORTMRG`, `SORTWORK`, `SPOOLER`, `TEMPDIR`, `TERMINFO` and
-`YEARBASE`.
+The 23 are `DUMPDIR`, `FLTDIFF`, `FSYNC`, `GRPSIZE`, `INTPREC`,
+`LPTRHIGH`, `LPTRWIDE`, `MAXCALL`, `MUSTLOCK`, `OBJECTS`, `OBJMEM`, `RECCACHE`,
+`SAFEDIR`, `SDCLIENT`, `SH`, `SH1`, `SORTMEM`, `SORTMRG`, `SORTWORK`,
+`SPOOLER`, `TEMPDIR`, `TERMINFO` and `YEARBASE`.
 
 Everything else takes effect only when SD is next started (`sd-solo -stop`, then
 `sd-solo -start`). That includes every limit which sizes the shared memory
@@ -241,8 +242,11 @@ something SD does; none is a door, a path, a command, a log or a security settin
 | `NETWAIT` | 5 | Seconds to wait for a connection to a server defined for SDNet (`set.server`, `set.netlogin`, a file opened through an `N` pointer): the TCP connection, then the TLS handshake, each. 1 to 3600; zero is refused |
 | `NETREPLY` | 30 | Seconds to wait for each reply of such a server. 1 to 3600; zero is refused. `config('NETWAIT')` and `config('NETREPLY')` read them. See the SDNet page of the User set |
 | `FDS` | unset | Limit on file descriptors. No limit when unset |
-| `FIXUSERS` | unset | `base,range` — user numbers reserved for sessions that ask for a specific number |
-| `PORTMAP` | unset | `base_port,base_user,range` — gives a session a fixed user number derived from the port its connection arrived on. Refused if the range overlaps `FIXUSERS` |
+| `USERPOOL` | 1023 | The highest user number handed out; user numbers rotate through 1 to this, 0 always takes the lowest free one |
+| `USPLIT` | 0 | `1`: interactive sessions take the lowest free user number and every other process (a phantom, an API session) the highest free one in 1 to `NUMUSERS`, so the two never meet. `PHANTOMS` and `USERPOOL` are ignored while it is on. `config('USPLIT')` reads it |
+| `PHANTOMS` | unset | `base,range` — user numbers kept for phantoms started with `phantom user n`. Nobody else is given one: not a session, not an API session, not a phantom started without `user`. It must lie between 1 and the highest user number, or SD will not start. `config('PHANTOMS')` reads it as `base,range`, null when none are kept |
+| `CLEANUP` | 300 | Seconds between the checks that look for sessions that ended without logging out (a killed window, a lost connection) and clear them from the user table. 30 to 3600. `config('CLEANUP')` reads it |
+| `PWDELAY` | 3 | Seconds SD waits after a failed network sign-on before it answers; 0 removes the pause |
 
 ## Files and locking
 
@@ -309,7 +313,6 @@ so it is a decision about the computer.
 | `LPTRWIDE` | 80 | Default page width for the printer. Range 10 to 1000 |
 | `LPTRHIGH` | 66 | Default page depth for the printer. Range 10 to 32767 |
 | `SPOOLER` | empty | The spooler to hand print jobs to |
-| `GDI` | 0 | Selects the Windows printing interface used by default |
 
 ## Sorting
 
@@ -362,26 +365,15 @@ keyboard, under your computer's own execution policy. Operating system access
 has its own page in this set — see
 [Operating system access](06b-operating-system-access.html).
 
-## Parameters that are accepted and do nothing
+## The screen
 
-These are parsed so that an existing `sd.conf` still loads. None of them
-changes SD's behaviour, and none should be offered as a control.
+| Parameter | Default | Effect |
+|---|---|---|
+| `SCREENTHEME` | unset (`mono`); `paper` in the shipped `sd.conf` | The color theme that a program using the `SCREEN` statement gets when it does not choose one: `paper`, `night`, `mono`, `classic` or `blue`. The shipped `sd.conf` says `SCREENTHEME=paper`, so the toolkit pages, the IDE, SED and the debugger show paper on a fresh install. A name that is not a theme is `mono`, without an error. A program reads the value with `config('SCREENTHEME')`. **Your own choice wins**: Ctrl-T or View > Theme on any full-screen program keeps the theme chosen |
 
-| Parameter | Why it is inert |
-|---|---|
-| `CREATUSR` | Nothing creates operating system accounts from `sd.conf`. The value is discarded as it is read |
-| `JNLMODE` | Stored and readable with `config('JNLMODE')`. Nothing acts on it: no journalling is done (read from the source, 20 October 2026) |
-| `JNLDIR` | Stored and readable with `config('JNLDIR')`. Nothing acts on it, for the same reason |
-| `CODEPAGE` | Stored, readable and settable. Nothing acts on it |
-| `EXCLREM` | Stored, readable and settable. It described exclusive access to a remote file, and there are no remote files |
-| `RINGWAIT` | Stored, readable and settable. Nothing acts on it |
-| `TXCHAR` | Stored, and not readable — there is no `config('TXCHAR')` |
+## `NETFILES`
 
-`FILERULE` is **not** in this list, and is easy to mistake for it. Its remote
-bits died with SDNet, but bit 4 is live and decides whether a `PATH:` VOC
-reference may name a pathname directly.
-
-**`NETFILES` is not in this list either.** A `server;file` VOC reference is
+A `server;file` VOC reference is
 refused whatever it holds (the old SDNet is gone), and the value is parsed,
 stored, shown by `config` and readable with `config('NETFILES')`. **One thing
 still reads it:** the API server's request 29, "open an SDNet file", which
