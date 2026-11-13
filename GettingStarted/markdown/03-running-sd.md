@@ -140,17 +140,23 @@ The whole `SDCoreSolo` folder can be moved; its parts cannot be separated.
 uninstaller removes it). `sd-solo` is also on your PATH: open a window and type
 it.
 
-**The Start Menu entry always opens a classic console window** (it runs
-`conhost.exe`). On Windows 11, a console program started plainly is handed to
-Windows Terminal when that is the default terminal, and there the full-screen
-pages can take about a second to draw; in the classic console they draw at
-once. Typing `sd-solo` in a window that is already open runs it in that window,
-whatever kind it is.
+**SD Core Solo always runs in a window of its own**, as a Windows application
+does. The Start Menu entry opens it; typing `sd-solo` at a PowerShell or cmd
+prompt opens it too, and the prompt comes back at once, as it does after
+`notepad`. The window is a classic console window that SD controls: it starts
+at 140 columns by 43 lines (make it bigger whenever you like) and is titled
+**SD Core Solo**. It is designed for Windows 11 on a screen of at least 1920 by
+1080.
 
-**The full-screen pages need a window of at least 140 columns by 43 lines.**
-When `sd-solo` starts in a classic console window smaller than that (the one
-the Start Menu entry opens, or one you typed in), **it makes the window 140 by
-43**, or as big as the screen allows; it never makes a window smaller. **In
-Windows Terminal it leaves the window alone**: the window is the terminal's, so
-make it big enough yourself. For full screen, press **F11** in Windows Terminal
-and **Alt+Enter** in a classic console window, where F11 goes to SD instead.
+When it ends normally (`OFF`) its window closes. **When it ends with an error,
+for example a refused sign-in, the window stays open** with "SD ended with
+status *n*. Press Enter to close this window." so the reason can be read.
+
+These still run where you type them, because they open no session:
+`sd-solo` with a command, the switches such as `sd-solo -start` and
+`sd-solo -stop`, anything whose input or output is redirected, and an ssh
+session.
+
+**The full-screen pages need a window of at least 140 columns by 43 lines**,
+which is the size SD's own window starts at. For full screen, press
+**Alt+Enter** (in SD's window F11 goes to SD).
