@@ -167,6 +167,11 @@ is the TCL verb that encrypted a field in place, and **nothing replaces that**.
 catalogued `PCL` routine are both still there. What has gone is a second, older
 copy of the source sitting in `BP`.
 
+**SD ships only four programs into the SDSYS bp file**: `PY_JSON`, `PY_TERM`,
+`PY_TEST` and `PY_TEST2`, the examples for the Python helper (see *SD BASIC -
+Python Integration*). The rest of `bp` is yours and is kept when you upgrade;
+an upgrade replaces those four programs by name and touches nothing else in it.
+
 ## Things that were never features, and are not coming
 
 These are not removals. They are stated here because a reader coming from
