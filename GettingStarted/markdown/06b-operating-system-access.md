@@ -289,8 +289,12 @@ optional and take the spaces. Takes effect at once.
 
 ### Where the documents come from: `docs.install`
 
-The PDFs are generated from the documentation and are not part of the source tree, so
-they reach the `pdf` directory by the administrator:
+The PDFs are generated from the documentation and are not part of the source tree.
+**A release package carries them**, in a folder `pdf` beside the installer, and **the
+installer puts them in the `pdf` directory with `docs.install`**. It also copies the
+release's changes document from beside it (`sd-core-solo-for-windows-<version>-changes.pdf`,
+`.html` and `.md`). An installer run without them says so in its report, and the install
+goes on. At any other time, or for documents of your own, the administrator runs:
 
 ```
 docs.install C:/path/to/the/pdf/files
