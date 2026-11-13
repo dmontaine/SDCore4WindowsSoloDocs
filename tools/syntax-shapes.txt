@@ -6,6 +6,10 @@
 # *italics* = you supply it.  `backticks` = typed as it stands.  {braces} =
 # optional.  Taken from documents 01 to 17, where these were measured, and
 # from BCOMP's statement compilers where no page covers them.
+#
+# 12 Nov 2026: the card was generated on 9 Nov, before Solo's public FCONTROL and CREATING.SEQKEY (SOLO 53); their lines are
+# here now.  ONE HAND EDIT CANNOT LIVE HERE: OSPATH is both a public intrinsic and an internal one, and mksyntax.py puts a name
+# on one page only, so its line on User 94 is made by hand.  After a regeneration, put it back from the page's git history.
 
 ABORT = `abort` {*message*}
 ADD = `add` *n* `to` *variable*
@@ -81,6 +85,7 @@ FIELD = `field(`*string*, *delimiter*, *occurrence* {, *count*}`)`
 FIELDS = `fields(`*arr*, *delimiter*, *occurrence* {, *count*}`)`
 FILE = `file` *name* — names a file at compile time
 FILEINFO = `fileinfo(`*file.var*, *key*`)`
+FCONTROL = `fcontrol(`*file.var*, *action* {, *qualifier*}`)` — *action* `FC$SET.SEQ.KEY` 2, `FC$GET.SEQ.KEY` 3, 5 (field access, always 1), `FC$VALID.ID` 6, `FC$MINMOD` 7; `FC$SYNC` 1 and `FC$CRLF` 4 stop the program ([File Handling](07-sd-basic-file-handling.html))
 FILELOCK = `filelock` *file.var* {`locked` …} {`on error` …} — ***no `then`/`else`***
 FILEUNLOCK = `fileunlock` *file.var* {`on error` …}
 FIND = `find` *x* `in` *arr* {, *occ*} `setting` *f* {, *v* {, *sv*}} `then` … `else` …
@@ -247,13 +252,13 @@ WAKE = `wake` *user.no*
 WATCH = `watch` *var*
 WEOFSEQ = `weofseq` *file.var* {`on error` …}
 WHILE = clause of `loop`: `loop` … `while` *condition* … `repeat`
-WRITE = `write` *var* `to` *file.var*, *id* {`on error` …} — ***inside a transaction the lock must already be held***
+WRITE = `write` *var* `to` *file.var*, *id* {`on error` …} — ***inside a transaction the lock must already be held***  ·  `write` *var* `to` *file.var* `creating.seqkey` *id.var* {`on error` …} — a hashed file numbers the record itself
 WRITEBLK = `writeblk` *var* `to` *file.var* {`on error` …}
 WRITECSV = `writecsv` *value*, … `to` *file.var* {`delimiter` *d*} {`quote` *q*} {`escape` *e*} `then` … `else` …
 WRITEPKT = `writepkt` *data*
 WRITESEQ = `writeseq` *var* `to` *file.var* {`on error` …} `then` … `else` …
 WRITESEQF = `writeseqf` *var* `to` *file.var* {`on error` …} `then` … `else` …
-WRITEU = `writeu` *var* `to` *file.var*, *id* {`on error` …}
+WRITEU = `writeu` *var* `to` *file.var*, *id* {`on error` …}  ·  `writeu` *var* `to` *file.var* `creating.seqkey` *id.var* {`on error` …}
 WRITEV = `writev` *var* `to` *file.var*, *id*, *field* {`on error` …}
 WRITEVU = `writevu` *var* `to` *file.var*, *id*, *field* {`on error` …}
 FOLDS = `folds(`*arr*, *width* {, *delimiter*}`)`
