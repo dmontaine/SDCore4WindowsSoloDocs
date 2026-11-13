@@ -149,8 +149,9 @@ at 140 columns by 43 lines (make it bigger whenever you like) and is titled
 1080.
 
 When it ends normally (`OFF`) its window closes. **When it ends with an error,
-for example a refused sign-in, the window stays open** with "SD ended with
-status *n*. Press Enter to close this window." so the reason can be read.
+for example a refused sign-in, the window stays open** with "SD stopped - the
+reason is shown above. Press Enter to close this window. (exit status *n*)", so
+the reason can be read.
 
 These still run where you type them, because they open no session:
 `sd-solo` with a command, the switches such as `sd-solo -start` and
