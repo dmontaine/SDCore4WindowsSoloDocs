@@ -140,6 +140,13 @@ The whole `SDCoreSolo` folder can be moved; its parts cannot be separated.
 uninstaller removes it). `sd-solo` is also on your PATH: open a window and type
 it.
 
+**The Start Menu entry always opens a classic console window** (it runs
+`conhost.exe`). On Windows 11, a console program started plainly is handed to
+Windows Terminal when that is the default terminal, and there the full-screen
+pages can take about a second to draw; in the classic console they draw at
+once. Typing `sd-solo` in a window that is already open runs it in that window,
+whatever kind it is.
+
 **The full-screen pages need a window of at least 140 columns by 43 lines.**
 When `sd-solo` starts in a classic console window smaller than that (the one
 the Start Menu entry opens, or one you typed in), **it makes the window 140 by
