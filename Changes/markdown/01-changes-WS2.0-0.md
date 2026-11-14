@@ -438,6 +438,7 @@ The screen statement and its library, and what changed in the terminal handling 
 | development pages | Added | `tool.files`, `tool.voc`, `tool.dict`, `tool.query`, `tool.bulk`, `tool.catalog` and `tool.test`, each a tile of the home screen |
 | full-screen pages | Changed | every page has the same frame: a menu bar (Esc or F10), F6 and Shift-F6 between the boxes, Ctrl-T the theme, Ctrl-K the keys, F1 the help of the box with the keys of that box above it; a larger window is used whole |
 | home screen | Added | a tile whose action is `menu:name` opens a page of its own with a Back tile (Esc, Backspace go back); **View > Recent group** keeps the tiles started last, off as delivered; `set.tile sduser recent off` forbids it |
+| home screen version | Added | the header's date line ends with the product and its version (`SD Core Solo for Windows WS2.0-0`) |
 | home screen | Changed | a menu bar, boxed tiles in the paper and night themes, and the development pages' tiles; a home screen that cannot open (a window too small) signs the session out when the account starts there |
 | `sp.view` | Changed | on a window of 140 by 43 or more, the pages' look: a menu bar, the theme, Ctrl-K the keys; F5 or Ctrl-L redraws |
 | immediate messages | Changed | `message ... immediate` is shown in a box over the alternate screen, or as lines and `Press return to continue` |

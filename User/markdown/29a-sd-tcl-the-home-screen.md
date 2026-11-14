@@ -26,7 +26,7 @@ a script is never taken for someone typing.
  File  Go  View  AI  Help                                                       home  don@sduser
 
    don @ sduser                                                                      -> Sign out
-   Thursday 22 Oct 2026  -  18:52
+   Thursday 22 Oct 2026  -  18:52  -  SD Core Solo for Windows WS2.0-0
 
    My tools
      [=]                  </>                    [ ]
@@ -63,7 +63,7 @@ none.)
 **The page scrolls.** It is laid out at its full height and only the rows that fit are
 drawn, with a scroll bar in the last column when there is more than fits, so the
 number of tiles can pass the height of the screen. The header (your name, the date
-and time, and Sign out) stays where it is.
+and time, the product and its version, and Sign out) stays where it is.
 
 ## Keys and the mouse
 
