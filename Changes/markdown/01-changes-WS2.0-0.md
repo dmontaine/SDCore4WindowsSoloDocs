@@ -54,6 +54,7 @@ Administrator commands from the openQM list.
 | `inhibit.login` | Added | administrator only: stops new sessions while maintenance is done; a killed backup no longer locks everybody out <!--s 387 g46--> |
 | `logout` | Changed | `logout n group` also ends the phantoms n started; `logout` of a session whose process has gone clears the entry and its locks <!--s 386--> |
 | `newvoc.mods` | Changed | applied to SDSYS's own VOC when SD is installed, as it already was to new accounts and by `update.accounts` <!--s 501--> |
+| `set.recovery` | Added | administrator only: the IDE keeps a recovery copy of text you have not saved (`set.recovery on`), offered back when the record is opened again; off as delivered; Getting Started page 06, Administrator commands |
 
 ## API
 
@@ -416,7 +417,7 @@ Three simple layers, with no vault and nothing on by default.
 |---|---|---|
 | group size of a new file | Changed | `grpsize` is 4 (KB) in the shipped `sd.conf` and the built-in value when it is absent; it was 2 and 1. An installed Solo keeps its `sd.conf`, and a file keeps the size it was made with |
 | right justified index keys | Changed | a right justified index made now keeps its keys in one order: the empty key, numbers by value (decimals too), then text, so 1, 01 and +1 are one key and `build.index` loses no id. An index made before keeps the old order; an index made on SD Core for Linux or its Solo since 25 Oct 2026 now opens here, and an index made here now cannot be opened by an older release |
-| `sdfix`, `sdidx`, `sdconv` | Changed | fixed several faults (see the changelog); `sdidx -m` says why it cannot make the directory |
+| `sdfix`, `sdidx`, `sdconv` | Changed | fixed several faults (see the changelog); `sdidx -m` says why it cannot make the directory; `sdidx` refuses a link put in place of a file's primary subfile instead of following it |
 | sort of equal or ordered keys | Changed | fixed: a long run of equal or already ordered keys took minutes; now a fraction of one |
 
 ### Installer

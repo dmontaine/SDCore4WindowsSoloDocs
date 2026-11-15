@@ -47,6 +47,7 @@ password is never displayed, stored or logged.
 | `CLEAN.ACCOUNT` | empty the account's scratch files |
 | `backup.account`, `restore.account`, `set.backup.directory`, `settings.report` | [Backing up and restoring the account](06c-backup-and-restore.html) |
 | `update.accounts` | refresh the account's VOC |
+| `set.recovery` | show, or turn on and off, the IDE's recovery copy of text you have not saved |
 | `APPEND.SD.PATH` | put SD on your PATH, or take it off |
 | `LISTU`, `LOGOUT ALL` | [Sessions and locks](06a-sessions-and-locks.html) |
 | `LIST.READU`, `LIST.LOCKS`, `LOCK`, `CLEAR.LOCKS`, `UNLOCK` | [Sessions and locks](06a-sessions-and-locks.html) |
@@ -192,3 +193,20 @@ append.sd.path off         take it off
 **It changes your own PATH**, not the computer's, and needs no elevation. The
 installer puts SD on your PATH every time it runs, so `off` lasts until the
 next install or upgrade. A window already open keeps the PATH it started with.
+
+### `set.recovery`
+
+```
+set.recovery {on | off}
+```
+
+**`set.recovery on`** has the IDE keep a recovery copy of text you have not
+saved, readable only by you, in `AppData\Local\.local\state\sd\recovery\sduser`
+of your Windows profile (the profile Windows records for your user, never the
+`USERPROFILE` or `LOCALAPPDATA` variable). When the record is opened again after
+a lost session, the IDE offers the copy back: use it, delete it, or do not open
+the record (which keeps it). The record itself is not changed until you save.
+The copies are outside the account, so `backup.account` never contains them. It
+is **off as delivered**; `set.recovery off` stops new copies (the ones that exist
+are kept until answered), and without a word the verb says which it is. It takes
+effect at once and writes the audit trail, in lower case.

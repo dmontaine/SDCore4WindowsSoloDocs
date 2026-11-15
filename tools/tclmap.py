@@ -160,7 +160,7 @@ DOCS = [
    set.password
  """),
  ('GettingStarted', '06-administrator-commands.md', """
-   admin append.sd.path clean.account config list.voc.removed restore.voc set.date update.accounts
+   admin append.sd.path clean.account config list.voc.removed restore.voc set.date set.recovery update.accounts
  """),
  ('GettingStarted', '06c-backup-and-restore.md', """
    backup.account restore.account set.backup.directory settings.report tool.backups
