@@ -14,11 +14,22 @@ you), and **`exit`** is the way back to it from that terminal. **A session start
 here as delivered**, not at the command prompt (see *Where a session starts*, below);
 you can always type `home` or `menu` at the prompt to open it.
 
+The keys, menus, boxes and pick lists that every full-screen page shares are described once in
+[Using the Full-Screen Pages](29d-sd-tcl-using-the-full-screen-pages.html); this page adds what is
+particular to the home screen.
+
 It needs a window of at least **140 columns by 43 lines** (the same as the other
 full-screen tools) and a real terminal. In a smaller window it says so, with the
-size it found, and leaves you at the prompt; in a session with no terminal (a
+size it found. If you typed `home` at the prompt, you stay at the prompt; if the
+session starts in the home screen, you are **signed out** (*This account starts at
+the home screen, which could not open, so the session is signed out*), whether or not
+the Terminal tile is on: a small window is never a way to the prompt. In a session with no terminal (a
 pipe, a phantom, a script) it says `home needs a terminal` and reads nothing, so
-a script is never taken for someone typing.
+a script is never taken for someone typing. **In a bigger window the tiles spread over
+the whole window**: as many columns of tiles as fit, each tile a little
+wider, and the page follows the window when it is resized; at 140 by 43 it looks as it always did.
+If the window is made smaller than 140 by 43 while the home screen is up, it holds the keyboard
+behind a warning that gives both sizes until the window is big enough again.
 
 ## What is on it
 
@@ -29,24 +40,30 @@ a script is never taken for someone typing.
    Thursday 22 Oct 2026  -  18:52  -  SD Core Solo for Windows WS2.0-0
 
    My tools
-     [=]                  </>                    [ ]
-     Editor               IDE                    Record editor
-     edit a record        programs and files     fields of a record
+     [=]                  </>
+     Editor               IDE
+     edit a record        programs and files
 
    Everyone
      >_                                          ^K
      Terminal                                    Keys
      type exit to come back                      test your keyboard
+
+   Develop
+     [F]                  [V]                    [D]                    [Q]
+     Files                Vocabulary             Dictionary             Queries
+     files and indices    verbs and pointers     items and indices      build a report
+     ...
 ```
 
 | tile | what it does |
 |---|---|
 | **Editor** | runs `sed` (it asks which file and record) |
 | **IDE** | runs `ide` |
-| **Record editor** | runs `ced` |
 | **Receive files** | runs `receive` ([Moving files in and out](29e-sd-tcl-moving-files-in-and-out.html)), then waits for Enter so you can read what came; it is there only when a transfer can be opened: `XFER=1` in `sd.conf` and the account's switch on (`set.xfer.access on`) |
 | **Terminal** | leaves the screen for the ordinary command prompt (below) |
 | **Keys** | runs `tool.keys`, the terminal and keyboard diagnostic |
+| **Files** · **Vocabulary** · **Dictionary** · **Queries** · **Bulk update** · **Programs** · **Tests** | the group *Develop*: each opens a development page (`tool.files`, `tool.voc`, `tool.dict`, `tool.query`, `tool.bulk`, `tool.catalog`, `tool.test`; see [The Development Tools](29c-sd-tcl-the-development-tools.html)) |
 | **Sign out** | asks `Sign out of SD?` and ends the session |
 
 **A tile starts a command exactly as you would have typed it.** It adds no
@@ -55,11 +72,24 @@ refusal you would at the prompt (`set.os.access`). A command that takes the scre
 (the editors, `tool.keys`) gives it back when you leave it, and the home screen is
 drawn again; a command that only prints waits for Enter before the screen returns.
 
-After **`admin`** the page also has a group called *System*, with the tile
-**Menu management** (`tool.menus`); it shows `administrator` at the top and at the
-right end of the menu bar. Type `admin`, then `home`, to see it. (SD Core, the
-multi-user product, also has a *Switch account* tile; Solo has one account, so it has
-none.)
+After **`admin`** the page shows `administrator` at the top and at the right end of
+the menu bar, the group *My tools* is called *Tools*, and three groups of administrator's
+tiles stand above it. Type `admin`, then `home`, to see it.
+
+| group | tile | runs |
+|---|---|---|
+| *System* | **Menu management** (tiles and start) | `tool.menus` |
+| | **Audit trail** (who did what) | `tool.audit` |
+| | **Configuration** (sd.conf and SD) | `tool.config` |
+| | **Bypass programs** (readers for pdf) | `tool.viewers` |
+| *People and access* | **Sessions and locks** (who is on) | `tool.sessions` |
+| | **Gates** (who may do what) | `tool.gates` |
+| *Data, network and AI* | **Backups** (save and restore) | `tool.backups` |
+| | **Remote servers** (doors and files) | `tool.remote` |
+
+(SD Core, the multi-user product, also has a *Switch account* tile and pages for its
+accounts; Solo has one account, so it has none. The group *Data, network and AI* has no
+AI tile in this product: see *Not in this product*, below.)
 
 **The page scrolls.** It is laid out at its full height and only the rows that fit are
 drawn, with a scroll bar in the last column when there is more than fits, so the
@@ -71,23 +101,43 @@ and time, the product and its version, and Sign out) stays where it is.
 | key | does |
 |---|---|
 | the arrow keys | move to the nearest tile in that direction (a tile in the same row or column comes first) |
-| Tab, Back-tab | the next and previous tile, in reading order |
+| Tab, Back-tab | the next and previous tile, in reading order, round the tiles |
 | Home, End | the first and the last tile |
 | Page Down, Page Up | the first tile of the next and of the previous group |
 | a letter | the next tile whose label begins with it |
+| / | find a tile: a window of the page's tiles; type any part of a tile's name (or of its group) to narrow the list; Enter moves the focus to the tile chosen (Enter on the page then starts it), Esc leaves the focus where it was |
 | Enter, the space bar | start the tile |
+| Esc, Backspace | back one page, when you are in a sub-menu (below); on the top page Esc opens the menu bar, as F10 does, and Backspace does nothing |
+| F1 | help on the home screen |
 | F5 | build the page again |
-| F10 | open the menu bar (File, Go, View, AI, Help) |
-| Ctrl-Q | sign out (asks first; **Cancel** is the button Enter chooses, so a stray Enter signs nobody out) |
+| F10, Alt and a title's letter, a click on the top row | open the menu bar (File, Go, View, AI, Help). Every entry shows its key and does what the key does: **File** Sign out (Ctrl-Q, or no key when you typed `home` at the prompt) and, in that case, Back to the prompt (Ctrl-Q); **Go** Back (Esc or Backspace, only in a sub-menu), Terminal (Alt-T), Find a tile (/), Start the tile (Enter); **View** Refresh (F5), Recent group on or off (Ctrl-R), Theme (Ctrl-T); **AI** cannot be chosen (see *Not in this product*); **Help** Help on this page (F1), Keys (Ctrl-K: the keys of the home screen). An entry whose tile the administrator turned off is dimmed, and its key only says so. The Keys tile still opens the keyboard and terminal page `tool.keys` |
+| Ctrl-T | the next color theme, kept for you: every page, the IDE, SED and the debugger start in it from then on (see *Using the full-screen pages*) |
+| Ctrl-K | the keys of the home screen, in a box |
+| F2 | find an action: every entry of the menus in one list (*Go > Terminal*, with its key); type part of a name to narrow it, Enter chooses. An entry that cannot be used now says *(not now)* and only explains why |
+| a right click, Shift-F10 | the menu of the page's actions at the pointer (Shift-F10: in the middle), ending with *Find an action...* (F2). The home screen has one box, so the right click does not move anything first |
+| Ctrl-Q | sign out (asks first; **Cancel** is the button Enter chooses, so a stray Enter signs nobody out). **When you typed `home` at the prompt, Ctrl-Q goes back to that prompt instead** and does not ask; the row then reads *^Q prompt* |
+| Alt-T | the Terminal tile |
+
+Backspace, Alt-T, Ctrl-R, Ctrl-T and Ctrl-K are not on the row of keys at the foot of
+the screen (F1 lists every key). The row shows Enter, F1, F5, Ctrl-Q and /, and Esc in a
+sub-menu.
+
+**Which Ctrl-Q you have.** A screen your session started in (the start setting is
+the home screen) is the session's own: Ctrl-Q signs out. `exit` after the Terminal tile
+brings back the same kind of screen you left. A screen you typed `home` for at the prompt is a visit: Ctrl-Q
+leaves it for the prompt, and the session goes on. When the administrator has turned the
+Terminal tile off there is no prompt to go back to, so Ctrl-Q signs out
+whichever way the screen was started.
 
 A **click** starts a tile; the **wheel** scrolls the page three rows; a click on the
 menu bar opens the menu under it. The foot of the screen is the same as the
-other full-screen tools: a hint line, the status line, a border and the row of
-function keys.
+other full-screen tools - the status line, a border and the row of function
+keys - with a hint line above it for the keys the row does not show: the
+arrows, a letter and PgDn.
 
-On a terminal with colour the tiles are filled in the colour of their group; on one
+On a terminal with color the tiles are filled in the color of their group; on one
 without, each tile is a box and the one with the focus is in reverse video, so
-nothing depends on colour.
+nothing depends on color.
 
 ## The terminal, and `exit`
 
@@ -105,8 +155,8 @@ prompt that *did not* come from the home screen, `exit` does what `quit` does an
 the session. The home screen remembers that you left by the Terminal tile for the rest
 of the session, so `exit` goes on coming back to it.
 
-**Sign out** (the tile, the File menu, or Ctrl-Q) asks first and then ends the
-session as `quit` does.
+**Sign out** (the tile, the File menu, or Ctrl-Q when your session started at the home
+screen) asks first and then ends the session as `quit` does.
 
 ## Where a session starts
 
@@ -123,23 +173,25 @@ upgrade, if you want the old start (the command prompt), type `admin` and then
 `set.start.default terminal`.** Starting in the menu confines nobody: the Terminal tile
 is there unless it is turned off (below).
 
-The screen is never given to a session that cannot use it: a window under 140 by 43,
-a pipe, a phantom or an API server.
+The screen is never given to a session that cannot use it: a pipe, a phantom or an
+API server. A session that starts in the menu in a window under 140 by 43 is signed
+out (above).
 
 ## Tiles the administrator turns off
 
 Every tile is on as delivered, and the administrator can turn a tile off for the account
 with **`set.tile sduser tile off`** (or on the *Menu management* page): it is then not
-on the page, and its menu entry cannot be chosen. The tile ids are `editor`, `ide`, `ced`,
-`terminal`, `keys` and `signout`, and `recent` (the Recent group, below); **sign out
-cannot be turned off**, and neither can the Back tile of a sub-menu page. `set.tile`
-alone says what is off.
+on the page, and its menu entry cannot be chosen. The tile ids are `editor`, `ide`,
+`terminal`, `keys`, `files`, `voc`, `dict`, `query`, `bulk`, `catalog`, `test`, `signout` and
+`recent` (the Recent group, below); **sign out cannot be turned off**. `set.tile` alone
+says what is off.
 
 If the **Terminal** tile is off and the session starts in the home screen, you are never
-given the command prompt: when the screen ends (a window too small, an error, the cursor
-lock) you are signed out. If the account starts at the prompt it keeps it.
+given the command prompt: when the screen ends (an error, the cursor
+lock) you are signed out. A window too small for the screen signs you out whatever the
+tiles say. If the account starts at the prompt it keeps it.
 **It is a wall only for the prompt the screen gives**: the programs behind the other
-tiles (`sed`, `ide`, `ced`) are the account's own, so to keep the account to the tiles you
+tiles (`sed`, `ide` and the rest) are the account's own, so to keep the account to the tiles you
 give it, turn those off too. A shell needs the `sh` switch (`set.os.access`), which is
 off as delivered.
 
@@ -159,11 +211,17 @@ when the command has finished printing.
 
 | key | does |
 |---|---|
-| F2 | add a program (it asks for the label, the command, the glyph and the wait) |
+| Ctrl-N | add a program (it asks for the label, the command, the glyph and the wait) |
 | Enter | change the selected one |
-| F3 | remove it (asks first; Cancel is the default) |
-| F4, F6 | move it up or down the list |
+| Del | remove it (asks first; Cancel is the default) |
+| U, D | move it up or down the list |
+| / | go to the next program whose label or command holds a text you type (any case; round to the top) |
+| Esc, F10 | open the menu bar (its menus Program, File and Help): the same actions by name; with no program in the list, Change, Remove and the moves are shown dimmed |
+| F1, `?`, a click on the `[?]` | help on this page; the Help menu has the same |
 | Ctrl-Q | leave; the home screen is built again and shows the list |
+
+In a window bigger than 140 by 43 the list takes the extra rows and the command column
+the extra width.
 
 **It manages only your own list.** The standard tiles are not touched. A program of
 yours runs the command exactly as you would type it, so it adds no access: the
@@ -171,12 +229,53 @@ switches apply as at the prompt. The list is the record `home` of the file `&men
 in your account. `set.pins` alone says whether it is allowed; `set.pins off` hides the
 group and `my.menu` says it is not allowed (the list stays in your file).
 
-## Help on a setting
+## The Recent group
 
-On the *Menu management* page every setting has a **`[?]`** at the end of its row; F1,
-`?` or a click opens a box that says what it means, with a *Documentation* button that
-shows the guide page in the PDF reader (`pdf`, below). The text is the file `context.help`
-of the system directory.
+```
+View > Recent group
+```
+
+A group of **the tiles you started last**, newest first, at the top of the page: six at
+most. **It is off as delivered.** Turn it on in the **View** menu (*Recent group on or off*,
+or Ctrl-R; the same entry turns it off, and the status line says which it is now). The first time it is on, SD makes the
+file `&menus&` in your account if it is not there, as `my.menu` does, and keeps the
+list in its record `recent`; the list is one word `on`, then one id for each tile.
+
+* **What is kept is an id, never a command.** The group is built from the page as it is
+  now: a tile that the administrator has turned off, or that is not on your page, is not
+  shown, and a record that someone edited by hand cannot make the page offer a tile it does
+  not have. Starting a tile of the group runs the command of that tile, exactly as the tile
+  in its own group would, and puts it first.
+* **The tiles you added yourself (`my.menu`) are not kept here**: they are your own list
+  already.
+* **Turning it off forgets the list** (the record is deleted), and **while it is off nothing
+  is written**: starting a tile leaves your file as it was.
+* **The administrator can turn it off** (`set.tile sduser recent off`, or
+  the *Menu management* page): the group is then not on your page, nothing is read or written
+  for it, and the View entry cannot be chosen. What you had kept stays in your file.
+* If the file `&menus&` cannot be made or written, turning the group on says so (*The
+  Recent group could not be turned on*) and leaves nothing behind. `my.menu` makes the file
+  the same way and meets the same limit.
+
+## Pages inside pages: sub-menus
+
+A tile can open a **second page of tiles**. The new page has a **Back** tile at the left of
+the header (your name moves right to make room), and the status line shows where you are:
+`[Home > Develop]`. **Esc**, **Backspace**, the Back tile and the *Back* entry of the Go menu (Esc or Backspace)
+each go back one page, with the tile you left selected.
+Pages can be nested **eight deep**; a page that is already open above cannot be opened again
+(*... is already open above this page*), and a menu none of whose tiles is on your page has no
+tile to open it.
+
+**No tile of the delivered page opens a sub-menu yet.** The tiles you start inside a
+sub-menu are kept by the Recent group like any other.
+
+## Help on a setting, and the documentation
+
+On the *Menu management* and *Bypass programs* pages every setting has a **`[?]`** at the
+end of its row; F1, `?` or a click opens a box that says what it means, with a
+*Documentation* button that shows the guide page in the PDF reader (`pdf`, below). The
+text is the file `context.help` of the system directory.
 
 ```
 pdf
@@ -194,36 +293,12 @@ not at the computer, it says so and does nothing.
 ## Not in this product
 
 - **The AI line.** The AI is not part of SD Core Solo for Windows. The AI item of the
-  menu bar is shown and says `AI is off`; it cannot be chosen, and the home screen has no
+  menu bar is shown and says *the AI is not on for this account*; it cannot be chosen, and the home screen has no
   `AI>` row.
-
-## The Recent group
-
-**View > Recent group** turns on a group at the top of the home screen with the tiles
-started last, **newest first, six at most**; the same entry turns it off. **It is off
-as delivered.** The list is the record `recent` of the file `&menus&` in the account
-(the file is made as `my.menu` makes it). It holds tile ids and never a command: each
-recent tile is built from the page as it is now, so a tile that is turned off is not
-offered, and a record edited by hand cannot start anything the page does not offer.
-The programs added with `my.menu` are not kept in it. Turning the group off forgets
-the list, and while it is off nothing is written.
-
-The administrator can forbid it: `set.tile sduser recent off`. The group is then not
-on the page, nothing is read or written for it, and the View entry cannot be chosen.
-
-## Sub-menus
-
-A tile whose action is `menu:name` opens a page of its own: the groups of the page
-table that belong to that menu. The new page has a **Back** tile at the left of the
-header (the name moves right to make room), and the status line shows the way in, for
-example `Home > Develop`. **Esc, Backspace, the Back tile and Go > Back** each go back
-one page, with the tile that was selected. Eight pages are the most; a page that is
-already open above cannot be opened again; and a menu none of whose tiles is on the
-page has no tile to open it. The Back tile cannot be turned off with `set.tile`.
-**The delivered page has no sub-menu yet**: this is the mechanism, in the page table of
-the `tool_home` program, for a page that wants one.
 
 ## Not yet
 
-Programs the administrator assigns to the account and a live line on a tile are
-planned and not built.
+Programs the administrator assigns to the account, a menu builder (grouping your own
+programs into sub-menus) and a live line on your own tiles are planned and not
+built; today the page is the table above plus your own programs and, if
+you turn it on, the Recent group.
