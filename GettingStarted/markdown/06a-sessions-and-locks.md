@@ -259,6 +259,48 @@ user number must be specified* — so there is no `unlock` that means
 > `list.locks` shows the number with an owner and `clear.locks` refuses it
 > because it is not yours. **`unlock tasklock` *n*** is the way out.
 
+## Who took which lock, and where: `lock.tracer`
+
+`list.readu` shows what is locked *now*. When the question is who took a lock, in
+which program and on which line, or what locked what in the second before a
+hold-up, switch the tracer on, let the system run for a short while, and read the
+log. **Needs `admin`.**
+
+```
+lock.tracer on
+lock.tracer off
+lock.tracer {user n} {lptr {n}} {no.page}
+```
+
+While it is on, every lock any session takes or lets go is added, as one line, to
+the file **`locktrace` in the SD system folder** (`sdsys` in the SD Core Solo
+folder). `on` empties that file first, so a log is one switching-on's worth. The
+report lists the lines, oldest first, with the **date and time**, the **user
+number**, the **action**, the **program** that was running and the **line number**
+in it, the **file** and the **record id**. `user n` shows one session's lines;
+`lptr` prints them and `no.page` stops the pause at the end of a page. A session
+without `admin` is told *lock tracing is for the administrator*.
+
+| action | means |
+|---|---|
+| `Get RU` | a record update lock taken |
+| `Get RL` | a shareable read lock taken |
+| `RL->RU` | a read lock raised to an update lock |
+| `RU->RL` | an update lock lowered to a read lock |
+| `Get FX` | a file lock taken |
+| `Rel RX` | a record lock let go |
+| `Rel FX` | a file lock let go |
+
+**It logs everything, SD's own locks included**: a sign-on takes `$ipc`, the
+command processor takes `$command.stack`, and reading the log reads a file. The
+volume is large and every lock costs a file write, so switch it on for a short
+time and off again.
+
+> **Only a lock that is granted is logged**: one that is refused, or has to wait,
+> is not, until the moment it is granted. A session that is killed has its locks
+> cleared by the cleanup, and that is not logged either, so a `Get RU` with no
+> `Rel RX` after it may be a lock the cleanup gave back.
+
 ## Keeping new sessions out while you work: `inhibit.login`
 
 ```
@@ -359,7 +401,7 @@ page's box says that too.
 
 | | |
 |---|---|
-| **need `admin`** | `tool.sessions`, `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `inhibit.login` |
+| **need `admin`** | `tool.sessions`, `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `lock.tracer`, `inhibit.login` |
 | **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` |
 
 Without it they answer *Command requires administrator privileges*. See

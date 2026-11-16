@@ -52,6 +52,7 @@ Administrator commands from the openQM list.
 | Name | Change | What |
 |---|---|---|
 | `inhibit.login` | Added | administrator only: stops new sessions while maintenance is done; a killed backup no longer locks everybody out <!--s 387 g46--> |
+| `lock.tracer` | Added | administrator only (`admin`): logs every lock taken and released, with program and line, to the file `locktrace` in the system folder; see Getting Started 06a |
 | `logout` | Changed | `logout n group` also ends the phantoms n started; `logout` of a session whose process has gone clears the entry and its locks <!--s 386--> |
 | `newvoc.mods` | Changed | applied to SDSYS's own VOC when SD is installed, as it already was to new accounts and by `update.accounts` <!--s 501--> |
 | `set.recovery` | Added | administrator only: the IDE keeps a recovery copy of text you have not saved (`set.recovery on`), offered back when the record is opened again; off as delivered; Getting Started page 06, Administrator commands |

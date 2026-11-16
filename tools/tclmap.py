@@ -172,14 +172,21 @@ DOCS = [
    set.config tool.config
  """),
  ('GettingStarted', '06a-sessions-and-locks.md', """
-   clear.locks inhibit.login list.locks list.readu listu lock logout tool.sessions unlock
+   clear.locks inhibit.login list.locks list.readu listu lock lock.tracer logout tool.sessions unlock
  """),
  # 11 Nov 26 SOLO 57 (Linux Solo S.211): the MCP door
  ('GettingStarted', '20-the-mcp-door.md', """
    mcp.call set.mcp
  """),
+ # 16 Nov 26: tool.viewers (SOLO 54) beside set.viewer; the AI's verbs (RELEASE_1.1 246's Solo carry) on the AI pages, as in SD Core for Windows.
  ('GettingStarted', '06b-operating-system-access.md', """
-   sh docs.install load.help set.os.access set.viewer tool.gates
+   sh docs.install load.help set.os.access set.viewer tool.gates tool.viewers
+ """),
+ ('GettingStarted', '24-the-ai-helper.md', """
+   set.ai tool.ai
+ """),
+ ('User', '29b-sd-tcl-asking-the-ai.md', """
+   ai
  """),
  # 15 Nov 26, the Solo carry of SD Core's S.242 (Linux Solo docs 6d7381b): receive and send are explained on the User page for the transfer.  The switch
  # set.xfer.access is placed on Getting Started 06 (Linux Solo puts it on 29e, but 29e only ever writes it as `set.xfer.access on`, which is not evidence here).
