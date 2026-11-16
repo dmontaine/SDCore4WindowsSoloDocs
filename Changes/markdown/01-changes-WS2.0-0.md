@@ -39,7 +39,7 @@ which has the full story of each change: what it does, why, and what it does not
 [BASIC](#basic) · [DATA](#data) · [FILES](#files) · [QUERY](#query) · [SYSTEM](#system) · [TCL](#tcl) · [TOOLS](#tools).
 
 **[New Features Unique to SD Core](#new-features-unique-to-sd-core)**, not part of openQM and not on the spreadsheet:
-[Administration](#administration) · [API and client library](#api-and-client-library) · [Encryption](#encryption) ·
+[Administration](#administration) · [AI](#ai) · [API and client library](#api-and-client-library) · [Encryption](#encryption) ·
 [File transfer](#file-transfer) · [Files](#files-1) · [Installer](#installer) · [Screen library and terminals](#screen-library-and-terminals) · [SDNet](#sdnet) ·
 [Security](#security) · [System](#system-1).
 
@@ -393,6 +393,12 @@ were built, with the changes they made.
 | `tool.remote` | Added | administrator page: the two doors, the SDNet servers, the sessions now and this computer's TLS identity; `A` and `S` change a door through `remote.api` and `remote.ssh` |
 | `set.viewer` | Added | allows one PDF reader for the `pdf` verb, by its full path; it must be an .exe under Program Files or the Windows folder that only the system and the Administrators can change; none is allowed as delivered |
 | `sh` and `os` switches | Added | two per-account switches, both off as delivered: `sh` for the `sh` verb and `!`, `os` for `os.execute`, the Python helper, the editors `edit` and `micro`, and files and directories outside the account by path; after `admin` the session passes both, except that the `sh` verb still refuses a command with a shell metacharacter unless the `sh` switch is on; the API server reads them when it enters the account |
+
+### AI
+
+| Name | Change | What |
+|---|---|---|
+| `agent-pack` | Added | a guide to SD BASIC for AI agents (its examples compiled and run on SD Core Solo for Linux), a generated reference of everything the product has, a Claude Code skill and a recipe for giving an agent a way in; in the source only, not installed; User page 41 and Getting Started page 23 |
 
 ### API and client library
 
