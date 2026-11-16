@@ -35,11 +35,12 @@ Earlier releases refused to install beside SD Core.
 ### Saved data — only where an uninstall kept some
 
 **If `%USERPROFILE%\SDCoreSolo` holds data that an earlier uninstall kept** (the
-account `sduser` and `sd.conf`, with a `.sdcore-kept` file), the first question
-is *Reload your saved data and configuration into this new install?* — **Yes**
-reloads them, **No** starts clean. Either way the old folder is moved aside to
-`SDCoreSolo.kept-<date and time>`, never deleted, and the passwords below are
-asked as for any new installation. See
+account `sduser`, `sd.conf` and the kept settings, with a `.sdcore-kept` file),
+the first question is *Reload your saved data and configuration into this new
+install?* — **Yes** reloads them, **No** starts clean. Either way the old folder
+is moved aside to `SDCoreSolo.kept-<date and time>`, never deleted. A reload
+keeps the passwords it finds and skips the password pages below and the start
+question; otherwise the passwords are asked as for any new installation. See
 [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 ### 1. The passwords
@@ -194,10 +195,10 @@ installer scripts - is `SDCore4WindowsSolo-source-<version>.zip` beside
 built from.
 
 **Uninstalling asks to keep or delete your data and configuration.** Keep leaves
-the account and `sd.conf` and removes the passwords, audit trail, deny list,
-`global.bp.out`, the API's TLS key, your ssh key file, the system files and the
-logs; a new installation then offers the account and `sd.conf` back. See
-[Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
+the account, `sd.conf`, the passwords, the audit trail, the TLS and ssh keys and
+your settings, and removes the system files, the deny list, `global.bp.out` and
+the logs; a new installation then offers them back, and a reload asks no
+password. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 **The folder can be moved.** SD finds its files from where its programs are,
 not from a path written into it, so a copied tree works under another Windows
@@ -242,10 +243,11 @@ which explains each item and shows a sample answer; copy it to
 **The file holds passwords in clear text.** Keep the stick safe, and do not
 leave the file on a computer after installing.
 
-**It is read only for a new installation**, kept data included (kept data holds
-no passwords). On a computer that already has an `SDCoreSolo` data tree — an
-earlier release's, with `sdsys` — it is ignored: the tree already has its
-passwords.
+**It is read only for a new installation**, kept data included. **Passwords it
+gives replace the ones kept data holds**; without them a reload keeps the kept
+passwords. On a computer that already has an `SDCoreSolo` data tree — an
+earlier release's, with its system files — it is ignored: the tree already has
+its passwords.
 
 ## When a step fails
 
@@ -265,7 +267,7 @@ report, and ends each with a verdict.
 
 | | |
 |---|---|
-| Whether there is a global password | uninstall and choose **Keep**, then install again: the passwords are asked again (the global one may be left blank, or entered), and you reload your saved data. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) |
+| Whether there is a global password | uninstall and choose **Keep**, then install again with a control file that gives the passwords (`admin-password=`, and `global-password=` filled in or left blank), and reload your saved data: the passwords it gives replace the kept ones. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) |
 | The API or ssh choices | the same — uninstall (Keep), install again and answer the API and ssh questions. Or change the firewall and `sd.conf` by hand |
 | The passwords | `set.password`, `set.password admin`, and on a managed computer `set.password global` from the server. See [The account and its passwords](05-account-types.html) |
 | Your PATH | `APPEND.SD.PATH`. See [Administrator commands](06-administrator-commands.html) |

@@ -57,50 +57,54 @@ gets SD's program folder if it lost it.
 ## Uninstalling
 
 **Uninstall from Windows Settings, *Apps*, *SD Core Solo for Windows*.** It
-stops SD, then — after the one administrator consent prompt — removes:
-
-- the startup task **SD Core Solo** and the ssh task **SD Core Solo SSH**,
-  which also stops Solo's ssh server and deletes its administrators-only folder,
-  `C:\ProgramData\SDCoreSolo`;
-- the firewall rules for the API and for Solo's ssh port, 4251;
-
-and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH.
-
-**Then it asks what to do with your data and configuration, and Keep comes
-first:**
+first asks what to do with your data and configuration, and Keep comes first:
 
 | | |
 |---|---|
-| **Keep** | leaves your account `sduser` with its data (`user_accounts\sduser`) and `sd.conf` in `%USERPROFILE%\SDCoreSolo`, with a small file, `.sdcore-kept`, that says so. **These are removed, and the dialog lists them:** every password, the audit trail, the list of denied commands, `global.bp.out`, the API's TLS key, your ssh key file, the system files (`sdsys`) and the install logs |
-| **Delete** | removes the whole folder, for good |
+| **Keep** | leaves in `%USERPROFILE%\SDCoreSolo` your account `sduser` with its data (`user_accounts\sduser`), `sd.conf`, and what SD Core keeps with its accounts: the passwords (`sdsys\$cred`), the audit trail and its older copies, the API's TLS key (`sd-tls`), your ssh key file (`ssh`), the SDNet logins, your own VOC changes (`newvoc.mods`) and saved VOC records, and where sessions start (`start.default`); a small file, `.sdcore-kept`, says so. Solo's ssh server keeps its host key in its administrators-only folder, `C:\ProgramData\SDCoreSolo\ssh`. **These are removed, and the dialog lists them:** the system files, the list of denied commands, `global.bp.out` and the install logs |
+| **Delete** | removes the whole folder, for good, and the ssh host key with it |
 
-**A silent uninstall never deletes your data**; it keeps, as above. Whichever you
-choose, the uninstaller says what it did and where.
+**A silent uninstall never deletes your data**; it keeps, as above.
+
+It then stops SD and — after the one administrator consent prompt — removes:
+
+- the startup task **SD Core Solo** and the ssh task **SD Core Solo SSH**,
+  which also stops Solo's ssh server and deletes its administrators-only folder,
+  `C:\ProgramData\SDCoreSolo` (all but the host key, when you chose Keep);
+- the firewall rules for the API and for Solo's ssh port, 4251;
+
+and takes `%USERPROFILE%\SDCoreSolo\usr\bin` off your PATH. Last, it keeps or
+deletes your data as you chose, and says what it did and where.
 
 **Install again later and the installer finds what Keep left.** It asks *Reload
 your saved data and configuration into this new install?* (Yes is the default):
 
 | | |
 |---|---|
-| **Yes** | copies the account's files into the new account, tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
+| **Yes** | copies the account's files into the new account and puts back everything else Keep kept — the passwords, the audit trail (the kept lines first, then the new installation's), the TLS key, your ssh key file, the SDNet logins, your VOC changes and where sessions start — then tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
 | **No** | starts clean |
 
 **Either way the old folder is moved aside, never deleted:** it becomes
 `%USERPROFILE%\SDCoreSolo.kept-<date and time>`, and stays until you delete it.
-**The passwords are asked again** — they are not in the kept data — and the
-global password may be left blank, so this is also how to add a global password
-to a computer that has none, or to drop one. See [Installing](01-installation.html).
 
-**A folder left by an earlier release's uninstaller** still holds `sdsys` and
-the passwords, and is reinstalled over as it always was: nothing is asked and
-everything is kept.
+**A reload keeps the passwords and asks none** (the summary says *passwords:
+kept from the previous install - not changed*), and does not ask where sessions
+start. Whether the computer is managed is whatever the kept passwords say. **A
+control file that gives passwords replaces the kept ones**: that is how to add a
+global password to a computer that has none, or to replace a forgotten one. Kept
+data from an earlier release has no passwords, so they are asked as for a new
+installation. See [Installing](01-installation.html).
+
+**A folder left by an uninstaller older than SOLO 37's** still holds the system
+files and the passwords, and is reinstalled over as it always was: nothing is
+asked and everything is kept.
 
 **What uninstalling leaves installed:** the OpenSSH server and Python, even if
 the SD installer put them there — other programs may use them — and Windows'
 own ssh firewall rule for port 22, which is Microsoft's and was never Solo's.
-Remove them from *Apps* if you no longer want them. Your optional ssh key file
-goes with the rest of the folder (Keep removes it), and so does the server's host
-key, so a client sees a new host key after a reinstall.
+Remove them from *Apps* if you no longer want them. Keep keeps your optional ssh
+key file and the server's host key, so a client that trusted the host key still
+does after a reinstall; Delete removes both, and a client then sees a new one.
 
 **If the administrator step cannot run**, the uninstaller says *"The startup
 task, firewall rule or ssh setting could not be removed"* and names the log.

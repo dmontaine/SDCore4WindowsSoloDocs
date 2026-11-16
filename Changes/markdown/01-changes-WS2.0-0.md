@@ -446,6 +446,8 @@ Plain-text files in and out of the account with an sftp program over Solo's ssh.
 | Shell and OS access page | Added | the installer asks, on a new installation and on an upgrade, with two boxes, both unticked; the control file's `os-access=` (`none`, `sh`, `os` or `both`) answers it on a new installation; a silent installation, or an unticked page, turns nothing on |
 | source | Added | the complete source (C, `gpl.bp`, build and installer scripts) is `SDCore4WindowsSolo-source-<version>.zip` beside the installer; none of it is installed |
 | Where sessions start page | Added | on a new installation, one unticked box: start new sessions at the command prompt instead of the home screen (`set.start.default terminal`); the control file's `start=` (`menu` or `terminal`) answers it; an upgrade keeps the start the installation has |
+| uninstall Keep | Changed | keeps what SD Core keeps with its accounts: the passwords, the audit trail, the TLS key, your ssh key file and the ssh host key, the SDNet logins, `newvoc.mods`, the saved VOC records and where sessions start; the question is asked before anything is removed |
+| reload of kept data | Changed | puts all of it back (the audit trail joined, kept lines first) and asks no password and no start question when the kept passwords are complete; passwords in the control file replace the kept ones |
 
 ### Screen library and terminals
 
