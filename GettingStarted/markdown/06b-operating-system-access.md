@@ -65,8 +65,10 @@ tool.gates
 ```
 
 **A full-screen page, in any session** (140 columns by 43 lines at least). It
-lists the four gates this account has: **Shell** (`sh`), **OS.EXECUTE** (`os`),
-**Remote files** (`net`, [API access](09-api-access.html)) and **File transfer**
+lists the five gates this account has: **Shell** (`sh`), **OS.EXECUTE** (`os`),
+**Remote files** (`net`, [API access](09-api-access.html)), the **AI** (`ai`, `set.ai gate`;
+the helper's own setting, read from its status and looked at at each request,
+[The AI helper](24-the-ai-helper.html)) and **File transfer**
 (`xfer`, `set.xfer.access`; *Moving Files In and Out* in the User documentation,
 read each time it is used, so "this session" is what the register says now). For each it shows
 whether the gate is ON or off **for this session**, what the register holds
