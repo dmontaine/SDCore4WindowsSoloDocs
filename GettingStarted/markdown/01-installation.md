@@ -135,6 +135,25 @@ terminal`, or on the Starts in row of `tool.menus`. **An upgrade does not ask**:
 it keeps the start the installation has. A silent installation, which shows no
 page, keeps the home screen.
 
+### 5. PDF reader — only where one is installed and none is allowed
+
+The `pdf` command shows the documentation in a PDF reader, even though your
+account may not run programs, so it starts only a reader the administrator has
+allowed, and **none is allowed as delivered**. When this computer's App Paths
+names a reader SD knows (`msedge`, `acrobat`, `acrord32`, `foxitpdfreader`,
+`sumatrapdf`, `pdfxedit`, `firefox` or `chrome`, the first found) and none is
+allowed yet, a page **PDF reader** asks with one box, unticked: **Allow msedge to
+show the documentation (the pdf command)**. Ticked, the installer runs
+`set.viewer add pdf msedge`, which tests the program and refuses one that fails,
+and `install-summary.log` says what was chosen. Asked on a new installation and
+on an upgrade; a silent installation, which shows no page, allows nothing. Later:
+`admin`, then `set.viewer` or the Bypass programs page. See
+[Operating system access](06b-operating-system-access.html).
+
+**Allowing a reader is a loosening:** that one program may then be started for an
+account whose `os` switch is off. A graphical reader can open other files the
+account's user may read and follow links. Allow only a reader you trust.
+
 ### What is not asked, because it always happens
 
 | | |
@@ -225,6 +244,7 @@ only what it gives; its presence does not make a computer managed.
 | `reload-data=` | `yes` or `no`, where the folder holds data kept by an earlier uninstall: reload it, or start clean (the kept data is moved aside, never deleted). Blank: the installer asks, or reloads when the file answers everything else too. Where nothing is kept it does nothing, so one file can say it for every computer |
 | `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade always asks |
 | `start=` | `menu` (the home screen) or `terminal` (the command prompt): where new sessions start (see *Where sessions start* above). Blank: the installer asks. Used on a new installation only; an upgrade keeps what the installation has |
+| `viewer=` | `none`, or the name of a PDF reader to allow for `pdf` (see *PDF reader* above), such as `msedge`; it must pass `set.viewer`'s test. Blank: the installer asks when it finds a known reader. Used on a new installation only |
 | `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed computers](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
 
 **The account password is deliberately not in it.** With a global password, the

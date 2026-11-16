@@ -196,8 +196,6 @@ not at the computer, it says so and does nothing.
 - **The AI line.** The AI is not part of SD Core Solo for Windows. The AI item of the
   menu bar is shown and says `AI is off`; it cannot be chosen, and the home screen has no
   `AI>` row.
-- **The Bypass programs page.** `tool.viewers` is not built; the readers `pdf` may start
-  are named with `set.viewer`.
 
 ## The Recent group
 

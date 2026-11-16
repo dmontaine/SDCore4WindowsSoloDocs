@@ -243,6 +243,7 @@ pdf name
 set.viewer
 set.viewer add pdf program
 set.viewer remove pdf program
+tool.viewers
 docs.install directory
 load.help
 ```
@@ -251,7 +252,8 @@ load.help
 switches say.** It is the one place where SD starts a program outside itself for an
 account that may not run programs, so it is held narrow and it is **off as delivered**:
 until you name a reader, `pdf` says that no viewer has been allowed and starts nothing.
-The installer does not name one for you.
+The installer asks once, unticked, when it finds a known reader and none is allowed yet
+(*Allow msedge to show the documentation*); the control file's `viewer=` answers it.
 
 **What `pdf` starts, and with what.**
 
@@ -278,17 +280,33 @@ permissions or takes ownership of it. **It does not say a program is safe.** A g
 reader can open other files its user may read and follow links, so allow only readers you
 trust, and never a shell or an editor.
 
-### Naming a reader: `set.viewer`
+### Naming a reader: `set.viewer` and the Bypass programs page
 
 ```
 set.viewer                                                    says which programs are allowed
-set.viewer add pdf "C:/Program Files/Some Reader/reader.exe"   allows it
-set.viewer remove pdf "C:/Program Files/Some Reader/reader.exe" stops allowing it
+set.viewer add pdf msedge                                     allows it (a bare name is looked up in App Paths)
+set.viewer add pdf "C:/Program Files/Some Reader/reader.exe"   a full path works too
+set.viewer remove pdf msedge                                  stops allowing it
 ```
 
 An administrator command (`admin` first; without it: *Command requires administrator
-privileges*). The program is always a full path, with `/` or `\`; the double quotes are
-optional and take the spaces. Takes effect at once.
+privileges*). **A bare name** (letters, digits and `. _ + -`) is the program this
+computer's **App Paths** key names for *name*`.exe` — the place Windows records which
+program a name starts; only the machine's key is read, which only an administrator can
+change. **A full path** is written with `/` or `\`; the double quotes are optional and
+take the spaces. Either way the program must pass the test above. Takes effect at once.
+
+**`tool.viewers`**, also an administrator command and a tile (*Bypass programs*) on the
+home screen, is the same list as a page: *Allowed for pdf* (each program and whether it
+still passes the test) and *Found on this machine* (the known readers App Paths names —
+`msedge`, `acrobat`, `acrord32`, `foxitpdfreader`, `sumatrapdf`, `pdfxedit`, `firefox` and
+`chrome` — whether each is allowed and whether it could be). Like the menu management
+page it **writes nothing itself**: Enter on a reader shows the command (`set.viewer add
+pdf msedge`) with its effect in a box answered Run or Cancel (Cancel is what Enter
+chooses), allowing one **asks for its name to be typed**, and the line under the page is
+the verb's own answer. A program on the list under a path App Paths does not give for its
+name is shown and removed at the prompt, because the commands the page may run carry no
+slash. F1, `?` or a click on a `[?]` explains each box.
 
 ### Where the documents come from: `docs.install`
 

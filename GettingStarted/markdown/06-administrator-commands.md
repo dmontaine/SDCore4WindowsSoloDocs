@@ -39,7 +39,7 @@ password is never displayed, stored or logged.
 |---|---|
 | `set.password admin` | change the administrator password — [The account and its passwords](05-account-types.html) |
 | `set.os.access` | show or change the `sh` and `os` switches — [Operating system access](06b-operating-system-access.html) |
-| `set.viewer`, `docs.install`, `load.help` | the reader `pdf` may start, the documents it shows, the context help — [Operating system access](06b-operating-system-access.html) |
+| `set.viewer`, `tool.viewers`, `docs.install`, `load.help` | the readers `pdf` may start, the documents it shows, the context help — [Operating system access](06b-operating-system-access.html) |
 | `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`; every remote file) — [API access](09-api-access.html) |
 | `set.xfer.access` | show, or turn on and off, file transfer over Solo's ssh (`receive` and `send`, with `XFER=1` in `sd.conf`); off as delivered — [Security](12-security.html), and for the person *Moving Files In and Out* in the User documentation |
 | `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
