@@ -136,7 +136,7 @@ administrator has turned it on (`set.os.access sh on`) — see
 
 | | |
 |---|---|
-| **Let other computers reach it** | the installer asks, or `ssh=open` in the control file. Unticked, or `ssh=local`, the firewall rule for port 4251 is limited to `127.0.0.1` — this computer only |
+| **Let other computers on your network connect to this one over ssh (port 4251)** | the installer asks, or `ssh=open` in the control file. Unticked, or `ssh=local`, the firewall rule for port 4251 is limited to `127.0.0.1` — this computer only |
 | **A managed computer** | needs it open, because the SD Core for Linux server connects from elsewhere. Nothing opens it for you |
 
 **Use `127.0.0.1` rather than `localhost` for a connection from this computer**:

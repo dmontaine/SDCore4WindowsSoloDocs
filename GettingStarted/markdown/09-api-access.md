@@ -63,7 +63,7 @@ rule, named `SD-Solo-API-In-TCP`:
 
 | | |
 |---|---|
-| **Let other computers reach it** | the installer asks, or `api=open` in the control file. Unticked, or `api=local`, the rule allows this computer only |
+| **Let other computers on your network reach it** | the installer asks, or `api=open` in the control file. Unticked, or `api=local`, the rule allows this computer only |
 | **A managed computer** | needs it open. Nothing opens it for you |
 
 **To change it afterwards from SD**, after `admin`: `remote.api open`, `remote.api local` or
