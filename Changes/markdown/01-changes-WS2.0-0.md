@@ -40,7 +40,7 @@ which has the full story of each change: what it does, why, and what it does not
 
 **[New Features Unique to SD Core](#new-features-unique-to-sd-core)**, not part of openQM and not on the spreadsheet:
 [Administration](#administration) · [API and client library](#api-and-client-library) · [Encryption](#encryption) ·
-[Files](#files-1) · [Installer](#installer) · [Screen library and terminals](#screen-library-and-terminals) · [SDNet](#sdnet) ·
+[File transfer](#file-transfer) · [Files](#files-1) · [Installer](#installer) · [Screen library and terminals](#screen-library-and-terminals) · [SDNet](#sdnet) ·
 [Security](#security) · [System](#system-1).
 
 **[NO CHANGE](#no-change)**: openQM items that needed nothing.
@@ -388,6 +388,7 @@ were built, with the changes they made.
 | `tool.audit` | Added | administrator page: the audit trail from its newest line, with filters, a go-to-date, a follow mode and the lines shown saved to a record |
 | `tool.backups` | Added | administrator page: the backup directory, the archives in it with what each holds, and `backup.account`, `restore.account` and `set.backup.directory` behind a box |
 | `tool.config` | Added | administrator page: every parameter of `sd.conf` with the value SD runs with, the file's value and the default; `E` changes one of the 14 through `set.config` |
+| `tool.gates` | Added | full-screen page of the account's four gates (`sh`, `os`, `net`, `xfer`): on or off for this session, what the register says, how each is delivered and when a change reaches you; after `admin`, Enter turns a gate on or off through its own verb |
 | `remote.api`, `remote.ssh` | Added | administrator commands: report each door, or set it off, local or open, from any session, through a doors helper the installer sets up; the administrator password is asked again; `remote.ssh local` or `open` sets ssh up if it was not chosen at install |
 | `tool.remote` | Added | administrator page: the two doors, the SDNet servers, the sessions now and this computer's TLS identity; `A` and `S` change a door through `remote.api` and `remote.ssh` |
 | `set.viewer` | Added | allows one PDF reader for the `pdf` verb, by its full path; it must be an .exe under Program Files or the Windows folder that only the system and the Administrators can change; none is allowed as delivered |
@@ -410,6 +411,18 @@ Three simple layers, with no vault and nothing on by default.
 | key ring subroutines | Added | `!keyset`, `!keyclear`, `!keylist`: fill, empty and list the session's key ring, kept in the memory of its own process |
 | `sdkey()` and friends | Added | `sdsalt()`, `sdkey()`, `sdrandkey()`: a salt, a key from a passphrase, and a random key for `sdencrypt()` and `sddecrypt()`, open to every program; every `sdencrypt()` uses a fresh random nonce <!--s 504 g116 g123--> |
 | `xe` conversion | Added | a dictionary item with `xe` (or `xe;name`) shows a field decrypted for a session that holds the key and the cipher text for one that does not; `iconv` encrypts |
+
+### File transfer
+
+Plain-text files in and out of the account with an sftp program over Solo's ssh. Off as delivered, twice.
+
+| Name | Change | What |
+|---|---|---|
+| home screen Receive files | Added | a tile that runs `receive` and waits for Enter after it, shown only where a transfer can be opened (`XFER` on and the account's switch on) |
+| `receive` | Added | opens a transfer for plain-text files coming in to the account's file `xfer.in` from an sftp client signed in to Solo's ssh (port 4251) with your Windows name, waits, and says what came with each file's SHA-256; `receive overwrite` lets a file replace one of the same name |
+| `send` | Added | `send <file> <id> ...` copies records that are plain text to the account's file `xfer.out` and opens a transfer for an sftp client to fetch them; the same switches and the same confinement as `receive` |
+| `set.xfer.access` | Added | the account's file transfer switch: `set.xfer.access on` and `off`; off as delivered; with `XFER=1` in `sd.conf` it lets `receive` and `send` move plain-text files over Solo's ssh |
+| `XFER` and the transfer limits | Added | `sd.conf`: `XFER` (0 as delivered; 1 lets the account transfer files once `set.xfer.access` is on), `XFERFILE` (10 MB a file), `XFERSLOT` (100 MB a transfer), `XFERWAIT`, `XFERIDLE`, `XFERMAX` (60 minutes) and `XFERKIND` (the endings taken; blank is any plain text); read when Solo starts |
 
 ### Files
 

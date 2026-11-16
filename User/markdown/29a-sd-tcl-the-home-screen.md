@@ -44,6 +44,7 @@ a script is never taken for someone typing.
 | **Editor** | runs `sed` (it asks which file and record) |
 | **IDE** | runs `ide` |
 | **Record editor** | runs `ced` |
+| **Receive files** | runs `receive` ([Moving files in and out](29e-sd-tcl-moving-files-in-and-out.html)), then waits for Enter so you can read what came; it is there only when a transfer can be opened: `XFER=1` in `sd.conf` and the account's switch on (`set.xfer.access on`) |
 | **Terminal** | leaves the screen for the ordinary command prompt (below) |
 | **Keys** | runs `tool.keys`, the terminal and keyboard diagnostic |
 | **Sign out** | asks `Sign out of SD?` and ends the session |

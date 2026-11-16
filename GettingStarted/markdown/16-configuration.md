@@ -288,6 +288,22 @@ server's runtime addresses them. A Windows path such as
 `C:\Users\you\AppData\Local\Temp` spelling. **A directory named here that does
 not exist is ignored**, and the default applies.
 
+## File transfer over ssh
+
+`receive` and `send` (see [Moving files in and out](../../User/html/29e-sd-tcl-moving-files-in-and-out.html)).
+Each takes effect when SD is next started (`sd-solo -stop`, then `sd-solo -start`), as every change to
+`sd.conf` does in Solo. None of them is one of the 14 that `set.config` changes: edit the file.
+
+| Parameter | Default | Effect |
+|---|---|---|
+| `XFER` | 0 | **The system's switch, off as delivered.** 1 lets the account move files with `receive` and `send` over Solo's ssh, once its own switch is on too (`set.xfer.access on`). It opens a door from the network into the account's transfer folders: see [Security](12-security.html). Range 0 to 1 |
+| `XFERFILE` | 10240 | The largest file one transfer takes, in kilobytes; a bigger file is refused and discarded. Range 1 to 1048576 |
+| `XFERSLOT` | 102400 | The most one transfer takes in all its files, in kilobytes. Range 1 to 4194304 |
+| `XFERWAIT` | 600 | Seconds a transfer waits for the sftp program's first connection before it closes. Range 10 to 3600 |
+| `XFERIDLE` | 120 | Seconds a transfer stays open after its last file has finished; a file still moving is never cut off. Range 10 to 3600 |
+| `XFERMAX` | 3600 | Seconds a transfer may stay open at most; 0 removes the ceiling. Range 0 to 86400 |
+| `XFERKIND` | blank | The endings a received file's name must have, separated by commas (`csv,txt`); blank takes any plain-text file |
+
 ## The API
 
 | Parameter | Default | Effect |

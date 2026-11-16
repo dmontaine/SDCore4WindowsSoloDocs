@@ -160,7 +160,7 @@ DOCS = [
    set.password
  """),
  ('GettingStarted', '06-administrator-commands.md', """
-   admin append.sd.path clean.account config list.voc.removed restore.voc set.date set.recovery update.accounts
+   admin append.sd.path clean.account config list.voc.removed restore.voc set.date set.recovery set.xfer.access update.accounts
  """),
  ('GettingStarted', '06c-backup-and-restore.md', """
    backup.account restore.account set.backup.directory settings.report tool.backups
@@ -180,6 +180,11 @@ DOCS = [
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
    sh docs.install load.help set.os.access set.viewer tool.gates
+ """),
+ # 15 Nov 26, the Solo carry of SD Core's S.242 (Linux Solo docs 6d7381b): receive and send are explained on the User page for the transfer.  The switch
+ # set.xfer.access is placed on Getting Started 06 (Linux Solo puts it on 29e, but 29e only ever writes it as `set.xfer.access on`, which is not evidence here).
+ ('User', '29e-sd-tcl-moving-files-in-and-out.md', """
+   receive send
  """),
  ('User', '06a-sd-basic-encryption.md', """
    encrypt.key
