@@ -67,7 +67,8 @@ rule, named `SD-Solo-API-In-TCP`:
 | **A managed computer** | needs it open. Nothing opens it for you |
 
 **To change it afterwards from SD**, after `admin`: `remote.api open`, `remote.api local` or
-`remote.api off` (or the A key of `tool.remote`). With no word, `remote.api` reports what is
+`remote.api off` (or the A key of `tool.remote`: the word is chosen from a list that starts on
+`off`, and `open` wants the word `open` typed, in either case). With no word, `remote.api` reports what is
 installed. A change asks for the administrator password again and is made by the doors
 helper the installer set up. It works from any session, at this computer or over ssh or the API,
 and needs no elevated window. Off also turns the listener off, and an API change to or from off

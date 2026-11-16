@@ -290,7 +290,7 @@ not exist is ignored**, and the default applies.
 
 ## File transfer over ssh
 
-`receive` and `send` (see [Moving files in and out](../../User/html/29e-sd-tcl-moving-files-in-and-out.html)).
+`receive` and `send` (see *Moving Files In and Out* in the User documentation).
 Each takes effect when SD is next started (`sd-solo -stop`, then `sd-solo -start`), as every change to
 `sd.conf` does in Solo. None of them is one of the 14 that `set.config` changes: edit the file.
 

@@ -459,11 +459,14 @@ The screen statement and its library, and what changed in the terminal handling 
 | `option debug.rebind.keys` | Removed | still accepted, no longer does anything |
 | screen save and restore | Removed | `save.screen()` and `restore.screen`: still exist and do nothing the terminal could see |
 | `screen` statement | Added | menus, dialogues and forms from BASIC; tabs, text areas, tables and trees; scroll bars and progress bars; the mouse |
+| `screen ask` history | Added | `history list` gives earlier answers: Up and Down step through them and Ctrl-R brings back the newest; the SD pages open a question empty and pass the value in force this way |
 | `screen form fill`, `stretch` | Added | a form that takes the whole window and follows it: a text area or table with `stretch` gets the spare room and what lies beyond it moves, with no code in the program; below the form's own size one warning holds the keyboard |
 | `sdterm` terminal type | Removed | with SDTerm and SDConsole, and the `term display` line about them |
 | `term 120,36` at login | Removed | new accounts no longer carry it in their `login` paragraph |
 | themes | Added | `paper` (the delivered one: a new install's `sd.conf` says `SCREENTHEME=paper`), `night`, `mono`, `classic` and `blue`; `screentheme=` in `sd.conf` chooses the default (no line means `mono`); a colour theme is refused where the terminal cannot show colour |
 | toolkit window size | Changed | a page of the full-screen toolkit refuses a window of more than 500 columns by 300 lines before it takes the screen (opening one cost time as the square of the height); "Press Enter to return" no longer names the home screen |
+| `!tkconfirm` typed word | Changed | the word a box asks for (`open`, `restore`) is taken in either case, as any command is, and the pages show it in lower case |
+| `!tkform` fields | Changed | every entry opens empty, its starting value shown beside it (`now: ...`) and put in by Ctrl-R, and a field may keep that value when left empty; a field can be a choice of fixed words, which the pages use wherever a fixed set was typed |
 | window size | Changed | SD reads the terminal's window size at the start and when it is resized; `kernel(k$winsize)` answers it; `term w,h` holds until the next resize |
 
 ### SDNet

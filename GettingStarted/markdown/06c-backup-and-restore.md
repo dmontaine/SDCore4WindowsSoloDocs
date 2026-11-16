@@ -130,7 +130,7 @@ anything.
 Each shows its command in a box answered Run or Cancel, **and Cancel is what Enter chooses**. The
 page runs those four commands and no other; the verbs ask for the administrator again and write
 their own audit lines. **A restore replaces the account's data**, so its box says so and wants the
-word `RESTORE` typed; the page then gives `no.query`, because the verb's own question cannot be
+word `restore` typed (in either case); the page then gives `no.query`, because the verb's own question cannot be
 answered through a page. An archive that holds an account other than `sduser` is refused by the
 page, which names it. As at the prompt, the restore is prepared now and the swap happens the next
 time SD starts. `F5` reads the folder, the archives and the sessions again, `F1` explains the page

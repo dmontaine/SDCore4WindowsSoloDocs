@@ -148,7 +148,8 @@ Windows does not filter traffic that never leaves the computer.
 administrator: a firewall rule is machine-wide. The uninstaller removes it.
 
 **To change it afterwards from SD**, after `admin`: `remote.ssh open`, `remote.ssh local` or
-`remote.ssh off` (or the S key of `tool.remote`). With no word, `remote.ssh` reports what is
+`remote.ssh off` (or the S key of `tool.remote`: the word is chosen from a list that starts on
+`off`, and `open` wants the word `open` typed, in either case). With no word, `remote.ssh` reports what is
 installed. A change asks for the administrator password again and is made by the doors helper the
 installer set up, from any session and with no elevated window:
 - off stops Solo's ssh server and keeps its folder and host key;

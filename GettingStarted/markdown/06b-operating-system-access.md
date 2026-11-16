@@ -67,7 +67,7 @@ tool.gates
 **A full-screen page, in any session** (140 columns by 43 lines at least). It
 lists the four gates this account has: **Shell** (`sh`), **OS.EXECUTE** (`os`),
 **Remote files** (`net`, [API access](09-api-access.html)) and **File transfer**
-(`xfer`, `set.xfer.access`; [Moving files in and out](../../User/html/29e-sd-tcl-moving-files-in-and-out.html),
+(`xfer`, `set.xfer.access`; *Moving Files In and Out* in the User documentation,
 read each time it is used, so "this session" is what the register says now). For each it shows
 whether the gate is ON or off **for this session**, what the register holds
 (shown to the administrator only), how it is delivered (off, every one), whether
