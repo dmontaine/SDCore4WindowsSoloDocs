@@ -400,6 +400,11 @@ were built, with the changes they made.
 | Name | Change | What |
 |---|---|---|
 | `agent-pack` | Added | a guide to SD BASIC for AI agents (its examples compiled and run on SD Core Solo for Linux), a generated reference of everything the product has, a Claude Code skill and a recipe for giving an agent a way in; in the source only, not installed; User page 41 and Getting Started page 23 |
+| `ai` | Added | asks the AI the administrator has chosen one question: you see the provider, the model, the size and your text, and nothing is sent without `y`; the answer is printed, never run; off until a provider, its key and the AI gate are set; User page 29b |
+| AI helper (`sd-ai.exe`) | Added | the one program that talks to the provider, in `usr\bin`; SD starts it for each request as your own Windows user (no service); its settings and keys are in `sdsys\ai`, each key encrypted with DPAPI for your Windows user, kept by an upgrade and by the uninstaller's Keep; any program running as you can use it; Getting Started page 24 |
+| AI line | Added | an `AI>` row on the home screen, the toolkit's pages, the IDE, SED, the dictionary form, CED (F2) and the debugger (`AI`), when the AI is on: a preview first, Cancel the default, a proposal Reject by default, Follow up; SD's own files are never sent; User pages 29a, 29b, 29d, 24 |
+| `set.ai` | Added | administrator only: the AI gate (`set.ai gate on`, off as delivered), the provider, model, key, Custom connection, certificate file, limits and standing text; a key typed at its prompt never passes through SD; Getting Started page 24 |
+| `tool.ai` | Added | administrator only: the AI choice page and home tile (*Data, network and AI*): the provider with a check box, the key and model in one setup dialog, the gate, the limits and the standing text, every change a `set.ai` sentence behind a box answered Run; Getting Started page 24 |
 
 ### API and client library
 

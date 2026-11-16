@@ -323,7 +323,7 @@ different there. The keys every full-screen page shares are in
 | File, Write a copy | the name form; the text is written to another record and the editor stays on the record it had. **With `path:/full/name` the text is written to a new file of the operating system** and no tab or lock is kept. It has no key |
 | Ctrl-W · File, Close record | closes the record's tab; with unsaved changes it asks whether to save them, discard them or cancel |
 | Ctrl-PageDown · Go, Next tab | the next record tab; Ctrl-PageUp (Go, Previous tab) the one before. **Alt-PageDown and Alt-PageUp do the same** |
-| F6 · Go, Next pane | the keyboard goes to the next pane. **Shift-F6** (Go, Previous pane) goes to the one before. These are the only keys that move between the panes, here and on every full-screen page |
+| F6 · Go, Next pane | the keyboard goes to the next pane (the AI line is one, after the messages, when the AI is on). **Shift-F6** (Go, Previous pane) goes to the one before. These are the only keys that move between the panes, here and on every full-screen page |
 | Go, Files and records | the keyboard goes to the tree. It has no key, because F3 is the text area's find next (below). From the editor, Shift-F6 twice reaches the tree (editor, tabs, tree) |
 | F3 · Shift-F3 | with the editor focused, **find next** and **find previous** of the text last searched for |
 | Ctrl-R · Search, Replace in the record | replace a text through the record, **as one undo step** (one Ctrl-Z gives the whole text back). The find options below apply. **In a record shown with `:@vm:` marks it changes the record's own text** (the colon in `10:30` is a colon; a mark's token is never found or changed, and a result that cannot be shown in the token form is refused and leaves the text alone). A text to find is at most **256 characters** |
@@ -524,7 +524,7 @@ and enter `X` as line 1 and the words as line 2 (for example `INDENT TABS 4 NO.M
 **If `autologout` is set** (the default is off) **the status line counts down the last 60 seconds** before
 the session would be signed out: *Idle: signing out in 42 s*, followed by *; unsaved changes will be
 lost* when there are any, or *; a recovery copy is kept* when the recovery copy below is on. Any key
-stops it. It reads the same inactivity clock that `autologout` uses.
+stops it. It reads the same inactivity clock that `autologout` uses, so a wait for the AI counts.
 
 Run and debug give the terminal to the program and come back to the IDE when
 you press Return. **Nothing runs if the compile failed.** If somebody else has
@@ -537,7 +537,7 @@ it leaves at once and asks nothing, so unsaved text is not saved.
 below the editor are hidden and the editor takes the whole screen, with the
 tabs above it, the menu bar, the status line (which says *zoomed*) and the
 key row as before; Ctrl-E again, or Go > Files and records, brings them back.
-Every key and menu works the same while zoomed, and F6 goes
+Every key, menu and the AI line work the same while zoomed, and F6 goes
 between the tabs and the editor only. Anything that fills the messages - a
 compile with errors or warnings, a search, Run a command - ends the zoom so
 that you can read it; a compile with no errors leaves it as it is. Ctrl-E is
@@ -563,7 +563,11 @@ nothing, and after a change **one Ctrl-Z in the text area takes the whole visit 
 fields: bp prog is changed, save it to keep it*; *... is as it was* when nothing changed). The pane
 writes nothing and takes no lock. **Commands that work on the text of the record** - Replace, the case
 changes, Import and Export, Format, Go to line and Open the include - **wait while the pane
-is up** (*This works on the text of the record: show the text first (F12), then do it*).
+is up** (*This works on the text of the record: show the text first (F12), then do it*). **The AI line
+works in the pane**: a request typed in the AI entry, and the AI menu's
+*explain the selection*, which explains the element the table has selected, send the record as
+indented JSON, one element to a line; the preview and the diff come first, and what you accept
+changes the fields and so the tab's text. Explaining a compile message does not apply to the pane.
 **On the empty top level of a record, Alt-T asks whether it is a collection or an array** (C, A or
 Esc); a new record of a collection file starts as an empty collection. If something
 else changes the text under the pane (the overwrite question's *Reload*), the pane follows it,
@@ -614,6 +618,15 @@ does not show (the compile stamp and object code of an I item, and any field aft
 they were while the type stays; a changed type starts from the new type's rows. The form is modal: the tabs and
 the menu wait until it is left.
 
+**The form has an AI line** when the AI is on: **AI>** on its last
+row, reached with **F6** or a click (Shift-F6, or F6 again, goes back to the row you were on; Tab goes from
+row to row, the AI line among them). Say what the item should be and press Enter there (Enter in that
+line asks the AI; it does not accept the form). A preview is shown first, Cancel the
+default; the values the AI proposes are shown in full, Reject the default; **Accept puts into the rows only
+the values that pass the form's own checks** and the line near the foot names any that did not. Nothing is
+written until you Accept the form and the IDE saves it. An item of SD's own files is never sent. See
+[SD TCL - Asking the AI](29b-sd-tcl-asking-the-ai.html).
+
 **A record that holds marks is shown with the marks written as tokens**, so
 that nobody types one. This follows the tab's kind: **a dictionary item, a VOC record
 and a record of a data file are always shown so, even one that had no marks when it was read**, so that a mark
@@ -634,6 +647,33 @@ It is shown as it is, with the marks drawn as the characters they are, and the s
 *Marks are shown as characters: field 1 holds the text of a mark token*. Find in the records of a
 file looks at the real records, and replace works on the real record, so neither matches a token;
 the item mark is not converted.
+
+**The AI in the IDE.** When the AI is on (see
+[Asking the AI](29b-sd-tcl-asking-the-ai.html)) the IDE has an **AI** menu before Help and an
+**`AI>`** row under the editor and the messages table (the table is one row shorter); without the AI
+neither is there and nothing else changes. F6 goes round the panes to the AI row (Shift-F6 the other
+way), or click it, or use the menu:
+
+| | |
+|---|---|
+| AI, Explain the error | asks the AI to explain the compile message the table has on its line, with the record |
+| AI, Explain the selection | the same for the text from the mark (Ctrl-G where it starts) to the cursor; with no mark the status line says to set one and nothing is sent |
+| AI, Ask about this record | puts you in the `AI>` row to type what you want |
+
+Whatever you ask, Enter shows **what you are sending** first: the provider and model, the size of
+all of it (SD's own instruction is sent and counted, not shown), the record's lines (the whole record when it is under 24,000 bytes, else the
+lines round the cursor, and it says which), the line they start at, and your request, with Send and
+**Cancel, which is the default**. While the AI answers, Esc gives the request up.
+
+The AI may answer with words and, if it was asked for a change, with **edits**. Each is shown as a
+diff in the answer: `Change 1 of 2, at line 5:` and the old lines with `-` and the new with `+`.
+**Accept** puts the changes into the editor as **one step** (one Ctrl-Z takes them all back) and
+saves **nothing**; **Reject, the default, leaves the editor as it was.** The set is taken whole or
+not at all: an old text that is not in the record, is in it twice, or overlaps another edit, more
+than 8 edits, or a change that would show more than 30 lines, is ignored with a note and nothing is
+offered. If you changed the record while the AI was answering, its change no longer fits and
+nothing is applied. The IDE has nowhere to run a command, so a command in the answer is ignored.
+Saving, compiling and running stay your own acts.
 
 The other keys: Ctrl-Q quits, Alt-G goes to a line, Ctrl-X, Ctrl-C and Ctrl-V cut, copy and
 paste, Ctrl-Z and Ctrl-Y undo and redo, Ctrl-F finds forward and Ctrl-B
@@ -695,8 +735,8 @@ lock, which looks at the cursor, not at the window.
 
 A window made bigger, or smaller and then big enough again, keeps everything you
 were doing: the editor's undo and redo steps, the selection,
-the text to find (F3), the cursor and the view, the messages table's row and the open
-nodes of the tree. The parts of the screen are moved and
+the text to find (F3), the cursor and the view, the messages table's row, the open
+nodes of the tree and a half-typed AI request. The parts of the screen are moved and
 sized where they are; if one of them cannot be moved, the IDE builds the screen again,
 keeping the text. Coming back from Run or Debug also builds the screen again.
 

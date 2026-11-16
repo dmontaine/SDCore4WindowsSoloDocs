@@ -85,6 +85,7 @@ unlocked. [SED](27a-sd-tcl-sed.html) describes the lock in full.
 | **`Ctrl-S`** | save, and carry on |
 | **`Q`** | leave, at the top level only |
 | **`Ctrl-Q`** | leave from any level |
+| **F2** | the AI menu, when the AI is on (see *The AI in CED*, below); without the AI it does nothing |
 | **F1** or **`?`** | list the keys |
 
 **Leaving with changes asks whether to save**, with *Yes*, *No* and *Cancel*.
@@ -114,3 +115,22 @@ were kept** (`Ctrl-S`, or *Yes* when leaving); otherwise it is as it was. A
 string holding the JSON text of an object or an array is taken as the
 collection it parses to, and a null string as an empty collection; on return
 the variable holds the collection. Anything else is left alone.
+
+## The AI in CED
+
+When the AI is on (see [Asking the AI](29b-sd-tcl-asking-the-ai.html)) **F2** opens a menu of three;
+without the AI F2 does nothing.
+
+| | |
+|---|---|
+| Explain the selected element | asks the AI about the element the cursor is on (its path and, for a container, its contents) |
+| Ask the AI about this record | takes a question |
+| Undo the AI's last change | puts the record back as it was before the AI's last accepted change (one level) |
+
+The AI sees the record as **indented JSON, one element to a line**. As everywhere, Enter shows
+**everything that will be sent** first, with Send and Cancel (the default). The answer may propose
+changes to that text; they are shown as a diff, with Accept and Reject (the default). **A set of
+changes is accepted only if the result is still a JSON object or array**; otherwise it is ignored
+with a note and the record is not touched. Accepting marks the record changed — the usual quit
+question applies — and **saves nothing**: Ctrl-S is yours. After an accepted change you are back at the
+top level of the record. A command in the answer is ignored.

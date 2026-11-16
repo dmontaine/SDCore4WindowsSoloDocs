@@ -86,10 +86,10 @@ tiles stand above it. Type `admin`, then `home`, to see it.
 | | **Gates** (who may do what) | `tool.gates` |
 | *Data, network and AI* | **Backups** (save and restore) | `tool.backups` |
 | | **Remote servers** (doors and files) | `tool.remote` |
+| | **AI** (model and key) | `tool.ai` |
 
 (SD Core, the multi-user product, also has a *Switch account* tile and pages for its
-accounts; Solo has one account, so it has none. The group *Data, network and AI* has no
-AI tile in this product: see *Not in this product*, below.)
+accounts; Solo has one account, so it has none.)
 
 **The page scrolls.** It is laid out at its full height and only the rows that fit are
 drawn, with a scroll bar in the last column when there is more than fits, so the
@@ -101,7 +101,7 @@ and time, the product and its version, and Sign out) stays where it is.
 | key | does |
 |---|---|
 | the arrow keys | move to the nearest tile in that direction (a tile in the same row or column comes first) |
-| Tab, Back-tab | the next and previous tile, in reading order, round the tiles |
+| Tab, Back-tab | the next and previous tile, in reading order, round the tiles (they never go to the AI line) |
 | Home, End | the first and the last tile |
 | Page Down, Page Up | the first tile of the next and of the previous group |
 | a letter | the next tile whose label begins with it |
@@ -110,7 +110,8 @@ and time, the product and its version, and Sign out) stays where it is.
 | Esc, Backspace | back one page, when you are in a sub-menu (below); on the top page Esc opens the menu bar, as F10 does, and Backspace does nothing |
 | F1 | help on the home screen |
 | F5 | build the page again |
-| F10, Alt and a title's letter, a click on the top row | open the menu bar (File, Go, View, AI, Help). Every entry shows its key and does what the key does: **File** Sign out (Ctrl-Q, or no key when you typed `home` at the prompt) and, in that case, Back to the prompt (Ctrl-Q); **Go** Back (Esc or Backspace, only in a sub-menu), Terminal (Alt-T), Find a tile (/), Start the tile (Enter); **View** Refresh (F5), Recent group on or off (Ctrl-R), Theme (Ctrl-T); **AI** cannot be chosen (see *Not in this product*); **Help** Help on this page (F1), Keys (Ctrl-K: the keys of the home screen). An entry whose tile the administrator turned off is dimmed, and its key only says so. The Keys tile still opens the keyboard and terminal page `tool.keys` |
+| F6, Shift-F6 | move to the AI line, and from it back to the tile you were on, when the AI is on (when it is not, the status line says so); the same keys move between the boxes of every page |
+| F10, Alt and a title's letter, a click on the top row | open the menu bar (File, Go, View, AI, Help). Every entry shows its key and does what the key does: **File** Sign out (Ctrl-Q, or no key when you typed `home` at the prompt) and, in that case, Back to the prompt (Ctrl-Q); **Go** Back (Esc or Backspace, only in a sub-menu), Terminal (Alt-T), Find a tile (/), Start the tile (Enter); **View** Refresh (F5), Recent group on or off (Ctrl-R), Theme (Ctrl-T); **AI** Ask the AI (F6), dimmed when the AI is not on; **Help** Help on this page (F1), Keys (Ctrl-K: the keys of the home screen). An entry whose tile the administrator turned off is dimmed, and its key only says so. The Keys tile still opens the keyboard and terminal page `tool.keys` |
 | Ctrl-T | the next color theme, kept for you: every page, the IDE, SED and the debugger start in it from then on (see *Using the full-screen pages*) |
 | Ctrl-K | the keys of the home screen, in a box |
 | F2 | find an action: every entry of the menus in one list (*Go > Terminal*, with its key); type part of a name to narrow it, Enter chooses. An entry that cannot be used now says *(not now)* and only explains why |
@@ -119,8 +120,8 @@ and time, the product and its version, and Sign out) stays where it is.
 | Alt-T | the Terminal tile |
 
 Backspace, Alt-T, Ctrl-R, Ctrl-T and Ctrl-K are not on the row of keys at the foot of
-the screen (F1 lists every key). The row shows Enter, F1, F5, Ctrl-Q and /, and Esc in a
-sub-menu.
+the screen (F1 lists every key). The row shows Enter, F1, F5, Ctrl-Q and /, Esc in a
+sub-menu, and F6 when the AI is on.
 
 **Which Ctrl-Q you have.** A screen your session started in (the start setting is
 the home screen) is the session's own: Ctrl-Q signs out. `exit` after the Terminal tile
@@ -290,11 +291,53 @@ always one of those files, never a path you type. With no reader allowed (the de
 state) it says `No viewer has been allowed for documents`; over ssh, or in a session that is
 not at the computer, it says so and does nothing.
 
-## Not in this product
+## The AI line
 
-- **The AI line.** The AI is not part of SD Core Solo for Windows. The AI item of the
-  menu bar is shown and says *the AI is not on for this account*; it cannot be chosen, and the home screen has no
-  `AI>` row.
+When the AI is on (the administrator has chosen a provider, given it a model and a key,
+**and turned the AI gate on with `set.ai gate on`**, which is off as delivered; see
+[Asking the AI](29b-sd-tcl-asking-the-ai.html) and
+*The AI helper* in the GettingStarted set) the home screen has one more row, just above the
+status line, that starts **`AI>`**. Without the AI there is no such row and nothing on this
+page changes.
+
+**Press F6, choose AI > Ask the AI, or click the row**, type
+what you want in your own words, and press Enter:
+
+```
+AI> open the ide
+AI> show me who I am
+```
+
+Enter does not send anything. It shows the provider, the model, the size of all that will be
+sent, and **your request**. SD's own text that goes with it (one fixed instruction, the list of
+what this page can do, what the page says about itself) is sent and counted, but not shown. **Cancel is the default
+button**, so Enter alone sends nothing; choose **Send** (press `s`) to send. While the AI
+answers the row says so and **Esc gives the request up**.
+
+The answer comes in a popup. It says what the AI said, and it may *propose* one thing:
+
+| The AI proposes | What you see | What happens |
+|---|---|---|
+| a **tile** that opens a tool (Editor, IDE, Keys, the Develop tiles, and after `admin` the administrator's tiles) | `The AI proposes: IDE - programs and files`, with **Accept** and Reject | **Accept** starts the tile exactly as a click on it would. Enter alone accepts, because a tile only opens a tool you could open anyway. |
+| the **Terminal** tile, or one of **your own programs** on the page | the same, with **Accept** and Reject | **Accept** starts it as a click would. **Enter alone rejects**: the Terminal tile leaves the screen for the command prompt and a program of yours runs a command you wrote, so neither starts unless you choose Accept. This is decided for the proposal: having a program of your own on the page does not change what Enter does for the other tiles. |
+| a **command** | the command on a line of its own, with **Run** and Cancel | **Run** runs it as the Terminal tile's prompt would, and waits for Enter. **Enter alone cancels**: a command never runs unless you choose Run. |
+| nothing | only what it said, with Close | nothing |
+
+What it cannot do: it is never offered **Sign out**; a tile that is not on your page is
+ignored, with a note; a command with a control character in it or of more than 200
+characters is not shown; anything that is not one JSON object is shown as words, with a
+note, and nothing is proposed. The accepted tile or command runs with **your** rights: the
+switches of your account (`set.os.access`) apply as they would if you had typed it.
+
+The audit trail records that you asked (`ai request account=sduser program=tk_ai
+bytes.out=...`), never what you asked or what came back.
+
+**What is different from SD Core.** Solo has one account, so there is no *Switch account*
+tile to withhold and no per-account permission to ask for: the one switch is the AI gate,
+which the administrator turns on with `set.ai gate on` (never `modify.account`). And the
+helper that talks to the provider runs **as your own Windows user**, not as a service of its own, so any program
+you run, not only SD, can reach it; *The AI helper* in the GettingStarted set says what that
+weakens. The row, the preview and the proposals are the same.
 
 ## Not yet
 

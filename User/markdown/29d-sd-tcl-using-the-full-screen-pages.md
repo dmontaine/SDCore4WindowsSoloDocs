@@ -5,7 +5,7 @@ Every full-screen page of SD - the home screen, the development tools (`tool.fil
 `tool.query`, `tool.bulk`, `tool.catalog`, `tool.test`), the administrator's pages, `sp.view` and the dictionary form -
 is built the same way and answers the same keys. Learn them once here; each page's own help (F1) adds only what is
 particular to that page. What the pages are *for* is on their own pages: [The Home Screen](29a-sd-tcl-the-home-screen.html),
-[The Development Tools](29c-sd-tcl-the-development-tools.html).
+[The Development Tools](29c-sd-tcl-the-development-tools.html), [Asking the AI](29b-sd-tcl-asking-the-ai.html).
 
 ## The window
 
@@ -24,6 +24,7 @@ press F11 there for full screen.
 |---|---|
 | The top row | The **menu bar**: File first, Help last, and the page's own menus between. At the right end, the page's name and who you are (`administrator`, or `name@account`). |
 | The middle | The page's **boxes**: lists, a form, a text pane. When a page has two or more boxes that can take the keyboard, the one that has it is marked. |
+| The `AI>` row | Only when the AI is on: the line where you ask the AI (below). |
 | The last three rows | A **status line** (what just happened, or why a key is not in use now), a border, and the **row of keys**: the page's main keys and what they do. |
 
 On a terminal without color, nothing depends on color: the box that has the keyboard and the chosen row are shown in
@@ -37,7 +38,7 @@ reverse video.
 | **F2** | **Find an action**: a list of every entry of every menu, written `Menu > Entry` with its key. Type any part of a name to narrow the list, then Enter to do it, or Esc to close the list and do nothing. An entry that cannot be used now is marked *(not now)*; choosing it only tells you why. |
 | **F10**, Alt and a menu's letter, a click on the top row | Open the menu bar. |
 | **Esc** | Close what the page has open - a filter, a sub-view, the output pane, a sub-menu. When nothing is open, Esc opens the menu bar on the first menu whose first entry is not *Quit* (on most pages the second), so Esc and then Enter never leaves a page by accident. |
-| **F6**, **Shift-F6** | Move the keyboard to the next and the previous box, round and round. The same keys do this on every page and in the IDE. |
+| **F6**, **Shift-F6** | Move the keyboard to the next and the previous box, round and round. Where the AI is on, the AI line at the foot of the page is one of the stops, after the last box. The same keys do this on every page and in the IDE. |
 | **Shift-F10** | The **action menu** of the box that has the keyboard, in the middle of the screen (see below). |
 | **F5** | Read everything again and draw the page again. |
 | **Ctrl-L** | Draw the whole page again, as it is, without reading anything. |
@@ -57,7 +58,8 @@ also on its menus**: a key is a short way to a menu entry, never the only way. T
   the program's screen, step, run). In line mode, which has no menu bar, F2 is still Abort.
 - **SP.VIEW** answers F1, F5, Ctrl-L, Ctrl-T, Ctrl-K and Ctrl-Q as above, and its own letters (shown on its key row);
   it has no *Find an action*.
-- **`!CED()`**, the record editor a program calls, has no menu bar, and Esc goes up a level.
+- **`!CED()`**, the record editor a program calls, has no menu bar: **F2 opens the AI** there when the AI
+  is on, and Esc goes up a level.
 - **The key tester `tool.keys`** has no menu bar, so that it can show you Esc and F10; **Ctrl-L clears its list of
   keys** as well as drawing it again, and it takes no function key for itself.
 - **The dialogs**, where Enter, Esc and Tab keep their usual meaning.
@@ -102,7 +104,7 @@ A page never changes anything without asking first.
 - **A change a page makes itself** (a record it writes or deletes) says what it is about to do: *Write this record?*,
   *Delete this record?*.
 - **A refusal** is the command's own refusal, shown in the output pane. A page adds no access: a switch that is off
-  (`set.os.access`, `set.net.access`) stays off, and the page never tries an operation just to find out.
+  (`set.os.access`, `set.net.access`, `set.ai`) stays off, and the page never tries an operation just to find out.
 
 ## Forms
 
@@ -116,6 +118,29 @@ Where a page asks you to pick a file, a record or a saved query, it opens a **pi
 columns. **Type to narrow the list**, move with the arrow keys, **Enter** takes the row and **Esc** closes the list
 taking nothing. A list that can delete (tool.query's saved queries, for example) deletes the chosen row with **Del**, after
 you type its name to confirm.
+
+## The AI line
+
+When the AI is on (the administrator turns it on with `set.ai gate on`), every page has an **`AI>`** row above the status line. Press
+**F6** until the cursor is there (it is the stop after the last box), choose **AI > Ask the AI**, or click the row; type what you want in your own words and press Enter. Nothing is sent yet: a box shows
+the provider, the size of all that will be sent, **your request** and anything of yours the page sends with it (a record's
+lines, a selection, earlier questions), with **Cancel** as the default; press **s** for Send. SD's own instructions to the
+AI are sent too and counted in the size, but not shown.
+
+The answer comes in a box. It can *propose* an action of the page - you choose Accept or Reject, and anything that runs a
+command or changes something defaults to Reject. It never runs anything by itself, and it works with your account's
+rights only.
+
+**Follow up**: the last button of an answer box asks a follow-up question. Your next question on the same page, within
+ten minutes, then carries up to the last three questions and answers with it, once - and the preview shows them in
+full before you send.
+
+On the **dictionary form** the AI line can also propose values for the item's fields: each proposed value is shown in
+full, Reject is the default, and an accepted value goes into its field only if the form accepts it. Nothing is written
+until you accept the form and save.
+
+The AI line never sees SD's own programs or system files; [Asking the AI](29b-sd-tcl-asking-the-ai.html) says exactly
+what is sent.
 
 ## The IDE's Tools menu
 
@@ -132,7 +157,3 @@ left it.
 - **The colors are hard to read**: the site's colors are the administrator's choice (`SCREENTHEME`; the delivered `paper`
   is dark text on light gray, and `night` is light text on black); `tool.keys` shows what your terminal can display, and which
   keys it sends.
-
-## Not in SD Core Solo for Windows yet
-
-The AI line (an `AI>` row on every page where the AI is on) is in SD Core Solo for Linux and not here yet.

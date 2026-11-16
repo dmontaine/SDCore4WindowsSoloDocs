@@ -26,7 +26,7 @@ page is up, the page holds the keyboard behind a warning that gives both sizes, 
 again (Ctrl-Q, then y, leaves). The administrator's pages and the home screen do the same.
 
 The keys, menus, boxes and pick lists that all these pages share - F1, F2, Esc, F6, the right-click
-menu, the confirm box - are described once in
+menu, the confirm box, the AI line - are described once in
 [Using the Full-Screen Pages](29d-sd-tcl-using-the-full-screen-pages.html); each section below adds only
 what is particular to its page.
 
@@ -40,10 +40,10 @@ the page.
 The home screen has a tile for each of them, in the group *Develop*.
 
 **On a page with more than one box the keyboard can be in** (the query page, the bulk change page and the
-test page here; on the administrator's side the sessions and menus pages), the box that has it
+test page here; on the administrator's side the sessions, menus and AI pages), the box that has it
 is marked **`[*]`** in its top right corner and the others **`[-]`**, as the IDE marks its panes (since 1
 November 2026). **F6** moves the keyboard and the marks to the next box and **Shift-F6** back, round and
-round (since 8 November 2026, the same keys on every page and in the IDE; Tab no longer moves between boxes). On the test page F6 goes
+round, with the AI line as the stop after the last box when the AI is on (since 8 November 2026, the same keys on every page and in the IDE; Tab no longer moves between boxes). On the test page F6 goes
 from the list to what the test under the cursor printed, and back. A box the keyboard never goes to has no mark.
 
 **Every page has a menu bar on its top row** (since 29 October 2026), made from the page's own key table, so

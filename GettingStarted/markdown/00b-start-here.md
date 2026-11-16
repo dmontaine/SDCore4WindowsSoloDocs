@@ -74,6 +74,7 @@ that no page runs longer than a reader will scroll.
 | **18** | [Encryption and the SDEXT interface](18-encryption.html) | What encryption SD has, and the interface behind it |
 | **19** | [Features the developers could not test](19-features-the-developers-could-not-test.html) | What nobody has watched work |
 | **20** | [The MCP door](20-the-mcp-door.html) | Letting an AI agent's MCP client use your account through read-only tools: the two switches (both off), the audit line, and what the door does not add |
+| **24** | [The AI helper](24-the-ai-helper.html) | Asking an AI model a question from SD: the provider, the key, the gate, and what a helper that runs as you cannot promise |
 
 ## The five things most likely to surprise you
 

@@ -61,7 +61,7 @@ first asks what to do with your data and configuration, and Keep comes first:
 
 | | |
 |---|---|
-| **Keep** | leaves in `%USERPROFILE%\SDCoreSolo` your account `sduser` with its data (`user_accounts\sduser`), `sd.conf`, and what SD Core keeps with its accounts: the passwords (`sdsys\$cred`), the audit trail and its older copies, the API's TLS key (`sd-tls`), your ssh key file (`ssh`), the SDNet logins, your own VOC changes (`newvoc.mods`) and saved VOC records, and where sessions start (`start.default`); a small file, `.sdcore-kept`, says so. Solo's ssh server keeps its host key in its administrators-only folder, `C:\ProgramData\SDCoreSolo\ssh`. **These are removed, and the dialog lists them:** the system files, the list of denied commands, `global.bp.out` and the install logs |
+| **Keep** | leaves in `%USERPROFILE%\SDCoreSolo` your account `sduser` with its data (`user_accounts\sduser`), `sd.conf`, and what SD Core keeps with its accounts: the passwords (`sdsys\$cred`), the AI helper's settings and keys (`sdsys\ai`; see [The AI helper](24-the-ai-helper.html)), the audit trail and its older copies, the API's TLS key (`sd-tls`), your ssh key file (`ssh`), the SDNet logins, your own VOC changes (`newvoc.mods`) and saved VOC records, and where sessions start (`start.default`); a small file, `.sdcore-kept`, says so. Solo's ssh server keeps its host key in its administrators-only folder, `C:\ProgramData\SDCoreSolo\ssh`. **These are removed, and the dialog lists them:** the system files, the list of denied commands, `global.bp.out` and the install logs |
 | **Delete** | removes the whole folder, for good, and the ssh host key with it |
 
 **A silent uninstall never deletes your data**; it keeps, as above.
