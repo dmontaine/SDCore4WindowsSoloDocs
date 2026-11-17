@@ -622,6 +622,7 @@ Fixes that close a way round a gate, and what the gates now ask.
 | F1 at the prompt | Changed | fixed: names the changelog in the SD Core Solo folder, not in its `sdsys` folder |
 | failed start | Changed | fixed: an `sd.exe` that stopped early ("SD has not been started.") kept an internal lock, and every session started after it hung; the lock is given back |
 | kernel faults | Changed | fixed: `getlocks()` with a user number nobody holds read outside the user table; a time conversion with negative parts or long hours overran its buffer, and a prefix strip in a conversion copied over itself |
+| message numbers | Changed | the administrator and password messages (12002 to 12020, 12022, 12025 to 12035), the `SDConnectLocal` refusal (12930), the AI gate message (12611) and the `set.pins` messages (12935 to 12937) are now 15891 to 15928 (15923 and 15924 unused), in the same order and with their text unchanged: SD Core for Windows uses those numbers for other messages |
 | phantom of an ended session | Changed | a phantom whose session ended before it started ends at once |
 | `sd -status` | Changed | fixed an overrun on a server that recorded no start time |
 | `sd-solo -start` | Changed | a script that captures its output, or runs a session whose phantom outlives it, gets its end of file: the background process no longer holds the pipe |
