@@ -388,6 +388,7 @@ compiled with until it is compiled again; compiling it again stops with an error
 | `cleardata`, `clearinput`, `clearprompts`, `clearselect` | Removed | the run-together names of the verbs `clear.data`, `clear.input`, `clear.prompts` and `clear.select` (the BASIC statements of the same names are not affected) |
 | `closeseq` and `equ` | Removed | write `close` and `equate` |
 | `colour`, `without`, `no.grand.total` | Removed | write `color`, `with no` and `grand.total "'L'"` |
+| `$contrib` and `$licence` | Removed | the VOC records of the contributors and the licence notice; read the files `contrib` and `licence` in the system folder, as on SD Core Solo for Linux |
 | `copyp`, `copy.listp` | Removed | the Pick-style copy and its saved-list form (`copy.listp` was added and taken out again in this release): write `copy` and `copy.list` |
 | `create.file ... no.case`, `case` and `version` | Removed | write `create.file` without them; a file is made in the current format |
 | `cs` | Removed | second name of `clr`: write `clr` |

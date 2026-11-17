@@ -44,20 +44,20 @@ valid PROC and it is the interpreter that is gone.
 ### What the shipped VOC holds
 
 Counted directly from `newvoc` in the system directory — the VOC a new account
-starts with, 433 records:
+starts with, 436 records:
 
 | Type | Count |
 |---|---|
-| `V` | 202 |
+| `V` | 207 |
 | `K` | 218 |
 | `F` | 7 |
 | `PA` | 1 |
 | `S` | 1 |
 | `Q` | 1 |
-| `X` | 3 |
+| `X` | 1 |
 
 **The four keyword-verbs are among the 218 `K` records.** They are counted as
-keywords here and are also verbs, so Solo has 202 + 4 = **206 verbs**.
+keywords here and are also verbs, so Solo has 207 + 4 = **211 verbs**.
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
 is yours. The account and grant commands are not in it — see
