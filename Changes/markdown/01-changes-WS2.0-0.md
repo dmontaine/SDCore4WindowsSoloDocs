@@ -542,6 +542,7 @@ The screen statement and its library, and what changed in the terminal handling 
 
 | Name | Change | What |
 |---|---|---|
+| alternate screen in SD's window | Added | in SD's own window a page opened with `screen open clear` (the home screen, the toolkit's pages, the IDE, CED) is drawn in the console's alternate screen, which Windows does not rewrap, so dragging the window wider or narrower no longer turns the page to garbage; leaving the page brings back the lines from before it; not over ssh |
 | `ced`, `ide`, `sed` | Added | `ide` is SD Core's editor: tabs, record locks, an OS-file tree, breakpoints handed to the debugger, a single-record mode, undo and redo; `sed` opens it (the old SED program is gone); `ced` edits a data collection; they save into the VOC only after `admin` |
 | `debugger` full-screen display | Added | on a terminal that reports its size and has an alternate screen the debugger takes the whole screen; F1 help, F4 the program's screen; a terminal without one (the `windows` type today) keeps the line-by-line debugger |
 | development pages | Added | `tool.files`, `tool.voc`, `tool.dict`, `tool.query`, `tool.bulk`, `tool.catalog` and `tool.test`, each a tile of the home screen |
