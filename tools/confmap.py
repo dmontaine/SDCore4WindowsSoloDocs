@@ -195,11 +195,22 @@ for name in roster:
 # Same rule as tclmap: the name backticked, or opening a line inside a fenced
 # block, or in the first column of a table row.  Prose alone is not evidence.
 
+PAGE_PARTS = {
+    'GettingStarted/markdown/16-configuration.md': [
+        'GettingStarted/markdown/16b-changing-a-parameter-from-sd.md',
+        'GettingStarted/markdown/16c-the-parameters.md'],
+}
+
+
 def evidences(path, name):
     full = os.path.join(HERE, path)
     if not os.path.isfile(full):
         return False
     text = io.open(full, encoding='utf-8').read()
+    # The page is kept to about 14,000 characters by splitting it into parts
+    # (Nov 2026); a parameter is documented when any part of it is evidence.
+    for extra in PAGE_PARTS.get(path, []):
+        text += '\n' + io.open(os.path.join(HERE, extra), encoding='utf-8').read()
     if re.search(r'`%s`' % re.escape(name), text):
         return True
     if re.search(r'^\|\s*%s\s*\|' % re.escape(name), text, re.M):
