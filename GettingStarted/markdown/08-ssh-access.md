@@ -103,6 +103,12 @@ password first.
 Linux server adds its own key on a managed computer, through the API (see
 [Managed mode](15-managed-mode.html)), and removes it again if it is asked to.
 
+**No key works until you add one.** Solo's ssh server reads only its own key file, which the
+installation creates empty, so nobody can sign in with a key you did not put there. A key
+arrives only when you add it, by editing the file (below) or by the SD Core for Linux
+server's request through the API, which runs `solo-sshkey.ps1` with `ADD`; a key you set up
+elsewhere on this computer does not reach Solo.
+
 **To sign in from your own computer with a key**, add your public key to
 `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` as one line (the file is in your
 own folder, so no administrator is needed):

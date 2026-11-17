@@ -193,7 +193,10 @@ this confinement, not a missing file.
 
 **If your data lives outside the account**, name the directory in the
 **`NETDIRS`** setting in `sd.conf`, separating several with a semicolon.
-`config('NETDIRS')` prints what is in force. SD's password file, its program
+An entry that is not an absolute path, not an existing directory, a drive root, or that
+overlaps the Solo folder or any account is ignored and named in the error log when SD starts
+(see [The parameters](16c-the-parameters.html#netdirs-directories-outside-the-account)).
+`config('NETDIRS')` does not read it: read the file. SD's password file, its program
 catalog and its account register are never reachable from an API session,
 and cannot be added to `NETDIRS`. A server session may reach `global.bp.out`.
 

@@ -91,9 +91,11 @@ SD accepts **59** parameters. The verb prints all of them except `APILOCAL`,
 `BACKUPDIR`, `NETDIRS` and `SDSYS`, and `DEBUG`, `FDS` and `PHANTOMS` only when
 they are set.
 
-`NETDIRS` is the one to know about. It decides what an API session may reach
-outside its own account, and the verb will not tell you what it is set to. Read
-it from the file.
+`NETDIRS` is the one to know about. It decides what an API session, and a
+session held to its account by the `os` switch, may reach outside its own
+account (see [The parameters](16c-the-parameters.html#netdirs-directories-outside-the-account)).
+The verb will not tell you what it is set to, and `config('NETDIRS')` does not
+read it. Read it from the file.
 
 The `config()` function reads one parameter from a program, and needs no
 `admin`:
@@ -102,8 +104,8 @@ The `config()` function reads one parameter from a program, and needs no
 group.size = config('GRPSIZE')
 ```
 
-**57 parameters are readable this way.** The two that are not are `BACKUPDIR`
-and `SDSYS`. The name is truncated to sixteen characters before it is matched,
+**56 parameters are readable this way.** The three that are not are `BACKUPDIR`,
+`NETDIRS` and `SDSYS`. The name is truncated to sixteen characters before it is matched,
 which is longer than any parameter name, so that only shows up if you pass
 something which is not a parameter.
 
@@ -183,7 +185,7 @@ not start with it (the section *A name SD does not recognize stops it starting* 
 the rows where the file and SD disagree, and `S` only the parameters the file sets. The last column,
 `Change`, says `e` for a parameter the page can change (press `E`) and `by hand` for every other.
 
-`SDSYS` and `BACKUPDIR` cannot be read with the `config()` function; the page says `(not readable)`
+`SDSYS`, `BACKUPDIR` and `NETDIRS` cannot be read with the `config()` function; the page says `(not readable)`
 for what SD is running with and shows the file's value. `DEBUG` is not compared: the function reports
 it in another form than the file writes it.
 

@@ -84,7 +84,7 @@ is a door, and the limits are added by hand.
 |---|---|---|
 | `APIPORT` | 4249 | Switches the API on. Any number above zero means on, and SD listens on port 4249 whatever the number is; the port cannot be changed. If the line is absent or commented out no socket is created at all, which is how the API is turned off. A file that says `APIPORT=4243` still means on |
 | `BACKUPDIR` | unset | The folder `backup.account` and `restore.account` use. Set by `set.backup.directory`, not by hand - see [Backing up and restoring the account](06c-backup-and-restore.html) |
-| `NETDIRS` | unset | Directories outside its own account an API session may open, separated by semicolons because a Windows path contains a colon |
+| `NETDIRS` | unset | Directories outside its own account that an API session, or a session held to its account by the `os` switch, may open, separated by semicolons because a Windows path contains a colon. See *`NETDIRS`: directories outside the account*, below |
 | `APILOCAL` | 0 | 1 makes the API listener (`APIPORT`) listen on 127.0.0.1 only, so only this computer can reach it; 0 or no line, every address. `remote.api local` writes it and `remote.api open` takes it away. `config('APILOCAL')` reads it; the `config` verb does not print it |
 | `SDCLIENT` | 0 | Restricts what an API session may do. Non-zero disables file access outright (no file can be opened, so no dictionary can be evaluated either), refuses `SDIConv`, `SDOConv`, `SDIConvs` and `SDOConvs` a conversion code that reads a file (`T` with a file) or calls a program (`U`), and refuses `SDOpenSeq`, `SDExecute`, `SDTrans` and `SDRTrans`; `2` additionally refuses any subroutine not compiled as callable from a client |
 
@@ -93,6 +93,37 @@ open files in the account it is standing in and nothing else. It never grants
 the credential store, the global catalog or the account register, and naming
 those has no effect. A directory listed here is reachable by every API session,
 so it is a decision about the computer.
+
+### `NETDIRS`: directories outside the account
+
+```
+NETDIRS=D:\Data\Sales;D:\Data\Shared
+```
+
+The entries are absolute paths separated by semicolons (a Windows path holds a colon).
+**Nothing is listed as delivered.** With the `os` switch off, a session opens no file by
+pathname outside the account's own directory; `NETDIRS` names directories it may reach all
+the same, to read, change, create and delete, without turning the switch on, which would open
+the whole computer. It widens the API session's reach as well as the `os` switch's. `sh` and
+`os.execute`, the rule that a VOC changes only after `admin`, and what the `ai` line may send
+are separate and unchanged. A session that has typed `admin`, or has the `os` switch on,
+reaches every path already. `NETDIRS` is asked last, after the account's own directory.
+
+**Entries SD ignores.** An entry is left out, and named in the error log when SD starts, when
+it is not an absolute path, is not an existing directory, is the root of a drive or a share,
+or holds or lies inside the SD Core Solo folder, the SD system directory, the directory of
+`sd.conf`, the user or group accounts directory (`USRDIR`, `GRPDIR`), or the directory of any
+registered account. An account created later inside a listed directory closes that entry at
+once. At most 16 entries are taken, and an element longer than a pathname is dropped whole.
+
+**How a path is judged.** The name a program gives is resolved first, and a name that still
+holds a `.` or `..` component is refused. It is then compared with each entry ignoring upper
+and lower case, and the whole folder name must match: `D:\Data\xkey` is not inside `D:\Data\x`.
+
+SD reads the line when it starts, so a change takes effect the next time SD is started.
+**A value longer than 191 characters is refused, by name**, rather than cut, because a cut
+path is a shorter directory and would admit more than you wrote. It is not shown by `config()`:
+read the file.
 
 `SDCLIENT` has no entry in the shipped `sd.conf`. It defaults to 0, which
 permits everything.

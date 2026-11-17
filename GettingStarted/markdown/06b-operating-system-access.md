@@ -19,6 +19,12 @@ about: inside it everything works whatever the switches say. **The
 administrator needs no switch**: after `admin` the session passes both for as
 long as it lasts.
 
+**One narrower door for files only.** With the `os` switch off, an `sd.conf` line such as
+`NETDIRS=D:\Data\Sales;D:\Data\Shared` lets the account read and write files in the folders it
+names, and below them, by pathname, without turning the switch on. None is listed as
+delivered, and listing one is a loosening for every session of the account. See
+[The parameters](16c-the-parameters.html#netdirs-directories-outside-the-account).
+
 **What they run as, when they are on:** your Windows user, on an ordinary
 unelevated token — even when your Windows account is an administrator, because
 SD drops those rights (see [Running SD](03-running-sd.html)). A command that
