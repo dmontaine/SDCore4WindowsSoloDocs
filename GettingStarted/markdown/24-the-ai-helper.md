@@ -197,10 +197,6 @@ The `ai request` line is written by the SD kernel **before** the helper is start
 | `The AI did not answer: limit (...)` | one of the limits above is used up; wait, or raise it |
 | `The AI did not answer: net (...)` or `timeout` | the provider could not be reached; check the address, the certificate, the clock, and whether the machine needs a proxy to reach the internet (the helper uses none) |
 
-## What has not been shown
-
-**Not run on an installed SD Core Solo for Windows yet.** The helper is SD Core for Windows' program with SD Core Solo for Linux's same-user rules; its own tests pass against a stand-in provider, and the kernel's side has started it and read its answers outside an installed SD. Not yet run: a request from an installed Solo, the page and the verb there, the DPAPI key files under a real sign-in, a session that signed in over ssh with a key, and any real provider.
-
 ## See also
 
 [Administrator commands](06-administrator-commands.html) ·

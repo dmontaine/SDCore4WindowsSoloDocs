@@ -140,7 +140,7 @@ the rights anyway.
 |---|---|
 | **Run only when user is logged on** | runs in your signed-in session. The kept password works as it does in a PowerShell window |
 | **Run whether user is logged on or not**, with your Windows password stored by Task Scheduler | runs when you are signed out. Expected to work the same way, because Windows signs the task in with your password |
-| **Run whether user is logged on or not**, with **Do not store password** ticked | **does not sign in while you are signed out** (measured 16 Nov 2026): Windows signs such a task in without your password, and the kept copy, which your password protects, does not open. Use one of the two above, supply the password on the input (below), or use SD's own jobs, which are made this way and sign in by your Windows identity |
+| **Run whether user is logged on or not**, with **Do not store password** ticked | **does not sign in while you are signed out**: Windows signs such a task in without your password, and the kept copy, which your password protects, does not open. Use one of the two above, supply the password on the input (below), or use SD's own jobs, which are made this way and sign in by your Windows identity |
 
 ## Supplying the password on the input
 

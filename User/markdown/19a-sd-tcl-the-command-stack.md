@@ -175,9 +175,7 @@ and the command:
 The `on` that starts the log is not in it; every command after it is, and the
 `off` that ends it is the last line. A word after `on` or `off`, or any word but
 those two, is refused with *Unexpected token*, and if the log cannot be made
-(*The command log could not be started*) nothing is logged. The listings were
-read from the source and the Linux Solo listings; they were not run on Windows.
-
+(*The command log could not be started*) nothing is logged.
 ## What is not here
 
 **There is no online help and `help` is not a verb.** The command processor

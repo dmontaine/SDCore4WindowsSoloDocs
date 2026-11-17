@@ -5,10 +5,7 @@ Subtitle: Open a file that lives on another SD server and use it with READ, WRIT
 ordinary `OPEN` and then use it with the ordinary file statements. In SD Core Solo for Windows
 it is **delivered off, in four places**: the account has no NET gate, no server is defined,
 nobody has a login on one, and no VOC entry points at one. The administrator turns each on,
-deliberately, and each can be turned off again. **On Windows the client is compiled and the checks
-that need no installed system pass; it has not yet been run against another server.** The Linux
-version of this client was run in private test sandboxes; that is not a result for this one.
-
+deliberately, and each can be turned off again.
 Solo is a **client** of SDNet here, and it is also a **target**:
 
 | | |
@@ -142,8 +139,7 @@ there, for this session, and `release` or a `close` or the end of the process gi
 or locks a file of a server defined `read` is refused with message 12506 (or sets `status()` under `on error`) and
 **nothing is sent**.
 
-**`recordlocked(f, id)` needs the same two things as a lock** (changed on 21 October 2026, carried from SD Core's rule of
-20 October): the server must be defined `write` here, and the login
+**`recordlocked(f, id)` needs the same two things as a lock**: the server must be defined `write` here, and the login
 on the other machine must be allowed to ask. A `read` definition stops the program with message 12506
 (`recordlocked is refused`) and nothing is sent; the function has no `on error` clause, so a refusal always stops the
 program. A SD Core server answers request 34, the one `recordlocked()` sends, only to a login that is in its write

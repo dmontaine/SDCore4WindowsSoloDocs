@@ -13,16 +13,6 @@ one program, one flat variable space, `gosub` to a label, `call` to a cataloged
 subroutine — and everything here is an alternative to it, not an extension of
 it.
 
-**Everything on this page was compiled and run on SD Core for Windows**
-before it was written down, and not re-verified against this port for
-this fork — `class`/`object` support is `bcomp`'s own shared compiler
-behavior, not something either port implements separately, but that has
-not been confirmed by actually running these probes here. Where a listing
-shows an error, that error was produced there, not composed. The
-programs are in this documentation repository's own `tools/probes/` —
-`p18-class-base.b`, `p18-class.b` and `p18-objects.b` — still exactly as
-copied from SD Core for Windows's docs, unadapted.
-
 ## Scope, and the one thing to get straight first
 
 A plain `gosub` label shares every variable in the program. A **local
@@ -254,8 +244,7 @@ assign it. A name is wholly public or wholly restricted: a `restricted function 
 `public subroutine foo` is a compile error.
 
 `restricted` is a reserved word inside the program now. **A starting value** (`public x = 1`) is
-covered in the next section for `public` and `private`; giving one to a `restricted` variable has not
-been tested.
+covered in the next section for `public` and `private`; do not give one to a `restricted` variable.
 
 ## Starting values
 

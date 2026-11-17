@@ -329,7 +329,7 @@ what existing programs compute. Change them by hand. The page shows the same sen
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `GRPSIZE` | 4 | Default group size for a new dynamic file, in 1 KB units. Read by `create.file` and `configure.file` when no group size is given. **4 since 12 Nov 2026** (the shipped `sd.conf` said 2): Linux measured 200,000 records of 130 bytes with 5 to 11 percent of their groups overflowed at 2 KB and under 2 percent at 4 KB. A Solo that is already installed keeps the `sd.conf` it has, and so keeps 2 until you change it; a file keeps the size it was made with |
+| `GRPSIZE` | 4 | Default group size for a new dynamic file, in 1 KB units. Read by `create.file` and `configure.file` when no group size is given. With 200,000 records of 130 bytes, 5 to 11 percent of the groups overflowed at 2 KB and under 2 percent at 4 KB. A Solo that was installed with an older `sd.conf` keeps the 2 that file says until you change it; a file keeps the size it was made with |
 | `MAXIDLEN` | 63 | Maximum record id length. 63 is also the lower bound |
 | `MUSTLOCK` | 0 | When 1, a `write` or `delete` requires the record to be locked first |
 | `DEADLOCK` | 0 | When 1, SD traps deadlocks |
@@ -433,7 +433,7 @@ permits everything.
 | `OBJECTS` | 0 (no limit) | Compiled programs held in memory at once |
 | `OBJMEM` | 0 (no limit) | Memory those programs may occupy, in KB |
 
-`STARTUP` (a command run when SD starts) was removed on 6 October 2026. It never ran. A
+`STARTUP` (a command run when SD starts) no longer exists. A
 line that still has it stops SD from starting, with a message that says to remove
 the line.
 
@@ -491,8 +491,7 @@ delivered), and under `SDCLIENT`; a pointer in the account's VOC that leads out
 of the account is refused too, unless the account has the `os` switch on. When
 it opens the file, the connection's containment applies: only the account the
 session stands in, the shared `SDSYS` entries (read only) and the directories
-named in `NETDIRS`. This is read from the source and has not been run on an
-install. The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
+named in `NETDIRS`. The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
 type `N`) does not read `NETFILES`; see the SDNet page of the User set.
 
 There is no license parameter and no license verb. SD Core Solo for Windows is

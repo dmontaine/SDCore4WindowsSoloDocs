@@ -11,11 +11,6 @@ libsodium, and is reached through the same interface.
 SD folds case, so a command may be typed in either case. Commands are shown
 here in lower case.
 
-> **Carried from SD Core for Linux and not yet run on Windows (20 October
-> 2026).** The functions, the `XE` conversion and the `encrypt.key` verb below
-> were written and tested for SD Core for Linux. They are built into this
-> release, but nothing of them has been run on an installed Windows system yet.
-
 ## The short version
 
 **For credentials**, nothing needs configuring. Passwords are never stored. SD
@@ -51,7 +46,7 @@ the machine's.
 | | |
 |---|---|
 | The `encrypt.field` verb | Removed. It pointed at a program, `$CRYPTO`, which never existed in the GPL release, so the verb could not have worked in any build derived from it |
-| `encrypt()` and `decrypt()` | Removed upstream in July 2024 and replaced by `sdencrypt()` and `sddecrypt()`. The old names do not compile |
+| `encrypt()` and `decrypt()` | Removed upstream and replaced by `sdencrypt()` and `sddecrypt()`. The old names do not compile |
 | `SD_EUID_SET` and `SD_EUID_RESTORE` | Removed. They were the Linux setuid model, which has no meaning on Windows. Keys 102 and 103 are left unused, so an old program that calls one gets the answer any unknown key gets |
 
 **The Python half of SDEXT is not on this list.** It was removed along with
@@ -151,8 +146,7 @@ reported at the last line rather than at the call. That behavior is covered by
 *SD Basic - Restricted Commands* in the User set.
 
 `$internal` needs both halves: the compiler tests for internal mode **and** for
-the administrator flag. Internal mode alone was enough until 13 August 2026 and
-was not safe, because internal programs are the only ones that may set the
+the administrator flag. Internal mode alone is not safe, because internal programs are the only ones that may set the
 administrator flag. On Solo the door that setup steps use, `sd-solo -internal`,
 admits a session only on a one-shot marker file the installer writes — see
 [Security](12-security.html#the-installers-own-door).
@@ -192,8 +186,8 @@ server's own — a decode failure there is a defect, not a wrong password. A
 caller deciding whether to admit a login must still treat the error as a
 refusal.
 
-**The two DPAPI keys are the kept copy of your account password.** (They were
-111 and 112 until 20 October 2026, which are now `SD_FILE_PRIVATE` and
+**The two DPAPI keys are the kept copy of your account password.** (They are
+`SD_FILE_PRIVATE` and
 `SD_USER_HOME`, as on Linux; 130 to 139 are the numbers reserved for keys that
 exist only on Windows.) DPAPI
 encrypts for a Windows user, so what the first produces only that user can turn

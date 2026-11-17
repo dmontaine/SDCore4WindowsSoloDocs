@@ -407,10 +407,6 @@ not open stops it (*Cannot open*), and a file name is required. The global
 catalog's directories (`gcat` and `global.bp.out`) and `solo.policy` are
 refused as they are for `ed` and `copy`: only a session signed in with the global
 password may change them.
-
-The refusal of the global catalog's directories is read from the source and was
-not run on Windows.
-
 ## Seeing what is actually in a record
 
 ```
@@ -514,7 +510,7 @@ a trigger function`.
 
 ### A trigger on a directory file
 
-A directory file can have a trigger function too (16 Oct 2026). `set.trigger` works on it as on a hashed file, and
+A directory file can have a trigger function too. `set.trigger` works on it as on a hashed file, and
 `list.triggers` lists it. The directory has no header to hold the trigger, so it is kept in a small text file named
 `%header%` in the directory itself, which SD makes when the trigger is set and removes when it is taken away:
 

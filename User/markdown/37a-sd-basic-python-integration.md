@@ -122,7 +122,7 @@ string values - not a general-purpose Python object store.
 
 ## Lists
 
-**`PY_LISTCREATE` is the newest of the twenty-one**, added 14 Sep 2026. The
+**`PY_LISTCREATE` is the newest of the twenty-one**. The
 opcode and the C-side dispatch for it existed since Python's return, but
 nothing in BASIC called it, so a list could be appended to and read but
 never actually made - `PY_LISTAPPD` on a name nothing had created simply
@@ -190,8 +190,7 @@ used; only the mechanism moved.
 
 **`-12040` used to mean all three of the last rows, and a caller could not
 tell them apart** - "Python is broken", "you don't have the permission",
-and "SD couldn't tell" all looked identical. Separated on the owner's
-ruling, 12 Sep 2026, because confusing them tells an administrator Python
+and "SD couldn't tell" all looked identical. They are separate because confusing them tells an administrator Python
 is broken when it is a permission, or tells an ordinary user they lack a
 right when the real problem is a missing Python install. `-12040` kept its
 narrower meaning; the other two are new.

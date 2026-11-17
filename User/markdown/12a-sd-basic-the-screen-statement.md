@@ -8,11 +8,8 @@ check boxes, lists and buttons, shows a menu bar, and takes clicks of the mouse.
 It needs no extra package and no change to the rest of the program: it is one
 statement word followed by a verb.
 
-> **Status on Windows.** The screen library came to SD Core Solo for Windows on 18 October 2026, as it is in SD Core for Linux; on 11 November 2026 it became SD Core for Windows's library as it stands, with `fill`, `stretch`, `history`, colors and accelerator keys.
-> It has been built here and every program in it compiles; **it has not yet been run on a Windows console.** What is known
-> about the console: the default terminal type, `windows`, has the color capabilities the themes need but no `smcup`, so no
-> alternate screen; an `xterm`-compatible terminal (SD can be reached through ssh from one) has that too. Try a small program with `screen open` before building on it, and report what a Windows
-> console does with the mouse, with color and when the window is resized.
+> **On Windows.** The default terminal type, `windows`, has the color capabilities the themes need but no `smcup`, so no
+> alternate screen; an `xterm`-compatible terminal (SD can be reached through ssh from one) has that too.
 
 SD folds case, so a program may be written in either case. Keywords are shown
 here in lower case. In the tables, *italics* mark something you supply and
@@ -77,8 +74,7 @@ must survive a dialog with `screen text`, or `screen refresh` will not bring it
 back. Before `screen open` a dialog still works, but it leaves blanks where it
 was.
 
-**A form on a screen opened with `clear` writes only what has changed** (since
-19 October 2026). The terminal is then known to show the shadow, so when a form is
+**A form on a screen opened with `clear` writes only what has changed**. The terminal is then known to show the shadow, so when a form is
 drawn again, or one of its widgets is, the text that is already there in the same style
 is left out; choosing a record in the IDE wrote 6,635 characters to the terminal
 before and about 780 now. Two things follow. A form does not repair what the program
@@ -178,8 +174,6 @@ for a click on no widget when the program has asked for those): *x* is the colum
 click, and the menu whose title is over it opens instead of the first. A column with no
 title over it (the space to the right of the titles) opens nothing, and the statement
 takes `else`. A title is its label with a blank on each side, from column 0.
-A program compiled before 19 October 2026 that uses `screen menubar` must be compiled
-again.
 
 **Submenus.** A menu whose title begins with `>` is not on the bar: it is a submenu. An
 entry whose *code* is that title opens it beside the entry, with a `>` at its right edge;
@@ -588,7 +582,7 @@ field 3 its data.
 | `resize` | the terminal's window changed size; the form has been drawn again at the new size | | the width, a value mark and the height |
 | `cancel` | Esc, or the form's cancel button | the button, if any | |
 | `timeout` | no key came in time | | |
-| `end` | the input ended, whether or not the statement has a `timeout` (before 19 October 2026 a wait with a timeout answered `timeout` instead, again and again) | | |
+| `end` | the input ended, whether or not the statement has a `timeout` | | |
 
 `then` is taken for `button`, `change`, `focus`, `key` and `resize`; `else` for `cancel`,
 `timeout` and `end`. Esc does **not** close the form here: the program decides. An

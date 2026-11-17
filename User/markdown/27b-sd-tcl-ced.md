@@ -25,10 +25,8 @@ at once without editing anything.
 In the tables, *italics* mark something you supply and **bold** marks a word
 typed as it stands; braces mark an optional part.
 
-> **Not run on Windows yet.** CED is SD Core Solo for Linux's program, carried here
-> unchanged and compiled (25 October 2026); nothing on this page has been seen
-> on a Windows console. The data collections themselves are described in
-> [Data Collections](05b-sd-basic-data-collections.html).
+The data collections themselves are described in
+[Data Collections](05b-sd-basic-data-collections.html).
 
 ## Starting it
 
@@ -59,7 +57,7 @@ messages. Questions — a new value, a name, a type, *Save changes?* — are ask
 small boxes over the list.
 
 **The screen is laid out for 140 columns by 43 lines or more** (a bigger window
-is used whole), and since 18 October 2026 **a window smaller than that is
+is used whole), and **a window smaller than that is
 refused**, before any record is touched, in words (*CED needs a window of at least
 140 columns by 43 lines; this one is 100 by 30*); `!ced()` refuses the same way,
 prints the message and returns, and the program goes on. If the window is made

@@ -101,10 +101,8 @@ No password, key, hash, record id or record is ever audited.
   `NETFILES` bit 2, as the Getting Started set explains.
 - **A remote file does not follow you across an account change**: the process's connections are dropped when the account
   is entered again (the NET gate is set), so a remote file variable from before is stale.
-- **Not run on Windows yet.** The paths above are compiled and the checks that need no installed system pass. The
-  test of a stored login's access list was run against real Windows access lists (your own file passes; one that admits
-  Everyone or another group, a junction, the wrong kind of object, a missing path and a file someone else owns are refused).
-  Nothing has been run between this Solo and another server.
+- **A stored login's file must be yours alone.** Your own file passes; one that admits
+  Everyone or another group, a junction, the wrong kind of object, a missing path and a file someone else owns are refused.
 
 ## See also
 

@@ -3,44 +3,34 @@ Subtitle: A tool for turning compiled program files between big-endian and littl
 
 `sdconv` was written to move SD files between computers that store numbers in
 opposite byte orders. SD Core Solo for Windows runs on little-endian machines
-(x86-64) and is built and tested only on one. Nothing on this page can say
-whether a result would run on a big-endian machine, because there is none to run
-it on.
+(x86-64). Nothing on this page can say whether a result would run on a
+big-endian machine.
 
 > **Read this first: `sdconv` does not convert hashed files.** Given one it says
 > so, changes nothing and exits 1. It converts **compiled program files** only,
-> and only the header of each. *Run*, below. (A copy built before 19 October 2026
-> printed nothing and exited 0, which read as a successful conversion.) The
+> and only the header of each. The
 > routine that converts a hashed file's subfiles is in the source, but the
 > program does not call it, and this SD cannot open a big-endian hashed file, so
 > a converted file would be of no use here. Windows and Linux are both
 > little-endian.
 
-> **How this page was made.** It is the page of the multiuser SD Core for Linux,
-> adapted for SD Core Solo for Windows with the Windows facts of the SD Core for
-> Windows page. Those pages were read from `sdconv.c` and run on scratch copies
-> under `C:\sdi_demo`. **Solo's `sdconv.c` is the SD Core for Windows file**
-> (checked by comparing the two), so the program is the same. Results are marked
-> *run* where the output was real **in the SD Core for Windows build**. **Nothing
-> on this page was run in SD Core Solo for Windows itself.** Solo's banner reads
-> `SDCONV WS2.0-0`.
+Solo's banner reads `SDCONV WS2.0-0`.
 
 ## The short version
 
 * **You almost certainly do not need it.** SD loads a program whose header is in
   the other byte order and swaps the header in memory; the file is left as it is.
-  *Run*: a program converted with `-B` ran correctly (it filled a file with 40
-  records), and its first byte was still `65` afterwards. Only the header was
-  converted there, so this shows that SD tolerates a flipped header, not that a
+  A program converted with `-B` runs correctly. Only the header is
+  converted, so this shows that SD tolerates a flipped header, not that a
   program compiled on a big-endian machine would run.
 * **Every conversion rewrites the file in place with no copy.** Take your own
   copy first.
-* **It rewrites even a file that needs no conversion.** *Run*: a program already
-  in the right order had its modified time changed by `sdconv -L`.
+* **It rewrites even a file that needs no conversion.** A program already
+  in the right order has its modified time changed by `sdconv -L`.
 * **A hashed file is refused: a message, the file untouched, exit status 1.**
 * **A path that is neither a hashed file nor a program object is skipped with no
   message and the exit status is 0**, including a path that does not exist, a
-  folder, and a file it cannot write (*run* for each).
+  folder, and a file it cannot write.
 
 ## Where it is and who can run it
 
@@ -48,8 +38,8 @@ it on.
 your PATH, so `sdconv` works from any new PowerShell or `cmd` window. Run it
 from an ordinary prompt, as yourself. It opens each file for read and write, so
 you need write access to it, which you have for everything under your own SD
-folder. A file it cannot open for writing is skipped without a word (*run*: a
-copy marked read-only was left as it was, exit 0). It takes no configuration
+folder. A file it cannot open for writing is skipped without a word (a
+file marked read-only is left as it was, exit 0). It takes no configuration
 file. Run it with SD stopped (`sd-solo -stop`; see
 [Running SD](03-running-sd.html)), or on files SD is not using: it makes no check
 for that.
@@ -64,14 +54,14 @@ sdconv {options} pathname ...
 |---|---|
 | `-B` | Convert to big-endian. |
 | `-L` | Convert to little-endian. |
-| `-D` | Debug. It is accepted, is not listed in the usage text, and **does nothing** for a program file: the progress it would print belongs to the hashed-file routine that is not called. *Run*: no extra output. |
+| `-D` | Debug. It is accepted, is not listed in the usage text, and **does nothing** for a program file: the progress it would print belongs to the hashed-file routine that is not called. |
 | (neither `-B` nor `-L`) | Convert to the byte order of the machine it is run on, which here is little-endian, so the same as `-L`. |
 
 Options may be joined in one word (`-BD`) and are not case sensitive. If both
 `-B` and `-L` appear, the last one wins. Several pathnames may follow. The
 program does not descend into a folder, and **a wildcard is not expanded by
-anything**: `sdconv -B bp.out\*` converted nothing and exited 0, from PowerShell
-and from `cmd` alike (*run*). Name the files, in PowerShell with
+anything**: `sdconv -B bp.out\*` converts nothing and exits 0, from PowerShell
+and from `cmd` alike. Name the files, in PowerShell with
 `sdconv -B (Get-ChildItem bp.out).FullName`. With no pathname, or an option it
 does not know, it prints the usage text and exits 1.
 
@@ -102,7 +92,7 @@ The only failures it reports are *Cannot read name*, *Error converting name*, a
 seek or write error naming the file, and *Cannot allocate memory for name*, and
 only for a file it had already recognized as a program object.
 
-## What it converts: compiled program files *(run)*
+## What it converts: compiled program files
 
 A compiled program is a plain file that begins with a one-byte marker, `0x64` for
 little-endian and `0x65` for big-endian. SD keeps them in:
@@ -133,7 +123,7 @@ tables and the constants are not touched. SD's own source says that floating
 point constants are the one thing in the code that needs swapping, and that SD
 does it when it loads them.
 
-## What it does not convert: hashed files *(run)*
+## What it does not convert: hashed files
 
 ```
 > sdconv -B C:\sdi_demo\zzcust

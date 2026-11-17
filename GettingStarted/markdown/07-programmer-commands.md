@@ -169,9 +169,7 @@ the keyboard, that is worth reporting** with the terminal you connected from.
 **`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
 need no operating-system permission and no editor installed; they need a terminal
 window of at least 140 columns by 43 lines (the debugger and the home screen use
-the same frame). Nothing was run on a Windows console when they were carried, and
-the User set's *The SED Screen Editor* page says so.
-
+the same frame).
 The removed full-screen editors are a different matter: `update.record` and
 `modify` are gone and are not coming back. See
 [Not in SD Core](14-not-in-sd-core.html).

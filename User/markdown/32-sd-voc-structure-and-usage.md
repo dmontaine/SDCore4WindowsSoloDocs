@@ -36,8 +36,8 @@ load-bearing and the remaining thirty are not.**
 | `X` | text | miscellaneous data — not a command |
 | `D` | descriptor | a data descriptor, which is what dictionary records are |
 
-**`PQ` is a valid type and is refused.** PROC was removed from this port
-(23 Aug 2026). A record of type `PQ` is reported as *"PROC is not
+**`PQ` is a valid type and is refused.** PROC was removed from this port.
+A record of type `PQ` is reported as *"PROC is not
 supported"* rather than being dispatched, because the record itself is
 valid PROC and it is the interpreter that is gone.
 
@@ -46,7 +46,7 @@ valid PROC and it is the interpreter that is gone.
 Counted directly from `newvoc` in the system directory — the VOC a new account
 starts with, 440 records, by each record's own field-1 type character (the type
 is the first character; a record whose field 1 reads `Verb to ...` is `V`).
-Counted on 17 Nov 2026:
+Counted in this release:
 
 | Type | Count |
 |---|---|
@@ -71,7 +71,7 @@ which nobody signs in to, is built from the larger `voc_template`.)
 > VOC whose old type field read `Verb - Full screen editor` rather than `V`,
 > so it looked callable and refused at dispatch with *"Full screen editor is
 > no longer supported."* **That is history, not current behaviour**: `edit`
-> is a real `V` record now, reinstated 26 Aug 2026, and works. The lesson
+> is a real `V` record now, and works. The lesson
 > stands even though the example does not: **being in the VOC is not
 > evidence a command works** — check the type field, not just the name.
 
@@ -188,7 +188,7 @@ a marginal verb.
 ```
 
 This is `sd.accounts`. Field 2 is the account name, field 3 is the file
-name in that account. `set.file` writes Q-pointers; see below. Since 16 Oct 2026 the
+name in that account. `set.file` writes Q-pointers; see below. The
 target of `set.file` may itself be a Q-pointer, which makes a chain (not recommended, but it opens): each link is
 followed under the same rules, so a chain cannot reach where its links alone could not.
 

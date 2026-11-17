@@ -61,9 +61,8 @@ each, with the date, time and user:
 
 Every word before the first `=` is lower case, the event names included. What
 follows an `=` is data and keeps its case: the account name, a `reason=` text,
-and what a caller typed in `command=`. Lines written before 7 October 2026 are
-upper case (`LOGIN REFUSED`) and are not rewritten, so search a long-lived file
-without regard to case.
+and what a caller typed in `command=`. Search a long-lived file
+without regard to case, since older lines may be upper case (`LOGIN REFUSED`).
 
 | Recorded | |
 |---|---|

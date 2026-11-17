@@ -117,8 +117,8 @@ so a file written on Linux still reads correctly here.
 than the same file with LF endings, so an offset computed by adding up line
 lengths must allow two bytes per line, not one.
 
-**You can choose the line end, for one file** (18 Oct 2026). `fcontrol(s, FC$CRLF, mode)` on the file variable of an
-`openseq` sets one of four modes (13 Nov 2026), and a letter in field 6 of the VOC entry of the directory file does the same
+**You can choose the line end, for one file**. `fcontrol(s, FC$CRLF, mode)` on the file variable of an
+`openseq` sets one of four modes, and a letter in field 6 of the VOC entry of the directory file does the same
 for every `openseq` of its records: `L` (mode 0) ends a line at LF only, keeps every CR, and `writeseq`
 adds LF; `C` (mode 1) ends it at CR LF only, so a line may hold an LF or a CR of its own, and `writeseq` adds CR LF; `B`
 (mode 2) ends it at CR LF or LF with a lone CR kept, and `writeseq` adds LF; `X` (mode 3) ends a line at LF and throws every
@@ -231,8 +231,8 @@ how a program tells the two apart.
 `waiting 5` can take as long as the characters keep arriving inside five seconds of each other.
 
 A pipe or device is opened by its pathname, so the OS access switch applies as it does to
-any other `openseq` of a path. **It has not been tried here on a pipe, a serial port or any other
-device**; it has been tried on an ordinary file. `get` with no `from` is still a class
+any other `openseq` of a path. **Do not rely on it for a pipe, a serial port or any other
+device**; it is meant for an ordinary file. `get` with no `from` is still a class
 module's property declaration, as in [SD Basic - Modern Program Structure](18-sd-basic-modern-program-structure.html).
 
 ## Asking about the file

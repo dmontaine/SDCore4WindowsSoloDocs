@@ -141,9 +141,6 @@ account needs, but cannot open, rename, delete or list anything else.
 - The same applies to a session that dies under its thread (`SDConnected()` is false for it and `SDError()` says why).
 
 **A session whose server has ended** — its `AUTOLOGOUT` period ran out, it was logged out, the process was killed — does not hang the client: the next request on it comes back empty, `SDError()` says the connection failed, and `SDDisconnect()` cleans it up. A session can set its own limit by executing the `AUTOLOGOUT` command (`SDExecute("AUTOLOGOUT 10")`: ten minutes idle; the period is in minutes, 0 turns it off).
-
-(The sessions and threads text is carried from the Linux Solo page; it was not run against this library on Windows.)
-
 ### File operations
 
 | Function | Returns | Description |
@@ -258,8 +255,6 @@ After a conversion `SDStatus()` is **the conversion's own status** - 0 after a s
 Their numbers begin at 10001 and are not those of `SDOpen`, so a number of one kind given to a function of the other is refused. The counter starts at 1 and is set with `configure.file ... next` ([SD Basic - File Handling](07-sd-basic-file-handling.html)).
 
 **The gates are the ones `openseq` has for any program.** A session restricted with `SDCLIENT` cannot open any file. An item of a directory file is an SD file and is opened through the VOC, as `openseq` opens it; a file that the session may not change (the VOC without `admin`, the global files without the global password) is opened for reading only. **A bare pathname is a Windows file, and while the account's `os` switch is off it reaches only the account's own directory by it**: a file elsewhere on the disk and a path that climbs out with `..` are refused with *... is not a file this account may open* (message 12350), and nothing is made. The switch is turned on with `set.os.access` (see *Operating system access* in the Getting Started set).
-
-**Not run on SD Core Solo for Windows yet.** These functions and the requests behind them are SD Core for Windows' and Linux Solo's, and compile here; they have not been run against a Solo server.
 
 ### Packages
 

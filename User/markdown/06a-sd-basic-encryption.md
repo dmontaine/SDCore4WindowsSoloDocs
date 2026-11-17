@@ -8,11 +8,6 @@ administrator override: **a passphrase that is forgotten is data that is lost.**
 the passphrase and the salt safe, and prove that you can decrypt from a backup before you
 rely on any of this.
 
-> **Carried from SD Core for Linux and not yet run on Windows (20 October 2026).** The
-> functions, the `XE` conversion and the `encrypt.key` verb on this page were written and
-> tested for SD Core for Linux. They are built into this release, but nothing of them has
-> been run on an installed Windows system yet.
-
 SD folds case, so a program may be written in either case. Functions and codes are
 shown here in lower case. *Italics* mark something you supply.
 

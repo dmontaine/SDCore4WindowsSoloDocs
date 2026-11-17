@@ -14,11 +14,6 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **The listings on this page were produced by running them**, on SD Core for
-> Windows. The two exceptions are `phantom` and `pdebug`, and the reason
-> is on the page: neither can be driven down a pipe, so both are described from
-> their source rather than shown.
-
 ## What is not on this page
 
 **Seeing the sessions, and ending them, are administrator verbs.** `listu`
@@ -219,9 +214,7 @@ program's own text and is not cleared for it.
 holds in memory reaches it** — no `@`-variables, no unnamed common, no open
 files, no active select list. **The command string is the only thing passed**,
 through a record in SD's `$IPC` file. The session's option settings do not go
-with it: a phantom starts with every option off. (Until 27 October 2026
-`option inherit` passed them on; the option is gone.)
-
+with it: a phantom starts with every option off.
 **The records are sealed.** `$IPC` is a file every SD user's process can write, so a
 phantom does not believe what it finds there. `phantom` makes a secret for each
 phantom (24 random bytes) before it creates anything, gives it to the new process in
@@ -449,11 +442,7 @@ many events it did not log. A profile that is not there is *There is no profile
 for user 1 - use profiler on, run the programs, then profiler off*. **Another
 user's process can be profiled by the administrator only**, because a profile
 holds the files that user's programs open and the commands they execute
-(*Only the administrator can profile another user's process*). The listings were
-taken from the Linux Solo text; levels 3 and 4, the full-profile message and the
-refusal for another user's process are read from the source, and none of this was
-run on Windows.
-
+(*Only the administrator can profile another user's process*).
 ## Who has these verbs
 
 **Your account has `status`, `phantom`, `pstat`, `pdebug`, `pdump`,

@@ -9,9 +9,7 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **The listings on this page were produced by running the verbs on the
-> multiuser SD Core for Windows**, whose code for them Solo shares apart from
-> the gates. Paths are shown as they read on a Solo computer.
+Paths are shown as they read on a Solo computer.
 
 ## Two things are not on this page, on purpose
 
@@ -101,8 +99,7 @@ The entry matters because **it holds a slot and an exclusive-access claim**:
 `NUMUSERS` counts it, and any verb that wants a file to itself — `build.index`
 is the usual one — is refused while it is there. So **the way to clear a dead
 session is `logout` *n*** — no `admin`, since every session on a Solo computer
-is `sduser`. *The line above is read from the source (`clopts.c`); this page's
-build has not been run against a killed session.*
+is `sduser`.
 
 A session that is **alive and does not answer the signal** is the other case,
 and it keeps its entry with **`(logout pending)`** beside it; asking again

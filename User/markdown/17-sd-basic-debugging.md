@@ -302,7 +302,7 @@ shows as `name = value`, and `set` and `watch` refuse it with *Variable not
 defined*. Without the mode a token is not known to the debugger, as it
 never was.
 
-**A token may also be the value** of a `set` (16 Oct 2026): `set tot = numc`
+**A token may also be the value** of a `set`: `set tot = numc`
 gives the variable the number the token stands for, and a token of a string or
 of `char(n)` gives it that. A token of a **variable** is not a value, and is
 refused with *Illegal value* as before.
@@ -510,8 +510,7 @@ be fed down a pipe.
 
 `@tty` reads empty in a piped session, and the debugger works there anyway.
 
-(Until 13 October 2026 the full-screen display needed AccuTerm, which kept the
-screen pictures; SD no longer supports AccuTerm.)
+(SD does not support AccuTerm.)
 
 ## Asking the AI
 
@@ -555,7 +554,7 @@ was available regardless.
 
 ## What is not here
 
-**`trace` is gone.** It was removed from the compiler in July 2024. In an
+**`trace` is gone.** It is not in the compiler. In an
 ordinary account it is *"Unrecognized statement"*.
 
 **The programmatic debug statements are restricted.** `debug.on`,

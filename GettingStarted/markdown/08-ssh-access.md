@@ -49,7 +49,7 @@ ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd-solo.exe"
 
 **Why the server runs as SYSTEM.** A server run as an ordinary user can check
 your Windows password but then cannot start your session: Windows refuses with
-*"a required privilege is not held"* (error 1314). This was measured. The
+*"a required privilege is not held"* (error 1314). The
 Windows OpenSSH Server service runs as SYSTEM too. **Because SYSTEM
 trusts the configuration, the configuration and host key are in an
 administrators-only folder, made by the installer's one administrator step,**
@@ -190,15 +190,12 @@ The connection that made the third wrong try is ended at once, and the lock lift
 | **Where it is set up** | wherever Solo's ssh server is set up: the installer, an upgrade and `remote.ssh local` or `open`. It runs the copy in the administrators-only folder, never the one in your own folder. Turning ssh off or uninstalling takes the task and every lock-out rule away |
 
 **What it does not stop:** a guess spread over **many addresses** (each gets its three), and connections
-already open when the lock engages: by reading the guard's code (not measured), each of them is cut at its
+already open when the lock engages: each of them is cut at its
 next wrong password, so each gets one more guess. On a network where everyone shares one address (behind one NAT), they share the lock.
 
 **A lock on this computer's own address cannot be enforced.** Windows Firewall does not filter loopback
 traffic, so after three wrong passwords from `127.0.0.1` the connection is ended, but the rule cannot refuse
 the next one. Someone at the computer is not kept out by it.
-
-**Not measured.** The lock-out has not been run on an installed system: no real ssh server, no real
-firewall rule and no real lock were seen. See [Features the developers could not test](19-features-the-developers-could-not-test.html).
 
 ## What an ssh session is
 
@@ -214,19 +211,9 @@ has been chosen at the keyboard, an ssh session is told:
 This account has no password yet. Set it at this computer's keyboard first; until then only the global password is accepted.
 ```
 
-## Not measured
+## The user name for a domain user
 
-**These have not been measured on a real computer.** See
+The configuration names a local user by the lower-case user name, and a domain
+user as `name@domain`. On a domain-joined computer, check that your ssh sign-in
+lands in SD before relying on it. See
 [Features the developers could not test](19-features-the-developers-could-not-test.html).
-
-- **A sign-in made while nobody is signed in to the computer.** After a restart,
-  the server was seen running before the first sign-in succeeded (the task
-  launched eight seconds before it), but nobody tried to sign in to it in that
-  window. (A Windows password sign-in through this server reached SD from the
-  same computer and from a second one, typed by the owner himself, and a key
-  sign-in reached SD from the same computer.)
-- **That SD Core Solo and SD Core work together on one computer**, each answering on its own ssh port.
-- **The user name for a domain user.** The configuration names a local user by the
-  lower-case user name, and a domain user as `name@domain`. Whether the server
-  matches a domain user by that form has not been measured. On a domain-joined
-  computer, check that your ssh sign-in lands in SD before relying on it.

@@ -191,8 +191,7 @@ Actions 2, 3 and 7 are refused on a file opened `readonly`: `status()` is 3018 a
 (null for 3), and the counter is not touched. On a file that is not hashed `status()` is 3005; a
 qualifier under 1 sets `status()` to 1. `FC$CRLF` on a hashed file gives 0 with `status()` 3004 (*not a directory
 file*: a hashed file has no line terminators); a mode outside 0 to 3 gives the mode the file is in and sets
-`status()` to 1, changing nothing. Until 13 Nov 2026 `FC$SYNC` and `FC$CRLF` stopped the program with *FCONTROL
-cannot do this action in SD*. Any action number SD does not know stops the program with *the action is not one SD
+`status()` to 1, changing nothing. Any action number SD does not know stops the program with *the action is not one SD
 knows* (message 12360). `FC$SYNC` works on a hashed file only (`status()` is 3005 on any other). The
 qualifier may be left out where the action does not use it. The internal programs' own function is called `fcontrol.int` and is not available to
 ordinary programs. On a file reached through an `N` pointer to another SD server the call goes to
@@ -357,8 +356,8 @@ On a newly created dynamic file:
 | `1100` (`FL$HOLDERS`) | the same sessions as text, for messages | `14 (ann), 22 (don)` |
 
 **Key `1021` is the openQM `FL$WHO`, and the caller is left out** unless it has the file
-open through more than one file variable. `1021` returned the text form until 17 Oct 2026; code
-that wants text for a message now asks `1100`, and SD's own "cannot gain exclusive access"
+open through more than one file variable. Code
+that wants text for a message asks `1100`, and SD's own "cannot gain exclusive access"
 messages do. Compile with `$include keys.h`, so that the names carry whatever number they have.
 
 File types: `1` SH, **`3` DH — an ordinary dynamic file**, `4` directory, `5`
@@ -409,8 +408,7 @@ cannot be opened at all**, which takes the same action:
 | **c** | return the record id itself |
 | **n** | return the record id itself |
 
-(Before 14 Oct 2026 a file that would not open always printed the message,
-whatever the action. A program that relied on the message now needs **v**.)
+A file that would not open prints the message only with **v**.
 
 A *field* of `0` returns the record id.
 

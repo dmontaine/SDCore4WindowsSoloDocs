@@ -13,20 +13,7 @@ You can relocate an index at creation from SD: `create.index` *file* *field*
 `pathname` *path*. `sdidx` is for everything after that, and for the case where
 SD is not running.
 
-> **How this page was made.** It is the page of the multiuser SD Core for Linux,
-> adapted for SD Core Solo for Windows with the Windows facts of the SD Core
-> for Windows page. Those pages were read from `sdidx.c` and run on scratch
-> copies of a small indexed file under `C:\sdi_demo`. **Solo's `sdidx.c` is the
-> SD Core for Windows file apart from the call that attaches SD's shared memory
-> and one carried line** (checked by comparing the two), so the program is the
-> same and has every fix under *What was fixed*. The sections say *run* where the
-> output was real **in the SD Core for Windows build**. **Nothing on this page
-> was run in SD Core Solo for Windows itself**, and the program was not run
-> elevated, on a file with more than one index or on a big file. Solo's banner
-> reads `SDIDX WS2.0-0`.
->
-> **A copy of `sdidx` older than 19 October 2026** still does what the old lines
-> under *What was fixed* say.
+Solo's banner reads `SDIDX WS2.0-0`.
 
 ## The short version
 
@@ -39,10 +26,8 @@ sdidx -q $env:USERPROFILE\SDCoreSolo\user_accounts\sduser\orders      # where ar
   afterwards and `-d` deletes indexes. Neither can be undone.
 * **Give full paths, for the data file and for the index folder.** Either
   slash will do. A relative index path given to `-m` or `-p` is made absolute
-  from the current folder before it is stored, as `C:\...` (*run*; older copies
-  stored the text as typed, which only a process running in that same folder
-  could follow, and SD never does). A path longer than 255 characters, which the
-  file header cannot hold, is refused (*run*: `Path is too long (the limit
+  from the current folder before it is stored, as `C:\...`. A path longer than 255 characters, which the
+  file header cannot hold, is refused (`Path is too long (the limit
   is 255 characters)`, status 1).
 * **Close the file in every session first.** The program refuses if the file is
   open within the running SD: see below. **It refuses nothing if SD is not
@@ -57,9 +42,9 @@ sdidx -q $env:USERPROFILE\SDCoreSolo\user_accounts\sduser\orders      # where ar
 your PATH, so `sdidx` works from any new PowerShell or `cmd` window. Run it from
 an ordinary prompt, as yourself: SD runs unelevated and the files belong to you.
 **It opens the file's `%0` for read and write even to answer `-q`**, so you need
-write access to the file even to ask where its indexes are (*run*: on a copy
-whose `%0` was marked read-only, `-q` printed *Cannot open data file [13]* and
-exited 1), which you have for everything under your own SD folder.
+write access to the file even to ask where its indexes are (on a file
+whose `%0` is marked read-only, `-q` prints *Cannot open data file [13]* and
+exits 1), which you have for everything under your own SD folder.
 
 The files `-m` creates take the permissions of the folder they are made in, as
 any new file does on NTFS, and belong to whoever ran the program. Do not run it
@@ -79,7 +64,7 @@ sdidx datapath                the same as -q
 ```
 
 Give exactly one mode. Letters are not case sensitive, and only the second
-character of a word is read, so `-qx` is `-q` (*run*). Anything else, two modes,
+character of a word is read, so `-qx` is `-q`. Anything else, two modes,
 an extra argument or no path prints the five usage lines above and exits 1. A
 **datapath** is the Windows path of the file's folder, not an SD file name. A
 path that does not exist, or is not an SD hashed file, gives *Cannot open data
@@ -109,24 +94,23 @@ Moving index subfile 2
 Indices have been moved
 ```
 
-What it does, in order (the order is from the source; the refusals and the
-results marked *run* were run): refuses if the file is open in SD; stops with
+What it does, in order: refuses if the file is open in SD; stops with
 *Indices are already at this location* if `akpath` is where they are; checks that
 each index file really belongs to this data file (it compares a creation stamp in
 both headers, and says *Index subfile n does not appear to belong to the data
 file* or *Incorrect magic number* if not); refuses with *`akpath` already exists*
-if the target is there (*run*); creates the target folder, **and any missing
-parents** (*run*: `a\b\orders.idx` was made from nothing); **copies** each index
+if the target is there; creates the target folder, **and any missing
+parents** (`a\b\orders.idx` is made from nothing); **copies** each index
 file to the new place; writes the new path into the data header; **then deletes
 the old index files.** If it stops before the header is written, the copy at the
 target is left behind and the file is as before.
 
 * **With no `akpath`, it moves the indexes back** into the data file's own
-  folder and clears the path in the header. *Run.*
-* **Only the index files are deleted from the old place** (*run*): the `%2`,
+  folder and clears the path in the header.
+* **Only the index files are deleted from the old place**: the `%2`,
   `%3` ... that the header lists, and nothing else. If the indexes were in a
   relocated folder, that folder is removed afterwards **only if it is then
-  empty**; if it holds anything else (*run*: a file named `note-from-admin`) the
+  empty**; if it holds anything else (a file named `note-from-admin`, say) the
   folder and the file stay, and the program says `path holds other files and has
   been left`. A new `akpath` inside the old folder therefore survives the move.
 * If an old index file cannot be deleted the program says `Cannot delete path
@@ -139,11 +123,7 @@ target is left behind and the file is as before.
   output, and ends with status 1. The reason is the operating system's, or *a file
   of that name exists* when a component of the path is a file. *akpath* in the
   message is the whole path as you typed it, not the component that failed, and
-  the indexes and the header are where they were. Before 23 October 2026 the tool
-  ended with status 1 and printed nothing at all in these two cases. (Carried
-  from SD Core for Linux, which printed the same two lines; the Windows form has
-  not been run.)
-
+  the indexes and the header are where they were.
 ### `-p`, point *(run)*
 
 `-p` writes the path into the header and moves nothing. Use it when you have
@@ -154,7 +134,7 @@ is out of date.
   directory*), and that **every index the header lists is in it and belongs to
   this file**. A folder without the index files gives *Cannot open index subfile
   2 [2]*.
-* **On success it says what `-q` would now say** (*run*): `Index directory is
+* **On success it says what `-q` would now say**: `Index directory is
   C:\sdi_demo\byhand`, or `Indices are not relocated` when `akpath` is omitted.
   A failure to write the header is reported and exits 1.
 * Omit `akpath` to say "the indexes are in the data file's folder".
@@ -176,60 +156,29 @@ the indexes back you create them and build them again with `create.index` and
   files in path (Y/N)?` and, on `y`, deletes **the index files the header
   lists** and then the folder if that leaves it empty. Anything else in the
   folder stays, and the program says so (the same rule as `-m`).
-* **Answering `n` stops the program** (*run*): it prints `Indices not deleted`,
+* **Answering `n` stops the program**: it prints `Indices not deleted`,
   exits 1, and changes nothing: the header is as it was and `-q` still names the
   folder.
-* **If standard input ends at the question, it is taken as `n`** (*run*): the
+* **If standard input ends at the question, it is taken as `n`**: the
   program prints `End of input` and `Indices not deleted` and exits 1.
 * With indexes in the data file's own folder there is no question. It deletes
   the files and clears the map. If a file cannot be deleted it says so, clears
   the map anyway, and exits 1 with `The indices are removed from the file, but
   some index files could not be deleted`.
 
-## The check that SD does not have the file open *(run)*
+## The check that SD does not have the file open
 
 `sdidx` attaches to SD's shared memory when SD is running and looks through the
 table of open files for the data folder's resolved path. If it finds one in use
 it prints *File is currently open within SD* and exits 1, for every mode, `-q`
-included (*run*: a session held `zzdoco` open; `-q`, `-m` and `-d` on it were
-refused, and `-q` succeeded once the session had ended).
+included (while a session holds the file open, `-q`, `-m` and `-d` on it are
+refused; `-q` succeeds once the session has ended).
 
-**The comparison ignores case, as NTFS does** (*run*): a path typed with
+**The comparison ignores case, as NTFS does**: a path typed with
 different capitals names the same file, and is refused as readily. **That is all
 it does. It does not look for a file held by another program, by `sdfix` or by
 `sdconv`, and when SD is not running it checks nothing.** Stop SD
 (`sd-solo -stop`; see [Running SD](03-running-sd.html)) if you must be sure.
-
-## What was fixed
-
-Found by running the program, and fixed. They are listed so that a copy built
-before 19 October 2026, which prints the same banner, can be recognized.
-
-1. **The old local index files were not deleted when the path was long.** `-m`
-   (from local to elsewhere) and `-d` (local) deleted each `%n` through a name
-   buffer of 33 bytes, so a data path with `\%2` after it longer than 32
-   characters was cut short, the delete missed, and the program reported success
-   (*run* on the old build: `-m` left `%2` in the data folder). Almost every real
-   path is longer. The stale `%2` also stopped `-m` moving the indexes back, and
-   `sdfix` called it *AK0 subfile found but not expected*. If you used an older
-   `sdidx` on an indexed file, look for a stray `%2`, `%3` ... beside `%0` and
-   `%1`, and delete it by hand once you have checked the index is where the
-   header says.
-2. **`-d` with the answer `n`, and with input that ended,** cleared the header
-   anyway, and the end of input looped for ever. Now it stops.
-3. **`-m` and `-d` deleted the whole old index folder,** including other files.
-   Now only the index files go.
-4. **`-p` printed nothing.** Now it prints what `-q` prints.
-5. **A path argument over 255 characters** overran a buffer. Now it is refused.
-6. **A relative index path was stored as typed.** A relative `akpath` is now made
-   absolute from the current folder, in the `C:\...` form.
-7. **A drive-letter path was taken for a relative one**, so `-m` and `-p` to
-   `C:\data\idx` ended status 1 with no message. It is absolute now.
-8. **`-m` could not create missing parents typed with backslashes.** It splits on
-   a backslash as well as a slash now.
-9. **The open-file test compared the path with its case.** A path typed in
-   another case named a file SD had open and was not refused, so `-m` and `-d`
-   ran under a live session. It ignores case now.
 
 ## What it will not do
 

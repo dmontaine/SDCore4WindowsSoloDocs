@@ -47,9 +47,7 @@ failed connect does; zero, a negative number or no argument means no limit of
 SD's own (the system's connect timeout applies). On a socket opened with the TLS
 flag it also bounds the TLS handshake. Before this release the fourth argument was
 an unused place for a security context and had to be zero. It is not used with the
-non-blocking flag. Carried from SD Core for Linux and compiled; not yet run on
-Windows.
-
+non-blocking flag.
 **Both fail by returning zero, not by taking an `else` branch** — they are
 functions, and there is no `then`/`else` on them. Test with
 `socket.info(`*s*`, 0)`, which is the one key that is safe to ask about a

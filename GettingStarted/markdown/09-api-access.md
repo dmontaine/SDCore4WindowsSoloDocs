@@ -166,9 +166,7 @@ bytes; after it, 6 to 1,073,741,832** (the largest SD string plus the 10-byte he
 the client library allows for). Anything else is not read: the server ends the
 session and writes one line to its log (`API packet length ... refused (before
 login)` or `(after login)`). The client library never breaks the rule; it matters
-to a program that speaks the protocol itself. *Read from the source (`op_tio.c`),
-not run on a Windows install.*
-
+to a program that speaks the protocol itself.
 ## An API session is you
 
 **It runs as your Windows user**, in the account `sduser`, with the same
@@ -234,8 +232,6 @@ client that is already signed in. The pointers SD itself puts in the VOC (`sysco
 a client of request 29 has no use for them. A pointer that opened before and leads out
 of an account whose `os` switch is off stops opening: turn the switch on if that was
 intended. Solo has no SDSYS exemption, because SDSYS is never a target of the request.
-This is read from the source and compiled; it has not been run on an install.
-
 ## Client libraries
 
 | | |

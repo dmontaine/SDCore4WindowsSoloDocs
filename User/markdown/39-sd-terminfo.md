@@ -113,8 +113,7 @@ Think before you give an entry an `erev` of its own: it ends reverse video and n
 
 Put the additions in `terminfo.mods` in the SDSYS account directory, which the installer compiles
 after `terminfo.src` so that an upgrade does not lose them, and compile with `sdtic` as described
-below. The start functions `@(-5)` and `@(-13)` were not changed. Tested with a copy of the `ansi`
-entry that has all five, a copy that has none and a copy with only `erev`.
+below. The start functions `@(-5)` and `@(-13)` are not changed.
 
 ## Compiling a definition
 

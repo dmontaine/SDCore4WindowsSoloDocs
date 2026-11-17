@@ -10,12 +10,8 @@ command, and `$voc.parser` once, when the session signs on.
 SD folds case, so a command may be typed in either case. Commands are shown
 here in lower case. In the tables, *italics* mark something you supply.
 
-> **The behavior on this page was run on SD Core for Linux**, in ordinary
-> sessions, with the names `zzpv`, `zzhello` and the like. SD Core Solo for Windows
-> has the same command processor (`$cproc`, read for this page: the lookup order,
-> the handler call and the sign-on read of `$voc.parser` are the same lines), but
-> **the examples were not run again on Windows Solo**. What differs on Solo is who may write
-> the two records, and that is the last section.
+> The examples use the names `zzpv`, `zzhello` and the like. What differs on
+> Solo is who may write the two records, and that is the last section.
 
 ## Where a command is looked for
 
@@ -198,7 +194,7 @@ corrected from inside the account.** On SD Core for Linux it was removed from
 outside, by a program that opened the account's `voc` by its path and deleted
 `$voc.parser`; after that the account worked again. On Solo the account's `voc`
 is a directory of files under the account's folder, so the way out is to remove
-that record from there with the operating system's own tools (**not run**). Test
+that record from there with the operating system's own tools. Test
 a new entry on a copy of the account you can reach from outside before you put it
 on the one you use.
 
@@ -210,17 +206,13 @@ program's `write` or `delete` to it, `copy` into it, `.s` and `.d` with a name;
 see page 32a). Without it the change is refused with *The VOC can only be
 changed after admin*. Reading is never stopped. Solo has no `voc-on`, `bp-on` or
 shared account to give anyone a narrower right: there is `admin` or there is not.
-(This paragraph is read from the source and the existing pages; it was not run.)
-
 What `admin` covers is the **VOC**, and only that:
 
 * **The private vocabulary's file is not covered.** The test looks at the name of
   the file being written, and a file called `zzpv` is an ordinary data file. Once
   the VOC points at it, a session that can write the file can add commands to it
   and replace commands in it, without `admin`. It still cannot touch the VOC's own
-  records, so it cannot replace a VOC command. On SD Core for Linux this was run
-  with all three edit switches off; on Solo it is read from the source.
-* **A handler is a cataloged program.** Cataloging to the private or local
+  records, so it cannot replace a VOC command.* **A handler is a cataloged program.** Cataloging to the private or local
   catalog needs no `admin` on Solo, so `admin` alone is what switches a
   handler on.
 * **Neither record is in a stock VOC.** Nothing SD ships writes them.

@@ -11,10 +11,6 @@ lower it, within a range the compiled limits set. Those are covered in full on
 [Configuration](16-configuration.html); this page gives the number in force and
 says which parameter controls it.
 
-> Every figure here was read from the sources that define it, or counted directly
-> from this tree's own shipped directories, not from documentation of another
-> product or port.
-
 ## Data
 
 | | | |
@@ -38,7 +34,7 @@ source notes that raising it would require major file-format changes.
 | | | |
 |---|---|---|
 | File types | **two** — directory and dynamic | compiled |
-| Group size for a dynamic file | **4 KB** by default (2 KB until 12 Nov 2026), maximum **8** | `GRPSIZE` |
+| Group size for a dynamic file | **4 KB** by default, maximum **8** | `GRPSIZE` |
 | Open files across all sessions | **80** | `NUMFILES` |
 | Maximum pathname length | **255** | compiled |
 | Sort keys in one query | **32** | compiled |
@@ -100,7 +96,7 @@ lists can be saved. `save.list` writes to a file and is limited only by space.
 |---|---|---|
 | Terminal definitions shipped | **26** source definitions | — |
 | Terminal names they compile to | **37** | — |
-| Default page size | **140 × 43** (it was 120 × 36 before 18 October 2026) | — |
+| Default page size | **140 × 43** | — |
 | Minimum page size | 10 lines × 20 columns | compiled |
 | Default printer page | **80 × 66** | `LPTRWIDE`, `LPTRHIGH` |
 

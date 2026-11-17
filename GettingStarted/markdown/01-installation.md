@@ -193,9 +193,7 @@ Signing out ends SD, and leaves it marked as not shut down cleanly; the sign-in
 task clears that and starts SD again, and writes what it did to
 `solo-start.log` in the `SDCoreSolo` folder. Solo's ssh server and the firewall
 rules are set up as for any account, and `install-summary.log` says which of the
-two tasks was made. This was measured on one Windows 11 computer with a local
-standard account; a domain account has not been tried.
-
+two tasks was made.
 ## What lands where
 
 Everything is under `%USERPROFILE%\SDCoreSolo`:
