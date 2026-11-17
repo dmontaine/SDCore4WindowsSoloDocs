@@ -24,16 +24,16 @@ which has the full story of each change: what it does, why, and what it does not
 | Name | Change | What |
 |---|---|---|
 | `@who` | Changed | was the account name in upper case; now lower case, as on SD Core Solo for Linux. A program that compares it with an upper-case name must compare without regard to case |
+| A `select` or `list` with `by` | Changed | records with equal `by` values came out in the order they sat in the file; now in record-id order (also under `by.dsnd`), as `sort` and the other S verbs always had it |
 | AccuTerm and SDTerm | Removed | were supported; use terminal type `xterm` or `vt100` |
-| `by` and equal sort keys | Changed | records with equal `by` values came out in the order they sat in the file; now in record-id order (also under `by.dsnd`), as `sort` and the other S verbs always had it |
 | CSV and DELIMITER reports | Changed | a multivalued field was one cell with value marks inside it; now each value is a line of its own |
 | Dictionary divide by zero | Changed | stopped the report; now gives zero |
 | `fileinfo(f, 1021)` | Changed | gave text such as `12 (don), 14 (ann)`; now the user numbers of the other sessions that have the file open, and the text form is key **1100** |
 | `intprec` and `sortmem` | Changed | were 13 and 1024; now **11** and **4096** (set the old values in `sd.conf` if you need them) |
-| Messages and texts | Changed | are in US spelling (catalog, color, canceled, recognized, license, behavior); a program that matches a message by its old wording must be changed; names of verbs, keywords and files are as they were |
 | Removed features | Removed | words and modes that existed to imitate other products (55 `option` words, 35 `$mode` words, and the second spellings and forms of statements, clauses, functions, conversions, TCL verbs and query keywords, each listed in [REMOVED](#removed)), and other things, `call *name` among them: see [REMOVED](#removed) |
 | `select file field` | Changed | a field not otherwise used was ignored; now it is `saving multivalued field`, so the list holds the values |
 | Shell and operating system access | Changed | were always on for the one account; now the SH switch (the `sh` verb) and the OS switch (`os.execute`, the Python helper, the editors, and files outside the account directory by path) are **off** as delivered; the administrator turns them on with `set.os.access` |
+| The spelling of what SD prints | Changed | are in US spelling (catalog, color, canceled, recognized, license, behavior); a program that matches a message by its old wording must be changed; names of verbs, keywords and files are as they were |
 | The terminal's size | Changed | every session started at the terminal type's 120 by 36; now SD asks the terminal how big it is at the start and when it is resized (`term w,h` still sets it by hand) |
 | The VOC and the server's files | Changed | only some of the commands that change a file you name asked for `admin` (or the global password for `gcat`, `global.bp.out` and `solo.policy`); now they all do |
 | `when field` with no operator | Changed | kept the null values; now keeps the values that are **not** null |
@@ -77,7 +77,7 @@ The server side of the API, the client library and the language headers.
 | client library: more functions | Added | `sdrevision`, `sdgetvar`, `sdsystem`, `sdindices`, `sdtrans`, `sdrtrans`, `sdtxn` (mode 4 commits a nested transaction non-durably) |
 | client library: threads | Added | each thread has its own session, transfer buffer and arguments; several threads may use the library |
 | `master.login` | Changed | the paragraph runs for API connections as for interactive and phantom sessions <!--s 170--> |
-| `SrvrSshKey` | Changed | the API's ssh key request is 72 (it was 49), and request 49 is the server's revision, as in SD Core; a script written for WS1.1-3 that sends 49 to install a key must send 72 |
+| The ssh key request | Changed | the API's ssh key request is 72 (it was 49), and request 49 is the server's revision, as in SD Core; a script written for WS1.1-3 that sends 49 to install a key must send 72 |
 
 ## BASIC
 
@@ -102,11 +102,12 @@ Statements, functions, `$mode` words and compiler directives.
 | `clearcommon name` | Added | sets the variables of the named common block to zero <!--s 52--> |
 | `compare()` | Changed | an `i` after `l` or `r` in the justification compares ignoring case; `compares()` does it over two arrays <!--s 307 g114--> |
 | `convert()` | Changed | `mcn-`, `mc/n-`, `mcs`, `mcp` with a quoted replacement character, `mt` with `m`, `md` options in any order <!--s 23 183 198 298 488--> |
+| default argument values | Added | `subroutine name(a, b = 7)`: a value for an argument the caller leaves out (a number, a string, `@true` or `@false`); the program needs `var.args` |
 | `digest()` | Added | the md5, sha1, sha256, sha384 or sha512 digest of a string or a file <!--s 63 g118--> |
 | `dir()` | Changed | includes the size of each file; sets `status()` (0, or why the directory could not be read) and lists only files and directories <!--s 366--> |
 | `fix()` | Added | a number with a fixed number of decimals <!--s 472--> |
 | exceptions | Added | `try`, `catch`, `throw`, `caught()` and `@exception`; many run time errors are caught under openQM's `sys.` names; `dumping` and `saving.stack` <!--s 353 354 355 295 309--> |
-| `execute ... silent` | Added | `execute`, `phantom` and `os.execute` with `silent` run the command and throw its output away; not with `capturing` |
+| `execute ... silent`, `phantom ... silent` and `os.execute ... silent` | Added | `execute`, `phantom` and `os.execute` with `silent` run the command and throw its output away; not with `capturing` |
 | `execute ... stacklist` | Added | keeps the default select list and puts it back when the command returns <!--s 61--> |
 | `execute.list` | Added | runs commands for each id of list 0 in turn <!--s g38--> |
 | `fcontrol()` | Added | the openQM function: next sequential key, valid id, minimum modulus, line terminator modes, forced writes <!--s 452 102--> |
@@ -163,13 +164,12 @@ Statements, functions, `$mode` words and compiler directives.
 | `select.socket()` | Added | waits on the sockets held in a matrix <!--s 161 g176--> |
 | `selectindexv` family | Added | `selectindexv`, `selectleftv`, `selectrightv`: index scans into a select list variable <!--s g177--> |
 | `send` | Added | `writeseq`, or with a colon `writeblk`, to a file opened with `openseq` <!--s g178--> |
-| `$setptr.defaults` | Added | a VOC record of the options `setptr` takes for each mode as if written after it; `@seqno` and `getpu(pu$seqno, unit)` give the number of the last `as next` hold file |
+| `$setptr.defaults`, `@seqno` | Added | a VOC record of the options `setptr` takes for each mode as if written after it; `@seqno` and `getpu(pu$seqno, unit)` give the number of the last `as next` hold file |
 | `socket.info()` | Changed | fixed: `skt$info.open` on a number, a string or an unassigned variable stopped with a fatal error <!--s 249--> |
 | `!sort` | Changed | sorts a select list variable; the internal sort is open to programs <!--s 274 371--> |
 | `sselectv`, `sselectn` | Added | sorted selects into a select list variable; `right.aligned` and `descending` <!--s 209 243 367--> |
 | `status()` after a transaction | Added | 0 if it committed, 1021 if it rolled back <!--s 19--> |
 | string arithmetic | Added | `sadd`, `ssub`, `smul`, `sdiv`, `scmp`: exact string arithmetic on numbers of any length and any decimals <!--s 391 468--> |
-| `subroutine` argument defaults | Added | `subroutine name(a, b = 7)`: a value for an argument the caller leaves out (a number, a string, `@true` or `@false`); the program needs `var.args` |
 | substring assignment | Added | `s[3] = "xy"` overwrites the last three characters <!--s 41 325--> |
 | `trans()` family | Changed | `trans()`, `rtrans()`: accept an `l` link; a file that will not open takes the error action of the call <!--s 43 182 7--> |
 | variable names | Changed | a name with two or more underscores together (`a__b`) is valid <!--s 336--> |
@@ -188,7 +188,6 @@ Data collections, JSON, XML, CSV and the verbs that import them.
 | `collection()` and `c{name}` | Added | a collection is a set of named values read and written by name; `enumerate()`, `element.exists()` <!--s 311 518 529 339--> |
 | `csv.mode` | Added | how `printcsv`, `writecsv` and `formcsv()` quote, with a delimiter, quote and escape character <!--s 173 200--> |
 | `csvparse()` and the CSV clauses | Added | `readcsv`, `writecsv` and the rest take `delimiter`, `quote` and `escape`; a quoted field with a line break is one row; `csvparse()` and `csvbuild()` read and write a whole CSV text as a collection; `csvopen()`; `csvdq()` takes a quote and an escape character |
-| `d` conversion: `i` code | Changed | fixed: the ISO week number is worked out without `yi` beside it (it gave whatever number was left in memory) |
 | `element` keyword in queries | Added | names an element of a collection file by its path, in a display list, `with`, `by`, `sum` and the like |
 | `expand()` and links | Added | a link `"file:id"` is followed; `trans()` of an `e` item |
 | file variable in a collection | Changed | a collection holding a file variable is written to a collection file as a null |
@@ -198,10 +197,11 @@ Data collections, JSON, XML, CSV and the verbs that import them.
 | `jboolean()` and `jtype()` | Added | `jboolean()`, `jnull()`, `jtype()`: true, false and null in collections, and the type of a value; a Boolean type <!--s 312--> |
 | `jmerge()`, `jpatch()`, `jpath()`, `jvalidate()` | Added | merge (RFC 7396), patch (RFC 6902), JSONPath queries and JSON Schema checks of a collection; `readjson` and `writejson` read and write JSON Lines; `json` and `json.lines` report keywords |
 | `jparse()`, `jbuild()` | Added | JSON text into a collection and back; `jbuild()` takes an indent for the pretty-print mode |
+| `oconv()` date `i` | Changed | fixed: the ISO week number is worked out without `yi` beside it (it gave whatever number was left in memory) |
 | operators on an element | Added | `+=`, `-=`, `*=`, `/=`, `:=` change an element in place |
 | the debugger and collections | Added | `/c`, `/c{path}` and `dump c{sub} pathname` show and write a collection; diving in with `/*` no longer crashes <!--s 530--> |
+| XML functions | Added | an XML document into a collection and back, and XPath 1.0 queries over it; no DTD is read |
 | `xml` keyword for queries | Added | `list ... xml` writes the report as XML, with an optional DTD or schema <!--s g211 g202--> |
-| `xparse()`, `xbuild()`, `xpath()` | Added | an XML document into a collection and back, and XPath 1.0 queries over it; no DTD is read |
 
 ## FILES
 
@@ -226,6 +226,7 @@ File handling: opening, indexes, triggers, print files, sorting, sequential file
 | `fixdir` | Added | takes the carriage returns out of directory file items that came from a Windows system <!--s 458--> |
 | hashed files | Changed | a split that finds the disk nearly full stops before the file's size is changed; `sdfix -z` clears dead space <!--s 329 33--> |
 | `hold.file.logger` | Added | a catalogued subroutine called when a hold file print unit opens and closes <!--s 56--> |
+| index, deleting many records | Changed | fixed: removing the last entry under a branch of an index of three levels cut the rest of that branch out of every lookup by key; rebuild an index that has had deletions with `build.index` |
 | `l-type` dictionary links | Added | usable in an `i`-type; links may follow links, up to ten, and reach `e` items <!--s 7 204 544--> |
 | `list.common detail` | Added | shows where each common block was created <!--s 362--> |
 | `list.index` | Changed | the report may go to a printer <!--s 73--> |
@@ -236,8 +237,7 @@ File handling: opening, indexes, triggers, print files, sorting, sequential file
 | `set.file` | Changed | the target may be a `q`-pointer; a `q`-pointer with no file name points at the VOC <!--s 32 435--> |
 | `set.trigger` | Changed | fixed: refused every function name; takes `all`; no longer needs exclusive access <!--s 388 157--> |
 | sort of long records | Changed | the disk sort handles records and keys over 32 KB <!--s 455--> |
-| sort with many work files | Changed | fixed: a sort that needs more work files than `sortmrg` put records with equal keys out in an order that depended on `sortmem` and `sortmrg`, and a `unique` sort could keep a later record; now they come out in the order they arrived |
-| deleting from a large index | Changed | fixed: removing the last entry under a branch of an index of three levels cut the rest of that branch out of every lookup by key; rebuild an index that has had deletions with `build.index` |
+| sort that uses work files | Changed | fixed: a sort that needs more work files than `sortmrg` put records with equal keys out in an order that depended on `sortmem` and `sortmrg`, and a `unique` sort could keep a later record; now they come out in the order they arrived |
 | trigger on a read | Changed | fixed: a locally catalogued read trigger could end the process <!--s 317--> |
 | `vocname` letters | Added | `r` opens a file read-only, `n` non-transactionally, `s` with forced writes, from field 6 of its VOC entry <!--s 197 380 102--> |
 
@@ -252,7 +252,7 @@ The query processor and the dictionary.
 | `by` with equal keys | Changed | records with equal sort keys come out in record-id order, also under `by.dsnd`; `sort` and the other S verbs already did |
 | `by.exp` | Changed | more than one `by.exp` in the same association is sorted <!--s 572--> |
 | `csv 3` | Added | every item quoted, numbers too <!--s 26--> |
-| `csv ... as` | Added | `as file id` after `csv` or `delimiter` writes the report as a record of a directory file (`no.query`, `appending`); a multivalued field gives one line for each value |
+| `csv ... as file id` | Added | `as file id` after `csv` or `delimiter` writes the report as a record of a directory file (`no.query`, `appending`); a multivalued field gives one line for each value |
 | dictionary expressions | Changed | divide by zero is zero (an `if` with a part missing, `fn` for a field, a format after a value and hyphens in names were added and removed again, see REMOVED) <!--s 36 48 270 271 423 547 564--> |
 | `for`, `from none` | Added | `search file for "text"`; `from none` ignores an active list 0 <!--s 190 378--> |
 | `in`, `not.in` | Added | test a value against a saved list or a file record <!--s 94--> |
@@ -308,9 +308,9 @@ Commands and VOC verbs that every account has, and the command language.
 | `block.print`, `block.term` | Added | print text, or show it on the terminal, in letters seven rows high <!--s g11 g12--> |
 | `catalog ... global c` | Added | puts the prefix `!`, `_` or `$` in front of every call name that has none of its own, so a whole select list can be cataloged globally |
 | `catalog ... local relative` | Added | stores the object file's path relative to the account <!--s 131--> |
+| catalog name as a command | Changed | a program run by its catalogue name takes `lptr`, `no.page` and the like <!--s 146--> |
 | `catalog` overwrite | Changed | pointing a local catalogue entry at a different object file asks first <!--s 490--> |
 | `catalog` prefix | Added | a prefix separate from the call name; `$private.catalog` or `$private.catalogue` <!--s 210 93--> |
-| catalogue name as a command | Changed | a program run by its catalogue name takes `lptr`, `no.page` and the like <!--s 146--> |
 | command stack | Changed | `.c-` undoes a `.0`; the stack is kept in the account the user entered <!--s 296 396--> |
 | `command.logging` | Added | a log of every command this session runs, in the account directory, readable by its owner only <!--s 444 g16--> |
 | `como` | Added | `append`, `in file`; `$como` ids pass the same name transform <!--s 8 361 9--> |
@@ -323,7 +323,6 @@ Commands and VOC verbs that every account has, and the command language.
 | `delete.common all except` | Added | deletes every named common block but those listed <!--s 425--> |
 | `ed` | Changed | `l` with no text as the first command works; marks typed in input; `ev` on a compound `i`-type; line numbers show positions in edit values mode; `spool` closes the printer; external commands; automatic ids <!--s 264 268 320 331 375 446 523 305--> |
 | `ed` and `pick` with piped input | Changed | fixed: they leave their record or list when the pipe has ended, instead of asking again for ever |
-| embedded Python examples | Added | SDSYS's `bp` file holds `py_json`, `py_term`, `py_test` and `py_test2`; an upgrade replaces those four and keeps the rest of `bp` |
 | `fstat` | Changed | wider columns <!--s 55--> |
 | `fstat.user` | Added | file activity of each session <!--s g44--> |
 | `git` option | Added | a directory file keeps `.gitignore` and `.gitattributes` under their own names <!--s g238--> |
@@ -345,13 +344,14 @@ Commands and VOC verbs that every account has, and the command language.
 | `profiler` | Added | records what the programs of a session do and where <!--s g66 g203--> |
 | `redo` | Added | runs a command again and again, `times` and `every` <!--s 188--> |
 | saved list verbs | Changed | `save.list`, `get.list`, `delete.list`: `keep`, `deleting`, `count.sup`, a default name, a name left out, `in file` <!--s 2 384 387 401 494--> |
+| SDSYS's `bp` examples | Added | SDSYS's `bp` file holds `py_json`, `py_term`, `py_test` and `py_test2`; an upgrade replaces those four and keeps the rest of `bp` |
 | `selectindex` | Added | the command form of the statement <!--s 119--> |
 | `setptr` | Changed | `form.feed`, `inform`, `eject`, `as ... in file`; the digits of `next` <!--s 51 59 70 139 448--> |
 | `show.list` | Added | a page at a time, starring and clearing items <!--s 449--> |
 | `sort.list`, `select.dir` | Added | sort a saved list; select the files of a directory <!--s 158 465--> |
 | `sp.view` | Changed | `by field`; `x` deletes the item shown; shows where output goes for every print unit mode <!--s 450 560--> |
 | `term` | Changed | takes two numbers for the default printer <!--s 466--> |
-| `update.accounts` in SDSYS | Changed | refreshes SDSYS's own VOC from `voc_template`, which is installed again |
+| `update.accounts` in the SDSYS account | Changed | refreshes SDSYS's own VOC from `voc_template`, which is installed again |
 
 ## TOOLS
 
@@ -382,7 +382,6 @@ compiled with until it is compiled again; compiling it again stops with an error
 | `analyse.file` | Removed | the British spelling: write `analyze.file` |
 | `bscan`, `root`, `key()` | Removed | added and taken out again in this release: scan an index with `selectindex`, `selectleft` / `selectright` and `setleft` / `setright` |
 | `call "file name"` | Removed | the Pick style call was added and taken out again in this release: catalog the program and call it by name |
-| `call *name` and the global catalog prefixes `*` and `-` | Removed | `!`, `$` and `_` stay; on a managed computer `sync.global.catalog` catalogs the server's programs under their own names, so a program calls one with `call name` and must be compiled again |
 | `caption`, `nopage`, `col.hdr.space` | Removed | `caption` and `nopage` were second names of `grand.total` and `no.page`; `col.hdr.space` was added and taken out again |
 | `catalogue`, `delete.catalogue`, `$catalogue` | Removed | the British spellings: write `catalog` (the verb and the `$basic.options` word), `delete.catalog` and `$catalog` |
 | `cd` | Removed | the short name of `compile.dict`: write `compile.dict` |
@@ -395,7 +394,7 @@ compiled with until it is compiled again; compiling it again stops with an error
 | dictionary field numbers 9998 and 9999 | Removed | an item whose location was 9998 gave the field count and 9999 the record length in bytes; they are ordinary field numbers now: write an `i`-type |
 | `dquote()`, `dquotes()`, `swap()`, `xlate()` | Removed | second names of `quote()`, `quotes()`, `change()` and `trans()`: write those |
 | `extract()`, `replace()`, `insert()`, `delete()` and `subr()` | Removed | write `a<f,v>`, `a<f,v> = x`, `ins`, `del` and `call` or `deffun` |
-| `filerule` | Removed | the `sd.conf` parameter and the `path:pathname` form of a file name (write an F-pointer); the `account:file` form is always on, checked as a Q-pointer is |
+| `FILERULE` | Removed | the `sd.conf` parameter and the `path:pathname` form of a file name (write an F-pointer); the `account:file` form is always on, checked as a Q-pointer is |
 | fourteen dead query keywords | Removed | `verify`, `verify.sup`, `exclusive`, `creating`, `inquiring`, `portrait`, `odd`, `even`, `mark`, `space`, `no.label`, `no.object`, `static` and `encrypt` were read by nothing |
 | `go`, `go to`, and `#` before a compiler directive | Removed | write `goto` (also in `on ... goto`) and `$ifdef`, `$define` |
 | `inputclear` | Removed | write `clearinput`; the file type constant `fl$type.sh` (a static hashed file SD never had) is gone too |
@@ -432,6 +431,7 @@ compiled with until it is compiled again; compiling it again stops with an error
 | `system:account:file` file names | Removed | a Q-pointer's fourth field named a file on another system and opened nothing; a Q-pointer with a fourth field is refused |
 | `term 120,36` at login | Removed | new accounts no longer carry it in their `login` paragraph |
 | terminal case inversion | Removed | `pterm case invert` / `noinvert` (and the line in `pterm display`), `input ... nocaseinvert` and the `invcase` setting of `sd.conf` (the upgrade takes it out of a kept `sd.conf`); `keyinc()` is now the same as `keyin()`. Type in the case you want |
+| the global catalog prefixes `*` and `-` | Removed | `!`, `$` and `_` stay; on a managed computer `sync.global.catalog` catalogs the server's programs under their own names, so a program calls one with `call name` and must be compiled again |
 | the Pick style matrix in the run-time system | Removed | nothing could make one since `$mode pick.matrix` went; its descriptor type and the branches for it in the kernel, the debugger and the process dump are gone. No program changes |
 | the word forms of query operators | Removed | `equal` (write `eq`), `greater` and `after` (`gt`), `less` and `before` (`lt`), `matches` and `matching` (`like`), `not.matching` (`unlike`) and `spoken` (`said`) |
 | VOC record type M (menu) | Removed | a VOC record of type M is no longer run as a menu; the home screen is the menu system |
@@ -447,8 +447,8 @@ were built, with the changes they made.
 
 | Name | Change | What |
 |---|---|---|
-| `[?]` help boxes | Added | F1, `?` or a click on a row of an administrator's page shows a short help box, kept in the file `context.help`, which `load.help` fills |
 | `docs.install` | Added | the administrator copies a directory of PDF files in, for the `pdf` verb to show |
+| `load.help` | Added | F1, `?` or a click on a row of an administrator's page shows a short help box, kept in the file `context.help`, which `load.help` fills |
 | `mcp.call` | Added | the work of every call of the MCP launcher `solo-mcp.py` - the gate, the checks of every word, the work and the audit line; not typed by a person |
 | `pdf` | Added | shows a document in the PDF reader the administrator has allowed, even for an account that may not run programs; no reader is allowed as delivered, and it does nothing over ssh |
 | `remote.api`, `remote.ssh` | Added | administrator commands: report each door, or set it off, local or open, from any session, through a doors helper the installer sets up; the administrator password is asked again; `remote.ssh local` or `open` sets ssh up if it was not chosen at install |
@@ -475,9 +475,9 @@ were built, with the changes they made.
 | Name | Change | What |
 |---|---|---|
 | `agent-pack` | Added | a guide to SD BASIC for AI agents (its examples compiled and run on SD Core Solo for Linux), a generated reference of everything the product has, a Claude Code skill and a recipe for giving an agent a way in; in the source only, not installed; User page 41 and Getting Started page 23 |
-| `ai` | Added | asks the AI the administrator has chosen one question: you see the provider, the model, the size and your text, and nothing is sent without `y`; the answer is printed, never run; off until a provider, its key and the AI gate are set; User page 29b |
 | AI helper (`sd-ai.exe`) | Added | the one program that talks to the provider, in `usr\bin`; SD starts it for each request as your own Windows user (no service); its settings and keys are in `sdsys\ai`, each key encrypted with DPAPI for your Windows user, kept by an upgrade and by the uninstaller's Keep; any program running as you can use it; Getting Started page 24 |
-| AI line | Added | an `AI>` row on the home screen, the toolkit's pages, the IDE, SED, the dictionary form, CED (F2) and the debugger (`AI`), when the AI is on: a preview first, Cancel the default, a proposal Reject by default, Follow up; SD's own files are never sent; User pages 29a, 29b, 29d, 24 |
+| `ai` line | Added | an `AI>` row on the home screen, the toolkit's pages, the IDE, SED, the dictionary form, CED (F2) and the debugger (`AI`), when the AI is on: a preview first, Cancel the default, a proposal Reject by default, Follow up; SD's own files are never sent; User pages 29a, 29b, 29d, 24 |
+| `ai` verb | Added | asks the AI the administrator has chosen one question: you see the provider, the model, the size and your text, and nothing is sent without `y`; the answer is printed, never run; off until a provider, its key and the AI gate are set; User page 29b |
 | `set.ai` | Added | administrator only: the AI gate (`set.ai gate on`, off as delivered), the provider, model, key, Custom connection, certificate file, limits and standing text; a key typed at its prompt never passes through SD; Getting Started page 24 |
 | `tool.ai` | Added | administrator only: the AI choice page and home tile (*Data, network and AI*): the provider with a check box, the key and model in one setup dialog, the gate, the limits and the standing text, every change a `set.ai` sentence behind a box answered Run; Getting Started page 24 |
 
@@ -485,9 +485,9 @@ were built, with the changes they made.
 
 | Name | Change | What |
 |---|---|---|
-| API `delete.file` | Changed | fixed: one the verb refused (the file open in another session) left the client's file number bad and reported 0; the file number stays good and the verb's status is reported |
-| API `dict` file names | Changed | fixed: a client that opened `dict <file>` in lower case was told the file did not exist; any case opens the dictionary |
+| api `dict` file names | Changed | fixed: a client that opened `dict <file>` in lower case was told the file did not exist; any case opens the dictionary |
 | API `filelock`, `fileunlock` | Changed | fixed: they locked the last file opened, not the file named; an `on error` reply no longer carries the text of an earlier refusal |
+| api request 70, `delete.file` | Changed | fixed: one the verb refused (the file open in another session) left the client's file number bad and reported 0; the file number stays good and the verb's status is reported |
 | api server loop | Changed | fixed: a client that hung up at the wrong moment, or sent a false packet length, left its server process tied up |
 | client library: `sdchecksum` | Added | a checksum computed on the client |
 
@@ -519,7 +519,7 @@ Plain-text files in and out of the account with an sftp program over Solo's ssh.
 | Name | Change | What |
 |---|---|---|
 | group size of a new file | Changed | `grpsize` is 4 (KB) in the shipped `sd.conf` and the built-in value when it is absent; it was 2 and 1. An installed Solo keeps its `sd.conf`, and a file keeps the size it was made with |
-| right justified index keys | Changed | a right justified index made now keeps its keys in one order: the empty key, numbers by value (decimals too), then text, so 1, 01 and +1 are one key and `build.index` loses no id. An index made before keeps the old order; an index made on SD Core for Linux or its Solo since 25 Oct 2026 now opens here, and an index made here now cannot be opened by an older release |
+| index on a right justified item | Changed | a right justified index made now keeps its keys in one order: the empty key, numbers by value (decimals too), then text, so 1, 01 and +1 are one key and `build.index` loses no id. An index made before keeps the old order; an index made on SD Core for Linux or its Solo since 25 Oct 2026 now opens here, and an index made here now cannot be opened by an older release |
 | `sdfix`, `sdidx`, `sdconv` | Changed | fixed several faults (see the changelog); `sdidx -m` says why it cannot make the directory; `sdidx` refuses a link put in place of a file's primary subfile instead of following it |
 | sort of equal or ordered keys | Changed | fixed: a long run of equal or already ordered keys took minutes; now a fraction of one |
 
@@ -530,7 +530,7 @@ Plain-text files in and out of the account with an sftp program over Solo's ssh.
 | Shell and OS access page | Added | the installer asks, on a new installation and on an upgrade, with two boxes, both unticked; the control file's `os-access=` (`none`, `sh`, `os` or `both`) answers it on a new installation; a silent installation, or an unticked page, turns nothing on |
 | source | Added | the complete source (C, `gpl.bp`, build and installer scripts) is `SDCore4WindowsSolo-source-<version>.zip` beside the installer; none of it is installed |
 | Start Menu entry | Added | the install puts SD Core Solo in your own Start Menu, opening a classic console window; the uninstaller removes it |
-| Where sessions start page | Added | on a new installation, one unticked box: start new sessions at the command prompt instead of the home screen (`set.start.default terminal`); the control file's `start=` (`menu` or `terminal`) answers it; an upgrade keeps the start the installation has |
+| start question | Added | on a new installation, one unticked box: start new sessions at the command prompt instead of the home screen (`set.start.default terminal`); the control file's `start=` (`menu` or `terminal`) answers it; an upgrade keeps the start the installation has |
 | PDF reader page | Added | where a known PDF reader is installed and none is allowed, one unticked box: allow it for the `pdf` command (`set.viewer add pdf <name>`); the control file's `viewer=` answers it; a silent installation allows nothing |
 | API and ssh boxes | Changed | the "other computers" boxes use SD Core for Windows' words: *Let other computers on your network reach it* (the API) and *... connect to this one over ssh (port 4251)*; as delivered the API is still off and ssh answers this computer only |
 | uninstall Keep | Changed | keeps what SD Core keeps with its accounts: the passwords, the audit trail, the TLS key, your ssh key file and the ssh host key, the SDNet logins, `newvoc.mods`, the saved VOC records and where sessions start; the question is asked before anything is removed |
@@ -573,11 +573,11 @@ free checks pass, and it has not been run against another server.
 | `list.servers`, `delete.server` | Added | the administrator's list of defined servers, and removal of one <!--s g52 g26--> |
 | `net` gate | Added | `set.net.access on`: one of the four things that must all be true before a remote file opens (the gate, a defined server, your login on it, a VOC pointer) |
 | `netwait`, `netreply` | Added | `sd.conf` settings, 1 to 3600 seconds, for a connection and a reply; a silent server is given up on <!--s 235 g291--> |
-| `open.socket` | Changed | the fourth argument is the number of seconds to wait for the connection, zero for no limit of SD's own; it was the unused security context <!--s 174--> |
-| remote files, administration | Added | on a remote file: `analyze.file`, `configure.file`, the index verbs, `fcontrol()`, `write ... creating.seqkey`; `create.file name ... server srv {as remote}` makes the file there and the pointer here, and `delete.file` of a pointer deletes both; the other machine decides (a Solo server serves them only to a session signed in with the global password) |
+| `open.socket()` | Changed | the fourth argument is the number of seconds to wait for the connection, zero for no limit of SD's own; it was the unused security context <!--s 174--> |
 | remote files, a pointer | Added | a VOC entry whose first field is `n` points to a file on another server |
-| remote files, indices | Added | `indices()`, `selectindex`, `setleft`, `setright`, `selectleft`, `selectright` ask the other machine, so a query on a remote file uses its indices |
+| remote file administration | Added | on a remote file: `analyze.file`, `configure.file`, the index verbs, `fcontrol()`, `write ... creating.seqkey`; `create.file name ... server srv {as remote}` makes the file there and the pointer here, and `delete.file` of a pointer deletes both; the other machine decides (a Solo server serves them only to a session signed in with the global password) |
 | remote files, cache | Added | a short record cache; `logto` closes the connections |
+| remote files, index | Added | `indices()`, `selectindex`, `setleft`, `setright`, `selectleft`, `selectright` ask the other machine, so a query on a remote file uses its indices |
 | remote files, query | Added | `list`, `count`, `sort`, `select`, `list.item`, `list dict` on a remote file; `fileinfo` type 7 |
 | remote files, refusal | Changed | the server's own words are shown, not `status 0`; a lost connection is an error <!--s 256--> |
 | remote files, reply checked | Changed | a reply that cannot be true is a lost connection at once |
@@ -595,22 +595,22 @@ Fixes that close a way round a gate, and what the gates now ask.
 
 | Name | Change | What |
 |---|---|---|
-| another session's text | Changed | record ids, paths, commands and program names another session wrote are shown by `list.readu`, `pstat`, `profiler` and `hsm` with their control characters as `?`, so a record id cannot send codes to your terminal |
-| API `clearfile` | Changed | fixed: it cleared whichever file a stale counter pointed at instead of the file the client named |
+| api `clearfile` | Changed | fixed: it cleared whichever file a stale counter pointed at instead of the file the client named |
 | api request 29 | Changed | fixed: it opened a file for any login once `netfiles` bit 2 was set; it now needs the account's `net` gate (`set.net.access on`), and a VOC pointer that leads out of the account needs the `os` switch |
-| API sign-in | Changed | writes `api login user= account=` to the audit trail |
+| api sign-in: audit | Changed | writes `api login user= account=` to the audit trail |
 | audit trail, control characters | Changed | fixed: a value written to the audit trail that held a newline started a false line; a control character, DEL or a mark is now written as `?` |
-| deleting a tree | Changed | fixed: a link inside a tree being deleted (`delete.file` and the rest) is removed as a link; a link to a directory was walked and everything under its target deleted; a pathname of more than 255 characters fails instead of overrunning its buffer |
+| commands that change a file you name | Changed | `get.list ... deleting`, `save.list`, `delete.list`, `sort.list`, `copy.list`, `map file`, `format`, `fixdir`, `generate`, `compile.dict data`, `set.trigger`, `reformat ... to`, the `pageseq` clause of a report, `sp.view` (deleting the item shown), `como ... in`, `basic`'s object file, `create.file` on an existing file, `import.csv`, `import.json` and `import.xml` into a VOC, and over the API `write`, `delete` and `clearfile`, each now ask before they change anything and say why when they refuse |
+| deleting a directory tree | Changed | fixed: a link inside a tree being deleted (`delete.file` and the rest) is removed as a link; a link to a directory was walked and everything under its target deleted; a pathname of more than 255 characters fails instead of overrunning its buffer |
 | global password | Changed | one set after the account password now shares the account's salt, so an SD Core server can sign in over the API under the account's name with it (set it again to give an older one the shared salt); it is no longer accepted under the name SDSYS |
 | hang-up and fault | Changed | fixed: a session whose console closed while it was writing the error log or the audit trail waited for itself for ever, and every other session behind it; the "Received termination signal" line is now written outside the signal, and a session that faults gives back its locks before it logs |
 | `kernel(k$internal, n)` | Changed | only a program compiled in internal mode may set internal mode; reading it (`-1`) is unchanged |
+| `list.readu`, `pstat`, `getlocks()`, `system(1083)` | Changed | record ids, paths, commands and program names another session wrote are shown by `list.readu`, `pstat`, `profiler` and `hsm` with their control characters as `?`, so a record id cannot send codes to your terminal |
 | named common with a `$` or `_` name | Changed | the system's own common blocks: the kernel refuses one to a program that is not a system program |
 | `openseq` that fails | Changed | fixed: a record lock it had taken stayed until SD was restarted; it is now given back |
 | operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes, except that the VOC's own files are read only there without `admin` or the `os` switch (`openseq` cannot create one, `deleteseq` and a print file are refused) |
 | paths with `..` | Changed | fixed: a path with a folder that does not exist followed by `..` kept the `..`; it now resolves to the right place |
 | phantom debugger messages | Changed | `pdebug` and the phantom it debugs leave each other their messages in `sd\pdebug` in the `AppData\Local` folder of the user's profile (a private folder, made with access for that user, SYSTEM and Administrators only), not in `$ipc`; message 12953 when the store cannot be set up |
-| `phantom` start-up records | Changed | `$ipc` is a file every SD user can write, so the records a new phantom runs, stacks and sets (command, `DATA` lines, log file, options) are sealed with a secret given only to the new process in its environment; a phantom whose records do not check runs nothing, says so and writes `phantom refused` to the audit trail |
-| the VOC and the server's files | Changed | `get.list ... deleting`, `save.list`, `delete.list`, `sort.list`, `copy.list`, `map file`, `format`, `fixdir`, `generate`, `compile.dict data`, `set.trigger`, `reformat ... to`, the `pageseq` clause of a report, `sp.view` (deleting the item shown), `como ... in`, `basic`'s object file, `create.file` on an existing file, `import.csv`, `import.json` and `import.xml` into a VOC, and over the API `write`, `delete` and `clearfile`, each now ask before they change anything and say why when they refuse |
+| phantom start-up records | Changed | `$ipc` is a file every SD user can write, so the records a new phantom runs, stacks and sets (command, `DATA` lines, log file, options) are sealed with a secret given only to the new process in its environment; a phantom whose records do not check runs nothing, says so and writes `phantom refused` to the audit trail |
 
 ### System
 
@@ -618,12 +618,12 @@ Fixes that close a way round a gate, and what the gates now ask.
 |---|---|---|
 | `autologout` | Changed | counts the time a full-screen page spends waiting, so such a page no longer keeps a session alive for ever |
 | classic console window | Changed | a full-screen page took 3 to 5 seconds to draw in the window Windows PowerShell or cmd opens; SD now writes to the console directly and it draws as quickly as in Windows Terminal |
-| F1 at an empty prompt | Changed | fixed: names the changelog in the SD Core Solo folder, not in its `sdsys` folder |
+| F1 at the prompt | Changed | fixed: names the changelog in the SD Core Solo folder, not in its `sdsys` folder |
 | failed start | Changed | fixed: an `sd.exe` that stopped early ("SD has not been started.") kept an internal lock, and every session started after it hung; the lock is given back |
 | kernel faults | Changed | fixed: `getlocks()` with a user number nobody holds read outside the user table; a time conversion with negative parts or long hours overran its buffer, and a prefix strip in a conversion copied over itself |
 | phantom of an ended session | Changed | a phantom whose session ended before it started ends at once |
 | `sd -status` | Changed | fixed an overrun on a server that recorded no start time |
-| `sd-solo -start` in a pipe | Changed | a script that captures its output, or runs a session whose phantom outlives it, gets its end of file: the background process no longer holds the pipe |
+| `sd-solo -start` | Changed | a script that captures its output, or runs a session whose phantom outlives it, gets its end of file: the background process no longer holds the pipe |
 | `sd-solo -stop` and `sd-solo -restart` | Changed | an SD process still running ten seconds after the termination signal is ended with SIGKILL, and the stop says how many; before, it was left running with SD gone under it |
 | `sd-solo` window | Changed | typed at a PowerShell or cmd prompt it opens a classic console window of its own, 140 by 43 to start, and the prompt comes back at once; one that started in a smaller classic console window makes it 140 by 43 (Windows Terminal is left alone); after an error, such as a refused sign-in, the window waits for Enter, and a refused sign-in exits with status 1 (it was 0) |
 | session with no terminal | Changed | its display is 140 by 42 (it was 120 by 36); `term default` gives the same |
@@ -658,7 +658,7 @@ feature was already there, or it does not apply. They are here so that nobody lo
 | `readv` fatal error | None | no change recorded <!--s 559--> |
 | record cache and case | None | no change recorded <!--s 330--> |
 | `set.date` | None | SD still has the command; nothing was withdrawn <!--s 78--> |
-| the startup process's `@tty` | None | not done: SD has no startup command, so there is no startup process to name <!--s 91--> |
+| the startup process | None | not done: SD has no startup command, so there is no startup process to name <!--s 91--> |
 | the `u` format in a report | None | already wraps a long value as `t` and `l` do <!--s 531--> |
 | the user limit reached | None | login prints message 1000 and exits cleanly <!--s 275--> |
 | `update.account` | None | already there in W1.1-3 <!--s g102--> |
