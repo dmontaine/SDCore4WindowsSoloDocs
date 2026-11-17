@@ -465,7 +465,9 @@ were built, with the changes they made.
 | `tool.audit` | Added | administrator page: the audit trail from its newest line, with filters, a go-to-date, a follow mode and the lines shown saved to a record |
 | `tool.backups` | Added | administrator page: the backup directory, the archives in it with what each holds, and `backup.account`, `restore.account` and `set.backup.directory` behind a box |
 | `tool.config` | Added | administrator page: every parameter of `sd.conf` with the value SD runs with, the file's value and the default; `E` changes one of the 14 through `set.config` |
-| `tool.gates` | Added | full-screen page of the account's four gates (`sh`, `os`, `net`, `xfer`): on or off for this session, what the register says, how each is delivered and when a change reaches you; after `admin`, Enter turns a gate on or off through its own verb |
+| `set.jobs.access` | Added | administrator only: SD's scheduled jobs switch, `set.jobs.access on` and `off`; off as delivered, and off refuses every job at its next run; Getting Started page 04, Scheduled jobs |
+| `tool.gates` | Added | full-screen page of the account's six gates (`sh`, `os`, `net`, `ai`, `xfer`, `jobs`): on or off for this session, what the register says, how each is delivered and when a change reaches you; after `admin`, Enter turns a gate on or off through its own verb |
+| `tool.jobs` | Added | full-screen page of your scheduled jobs: each one's schedule, command, next and last run; N, C, D and R make, change, delete and start one through `set.job`, N and C with the account password typed in the form |
 | `tool.menus` | Added | administrator page: the home screen's settings, changed through `set.start.default`, `set.tile` and `set.pins` behind a box answered Run |
 | `tool.remote` | Added | administrator page: the two doors, the SDNet servers, the sessions now and this computer's TLS identity; `A` and `S` change a door through `remote.api` and `remote.ssh` |
 | `tool.sessions` | Added | administrator page: every session and every lock, read again every three seconds; `L` logs a session out, `U` releases a lock, `I` stops or allows new sessions, each through its verb behind a box answered Run and written to the audit trail |
@@ -514,6 +516,16 @@ Plain-text files in and out of the account with an sftp program over Solo's ssh.
 | `send` | Added | `send <file> <id> ...` copies records that are plain text to the account's file `xfer.out` and opens a transfer for an sftp client to fetch them; the same switches and the same confinement as `receive` |
 | `set.xfer.access` | Added | the account's file transfer switch: `set.xfer.access on` and `off`; off as delivered; with `XFER=1` in `sd.conf` it lets `receive` and `send` move plain-text files over Solo's ssh |
 | `XFER` and the transfer limits | Added | `sd.conf`: `XFER` (0 as delivered; 1 lets the account transfer files once `set.xfer.access` is on), `XFERFILE` (10 MB a file), `XFERSLOT` (100 MB a transfer), `XFERWAIT`, `XFERIDLE`, `XFERMAX` (60 minutes) and `XFERKIND` (the endings taken; blank is any plain text); read when Solo starts |
+
+### Scheduled jobs
+
+SD commands of yours that Windows Task Scheduler runs on a schedule, signed in or not. Off as delivered.
+
+| Name | Change | What |
+|---|---|---|
+| `set.job` | Added | SD's own scheduled jobs: `set.job add` and `change` *name* *schedule* *command* (every 5-30 minutes, hourly, daily, weekly or monthly at hh:mm), `delete`, `run`, and alone the list with each job's next and last run; each job is a task in Task Scheduler's folder `\SD Core Solo Jobs` that runs as your Windows user without a stored password, made by the installer's SYSTEM helper; making or changing one asks for the account password; off until `set.jobs.access on` |
+| `run.job` | Added | what a scheduled job's task runs (`sd-solo.exe run.job <name>`): the switch is asked at every run, the job's command is run as it was given and the start and end are audited; refused anywhere else. While you are signed out it signs in by your Windows identity (the owner of SD's password folder), because Windows will not open the kept copy of the password then; no other command does |
+| uninstall and reload | Changed | the uninstaller removes the jobs' tasks first; Keep keeps their definitions (`sdsys\$jobs`), and a reinstall that reloads the kept data gives the jobs their tasks back |
 
 ### Files
 

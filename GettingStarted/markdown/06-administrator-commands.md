@@ -42,6 +42,7 @@ password is never displayed, stored or logged.
 | `set.viewer`, `tool.viewers`, `docs.install`, `load.help` | the readers `pdf` may start, the documents it shows, the context help — [Operating system access](06b-operating-system-access.html) |
 | `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`; every remote file) — [API access](09-api-access.html) |
 | `set.xfer.access` | show, or turn on and off, file transfer over Solo's ssh (`receive` and `send`, with `XFER=1` in `sd.conf`); off as delivered — [Security](12-security.html), and for the person *Moving Files In and Out* in the User documentation |
+| `set.jobs.access` | show, or turn on and off, SD's scheduled jobs (`set.job`, `run.job`, `tool.jobs`); off as delivered, and off refuses every job at its next run — [Scheduled jobs](04-scheduled-jobs.html) |
 | `set.ai`, `tool.ai` | whether the AI may be used (`set.ai gate on`; off as delivered), its provider, model and key, and the page that does it — [The AI helper](24-the-ai-helper.html) |
 | `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
 | `CONFIG` | report or set configuration — except `CONFIG GPL` and `CONFIG CONTRIB`, which need nothing |

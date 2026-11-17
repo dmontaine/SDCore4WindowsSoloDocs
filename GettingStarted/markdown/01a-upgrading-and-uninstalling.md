@@ -61,13 +61,16 @@ first asks what to do with your data and configuration, and Keep comes first:
 
 | | |
 |---|---|
-| **Keep** | leaves in `%USERPROFILE%\SDCoreSolo` your account `sduser` with its data (`user_accounts\sduser`), `sd.conf`, and what SD Core keeps with its accounts: the passwords (`sdsys\$cred`), the AI helper's settings and keys (`sdsys\ai`; see [The AI helper](24-the-ai-helper.html)), the audit trail and its older copies, the API's TLS key (`sd-tls`), your ssh key file (`ssh`), the SDNet logins, your own VOC changes (`newvoc.mods`) and saved VOC records, and where sessions start (`start.default`); a small file, `.sdcore-kept`, says so. Solo's ssh server keeps its host key in its administrators-only folder, `C:\ProgramData\SDCoreSolo\ssh`. **These are removed, and the dialog lists them:** the system files, the list of denied commands, `global.bp.out` and the install logs |
+| **Keep** | leaves in `%USERPROFILE%\SDCoreSolo` your account `sduser` with its data (`user_accounts\sduser`), `sd.conf`, and what SD Core keeps with its accounts: the passwords (`sdsys\$cred`), the AI helper's settings and keys (`sdsys\ai`; see [The AI helper](24-the-ai-helper.html)), the audit trail and its older copies, the API's TLS key (`sd-tls`), your ssh key file (`ssh`), the SDNet logins, your own VOC changes (`newvoc.mods`) and saved VOC records, your scheduled jobs' definitions (`sdsys\$jobs`; see [Scheduled jobs](04-scheduled-jobs.html)), and where sessions start (`start.default`); a small file, `.sdcore-kept`, says so. Solo's ssh server keeps its host key in its administrators-only folder, `C:\ProgramData\SDCoreSolo\ssh`. **These are removed, and the dialog lists them:** the system files, the list of denied commands, `global.bp.out` and the install logs |
 | **Delete** | removes the whole folder, for good, and the ssh host key with it |
 
 **A silent uninstall never deletes your data**; it keeps, as above.
 
 It then stops SD and — after the one administrator consent prompt — removes:
 
+- first, every scheduled job's task (the folder **SD Core Solo Jobs**), so that
+  no job starts while SD is being removed; their definitions stay with your data
+  when you chose Keep;
 - the startup task **SD Core Solo** and the ssh task **SD Core Solo SSH**,
   which also stops Solo's ssh server and deletes its administrators-only folder,
   `C:\ProgramData\SDCoreSolo` (all but the host key, when you chose Keep);
@@ -81,7 +84,7 @@ your saved data and configuration into this new install?* (Yes is the default):
 
 | | |
 |---|---|
-| **Yes** | copies the account's files into the new account and puts back everything else Keep kept — the passwords, the audit trail (the kept lines first, then the new installation's), the TLS key, your ssh key file, the SDNet logins, your VOC changes and where sessions start — then tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
+| **Yes** | copies the account's files into the new account and puts back everything else Keep kept — the passwords, the audit trail (the kept lines first, then the new installation's), the TLS key, your ssh key file, the SDNet logins, your VOC changes, your scheduled jobs (each given its task again by the installer's administrator step) and where sessions start — then tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
 | **No** | starts clean |
 
 **Either way the old folder is moved aside, never deleted:** it becomes
