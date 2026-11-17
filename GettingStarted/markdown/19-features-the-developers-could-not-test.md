@@ -209,6 +209,28 @@ SD Core**, with Solo installed beside it, has not been tried.
 second computer with `ssh -p 4251`, typing the Windows password and then the SD
 password; and connect to port 22 as an SD Core user.
 
+### The ssh lock-out
+
+**Known.** Three wrong passwords from one address in ten minutes lock that address for ten minutes: the
+rules (a wrong password counts, a key does not, a sign-in forgets the failures, the window and the end of a
+lock are honored, the address is read from the end of the log line) were run by a test on recorded ssh
+log lines, without the firewall and without a real ssh server.
+
+**Not known.** **The lock-out has not been run on an installed system.** No ssh server logged to the
+file and no Windows Firewall rule was measured. Nobody has seen: the exact prefix the Windows ssh server
+puts before each line of its log; that the server's per-connection processes write to the same file; the
+**SD Core Solo SSH Guard** task starting at boot and running; that the block rule refuses a **new**
+connection from the address; that ending the process which holds the connection ends only that
+connection; or that `-List` and `-Unlock` report what the task did. **A lock on this computer's own
+address (`127.0.0.1`) ends the connection but cannot refuse the next one**, because Windows Firewall does
+not filter loopback; that follows from how Windows works and has not been tried either. A guess spread
+over many addresses is not stopped.
+
+**To settle it.** Install with ssh on and the firewall rule open, give three wrong passwords at
+`ssh -p 4251` from a second computer, and watch the third end the connection, the next connection be
+refused, `-List` name the address and its end time, `-Unlock` let it in again, and the lock lift by
+itself after ten minutes; then try a correct password and a key that the server does not know.
+
 ### The first password on a computer installed from a control file
 
 **Known.** A computer installed from a control file has no account password

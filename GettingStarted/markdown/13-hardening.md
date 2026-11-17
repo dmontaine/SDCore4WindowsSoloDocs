@@ -163,13 +163,12 @@ the byte protocol.
 
 **An account keeps the terminal setting in its VOC** until that VOC is updated;
 an upgrade runs `update.accounts` for you, and you can run it yourself. Until
-then, `term windows` sets it for the session. **51 definitions ship, compiling
-to 83 terminal names** — the extra names are variants such as `vt100-w` — so
-`term wyse60` still works. (The `-at` types of AccuTerm and SDTerm's `sdterm`
-were removed: SD does not support those terminal programs.)
+then, `term windows` sets it for the session. **26 definitions ship, compiling
+to 37 terminal names** — the extra names are aliases such as `vt200` and
+`wyse60` — so `term wyse60` still works.
 
 **A name that is not installed is refused and your current type is kept** —
-*"Unrecognised terminal name"* — so a typo costs you nothing. **`term` with no
+*"Unrecognized terminal name"* — so a typo costs you nothing. **`term` with no
 argument reports the type actually in force**, which is how to check.
 
 Watch for near-misses all the same. There is no `vt320` definition; `vt220`

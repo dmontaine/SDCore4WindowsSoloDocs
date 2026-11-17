@@ -225,19 +225,27 @@ With no record name it uses the active select list.
 ## Compiling dictionaries
 
 ```
-compile.dict {dict | data} file {i-type}... {no.query} {no.page}
+compile.dict file {i-type}... {no.query} {no.page}
 compile.dict local
 compile.dict all
+compile.dict data file {i-type}...
 ```
 
-It compiles the I-type entries in a dictionary; with no names it does all of them, or uses
-the active select list if there is one.
+It compiles the I-type entries in the dictionary of *file*; with no names it does all of
+them, or uses the active select list if there is one. **The dictionary is the
+default: write the file's name and nothing before it** (`compile.dict cust dbl`).
 
 | | |
 |---|---|
 | **`compile.dict local`** | every dictionary in the account |
 | **`compile.dict all`** | every dictionary visible from the account |
 | **`compile.dict data file`** | reads the records of the file's *data* part as if they were dictionary items, and compiles those that look like one: a record whose first character is `I`. Every other record is skipped without a word. It is for the rare file whose data holds items of that kind; on an ordinary data file a record that happens to begin with `I` is reported as a compilation error |
+
+> **Do not put `dict` before the file name.** An older description of this verb
+> gave the form `compile.dict dict file`, but the word is not understood as a keyword:
+> `compile.dict dict cust dbl` answers *File dict not found*, because `dict` is taken to be
+> the name of the file. `compile.dict cust dbl` is the command that compiles the item
+> `dbl` of the dictionary of `cust`.
 
 Compiling a dictionary is a performance step, not a correctness one: it is what
 a query using those entries runs against.

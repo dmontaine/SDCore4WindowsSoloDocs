@@ -392,7 +392,7 @@ subroutine did. The subroutine must be catalogued where the user can reach it.
 
 **What this does not do:** the editor does not check that the subroutine exists
 until a command that names it is typed; a missing one then stops the editor with
-the run time's usual message. An unrecognised option in `$ed.options` is
+the run time's usual message. An unrecognized option in `$ed.options` is
 ignored, as before.
 
 ### The command stack, and prestored sequences
@@ -430,7 +430,7 @@ bp zzed
 **Field 1 is a marker, not a command. it must begin with `E`** — `ED` is the
 usual thing to write — and `ed` refuses a record that does not with *"Record is
 not a prestored edit sequence"*. Nothing was run for it above, and the
-line numbers in error messages count it: an unrecognised command in **field 2**
+line numbers in error messages count it: an unrecognized command in **field 2**
 is reported as line 2.
 
 `PAUSE` inside a sequence stops it and `.XR` resumes, `.XK` abandons it;
@@ -442,7 +442,7 @@ is reported as line 2.
 >
 > ```
 > ----: .X bp zzs2
-> Error - Unrecognised command at line 2 of prestored commands
+> Error - Unrecognized command at line 2 of prestored commands
 > Did you mean to insert this text (Y/N)? N
 > ```
 >

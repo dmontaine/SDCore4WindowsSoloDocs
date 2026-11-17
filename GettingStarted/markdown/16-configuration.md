@@ -53,7 +53,7 @@ anything.
 ### A name SD does not recognize stops it starting
 
 An unrecognized parameter is not ignored. The parser abandons the file with
-`Unrecognised configuration parameter`, and SD does not start.
+`Unrecognized configuration parameter`, and SD does not start.
 
 **The parameters SD no longer has are removed from a kept `sd.conf` for you.**
 In 2.0-0 thirteen names went, because they did nothing or imitated another

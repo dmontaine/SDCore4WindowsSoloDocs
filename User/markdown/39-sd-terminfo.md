@@ -3,9 +3,9 @@ Subtitle: The terminfo database, the definitions that ship, and the compiler tha
 
 SD uses a terminfo database to know what byte sequences a terminal sends for
 each key, and what sequences to emit for screen control — cursor movement,
-clear, colour, bold, underline.
+clear, color, bold, underline.
 
-Most installations never touch it. The 51 shipped definitions cover the
+Most installations never touch it. The shipped definitions cover the
 terminals in ordinary use, and `windows` works with any Windows console, cmd,
 PowerShell or Windows Terminal session.
 
@@ -16,8 +16,8 @@ term
 ```
 
 ```
-Page width: 120
-Page depth: 36
+Page width: 140
+Page depth: 43
 Device    : windows
 ```
 
@@ -30,9 +30,9 @@ consoles, cmd, PowerShell and Windows Terminal.
 
 ## What ships
 
-**About 50 terminfo definitions ship with SD**, compiling to **82 terminal
-names** — the extra names are variants. For example, `vt100-w` is an alias
-that maps to the same definition as its base name.
+**26 terminfo definitions ship with SD**, compiling to **37 terminal
+names** (what `list.term.types` lists) — the extra names are variants. For
+example, `vt200` is an alias that maps to the same definition as `vt220`.
 
 Common names that work out of the box: `windows`, `linux`, `vt100`,
 `vt220`, `wyse60`, `ansi`, `xterm`.
@@ -46,7 +46,7 @@ A name that is not installed is refused and your current type is kept:
 
 ```
 :term vt320
-Unrecognised terminal name
+Unrecognized terminal name
 ```
 
 There is no `vt320` definition; `vt220` or `xterm` does the same job.
@@ -94,7 +94,7 @@ definition.
 ## Ending one attribute: `eblink`, `edim`, `erev`, `ebold` and `eprot`
 
 SD turned blink, half intensity, reverse video and bold off with `sgr0`, which ends **every**
-attribute and the colours as well. A terminal entry can now give each its own capability:
+attribute and the colors as well. A terminal entry can now give each its own capability:
 
 | capability | ends | sent by |
 |---|---|---|
@@ -106,10 +106,10 @@ attribute and the colours as well. A terminal entry can now give each its own ca
 
 When the entry defines the capability, the function sends it; **when it does not, the function
 sends `sgr0` as before.** No entry that ships with SD defines any of the five, so nothing changes
-until you add them. SD's own programs that use `@(-14)` to put the colours back (the query
+until you add them. SD's own programs that use `@(-14)` to put the colors back (the query
 processor's styles, SED, the pick lists) therefore behave as they did on every stock terminal.
 Think before you give an entry an `erev` of its own: it ends reverse video and nothing else, where
-`sgr0` ended the colours too.
+`sgr0` ended the colors too.
 
 Put the additions in `terminfo.mods` in the SDSYS account directory, which the installer compiles
 after `terminfo.src` so that an upgrade does not lose them, and compile with `sdtic` as described

@@ -79,9 +79,12 @@ it does. The other choice it asks is who may reach the port (below).
 Windows can then lock you out of it.** Wrong passwords count against the
 account like wrong passwords at the sign-in screen. On the computer this was
 developed on, the policy locks an account after 10 wrong tries within 10
-minutes (`net accounts` shows yours), and that includes you. So **leave the firewall rule limited to this computer unless other
+minutes (`net accounts` shows yours), and that includes you. **Solo therefore has a
+lock-out of its own** ([below](#the-lock-out-three-wrong-passwords-lock-the-address)),
+which cuts an address off after three wrong passwords, before that count is reached from one
+address. So **leave the firewall rule limited to this computer unless other
 computers need to reach SD**, and use a long Windows password. (Windows OpenSSH
-on port 22 has the same property.)
+on port 22 has the same property, and no lock-out of Solo's.)
 
 **The password is not sent in the clear.** ssh encrypts the connection before
 it asks for the password, so it crosses the network inside the encrypted
@@ -171,6 +174,31 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-fire
 `0` applied, `1` failed, `2` refused (for example, not elevated). It scopes the
 rule's remote address rather than disabling it, so the rule reads correctly in
 `wf.msc`.
+
+## The lock-out: three wrong passwords lock the address
+
+**Three wrong Windows passwords from one address within ten minutes lock that address for ten minutes.**
+The connection that made the third wrong try is ended at once, and the lock lifts by itself.
+
+| | |
+|---|---|
+| **Per address, not per account** | the lock-out never locks the Windows account, so someone guessing from elsewhere cannot lock **you** out of your own account with it, and the computer's own ssh server on port 22 is not touched. Windows' own account lock-out policy, if the computer has one, still counts the same wrong passwords against the account (see above); the guard cuts an address off at three, before that count |
+| **Only a wrong password counts** | not a key the server does not know: an ssh client that offers several keys is not punished for it |
+| **A sign-in forgets the failures** | a sign-in from the address clears its count |
+| **Who is locked** | `powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard.ps1" -List` lists the addresses, any that have wrong passwords counted and each lock's end time, from an ordinary prompt. `-Unlock ADDRESS` lets one address back in and `-Unlock all` every address; **`-Unlock` needs an elevated PowerShell**. `-List` ends `SOLO SSH GUARD LOCKED <n>` and `-Unlock` ends `SOLO SSH GUARD UNLOCKED <n>` |
+| **How** | a scheduled task, **SD Core Solo SSH Guard**, runs as SYSTEM from Windows start (and again up to three times a minute apart if it stops) and reads Solo's ssh log, `C:\ProgramData\SDCoreSolo\ssh\sshd.log`. A locked address gets a Windows Firewall block rule on port 4251, **`SD-Solo-SSH-Guard-<address>`**, for ten minutes, and the rule goes when the time is up. The address is read from the end of the log line, where the ssh server puts the peer's address, never from the user name a client types. The guard's own log is `sshguard.log` in the same folder, and its state is `guard.state`: anyone may read them, only an administrator may change them |
+| **Where it is set up** | wherever Solo's ssh server is set up: the installer, an upgrade and `remote.ssh local` or `open`. It runs the copy in the administrators-only folder, never the one in your own folder. Turning ssh off or uninstalling takes the task and every lock-out rule away |
+
+**What it does not stop:** a guess spread over **many addresses** (each gets its three), and connections
+already open when the lock engages: by reading the guard's code (not measured), each of them is cut at its
+next wrong password, so each gets one more guess. On a network where everyone shares one address (behind one NAT), they share the lock.
+
+**A lock on this computer's own address cannot be enforced.** Windows Firewall does not filter loopback
+traffic, so after three wrong passwords from `127.0.0.1` the connection is ended, but the rule cannot refuse
+the next one. Someone at the computer is not kept out by it.
+
+**Not measured.** The lock-out has not been run on an installed system: no real ssh server, no real
+firewall rule and no real lock were seen. See [Features the developers could not test](19-features-the-developers-could-not-test.html).
 
 ## What an ssh session is
 

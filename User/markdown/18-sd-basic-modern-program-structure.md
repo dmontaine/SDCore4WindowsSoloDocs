@@ -219,7 +219,7 @@ can validate, transform or compute without the caller knowing.
 
 ```
 :crt p->balance
-000003C1: Unrecognised property/method name (BALANCE). at line 92
+000003C1: Unrecognized property/method name (BALANCE). at line 92
 ```
 
 **Note the wording.** It is not *"private"* — from outside the class the name is
@@ -245,7 +245,7 @@ that declares it and to every class that inherits it, and invisible to everythin
 the main program, an unrelated class, and a sibling that shares only the parent. A child
 reaches its parent's restricted members through the inherited object, as it reaches the public
 ones (`parent->secret()`); a program that tries gets the same answer it gets for a private
-name, *Unrecognised property/method name (SECRET)*. **The child object does not pass
+name, *Unrecognized property/method name (SECRET)*. **The child object does not pass
 the parent's restricted names on to the caller** — `c->secret()` from the main program is
 refused although `c` inherits it.
 
@@ -319,7 +319,7 @@ DESTROYED
 
 `run` makes the object, so `create.object` runs first, calls `main`, and lets the object go, so
 `destroy.object` runs last. A class with no `main` still gets its object made and
-`create.object` run; the reference to `main` is then refused with *Unrecognised property/method name
+`create.object` run; the reference to `main` is then refused with *Unrecognized property/method name
 (MAIN)*. **`call` of a class is still refused** — *A CLASS routine may not be used in this way*.
 
 ## Construction and destruction

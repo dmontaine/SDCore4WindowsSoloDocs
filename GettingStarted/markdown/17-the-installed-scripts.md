@@ -1,5 +1,5 @@
 Title: The Installed Scripts
-Subtitle: The fifteen PowerShell scripts installed beside SD - the execution policy they need, what their exit codes mean, and the two you may need to run yourself.
+Subtitle: The sixteen PowerShell scripts installed beside SD - the execution policy they need, what their exit codes mean, and the two you may need to run yourself.
 
 SD's installer does part of its work in PowerShell rather than inside the
 installer script, and **it leaves those scripts on the computer**. They are in
@@ -18,7 +18,7 @@ braces an optional part.
 
 ## What is here and what is not
 
-**Fifteen scripts ship.**
+**Sixteen scripts ship.**
 
 | | |
 |---|---|
@@ -28,6 +28,7 @@ braces an optional part.
 | `solo-machine.ps1` | the installer's one administrator step |
 | `solo-setup.ps1` | the installer's steps that run as you |
 | `solo-sshd.ps1` | sets up and looks after Solo's own ssh server |
+| `solo-sshguard.ps1` | the ssh lock-out: what the SYSTEM task **SD Core Solo SSH Guard** runs, and the way to list and unlock addresses — [below](#the-ssh-lock-out) |
 | `solo-start.ps1` | what the sign-in startup task runs, for an account Windows will not give a start-up task |
 | `internal-marker.ps1` | a helper the installer's steps load |
 | `sd-path.ps1` | what `append.sd.path` runs |
@@ -169,9 +170,31 @@ takes it away. **It never touches Windows' own ssh rule for port 22**
 (`OpenSSH-Server-In-TCP`): that is Microsoft's, and Solo's ssh server does not
 use port 22. See [ssh access](08-ssh-access.html).
 
+### The ssh lock-out
+
+```
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard.ps1" -List
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard.ps1" -Unlock ADDRESS
+powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard.ps1" -Unlock all
+```
+
+| | |
+|---|---|
+| `-List` | who is locked and when each lock ends, and who has wrong passwords counted; needs no elevation. Ends `SOLO SSH GUARD LOCKED <n>` |
+| `-Unlock ADDRESS`, `-Unlock all` | lets one address, or every address, back in and takes its firewall rule away; **needs an elevated PowerShell**. Ends `SOLO SSH GUARD UNLOCKED <n>`. Anything it refuses prints `ERROR=<text>` and exits `1` |
+| `-Serve` | what the task runs; you do not run it |
+
+**The task does not run the copy in your own folder.** `solo-sshd.ps1` copies the script into the
+administrators-only folder `C:\ProgramData\SDCoreSolo\ssh` and the SYSTEM task runs that one, so
+nothing a user can edit runs as SYSTEM; `-List` and `-Unlock` read the same folder whichever copy you run.
+**The script owns its rules**, `SD-Solo-SSH-Guard-<address>`, one per locked address, and removes each
+when the ten minutes are up; it never touches `SD-Solo-SSH-In-TCP` or Windows' own ssh rule for port 22.
+It is set up wherever Solo's ssh is set up and removed with it. What it counts, and what it cannot
+stop, is on [ssh access](08-ssh-access.html).
+
 ## See also
 
 [Installing](01-installation.html) covers what the installer asks and what it
 does with each answer. [The Scripts SD Runs For Itself](17a-scripts-sd-runs-itself.html)
 and [The Scripts a Verb Calls](17b-scripts-a-verb-calls.html) cover the other
-thirteen.
+fourteen.

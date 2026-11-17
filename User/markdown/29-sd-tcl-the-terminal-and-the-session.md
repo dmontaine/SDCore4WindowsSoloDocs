@@ -371,7 +371,7 @@ names is refused, *"x is not a recognised NLS key"*.
 
 These are the same three values that **`getnls`** and **`setnls`** read and set
 from SD BASIC (see [Data Conversion](06-sd-basic-data-conversion.html)). SD Core
-is English only; `nls` has nothing to do with the language of messages, month
+Solo for Windows is English only; `nls` has nothing to do with the language of messages, month
 names or day names.
 
 ## Waiting

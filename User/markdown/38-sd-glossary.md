@@ -1,7 +1,7 @@
 Title: SD Glossary
-Subtitle: Terms used in SD Core documentation, from account to VOC.
+Subtitle: Terms used in SD Core Solo documentation, from account to VOC.
 
-This glossary defines the terms used throughout the SD Core for Windows
+This glossary defines the terms used throughout the SD Core Solo for Windows
 documentation set. Terms are listed in alphabetical order.
 
 ## A
@@ -160,7 +160,7 @@ the *Getting Started* set.
 ## Q
 
 **QMSYS** — what the system account is called in OpenQM. In SD it is
-`SDSYS`, and `sdsys` on disk. Nothing in SD Core answers to the name
+`SDSYS`, and `sdsys` on disk. Nothing in SD Core Solo answers to the name
 QMSYS; it is here so that a reader coming from OpenQM finds the entry.
 
 **Query processor** — the reporting language: `list`, `select`,
@@ -207,8 +207,8 @@ prompt and dispatches it.
 
 **Terminfo** — the terminal capability database. Defines what
 sequences a terminal sends for keys and what sequences to use for
-screen control. SD ships 51 definitions compiling to 83 terminal
-names. The terminfo compiler (`sdtic`) is not shipped with SD Core.
+screen control. SD ships 26 definitions compiling to 37 terminal
+names. The terminfo compiler (`sdtic`) ships with SD Core Solo for Windows.
 
 **Transaction** — a group of file updates that succeed or fail together.
 Declared with `start transaction` and committed with `commit` or

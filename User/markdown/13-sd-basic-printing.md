@@ -145,7 +145,7 @@ Other keys worth knowing:
 
 `setpu` changes a setting; `printer.setting()` takes **three** arguments and
 reports or sets a spooler-level setting. **Not every key is valid for every
-call** — `printer.setting(0, 0, 0)` fails with *"Unrecognised printer setting
+call** — `printer.setting(0, 0, 0)` fails with *"Unrecognized printer setting
 key"*, because key 0 belongs to `getpu`, not to it.
 
 **The width and length are the unit's, not the terminal's.** Unit 0 reports

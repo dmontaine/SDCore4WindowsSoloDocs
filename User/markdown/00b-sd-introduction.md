@@ -50,7 +50,7 @@ There are no `#ifdef` branches keeping Linux alive in this source — SD Core
 Solo for Linux is a separate project, kept in behavioral parity by deliberate
 policy, and this is not a build of it.
 
-SD Core is free software under the GNU General Public License v3. `config gpl`
+SD Core Solo for Windows is free software under the GNU General Public License v3. `config gpl`
 displays the license and `config contrib` the list of contributors. The
 installer carries compiled binaries; the source is a separate download.
 
@@ -144,7 +144,7 @@ Type the administrator password chosen at installation, or, on a managed
 computer, the global password. It lasts until you leave SD or type
 `admin off`. See *Administrator commands* in the GettingStarted set.
 
-## What is not in SD Core
+## What is not in SD Core Solo for Windows
 
 The following were in OpenQM, in ScarletDME, or in upstream `sdb64`, and
 are not in SD Core Solo for Windows:
@@ -157,7 +157,7 @@ are not in SD Core Solo for Windows:
 | `ENCRYPT.FIELD` verb | Removed; `sdencrypt()` and `sddecrypt()` in SDBasic, with `sdkey()` for the key, and the `XE` conversion are the supported route |
 | `update.record`, `modify` editors | Gone; use `sed`, `edit`, `micro` or `ed` |
 | PROC language | Removed; use paragraphs instead |
-| `SET.LANGUAGE`, `LOAD.LANGUAGE` | Removed; SD Core is English only (NLS, for currency and separators, is kept) |
+| `SET.LANGUAGE`, `LOAD.LANGUAGE` | Removed; SD Core Solo for Windows is English only (NLS, for currency and separators, is kept) |
 | Accounts other than `sduser` | Solo has one account. `create.account`, `grant` and the rest are gone |
 
 ## Document conventions
