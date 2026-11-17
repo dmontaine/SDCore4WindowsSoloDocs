@@ -49,7 +49,7 @@ Only your text, the fixed sentence and the standing text set up with the helper 
 
 SD does not take questions about its own code or build (`gpl.bp`, `gplsrc`, the kernel) to the AI: it says so and sends nothing; the source is open, so ask an AI outside SD for that. In the editors, a record of SD's own files, such as a header in `syscom`, is never sent either.
 
-**No passages of the documentation.** On SD Core Solo for Linux the AI line (below, not the `ai` verb) also sends a few matching sections of SD's own documentation, from a copy its installer puts beside SD. SD Core Solo for Windows does not install that copy, so here no passages are sent and the preview shows none.
+**Passages of the documentation.** The AI line (below, not the `ai` verb) also sends up to four matching sections of SD's own documentation, from the pages the installer puts in the `sdsys\docs\user` folder of your Solo folder; an upgrade replaces them. A passage is at most 2,400 bytes and all of them 6,000. The preview does not list them; its size counts them. A request of common words, or of words no page holds, gets none. After `admin`, the Getting Started pages, which hold the administration, are searched too; they are never searched for a session that has not typed `admin`.
 
 ## The AI line on a page of the toolkit
 

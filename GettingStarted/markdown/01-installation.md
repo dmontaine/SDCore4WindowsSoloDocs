@@ -273,6 +273,15 @@ passwords. On a computer that already has an `SDCoreSolo` data tree — an
 earlier release's, with its system files — it is ignored: the tree already has
 its passwords.
 
+## What the installer checks when it finishes
+
+Every install, a new one, a reload and an upgrade, ends by confirming that
+**`sd-solo -internal` is closed**: the door the installer itself uses is a
+one-shot, opened only by a marker file the installer writes immediately before
+each of its own steps, so with no marker it must be refused (*Connection
+terminated*) and leave none behind. If it is admitted, the install fails and
+`install-summary.log` says so.
+
 ## When a step fails
 
 **The installer finishes and then lists what did not complete**:

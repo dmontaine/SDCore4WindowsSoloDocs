@@ -13,7 +13,7 @@ SD adds nothing of the account, the session or the data. You can of course type 
 
 **The standing text.** Every request, from the `ai` verb and from every AI line, begins with a few lines of yours: what SD is, how its commands are written, which gates there are, and where SD's help is. SD ships a default; you can replace it (see [The standing text](#the-standing-text) below). It is not in the preview and it does not change the question. The preview's size counts it.
 
-**No passages of the documentation.** On SD Core Solo for Linux the AI line also adds sections of SD's own documentation, from a copy its installer puts beside SD. **SD Core Solo for Windows does not install that copy**, so the AI line here sends no passages, and the preview shows none.
+**Passages of the documentation.** The AI line (the home screen, the pages of the toolkit, the IDE, SED, the collection editor and the debugger; not the `ai` verb) also adds up to four sections of SD's own documentation that match the request, at most 2,400 bytes each and 6,000 in all. Like the standing text and SD's fixed instruction they are not shown in the preview; its size counts them. The installer puts the markdown of the User document in `sdsys\docs\user` in your Solo folder and the markdown of this Getting Started document in `sdsys\docs\admin`; a new installation copies them and an upgrade replaces both folders whole, so they are not a place to put your own text. **`sdsys\docs\admin` is read only for a session that has typed `admin`**: the routine asks SD for the administrator before it looks there. This is documentation, not source: the rule below that the AI is never given SD's own code is unchanged.
 
 ## What the AI is never given, and what is not taken to it
 

@@ -24,7 +24,11 @@ file, and neither is switched on for you:
 | **ssh, on and open** | Solo's own ssh server on port 4251 (the OpenSSH package is installed if none was), reachable from other computers |
 
 With either off, or open to this computer only, the server cannot use that
-route. An administrator who sets up many computers puts `api=open` and
+route. **Nothing forces either open.** If you give the installer a global
+password on a new installation and either is off or local, the finish page and `install-summary.log`
+say so (*This computer has a global password, but the API is local and ssh is
+off*): an SD Core server reaches this computer only through what is open to the
+network, so with neither open the computer is managed in name only. An administrator who sets up many computers puts `api=open` and
 `ssh=open` in the control file.
 
 See [Installing](01-installation.html), including the **control file** that

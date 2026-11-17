@@ -175,12 +175,12 @@ reported and audited:
 The list can be read, and every removal undone (`admin` first):
 
 ```
-list.voc.removed {account}
-restore.voc account id | restore.voc account all
+list.voc.removed {sduser}
+restore.voc sduser {id}
 ```
 
 `list.voc.removed` prints the records SD no longer ships, with the release each
-went in and what to write instead; with an account it also says what the next
+went in and what to write instead; given `sduser` it also says what the next
 update would do there (removed, kept because it is not the shipped record,
 kept because it is locked, or absent) and **changes nothing**. `restore.voc`
 puts back the newest saved copy of a record, as it was, and never overwrites a

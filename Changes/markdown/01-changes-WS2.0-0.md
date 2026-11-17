@@ -579,6 +579,9 @@ Three simple layers, with no vault and nothing on by default.
 | uninstall Keep | Changed | keeps what SD Core keeps with its accounts: the passwords, the audit trail, the TLS key, your ssh key file and the ssh host key, the SDNet logins, `newvoc.mods`, the saved VOC records and where sessions start; the question is asked before anything is removed |
 | reload of kept data | Changed | puts all of it back (the audit trail joined, kept lines first) and asks no password and no start question when the kept passwords are complete; passwords in the control file replace the kept ones |
 | uninstall and reload | Changed | the uninstaller removes the scheduled jobs' tasks first; Keep keeps their definitions (`sdsys\$jobs`), and a reinstall that reloads the kept data gives the jobs their tasks back |
+| documentation for the AI line | Added | the install puts the User pages in `sdsys\docs\user` and the Getting Started pages in `sdsys\docs\admin`, and an upgrade replaces them; the AI line sends the few passages that fit a question (the administrator's pages only after `admin`); Getting Started page 24 |
+| internal door check | Added | the install ends by checking that `sd-solo -internal` is refused without the installer's one-shot marker; if it is admitted, the install fails |
+| global password with the API or ssh not open | Added | a new installation that gives a global password while the API or ssh is off or local says so on the last page and in `install-summary.log` |
 
 ### Screen library and terminals
 
