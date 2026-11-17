@@ -449,6 +449,7 @@ were built, with the changes they made.
 | Name | Change | What |
 |---|---|---|
 | `docs.install` | Added | the administrator copies a directory of PDF files in, for the `pdf` verb to show |
+| `examples.bp` | Added | the account has its own file of example programs, compiled: the TUI guide's five and 23 programs of a first course in programming; the installer puts it there on a new installation, a reload and an upgrade, and an upgrade refreshes the shipped ones; a program you add under another name is kept |
 | `load.help` | Added | F1, `?` or a click on a row of an administrator's page shows a short help box, kept in the file `context.help`, which `load.help` fills |
 | `mcp.call` | Added | the work of every call of the MCP launcher `solo-mcp.py` - the gate, the checks of every word, the work and the audit line; not typed by a person |
 | `pdf` | Added | shows a document in the PDF reader the administrator has allowed, even for an account that may not run programs; no reader is allowed as delivered, and it does nothing over ssh |
