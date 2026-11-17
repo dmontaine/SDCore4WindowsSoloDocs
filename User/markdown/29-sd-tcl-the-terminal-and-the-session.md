@@ -1,5 +1,5 @@
 Title: SD TCL - The Terminal and the Session
-Subtitle: Screen size, terminal behaviour, silence, the inactivity timer, and writing to the error log.
+Subtitle: Screen size, terminal behavior, silence, the inactivity timer, and writing to the error log.
 
 Two different things are called the terminal. **`term` is the page** — how wide
 and how deep SD thinks your screen is, which decides where output wraps and when
@@ -43,20 +43,24 @@ Page depth: 9999
 
 The depth stayed at 9999 because only the width was given.
 
-### The page is the terminal's own size, and SD's default is 120 × 36
+### The page is the terminal's own size, and SD's default is 140 × 43
 
 **SD asks the terminal how big it is.** When a session starts on a terminal, and
 again each time the window is resized, SD reads the size of the window and makes
 it the page: `@crtwide` and `@crthigh` follow it, and so does `term`. A program
-that draws a screen — the SCREEN statement, the debugger — sees an 80 × 24
-window as 80 × 24.
+that draws a screen — the SCREEN statement — sees an 80 × 24 window as 80 × 24.
+(**SD's own full-screen programs are the exception: SED, the IDE, CED and the
+full-screen pages are laid out for 140 × 43 or more**, SD's default size; they
+refuse a window smaller than that, and the debugger's
+full-screen display says so and is line by line instead. If the window is made smaller while one of them runs, it shows the
+upper left corner and stops taking keys while the cursor is off the screen — see
+the SED page. A `screen open` program of your own asks for the size it needs
+with `minsize`, and SD asks nothing more of it.)
 
-**SD's default is 120 columns by 36 lines, not 80 × 24**, and it is not a
-cosmetic choice: the shipped `@` dictionary records and the default `list`
-report layouts are formatted for that width. It is what a session gets when
-there is no terminal to ask — a phantom, a piped script, a service — and a
-report that looks wrapped or truncated on a narrow window is usually the
-window, not the report.
+**SD's default is 140 columns by 43 lines, not 80 × 24** (it was 120 by 36
+in release WS1.1-3). It is what a session gets when there is no terminal to
+ask — a phantom, a piped script, a service — and a report that looks wrapped or
+truncated on a narrow window is usually the window, not the report.
 
 **Where the number comes from**, in order, when a session starts:
 
@@ -65,26 +69,28 @@ window, not the report.
 | 1 | **the terminal's own window size**, as the terminal reports it |
 | 2 | when there is no terminal to ask: the `LINES` and `COLUMNS` environment variables, if they are numeric |
 | 3 | otherwise the terminfo entry's `lines` and `cols` |
-| 4 | **otherwise 36 and 120** |
+| 4 | **otherwise 43 and 140** |
 
 and whatever comes out is then raised to the minimum of 10 lines by 20 columns
 if it is smaller. **`term` with a size typed by hand sets the page from then on,
-until the next time the window is resized.**
+until the next time the window is resized**, and it is taken as typed: any width
+from 20 to 32767 and any depth from 10 to 32767, larger or smaller than the
+default, with no other ceiling.
 
-> **`term default` puts the 120 × 36 pair back, and it prints nothing when it
-> does.** The verb sets the same 120 × 36 that is the fallback, then returns
-> without a message — so the way to see that it worked is a bare `term` after
-> it, not the command itself:
+> **`term default` puts the 140 × 43 pair back, and it prints nothing when it
+> does.** The verb sets the same 140 × 43 that is the fallback, whatever size
+> the window is, then returns without a message — so the way to see that it
+> worked is a bare `term` after it, not the command itself:
 >
 > ```
 > :term default
 > :term
-> Page width: 120
-> Page depth: 36
+> Page width: 140
+> Page depth: 43
 > ```
 >
 > `term 120,36` does the same thing by hand and is worth knowing for the cases
-> where you want some other size back.
+> where you want some other size back, the old default included.
 
 **`Device`** is the terminfo entry in use, `windows` on this port. If a terminal
 type has no terminfo entry SD falls back to `windows` rather than failing, so
@@ -114,7 +120,7 @@ xterm
 
 (The list is cut short here: it is 37 names in rows of six, and the count depends
 on the release. The Data General, MDC Prism, Prime and Televideo 910 definitions that
-were once on it were removed in 1.2-0.) **A type that is not on it has no definition of its own**, and SD
+were once on it were removed in 2.0-0.) **A type that is not on it has no definition of its own**, and SD
 substitutes one for it.
 
 ## The wire: `pterm`
@@ -200,7 +206,7 @@ clear.prompts
 command left behind. Neither prints anything.
 
 (The run-together spellings `clearinput` and `clearprompts` were second names
-for the same verbs and were removed in 1.2-0.)
+for the same verbs and were removed in 2.0-0.)
 
 > **Neither can be demonstrated down a pipe, and `clear.input` should not be
 > sent down one at all.** In a piped session the input stream *is* the script,
@@ -230,6 +236,17 @@ is normal.
 executes `autologout 10` (`SDExecute("AUTOLOGOUT 10")`) has its server session ended after
 ten minutes in which it sent nothing, and its next request fails at once
 (see [SD Client API](37-sd-client-api.html)). The setting belongs to the one session that gave it.
+
+**It works in the full-screen programs too.** The screen library, `ide`, the
+home screen and every tool page wait for a key one second at a time, and each of those waits used to
+start the timer again, so a session left in one of them was never logged out. SD now adds up the time
+spent waiting across such short waits: only a key actually typed (or the break key) starts the period
+again, and the logout is the same as at the prompt. A page left open without typing, `tool.sessions`
+included, is therefore logged out like any other session. A program that waits for a key with no time
+limit behaves as before, and a timed wait exactly as long as the `autologout` period still ends with a
+plain timeout. **A program that polls the keyboard with very short timed `keyin`s and does work between
+them counts as waiting**, because the polls add up with nothing typed: `autologout` can end it, and
+only a key resets the count.
 
 ## The command echo: `echo`
 
@@ -324,9 +341,9 @@ conversion code other than `D` is set, `display` names that too.
 
 **`date.format` with no keyword prints nothing** — like `pterm`, it wants one.
 
-**Changing the date SD reports is a different thing entirely** — `set.date`
-needs `admin`, and it sets the date for your session only, not the computer's
-clock. It is in the GettingStarted set, under *Administrator commands*.
+**Setting the session's date is a different thing** — `set.date` needs `admin`,
+and it moves the date SD reports in your session only, not the computer's clock.
+It is described under *Administrator commands* in the GettingStarted set.
 
 ## Currency and separators: `nls`
 
@@ -395,6 +412,37 @@ it; `command.logging off` is. **openQM writes the file in `TEMPDIR` and has a
 write to, where another user could create the file first and be handed the log.
 A symbolic link left where the file would be made is refused (*The command log
 could not be started*). Logging belongs to the session and is off in the next.
+
+## Big letters: `block.term`
+
+```
+block.term text
+```
+
+Writes *text* to the terminal in large letters. Each character is drawn in a
+block 7 rows high and 7 columns wide made of the letter `W`, with two blank
+columns after it, so **eight characters fill an 80 column line**. Long text wraps,
+breaking at a space where it can. Lower case prints as upper case. Letters,
+digits and `. , ! ? - : / + = * ( ) '` have shapes; any other character prints as
+a question mark, and a space is a blank block.
+
+```
+block.term Hi 2
+```
+
+```
+ W   W     WWW               WWW
+ W   W      W               W   W
+ W   W      W                   W
+ WWWWW      W                  W
+ W   W      W                 W
+ W   W      W                W
+ W   W     WWW              WWWWW
+```
+
+With no text the verb answers *Text to print required*. `block.print` is the same
+program writing to the default printer; it is described with the printing verbs
+in [SD TCL - Printing and Spooling](28-sd-tcl-printing-and-spooling.html).
 
 ## Writing to the error log
 

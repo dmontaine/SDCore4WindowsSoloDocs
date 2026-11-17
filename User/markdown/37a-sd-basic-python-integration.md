@@ -21,14 +21,12 @@ Running Python as a separate program avoids the conflict by never being the
 same process at all - and, as a side effect, a Python crash can no longer
 take the database down with it.
 
-**Requires an all-users install of Python 3.13 or later.** Windows does
-not ship Python. The SD Core release zip carries python.org's installer,
-and SD Core's installer offers to install it for all users (an unticked
-box, shown only when no suitable Python is there already); restart Windows
-afterwards. You can also install Python yourself - for all users. A "for
-me only" install cannot be found or used. Without a usable Python on the machine, every `PY_` function
-returns `-12040` and nothing else about SD is affected -
-`PY_IS_INITIALIZED()` still works and answers `0`.
+**Requires Python 3.13 or later (64-bit) registered for you.** Windows does
+not ship Python. The SD Core Solo release zip carries python.org's installer,
+and SD Core Solo's installer installs it, for you only and without elevation,
+whenever no Python 3.13 or later is registered. Without a usable Python on the
+machine, every `PY_` function returns `-12040` and nothing else about SD is
+affected - `PY_IS_INITIALIZED()` still works and answers `0`.
 
 ## Access control
 
@@ -49,14 +47,12 @@ session sees the first row once the administrator has turned the switch on (or
 after `admin`), and `-12041` until then. `-12042` remains in the list because
 the check is still made.
 
-**This gate is Windows-specific and does not carry over to SD Core for
-Linux.** Confirmed against their source, not assumed: Linux's Python
-integration runs embedded in-process, with no separate helper to fail to
-start and no permission check anywhere on the call path - it runs
-unconditionally for any account there, the same shape their own `SH`/
-`OS.EXECUTE` was left in once their equivalent gate was removed. A program
-that checks for `-12041` to decide whether it may proceed will behave
-correctly on Windows and never see that code at all on Linux.
+**SD Core Solo for Linux has the same switch for Python**: starting Python and
+running code in it need the `os` switch there too, because Python runs
+arbitrary code. Asking whether Python is running (`PY_IS_INITIALIZED()`) and
+shutting it down are not gated. The difference is the model: on Linux Python
+runs inside the SD process, so there is no helper to fail to start and no
+`-12040`.
 
 ## `$INCLUDE SDPYFUNC.H`
 

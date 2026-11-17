@@ -1,17 +1,23 @@
 Title: Development and file commands
 Subtitle: Compiling, editing, and the verbs that maintain files, indexes and records in bulk.
 
-**You have all of these, and none needs `admin`.** This page is a reference for
-what each does. Two things near them are gated, and are named where they come
-up: **the global catalogue**, which nobody changes from your account, and
-**editing the VOC directly**, which needs `admin`.
+**Your account has all of these, from the moment it is installed.** SD Core used
+to hold them back from a *standard* account; that split is gone, and Solo has one
+account — see [The account and its passwords](05-account-types.html). This page
+is a reference for what each of them does, not a list of what you have been
+given.
 
-## Compile, catalogue and run
+**Two things, named as they come up below, still need more than the verb**:
+cataloging globally is refused to everyone, and editing the VOC directly needs
+`admin` — see [What actually gates these](#what-actually-gates-these) at the
+foot of this page. The full-screen editors need nothing extra.
+
+## Compile, catalog and run
 
 | | |
 |---|---|
 | **`basic`** | compile SD BASIC source |
-| **`catalog`** | add to the catalogue |
+| **`catalog`** | add to the catalog |
 | **`delete.catalog`** | remove from it |
 | **`compile.dict`** | compile dictionary items |
 | **`run`** | run a compiled program |
@@ -19,22 +25,25 @@ up: **the global catalogue**, which nobody changes from your account, and
 | **`generate`** | generate source |
 | **`phantom`** | start a background process |
 
-> **Catalogue locally or privately; the global catalogue is not yours.**
-> `catalog` and `delete.catalog` work for local and private entries.
-> `catalog ... global`, a name beginning `!`, `_` or `$`, and
-> `delete.catalog` of a global entry are refused for every session, `admin`
-> or not: *The global catalogue holds the SD Core server's programs from
-> global.bp.out and is changed only by sync.global.catalog*. On a managed
-> computer the global catalogue holds the SD Core for Linux server's programs,
-> which you can call; see [Managed computers](15-managed-mode.html).
+> **Nobody catalogs globally.** `catalog ... global`, a name beginning `*`, `!`,
+> `_` or `$`, and `delete.catalog` of a global entry, are refused whoever asks and
+> whether or not `admin` is unlocked: *The global catalog holds the SD Core
+> server's programs from global.bp.out and is changed only by
+> sync.global.catalog*. On a managed computer the global catalog is the SD Core
+> for Linux server's — see [Managed mode](15-managed-mode.html). Private
+> and local cataloging work as they always did: catalog your own programs with
+> `catalog ... local`.
 
 ## Edit and debug
 
 | | |
 |---|---|
-| **`ed`** | the line editor |
+| **`ed`** | the line editor. Needs nothing installed |
 | **`edit`** | a **full-screen** editor — opens the record in Microsoft Edit |
 | **`micro`** | a **full-screen** editor — opens the record in micro |
+| **`sed`** | a **full-screen** editor that runs **inside** SD: drop-down menus that show the keys, color for the language, split windows and macros. Needs a window of 140 columns by 43 lines, and no operating-system permission |
+| **`ced`** | a full-screen editor for a record that is a **data collection** (JSON), one level at a time with the type of every element shown |
+| **`ide`** | a full-screen workbench: the files and records, the program and its compile messages on one screen |
 | **`debug`** | the BASIC debugger |
 | **`pstat`** · **`pdebug`** · **`pdump`** · **`dump`** | process introspection |
 
@@ -59,7 +68,7 @@ edit  dict customers name
 
 Either verb writes the record to a working copy, opens the editor on it,
 reads it back, and asks whether to save. For a `bp` record it then offers
-the compile and the catalogue.
+the compile and the catalog.
 
 **Both are terminal editors**, so both work over ssh as well as at the
 keyboard. **A session with no terminal is refused** — an API session or a
@@ -82,16 +91,25 @@ data record.
 > **The word lists are generated from the compiler.** They come out of
 > `BCOMP`'s own tables — **218 statements, 37 reserved words and 176
 > intrinsic functions** — so the highlighting cannot drift from the
-> language. **If a name you expect is not coloured, that is worth
-> reporting.**
+> language. **If a name you expect is not colored, that is worth
+> reporting**: it means the two have come apart, which is exactly what
+> generating them was meant to prevent.
+
+**`ed` is unaffected and is still there.**
 
 ### What the editors are good for, and what they are not
 
-**They are text editors**, so they suit a record whose content is lines of
-text: BASIC source, VOC records, simple dictionary records, and data records
-with multivalues or subvalues.
+**They are text editors**, so they suit a record whose content is lines of text:
 
-**A field is a line.** SD writes the working copy with one field per line, so
+| | |
+|---|---|
+| **BASIC source** in a `bp` file | what they are for |
+| **VOC records** | fine — a VOC record is a few short fields |
+| **Dictionary records** | fine for a simple one; see the limit below |
+| **Data records with multivalues** | fine — see the tokens below |
+| **Data records with subvalues** | fine — see the tokens below |
+
+**A field is a line and that part needs no explanation.** SD writes the working copy with one field per line, so
 moving between fields is moving between lines.
 
 **A value mark is not a line, and neither is a subvalue mark.** Both are
@@ -103,7 +121,8 @@ control characters an editor cannot show, so each has a token you can type:
 | `` ~` `` | a **subvalue** mark |
 
 SD converts marks to tokens on the way into the editor and tokens back to
-marks on the way out.
+marks on the way out, so multivalues and subvalues are both ordinary text while
+you are editing.
 
 ```
 SMITH~~JONES~~BROWN
@@ -120,10 +139,12 @@ is two values, the first of which has two subvalues.
 **A record that cannot be written this way is refused, not mangled.** Some
 records would come back different from how they went in — one that already
 contains `~~` as data, for instance, or one with a `~` sitting immediately
-before a mark. Before opening the editor, SD converts the record and converts
-it back; **if the result is not what it started with, the verb refuses and
-names `ed`**, which needs none of this. Text marks are not converted, and are
-covered by the same refusal.
+before a mark, where the tilde and the token run together. Before opening the
+editor, SD converts the record and converts it back; **if the result is not what
+it started with, the verb refuses and names `ed`**, which needs none of this.
+
+**Text marks are not converted**, and are covered by the same refusal rather than
+being left to surprise you.
 
 **A compiled dictionary record is truncated to its first 15 fields** while
 you edit it, and recompiled with `compile.dict` when you save.
@@ -140,13 +161,20 @@ only for who you let use your account — see [Security](12-security.html).
 
 ### Over ssh
 
-**A terminal editor is the point of an ssh session.** SD hands the editor the
-session's terminal rather than reading it through a pipe. **If an editor
-misbehaves over ssh and not at the keyboard, that is worth reporting** with
-the terminal you connected from.
+**A terminal editor is the point of an ssh session.** An ssh session reaches SD
+through a terminal like any other, and SD hands the editor that terminal rather
+than reading it through a pipe. **If an editor misbehaves over ssh and not at
+the keyboard, that is worth reporting** with the terminal you connected from.
 
-The removed full-screen editors `sed`, `update.record` and `modify` are gone
-and are not coming back. See [Not in SD Core](14-not-in-sd-core.html).
+**`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
+need no operating-system permission and no editor installed; they need a terminal
+window of at least 140 columns by 43 lines (the debugger and the home screen use
+the same frame). Nothing was run on a Windows console when they were carried, and
+the User set's *The SED Screen Editor* page says so.
+
+The removed full-screen editors are a different matter: `update.record` and
+`modify` are gone and are not coming back. See
+[Not in SD Core](14-not-in-sd-core.html).
 
 ## Files
 
@@ -178,14 +206,15 @@ needs no `admin`.
 | **`cname`** | rename a file or change a record's name |
 | **`delete.common`** | clear a common block |
 
-**Copying into the VOC, or deleting from it, needs `admin`**, like any other
-direct VOC edit.
+## What actually gates these
 
-## On a managed computer
-
-**Any of these can be on the list of commands you may not run** without
-`admin`; the SD Core for Linux server keeps that list. See
-[Managed computers](15-managed-mode.html).
+| | |
+|---|---|
+| Changing the VOC directly | `admin` first: `ed voc`, a program's `write` or `delete` to the VOC, `copy` into it, `.s` and `.d`. Everything SD writes to the VOC itself, as a side effect, is not gated |
+| The global catalog | nobody, `admin` or not — `catalog global`, `delete.catalog` of a global entry, a write to `global.bp.out` or `gcat` |
+| The deny list (managed mode) | `admin` or the global password unlocks what the server denied; the SD Core for Linux server keeps that list — see [Managed mode](15-managed-mode.html) |
+| File permissions | ordinary Windows file permissions on your own folder — see [Security](12-security.html) |
+| Reaching the operating system | two switches, **off as delivered**: `sh` (the `sh` verb) and `os` (`OS.EXECUTE`, a path outside the account, the Python helper, `edit` and `micro`); the administrator turns each on with `set.os.access` (`admin` first) — see [Operating system access](06b-operating-system-access.html) |
 
 ## Two things to know when you compile
 
@@ -193,7 +222,8 @@ direct VOC edit.
 Compiling into a reused file name previously produced an object SD could
 not subsequently open.
 
-**SD's own compiled programs are replaced on upgrade; yours are not.** A new
-release overwrites SD's system programs, messages, include records and VOC
-templates. Your `bp`, `bp.out` and everything else in your account are left
-alone.
+**Object code and the catalog are replaced on upgrade.** The compiled programs,
+the messages, include records and VOC templates are all overwritten by a new
+release — see [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
+**Anything in your own account — your `bp` file and everything compiled from it —
+survives an upgrade untouched.**

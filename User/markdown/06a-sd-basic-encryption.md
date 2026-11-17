@@ -24,7 +24,7 @@ shown here in lower case. *Italics* mark something you supply.
 | `sdkey(passphrase, salt)` | the 44 character base64 key that passphrase and salt always make |
 | `sdrandkey()` | a random 256 bit key, 44 characters, for a program that will keep the key in a protected place |
 
-Any program may use them. Nothing is gated, because they compute on what the program
+Any session may use them. Nothing is gated, because they compute on what the program
 already holds and give nothing away.
 
 `sdkey()` uses argon2id with **2 passes and 64 MiB of memory**. Those two numbers are
@@ -54,7 +54,8 @@ Encoding **202** takes a 44 character base64 key, which is what `sdkey()` and
 `sdrandkey()` make. Encoding 201 (hexadecimal) wants a 64 hex character key, which they
 do not make. A wrong key gives the null string and `status()` **10201**; changing one
 character of the cipher text does the same, because the value carries a check; a key of
-the wrong length is **10204**; an empty value is **10200**. The cipher text of a value is
+the wrong length is **10204**; an empty value is **10200**. A passphrase passed straight
+in as the key is still **10204**. The cipher text of a value is
 different every time it is made, so the same salary encrypts to two different strings.
 
 ## The XE conversion: show the field decrypted
@@ -74,10 +75,11 @@ item puts it in field 3: `D`, the field number, `XE;salary`, a heading, a format
 ### The key ring
 
 The conversion never holds a key. It names one, and the key is looked up in a **ring in
-the memory of your own process**: it is set by `!keyset`, cleared by `!keyclear`, by
-`logto` or at sign-on, and not handed to a phantom (a phantom that must decrypt calls
-`!keyset` itself). The ring is never written to a disk, the audit trail or a `$como`
-file. It holds 16 keys.
+the memory of your own process**: it is set by `!keyset`, cleared by `!keyclear`, empty at
+the start of every session, and not handed to a phantom (a phantom that must decrypt calls
+`!keyset` itself). **SD Core Solo for Windows has one account and no `logto`**, so a
+session's ring ends with the session. The ring is never written to a disk, the audit trail
+or a `$como` file. It holds 16 keys.
 
 ```
 call !keyset(name, key, id)     ;* id: the key's id (8 hex digits), or '' and status() 10213, 10204, 10203 or 10211
@@ -98,8 +100,10 @@ encrypt.key clear salary
 
 `set` takes the salt that `sdsalt()` made. **Use `confirm` the first time:** it asks for the
 passphrase twice, because data encrypted under a mistyped passphrase cannot be read again.
-`clear` with no name empties the ring. The verb applies no strength rule to the passphrase;
-a long phrase of words is a better one than eight characters of every kind.
+`clear` with no name empties the ring. The verb refuses a passphrase of fewer than 12
+characters and has no other rule; `sdkey()` itself takes any passphrase that is not empty. A long phrase of
+words is a better passphrase than eight characters of every kind. It writes the
+key's name, never the passphrase or the key, to the audit trail.
 
 ### What is stored
 
@@ -183,3 +187,6 @@ or key into; the strings your program held are freed, not wiped, so keep them sh
 | a passphrase kept in a file, a variable or a command line | is as safe as the file, the variable or the history |
 | a forgotten passphrase or a lost salt | is lost data |
 | the disk | is protected by the operating system (BitLocker, or the file system's own encryption), not by SD |
+
+**Cost:** twenty thousand `oconv(value, 'XE')` calls take under a second on the test machine,
+so a listing of a large file is not slowed noticeably. `sdkey()` is the one slow call.

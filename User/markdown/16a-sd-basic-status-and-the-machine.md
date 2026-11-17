@@ -56,13 +56,14 @@ sddecrypt(data, key, encoding)
 
 Three arguments. The encoding is `201` for hex or `202` for base64.
 
-**A passphrase is not a key.**
+**A passphrase is not a key, but a program can make one.**
 `sdencrypt('The quick brown fox', 'secretkey', 202)` returns **nothing** and
-sets `status()` to **10204**, a key length error. The key has to
-be an encoded 256-bit key, and an ordinary program makes one with
-`sdkey(passphrase, salt)` or `sdrandkey()`. See
-[SD Basic - Encrypting Data](06a-sd-basic-encryption.html), which also covers the
-`XE` conversion and the key ring.
+sets `status()` to **10204**, a key length error: the key has to be an encoded
+256-bit key. `sdkey(passphrase, salt)` makes one from a passphrase and a salt
+that `sdsalt()` made, and `sdrandkey()` makes a random one. **SD does not keep the
+key: a lost passphrase is lost data.** The three functions, the `XE` conversion
+that shows an encrypted field decrypted, the key ring and the `encrypt.key` verb
+are on [SD Basic - Encrypting Data](06a-sd-basic-encryption.html).
 
 ## UMASK()
 
@@ -89,19 +90,19 @@ and pass it back.
 
 | | Value |
 |---|---|
-| `@who`, `@logname`, `@user` | `sduser` — every session on Solo is the one account |
+| `@who` | `sduser` — always, on a Solo computer |
+| `@logname` | `sduser` |
 | `@path` | `/cygdrive/c/Users/you/SDCoreSolo/user_accounts/sduser` |
 | `@sdsys` | `C:\Users\you\SDCoreSolo\sdsys` |
-| `@user.no` | `67`, the same as `system(18)` |
+| `@userno` | `67`, the same as `system(18)` |
 | `@tty` | **empty in a piped session** |
 | `@system.return.code` | `1` |
 | `@user.return.code` | `0` |
 | `@crtwide` / `@crthigh` | `200` / `9999` — whatever `TERM` last set |
 
-**`@who` is lower case here and on the multiuser SD Core for Windows**, as on
-SD Core for Linux (before this release it was upper case on both Windows
-products). A program that compares it with `@logname` should use `downcase()`
-on both sides.
+**`@who` and `@logname` are the same, `sduser`, and both are lower case.** A
+program that compares one with an upper-case literal fails; compare with
+`'sduser'`.
 
 `set.exit.status` sets what SD returns to the operating system when the session
 ends.
@@ -115,14 +116,15 @@ os.execute command {capturing variable | silent}
 `capturing` puts the command's output in the variable; `silent` throws it
 away, so nothing of it reaches the terminal.
 
-**On Solo it is always allowed.** SD runs as your Windows user, and the
-operating system is yours already, so there is no permission to grant and no
-refusal to handle. See *Operating system access* in the GettingStarted set.
-
-**The multiuser SD Core for Windows gates it per account, and a refusal aborts
-the program rather than setting a status.** A program written for that product
-should not reach the statement in an account without the right, because there
-is no `else`, no `on error` and no status to test.
+**It needs the `os` switch, which is off as delivered**: a program that runs
+`OS.EXECUTE` without it stops with *sduser is not permitted to use OS.EXECUTE*.
+The administrator turns the switch on with `set.os.access os on`; a change is seen
+at the next sign-on. Once it is on, `OS.EXECUTE` executes at the account's own
+Windows permissions, the same wall that already governs what that account's user
+could do at a command prompt outside SD — see *Operating system access* in the
+GettingStarted set. (`OS.EXECUTE` is not
+subject to the metacharacter filter that the `sh` verb applies to a typed
+command.)
 
 ## LOGMSG
 
@@ -162,14 +164,16 @@ gives a different but equally misleading answer — `sdext(101, 'pw', 'salt')`
 is *"Right bracket not found where expected"*, because a matrix takes at most
 two subscripts.
 
-Internal-only: `kernel()` — and therefore the Windows path conversion —
-`option()`, `pterm()`, `sdext()`, `testlock()` and `getlocks()`.
+Internal-only: `kernel()`, `option()`, `pterm()`, `sdext()`, `testlock()` and
+`getlocks()`.
 The compiler's list is longer than that; those six are the ones this page
 put in front of it. They are reachable only from a program compiled
-with `$internal`, which is reserved to SD's own setup steps.
+with `$internal`, which the compiler allows only in the installer's own
+internal session.
 
-**`ospath()` is not on that list any more** (12 Nov 2026). Any program may call it,
-with the openQM keys, and the account's OS switch decides what it may look at:
+**`ospath()` is not on that list any more.** Any program may call it, with the
+openQM keys, and the OS access switch (`set.os.access os on`) decides what it may
+look at:
 
 ```
 ospath(path, key {, qualifier})
@@ -201,9 +205,8 @@ key answers false with `status()` 1. The qualifier is read and ignored. An inter
 `ospath()`, with its different numbers, is unchanged.
 
 **And some statements are restricted the same way.** These 34 are
-*"Unrecognised statement"* to a program that is not compiled `$internal` (they
-are the compiler's own `restricted.statements` list; each was compiled once in
-a plain program on Linux to check):
+*"Unrecognized statement"* to a program that is not compiled `$internal` by an
+administrator (they are the compiler's own `restricted.statements` list):
 `add`, `akclear`, `akdelete`, `akenable`, `akread`, `akrelease`, `akwrite`,
 `callv`, `configure.file`, `create.ak`, `delete.ak`, `delete.common`,
 `keyboard.input`, `modify`, `quit`, `release.lock`, `remove.token`,
@@ -212,10 +215,10 @@ a plain program on Linux to check):
 and the whole debugging family — `debug.on`, `debug.off`, `debug.set`,
 `breakpoint` and `watch`. An earlier version of this list gave 13 of them and
 left out `set.status`; it is the compiler's own `restricted.statements` list
-that counts, and the *Administrator* set's *SD Basic - Restricted Commands*
-page carries the same names.
+that counts, and [SD Basic - Restricted Commands](96-sd-basic-restricted-commands.html)
+carries the same names.
 
-**`errmsg` is not a statement at all.** It compiles to *"Unrecognised
+**`errmsg` is not a statement at all.** It compiles to *"Unrecognized
 statement"* for everybody, as any word the compiler does not know does. It was
 removed from the compiler's statement table in July 2024. An earlier version of
 this page said the name was left behind in the table; only a comment beside the

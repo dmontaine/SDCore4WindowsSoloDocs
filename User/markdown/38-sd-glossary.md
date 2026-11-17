@@ -7,12 +7,14 @@ documentation set. Terms are listed in alphabetical order.
 ## A
 
 **Account** — a workspace: a directory containing one or more files, a
-VOC, and its own `bp` source file. Solo has one account, `sduser`, in
-`%USERPROFILE%\SDCoreSolo\user_accounts\sduser`.
+VOC, and its own `bp` source file. SD Core Solo for Windows has one, `sduser`, in
+`%USERPROFILE%\SDCoreSolo\user_accounts\sduser`. Entry to it is the account password.
 
-**Administrator** — a session that has unlocked `admin` with the
-administrator password. Being a Windows administrator, elevated or not, grants
-nothing. There is one account, `sduser`, and no SDSYS sign-in.
+**Administrator** — a session that has unlocked the administrator commands
+with `admin` and the administrator password (or that signed in with the global
+password on a managed computer). Being a Windows administrator, elevated or not,
+grants nothing. There is no separate administrator account and no way to make
+another: SDSYS, the system account, is never entered.
 
 **Alternate key index** — a secondary access path to records in a file,
 built from the values in a nominated field. Created with
@@ -44,11 +46,11 @@ beside the installer.
 
 ## C
 
-**Catalogue** — the registry of compiled programs. A catalogued program
+**Catalog** — the registry of compiled programs. A cataloged program
 can be run by name from any account that can reach it. Private
-catalogue is per-account; local catalogue puts the VOC entry in the
-account's own VOC; global catalogue is system-wide and requires an
-administrator.
+catalog is per-account; local catalog puts the VOC entry in the
+account's own VOC; global catalog is system-wide and is changed by nobody
+in a session — on a managed computer it is the SD Core server's.
 
 **Common block** — a named memory area shared between subroutines.
 Declared with `common` or `common /name/`. Used for passing data
@@ -96,8 +98,9 @@ possibly in another account. A remote file pointer.
 
 ## G
 
-**Group** — (1) a Windows group used for account membership. (2) In a
-dynamic file, the bucket that holds records hashed to the same slot.
+**Group** — in a dynamic file, the bucket that holds records hashed to the same
+slot. (The multiuser product also uses the word for a Windows group and for a
+*group account*; Solo has neither.)
 
 ## I
 

@@ -181,7 +181,7 @@ unlock n
 ```
 
 There are **64** of them, numbered 0 to 63, and SD attaches no meaning to any
-of them. They are for serialising something that is not a record — a nightly
+of them. They are for serializing something that is not a record — a nightly
 report, a printer, an external file.
 
 **A `lock` with no `else` clause retries for ever.** The compiler generates
@@ -316,7 +316,7 @@ upstream's, not this port's: `sdb64` carries the identical code.
 
 ### Do not nest transactions
 
-**A `commit` inside a Nested transaction abandons the outer one, and the outer
+**A `commit` inside a nested transaction abandons the outer one, and the outer
 write is lost.** With an outer transaction writing `R2` and an inner one
 writing `R3`:
 
@@ -357,8 +357,7 @@ the parent taking its own:
 | the lock the nested transaction took, `recordlocked()` after its `commit` | **still held**, released when the parent ends | released at once |
 
 The directive is *the program's*: it covers the program's own commits, not those
-of a subroutine compiled without it. A client session reaches the same thing with
-`SDTxn(4)` ([SD Client API](37-sd-client-api.html)).
+of a subroutine compiled without it.
 
 `set.trigger` attaches a program that runs on every write or delete. A trigger
 runs inside the caller's transaction, so it is bound by the same locking rule.
@@ -367,8 +366,8 @@ runs inside the caller's transaction, so it is bound by the same locking rule.
 
 **`testlock()` and `getlocks()` are internal-only and an ordinary program
 cannot call them.** They are in the compiler's internal intrinsic list, which
-only a program compiled with `$internal` — which is reserved to SD's own setup
-steps — may reach.
+only a program compiled with `$internal`, which the compiler allows only in the
+installer's own internal session, may reach.
 
 **And the compiler does not say so.** `v = testlock(5)` in an ordinary account
 produces, at the **last line of the program**:
@@ -388,7 +387,7 @@ The same applies to `getlocks()`, which would list every lock in the system.
 it answers about one record at a time.
 
 `release.lock` is a restricted statement for the same reason and gives
-*"Unrecognised statement"*.
+*"Unrecognized statement"*.
 
 **Deadlock detection exists** in the C, and takes the `locked` branch when it
 fires. It was not provoked: two sessions each waiting on the other's record is

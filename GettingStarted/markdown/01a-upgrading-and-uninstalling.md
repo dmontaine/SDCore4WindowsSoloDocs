@@ -5,7 +5,7 @@ This page continues [Installing](01-installation.html).
 
 ## Upgrading
 
-**Run the new installer while the old release is installed.** It recognises
+**Run the new installer while the old release is installed.** It recognizes
 the installation and upgrades it. It asks no passwords and no API or ssh
 choices — and it keeps them all. It never adds, changes or removes the global
 password. **It asks one question: *Shell and OS access*.** Before this release
@@ -23,18 +23,21 @@ at the next Windows start-up, or with `sd-solo -start` (see
 
 | | |
 |---|---|
-| **replaced** | the programs, the system programs and their catalogue, SD's messages, the VOC templates and the other files the release ships |
+| **replaced** | the programs, the system programs and their catalog, SD's messages, the VOC templates and the other files the release ships |
 | **kept** | your account and its data, the passwords, `sd.conf`, the API's TLS key, and on a managed computer the server's programs in `global.bp.out` and the list of denied commands |
 
 **Then it brings your account up to the release.** Replacing files is not
 enough on its own: your account's VOC and SD's dictionaries were built by the
 release that installed them. So an upgrade also, for you:
 
-- adds the new release's commands to your account's VOC — it never takes
-  anything away, and a record you keep your own version of is left alone;
+- adds the new release's commands to your account's VOC (`update.accounts all`),
+  and takes out the records on SD's deletion list - the ones a release stopped
+  shipping - but only a record that is still exactly what SD shipped, after
+  saving a copy (`restore.voc` puts it back); a record you keep your own
+  version of, marked `[locked]`, is left alone;
 - merges and recompiles SD's own dictionaries;
-- catalogues the server's programs in `global.bp.out` again, on a managed
-  computer, because the global catalogue is one of the files replaced.
+- catalogs the server's programs in `global.bp.out` again, on a managed
+  computer, because the global catalog is one of the files replaced.
 
 Each step reports in `%USERPROFILE%\SDCoreSolo\install-summary.log`, ending
 with a verdict. The startup task is registered again. So is the ssh task

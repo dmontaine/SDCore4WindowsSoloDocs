@@ -37,7 +37,7 @@ The full recipe is `sdb_ai\sd64\agent-pack\recipe\agent-account.md` in the SD Co
 
 ## What this does not give you
 
-There are no scopes inside the account: the agent can read, change and delete everything in `sduser`, and with a switch on everything its Windows user can reach, which is why your data is somewhere else or behind shape 2. A switch turned on later takes the refusal away from then on. The audit trail names what the agent did, not what it saw. The MCP door ([The MCP Door](20-the-mcp-door.html)) is another way in, off as delivered, run by an MCP client on this computer; this recipe does not use it, and the `.mcp.json` example in the source is the shape of a remote door that is not built, not something to use. And no setting protects you from a prompt that persuades the agent to ask *you* for more: the answer to a request for the administrator password, or for a switch, is yours, and the safe default is no.
+There are no scopes inside the account: the agent can read, change and delete everything in `sduser`, and with a switch on everything its Windows user can reach, which is why your data is somewhere else or behind shape 2. A switch turned on later takes the refusal away from then on. The audit trail names what the agent did, not what it saw. The MCP door ([The MCP Door](25-the-mcp-door.html)) is another way in, off as delivered, run by an MCP client on this computer; this recipe does not use it, and the `.mcp.json` example in the source is the shape of a remote door that is not built, not something to use. And no setting protects you from a prompt that persuades the agent to ask *you* for more: the answer to a request for the administrator password, or for a switch, is yours, and the safe default is no.
 
 None of this recipe was run end to end on SD Core Solo for Windows; the refusals the guide quotes were run on SD Core Solo for Linux, whose BASIC this product shares.
 
@@ -45,5 +45,5 @@ None of this recipe was run end to end on SD Core Solo for Windows; the refusals
 
 [Operating System Access](06b-operating-system-access.html) ·
 [Security](12-security.html) ·
-[The MCP Door](20-the-mcp-door.html) ·
+[The MCP Door](25-the-mcp-door.html) ·
 and, in the User documentation, the page *SD and AI Agents*.

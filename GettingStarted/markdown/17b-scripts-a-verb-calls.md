@@ -15,7 +15,7 @@ knew what they were doing.
 | `sd-path.ps1` | `append.sd.path on` \| `off` — puts SD's program folder on **your** PATH, or takes it off |
 | `micro-home.ps1` | the editor programs, before `micro` starts — see below |
 | `solo-sshkey.ps1` | the API's ssh key request (72), on a managed computer — see below |
-| `solo-mcp.py` | an AI agent's MCP client, never a verb: it is the MCP door's launcher, and each call it makes is one `sd-solo mcp.call`; it needs Python 3 — see [The MCP door](20-the-mcp-door.html) |
+| `solo-mcp.py` | an AI agent's MCP client, never a verb: it is the MCP door's launcher, and each call it makes is one `sd-solo mcp.call`; it needs Python 3 — see [The MCP door](25-the-mcp-door.html) |
 | `sd-account-archive.ps1` | `backup.account` and `restore.account` — see below |
 | `sd-settings-os.ps1` | `settings.report` — see below |
 | `sd-backupdir.ps1` | `set.backup.directory` — see below |
@@ -57,7 +57,7 @@ that line, or 1 without it. It exists because `micro` printed a false
 ### `solo-sshkey.ps1`
 
 **Run by SD itself, in your own session, when the SD Core server asks to add,
-remove or list its ssh key** — see [Managed computers](15-managed-mode.html). It is
+remove or list its ssh key** — see [Managed mode](15-managed-mode.html). It is
 not for typing: it takes a request verb (`ADD`, `REMOVE` or `LIST`) and a key or
 fingerprint, and prints lines SD reads back (`RESULT=ADDED`, `FPR=SHA256:...`,
 `ERROR=...`). **It needs no elevation**, because it writes only Solo's own key

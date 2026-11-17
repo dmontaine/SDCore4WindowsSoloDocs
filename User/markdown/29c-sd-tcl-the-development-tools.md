@@ -6,7 +6,7 @@ tool.files
 tool.voc
 ```
 
-These pages are for **your account**. They need a window of at least **140 columns by 43 lines** (and no bigger than **500 by 300**:
+These pages are for **your account**. They need a real terminal of at least **140 columns by 43 lines** (and no bigger than **500 by 300**:
 a larger window is refused at once, in a line that gives the size it found, because taking such a screen
 costs time that grows with the square of its height), and they add no
 access: every change they make is a command you could have typed, run for you after a box that shows the

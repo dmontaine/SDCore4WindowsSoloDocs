@@ -12,10 +12,10 @@ here in lower case, which is what this port uses on disk. In the tables,
 *italics* mark something you supply and **bold** marks a word typed as it
 stands; braces mark an optional part.
 
-> **The records on this page were read from a stock account VOC on the
-> multiuser SD Core for Windows.** On Solo the installer's account step copies
-> the whole of the shipped `newvoc` into the account's VOC, so the shapes are the
-> same; **the counts below are Solo's own**, taken from the shipped `newvoc`.
+> **The records on this page were read from a stock account VOC.** On Solo the
+> installer's account step copies the whole of the shipped `newvoc` into the
+> account's VOC, so the shapes are the same; **the counts below are Solo's own**,
+> taken from the shipped `newvoc`.
 
 ## The ten record types
 
@@ -44,11 +44,13 @@ valid PROC and it is the interpreter that is gone.
 ### What the shipped VOC holds
 
 Counted directly from `newvoc` in the system directory — the VOC a new account
-starts with, 436 records:
+starts with, 440 records, by each record's own field-1 type character (the type
+is the first character; a record whose field 1 reads `Verb to ...` is `V`).
+Counted on 17 Nov 2026:
 
 | Type | Count |
 |---|---|
-| `V` | 207 |
+| `V` | 211 |
 | `K` | 218 |
 | `F` | 7 |
 | `PA` | 1 |
@@ -56,13 +58,14 @@ starts with, 436 records:
 | `Q` | 1 |
 | `X` | 1 |
 
-**The four keyword-verbs are among the 218 `K` records.** They are counted as
-keywords here and are also verbs, so Solo has 207 + 4 = **211 verbs**.
+**The four keyword-verbs are among the 218 `K` records.** `break`, `count`,
+`display` and `off` are counted as keywords here and are also verbs, so Solo has
+211 + 4 = **215 verbs**, the number on the syntax card. No `R` record is shipped.
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
-is yours. The account and grant commands are not in it — see
-*Differences from multiuser SD Core for Windows W1.1-1* in the GettingStarted
-set.
+is yours. The account and grant commands are not in it — see *Differences from
+multiuser SD Core for Windows W1.1-1* in the GettingStarted set. (SDSYS's own VOC,
+which nobody signs in to, is built from the larger `voc_template`.)
 
 > **`edit` used to be exactly this kind of trap** — a record present in the
 > VOC whose old type field read `Verb - Full screen editor` rather than `V`,
@@ -94,8 +97,8 @@ dictionary.
 ### The pointers into @SDSYS
 
 Seven of the shipped `F` records have a data path that begins `@SDSYS/`. They
-point at files in the system directory that the account needs; the eighth,
-`$acc`, is the account itself:
+point at files in the system directory — on Solo, the `sdsys` directory of the
+installation — that the account needs:
 
 | VOC id | Field 2 | Field 3 |
 |---|---|---|
@@ -106,11 +109,9 @@ point at files in the system directory that the account needs; the eighth,
 | `dict.dict` | `@SDSYS/dict.dic` | `@SDSYS/dict.dic` |
 | `global.bp.out` | `@SDSYS/global.bp.out` | |
 
-These are **read-only to a network session**. The account-root gate in the
-file engine allows them on read paths but sets `FV_RDONLY` on the file
-variable, so every write path in the engine refuses them. `global.bp.out` is
-the server's file on a managed computer — see *Managed computers* in the
-GettingStarted set.
+`global.bp.out` is the SD Core for Linux server's directory of compiled programs
+on a managed computer, and is empty otherwise; you cannot write to it, `admin` or
+not. See *Managed mode* in the GettingStarted set.
 
 ### The $ACC record
 
@@ -138,21 +139,25 @@ target, and the remaining fields carry options.
 
 | Field 2 | Field 3 | What it does |
 |---|---|---|
-| `CA` | *catalogue name* | a catalogued program — 161 of the shipped verbs |
+| `CA` | *catalog name* | a cataloged program — 174 of the shipped verbs |
 | `IN` | *number* | internal verb *n*, handled by the command processor itself — 36 verbs |
 | `OS` | *text* | an operating-system command — `sh`, and nothing else |
-| `CS` | *path* | a locally catalogued function |
+| `CS` | *path* | a locally cataloged function |
 
-The first three rows account for all 142 shipped `V` records; none is `CS`.
-The four keyword records described above — `break`, `count`, `display` and
-`off` — are `K` records in which field 2 holds a keyword number rather than a
+The first three rows account for all 211 of Solo's `V` records. The
+remaining four verbs are the keyword records described above — `break`,
+`count`, `display` and `off` — where field 2 holds a keyword number rather than a
 dispatch type, and it is field 3 that marks the record as a verb.
 
 Field 4 carries dispatch options and **field 5 names a security subroutine**.
-If field 5 is present, that subroutine is called before the verb runs and
-can refuse it. **None of the shipped verbs uses field 5** — what needs `admin`
-is checked by the verb's own program, not by a security subroutine — but the
+If field 5 is present, that subroutine is called before the verb runs and can
+refuse it. **None of the shipped verbs uses field 5** — what needs `admin` is
+checked by the verb's own code, not by a security subroutine — but the
 mechanism is there for a site that wants a verb guarded rather than absent.
+
+**Field 4 does matter to the deny list** (see *Managed mode* in the
+GettingStarted set): SD denies a verb by what it runs — the same field 2, field 3
+and field 4 — so two names that dispatch identically are denied together.
 
 ### Internal verbs
 
@@ -185,7 +190,7 @@ a marginal verb.
 This is `sd.accounts`. Field 2 is the account name, field 3 is the file
 name in that account. `set.file` writes Q-pointers; see below. Since 16 Oct 2026 the
 target of `set.file` may itself be a Q-pointer, which makes a chain (not recommended, but it opens): each link is
-followed with the same account test, so a chain cannot reach where its links alone could not.
+followed under the same rules, so a chain cannot reach where its links alone could not.
 
 ## The R record — a remote record reference
 
@@ -276,12 +281,12 @@ if it had been typed instead:
 005  /cygdrive/c/Users/pat/SDCoreSolo/user_accounts/sduser/bp.out/report
 ```
 
-This works for a locally catalogued subroutine too. The object is found by the
-last part of the pathname in field 5, which is the name it was catalogued
-under, so a program catalogued under a call name different from its program
+This works for a locally cataloged subroutine too. The object is found by the
+last part of the pathname in field 5, which is the name it was cataloged
+under, so a program cataloged under a call name different from its program
 name is not reached this way.
 
-The 249 K-records in a stock VOC are the query processor's vocabulary,
+The 218 K-records in the shipped VOC are the query processor's vocabulary,
 and they are what makes a sentence like `list stock with qty > 100 by
 supplier` parse.
 
@@ -289,16 +294,19 @@ supplier` parse.
 
 ```
 001  X
-002  SD, including the API, is licensed under the GPL v3.0.
+002  WS2.0-0
 ```
 
-This is `$licence`. An X-record is **not a command** — it is miscellaneous
-data the VOC holds so that a program or a user can read it by name.
-`$contrib` and `$RELEASE` are also X-records. Nobody dispatches them; they
-are read with `read` from BASIC or with `ct` from the command line.
+This is `$release`, and it is the shipped VOC's **only** X-record. An X-record is
+**not a command** — it is miscellaneous data the VOC holds so that a program
+can read it by name with `read` from BASIC or `ct` from the command line.
 Two X-records that an account may add are read by SD itself and change what
 a command line does: `$private.voc` and `$voc.parser`, described on the next
 pages.
+
+**The license and the contributor list are not VOC records at all**, despite
+looking like the obvious candidates. They are two plain files in the system
+directory, `licence` and `contrib`, in `%USERPROFILE%\SDCoreSolo\sdsys`.
 
 ## Continued in
 

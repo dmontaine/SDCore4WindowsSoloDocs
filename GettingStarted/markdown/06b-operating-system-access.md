@@ -1,7 +1,7 @@
 Title: Operating System Access
 Subtitle: The two switches, sh and os, that decide whether SD can reach the operating system: off as delivered, turned on by the administrator.
 
-`sh` runs a Windows command from the SD prompt. `OS.EXECUTE` is the way from a program, and a program can also
+`sh` runs a Windows command from the SD prompt (the shorter name `!` was removed in 2.0-0). `OS.EXECUTE` is the way from a program, and a program can also
 reach the operating system by naming a file or directory outside the account.
 **All of it is off as delivered**, and the administrator turns it on, in two
 independent switches, with `set.os.access`.
@@ -11,7 +11,7 @@ independent switches, with `set.os.access`.
 | Switch | What it lets the account do |
 |---|---|
 | **`sh`** | the `sh` verb |
-| **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the Python helper; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
+| **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `OPENTEMP`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the Python helper; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
 
 **Both are off as delivered, on a new install and on an upgrade unless you said
 yes when the installer asked.** The account's own directory is never asked
@@ -51,7 +51,7 @@ nothing. Saying it a second time says `sduser already had that access; nothing
 changed`. The answer always gives **both** switches, because `sh off` says
 nothing about `os`. The change is written to the audit trail
 (`set.os.access sh on account=sduser`), and it is kept in fields 7 and 8 of the
-account's record in the account register (`yes` is on; anything else is off, and
+account's register record (`yes` is on; anything else is off, and
 a record with fewer fields is off).
 
 **A change is seen at the next sign-on, never by a session that is already
@@ -65,18 +65,18 @@ tool.gates
 ```
 
 **A full-screen page, in any session** (140 columns by 43 lines at least). It
-lists the six gates this account has: **Shell** (`sh`), **OS.EXECUTE** (`os`),
-**Remote files** (`net`, [API access](09-api-access.html)), the **AI** (`ai`, `set.ai gate`;
-the helper's own setting, read from its status and looked at at each request,
-[The AI helper](24-the-ai-helper.html)), **File transfer**
-(`xfer`, `set.xfer.access`; *Moving Files In and Out* in the User documentation) and
-**Scheduled jobs** (`jobs`, `set.jobs.access`; [Scheduled jobs](04-scheduled-jobs.html)),
-the last two read each time they are used, so "this session" is what the register says now. For each it shows
-whether the gate is ON or off **for this session**, what the register holds
-(shown to the administrator only), how it is delivered (off, every one), whether
-it reaches beyond SD (every one does) and when a change reaches you. A box under
-the list explains the row under the cursor in plain sentences: what ON lets the
-account do, what it can still do with it off, and the command that changes it.
+lists the six gates this account has - **Shell** (`sh`), **OS.EXECUTE** (`os`),
+**Remote files** (`net`, [API access](09-api-access.html)), **AI** ([The AI
+helper](24-the-ai-helper.html)), **File transfer** (`xfer`, `set.xfer.access`;
+*Moving Files In and Out* in the User documentation) and **Scheduled jobs**
+(`jobs`, `set.jobs.access`; [Scheduled jobs](04-scheduled-jobs.html)), the last
+two read each time they are used, so "this session" is what the register says
+now - with, for each: whether it is ON or off **for this session**, what the
+register holds (shown to the administrator only), how it is delivered (off,
+every one), whether it reaches beyond SD (every one does) and when a change
+reaches you. A box under the list explains the row under the cursor in plain
+sentences: what ON lets the account do, what it can still do with it off, and
+the command that changes it.
 
 | Key | What it does |
 |---|---|
@@ -89,14 +89,17 @@ account do, what it can still do with it off, and the command that changes it.
 **What the columns say.** *This session* is what the system holds for the
 session you are typing in: `sh`, `os` and `net` were loaded when you signed on,
 so a change made later shows there **after the next sign-on**, which is why the
-*Register* column is there (what the next sign-on will load). `xfer` is read each
-time a transfer opens, so a change to it reaches you at the next transfer. The page **asks and
-does not try**: it never tests an operation to find out whether it works.
+*Register* column is there (what the next sign-on will load). The AI's gate is the
+helper's own setting, looked at at every request, so the two columns agree; if the
+helper is not running both show a dash and the row says so. `xfer` and `jobs` are
+read each time they are used, so a change to either reaches you at once. The page
+**asks and does not try**: it never tests an operation to find out whether it works.
 
-**What Enter does (administrator only).** It builds one command (`set.os.access
-sh on`, `set.os.access os off`, `set.net.access on`, `set.xfer.access on` and so on), shows it in a box
-with what it will do, and runs it only when you answer Run; Cancel is what Enter
-chooses. **Turning a gate ON asks you to type its name** (`sh`, `os`, `net` or `xfer`),
+**What Enter does (administrator only).** It builds one command - `set.os.access
+sh on`, `set.os.access os off`, `set.net.access on`, `set.ai gate on` and so on -
+shows it in a box with what it will do, and runs it only when you answer Run;
+Cancel is what Enter chooses. **Turning a gate ON asks you to type its name**
+(`sh`, `os`, `net`, `ai`, `xfer` or `jobs`),
 because every one of them reaches beyond SD, and the box says that a gate off as
 delivered is being turned on and that leaving it off is the tighter choice. The verb
 asks for the administrator itself and writes its own audit line
@@ -107,11 +110,9 @@ command it reads again and shows the verb's own last line in the status bar.
 session that has not typed `admin` sees the page and cannot change anything: Enter
 says so and opens no box.
 
-*Carried from the Linux product's page and not yet run on Windows.*
-
 ## What a refusal looks like
 
-With both switches off, `sh` answers:
+With both switches off:
 
 ```
 sduser is not permitted to use the operating system shell
@@ -138,7 +139,7 @@ sduser has no OS access, so a file or directory outside its own account cannot b
 sh command
 ```
 
-With `sh` on, everything after the verb is handed to the shell as typed:
+Everything after the verb is the command:
 
 ```
 :sh echo hello-from-the-shell
@@ -169,7 +170,7 @@ interactive shell, where you may type what you like.
 
 ## The shell you get is Windows PowerShell 5.1
 
-Not `pwsh`. Inside a script, **`&&` and `||` do not exist**, nor do the ternary,
+Not `pwsh`, and the difference bites: inside a script, **`&&` and `||` do not exist**, nor do the ternary,
 null-coalescing or null-conditional operators. Chain with `;`, and test with
 `if ($?) { … }`.
 
@@ -234,7 +235,7 @@ it was.
 ## On a managed computer
 
 **The SD Core for Linux server can put `sh` on the list of denied commands**
-(see [Managed computers](15-managed-mode.html)); it then needs `admin` first. That list is separate from the switches: a
+(see [Managed mode](15-managed-mode.html)), and it then needs `admin` first. That list is separate from the switches: a
 denied `sh` needs `admin` even when the switch is on, and `set.os.access` is
 itself an administrator command.
 

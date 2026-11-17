@@ -24,8 +24,14 @@ programmer's view of their own processes.
 ## Who is signed in: `listu`
 
 ```
-listu {no.page} {lptr {n}}
+listu {detail} {no.page} {lptr {n}}
 ```
+
+`detail` adds a line above the report: the interactive users, the API sessions,
+the phantoms that count as licensed, the other phantoms, and the most users
+there have been at once since SD started. `system(1056)` gives the same five
+numbers. **SD has no license count**, so the third number is whatever the system
+marks as chargeable.
 
 ```
 :listu
@@ -67,6 +73,11 @@ logout all              end every session but this one
 another name, which is worth knowing before typing it intending to list
 something.
 
+```
+:logout 27
+Force logout initiated for user 27
+```
+
 **`logout n` needs no `admin`.** SD lets a session end any session running
 under the same user name, and on a Solo computer every session is `sduser`.
 **`logout all` needs `admin`.** It leaves your own session alone.
@@ -76,26 +87,40 @@ outside SD.
 
 ### When a session will not end
 
-`logout` **signals** a process. If the process has already gone — killed from
-outside SD, or lost with a terminal — there is nothing to signal, and the entry
-stays with **`(logout pending)`** beside it.
+`logout` **signals** a process. **If the process has already gone** — killed from
+outside SD, or lost with a terminal — there is nothing to signal, and `logout`
+finds that out first: it **clears the entry and releases every file, record,
+group and task lock the session still held**, and says so (then the text of
+message 10167, *User n was not running, so there was nothing to log out*):
 
-**The entry matters because it holds a slot and an exclusive-access claim.**
+```
+LOGOUT reaped user 43 (pid 1799, sduser) - process was gone.
+```
+
+The entry matters because **it holds a slot and an exclusive-access claim**:
 `NUMUSERS` counts it, and any verb that wants a file to itself — `build.index`
-is the usual one — is refused while it is there. **Recovery is not another
-`logout`:**
+is the usual one — is refused while it is there. So **the way to clear a dead
+session is `logout` *n*** — no `admin`, since every session on a Solo computer
+is `sduser`. *The line above is read from the source (`clopts.c`); this page's
+build has not been run against a killed session.*
+
+A session that is **alive and does not answer the signal** is the other case,
+and it keeps its entry with **`(logout pending)`** beside it; asking again
+signals it again.
 
 ```
 sd-solo -cleanup
 ```
 
-from a PowerShell window — no elevation needed — and `sd-solo -stop` then
-`sd-solo -start` if that does not take it.
+from a PowerShell window — no elevation needed — is the remaining way to clear
+entries of sessions that are not going to end, and `sd-solo -stop` then
+`sd-solo -start` if that does not take them.
 
 **Confirm the session is actually dead before clearing it.** `pstat` *n*
 answers *(Not responding)* for a session with nothing behind it — it asks the
 process and waits about four seconds — and that is the difference between a dead
-entry and a busy one.
+entry and a busy one. (`logout` itself only clears an entry whose process is not
+there; it signals a live one.)
 
 ## What is locked: `list.readu`
 
@@ -140,7 +165,8 @@ Record lock limit (NUMLOCKS) = 100, Current = 0, Peak = 2
 There are no active file, read or update locks held by any user
 ```
 
-**`Peak` is the one to watch.** A peak near the limit is how you find out
+**`Peak` is the one to watch.** `Current` describes this instant, which is
+rarely the instant that mattered. A peak near the limit is how you find out
 `NUMLOCKS` needs raising **before** a program fails with the lock table full.
 `config` reports the configured limit — see [Configuration](16-configuration.html).
 
@@ -151,8 +177,12 @@ plain listing shows the cause of a hold-up and not its victims. **Ask for
 
 ### A lock outliving its session
 
-**A dead session's locks are not released**, any more than its user-table entry
-is, and everything wanting that record waits for a process that is not there.
+**A dead session's locks are not released by its dying**, any more than its
+user-table entry is removed, and everything wanting that record waits for a
+process that is not there. **They are released when the entry is cleared**,
+which is `logout` *n* for a session whose process is gone (see *When a session
+will not end*), or the `tool.sessions` page's L key.
+
 **Take the user number to `pstat`.** *(Not responding)* means clear the session
 rather than wait for it.
 
@@ -179,9 +209,10 @@ and with lock 5 held by user 16, `*` marking your own session:
 :list.locks
  0:       1:       2:       3:       4:       5: 16*   6:       7:
  8:       9:      10:      11:      12:      13:      14:      15:
+16:      17:      18:      19:      20:      21:      22:      23:
 ```
 
-*(64 numbers over eight rows; the rest are cut here.)*
+*(64 numbers over eight rows; the rest are blank and are cut here.)*
 
 ### `lock` waits unless you tell it not to
 
@@ -225,11 +256,16 @@ unlock file n {user n} filelock
 unlock tasklock n {n …}
 ```
 
-**This is the only verb that takes another session's lock.**
+**This is the only verb that takes somebody else's lock, and it needs `admin`:**
+
+```
+:unlock
+Command requires administrator privileges
+```
 
 **It names a file by number, not by name** — the `File` column of `list.readu`.
-That is deliberate: the lock is on a file SD has open, which may not be in your
-VOC at all.
+That is deliberate: the lock is on a file the computer has open, which may not
+be in your VOC at all.
 
 | | |
 |---|---|
@@ -237,11 +273,11 @@ VOC at all.
 | **`user`** *n* | restrict to one session's locks |
 | **`all`** | every record lock matching, rather than named ids |
 | **`filelock`** | the file lock, which cannot be combined with record ids |
-| **`tasklock`** *n* | force a task lock, including one held by another session |
+| **`tasklock`** *n* | force a task lock, including one held by another process |
 
 **A file number or a user number is compulsory** — *Either a file number or a
 user number must be specified* — so there is no `unlock` that means
-*everything*.
+*everything on the computer*.
 
 > **Unlocking is not free and SD cannot make it so.** A lock is a promise its
 > holder is relying on. Forcing one open while its owner is alive lets two
@@ -251,13 +287,15 @@ user number must be specified* — so there is no `unlock` that means
 
 ### `unlock tasklock` is the only way back from a killed holder
 
-**Task locks are released when a session ends normally.**
+**Task locks are released when a session ends normally.** They are not part of
+any file, so nothing has to be written back.
 
 > **`sd-solo -cleanup` does not give them back, and that is a defect.** It releases
 > a dead session's record locks and file locks and leaves its task locks held,
 > by a user number nothing is behind, until SD itself is restarted.
 > `list.locks` shows the number with an owner and `clear.locks` refuses it
-> because it is not yours. **`unlock tasklock` *n*** is the way out.
+> because it is not yours. **`unlock tasklock` *n*, after `admin`,** is the way
+> out — that is what the forced form is for.
 
 ## Who took which lock, and where: `lock.tracer`
 
@@ -335,11 +373,13 @@ session that took it is killed.
 
 A VOC record named `MASTER.LOGIN` in the SDSYS account (the `voc` file in
 `%USERPROFILE%\SDCoreSolo\sdsys`), if it is a paragraph (its first line is `PA`),
-is run **by each new session before the account's own `LOGIN` paragraph**: a
-terminal session, a phantom, and an API session, which runs it when it first
-enters an account. A session shows what it is by `@tty` (`apisrvr` for the API).
-There is none unless you write one, so nothing runs by default. It runs under the account's own switches: it can do no
-more there than the account's user can.
+is run **once by every new session, before the account's own `LOGIN`
+paragraph**: an interactive session, a phantom and an API session, which runs it
+when it first enters an account. There is none as delivered, so nothing runs by
+default, and the account's own `LOGIN` paragraph is the ordinary place for what
+a session should do when it starts; a session shows what it is by `@tty`
+(`apisrvr` for the API). It runs in the account, **under the account's own
+switches**: it can do no more there than the account can.
 
 ## Sessions and locks on one screen: `tool.sessions`
 
@@ -384,30 +424,20 @@ What each key refuses, in words, before any box opens: `L` on the session the pa
 (leave it with Ctrl-Q); `U` on a `WAIT` row, which is a session waiting for a lock and not a
 lock; `U` on a record id with a character the page will not put in a command (only lower-case
 letters, digits, dot, dash and underscore go through) or an id that is one of the words
-`unlock` reads as a keyword (`all`, `file`, `user`, `filelock`, `tasklock`): release those at
+`unlock` reads as a keyword (`all`, `file`, `user`, `filelock`, `tasklock`) — release those at
 the prompt with `unlock`. The lock table keeps record ids in upper case and shows them so; the
 page sends the id in lower case, which the verb folds.
 
 **`logout` ends a session by signalling its process**, so work that session has not saved is
 lost; the box says so before you answer Run. **While `inhibit.login` is on, only this session
-and the phantoms it starts can sign in, and if this session is lost the hold lapses**: the
+and the phantoms it starts can sign in, and if this session is lost the hold lapses** — the
 page's box says that too.
 
 **Not on the page:** a message to a user, `logout all`, and `unlock tasklock`.
 
-*Carried from the Linux product's page and not yet run on Windows.*
-
-## Which need `admin`
+## Who needs `admin`
 
 | | |
 |---|---|
-| **need `admin`** | `tool.sessions`, `listu`, `logout all`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `lock.tracer`, `inhibit.login` |
-| **need nothing** | `logout`, `logout n`; and from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` |
-
-Without it they answer *Command requires administrator privileges*. See
-[Administrator commands](06-administrator-commands.html).
-
-## See also
-
-[Administrator commands](06-administrator-commands.html) ·
-[Operating system access](06b-operating-system-access.html).
+| `tool.sessions`, `listu`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `logout all`, `lock.tracer`, `inhibit.login` | `admin` first |
+| `logout`, `logout n`; from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` | nothing |

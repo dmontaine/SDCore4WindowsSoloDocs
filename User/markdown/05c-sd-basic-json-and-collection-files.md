@@ -136,8 +136,8 @@ feed inside a string written as `\n`, so that it is one line. `to` may be writte
 `readjson` skips a blank line. Its `else` branch is the end of the file (`status()` is 3006) or
 a line that is not JSON (`status()` is 1020, and the next `readjson` reads the line after it).
 `writejson`'s `else` branch is a value that is not an object or an array (`status()` 1020), a
-value with no JSON form (1019), or a failed write. The OS-access gate was
-asked at `openseq`, as for every sequential file.
+value with no JSON form (1019), or a failed write. The OS-access switch was
+asked at `openseq`, as for every sequential file. (SD Core also asks its edit gates there; Solo has none.)
 
 ```
 openseq 'orders.jsonl' to f else stop

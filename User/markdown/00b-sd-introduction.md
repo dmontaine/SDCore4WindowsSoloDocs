@@ -20,17 +20,18 @@ QM, and ScarletDME — and SD is one of its direct descendants.
 The three delimiters that make it work are **field marks**, **value
 marks** and **subvalue marks** — control characters that separate the
 levels inside a single string. A dynamic array in SDBasic is a string
-that carries these marks, and `extract`, `insert`, `delete` and
-`replace` work on them directly.
+that carries these marks, and the angle-bracket forms (`a<f,v>`), `ins` and
+`del` work on them directly.
 
 ## What SD is
 
-SD Core Solo for Windows is a version of SD, with elements found in the main
-SD version and in ScarletDME. ScarletDME was a fork of the original GPL
-release of OpenQM 2.6.6. **Solo is the personal edition of SD Core for
-Windows**: one Windows user, one computer, one account, and none of the
-multi-user machinery. The GettingStarted set has a page, *Differences from
-multiuser SD Core for Windows W1.1-1*, that says exactly what differs.
+SD Core Solo for Windows is built from upstream `sdb64`, a MultiValue database
+with elements found in the main SD version and in ScarletDME. ScarletDME was
+a fork of the original GPL release of OpenQM 2.6.6. **Solo is the personal
+edition of SD Core for Windows**: one Windows user, one computer, one account,
+and none of the multi-user machinery. The GettingStarted set has a page,
+*Differences from multiuser SD Core for Windows W1.1-1*, that says exactly what
+differs.
 
 **That lineage matters when you go looking for documentation.** Not all
 the features of the *commercial* OpenQM 2.6.6 were in the GPL release,
@@ -39,16 +40,18 @@ OpenQM 2.6.6 documents can be used as a reference, but SD Core has
 additions, changes and deletions — of features, of structure, of
 security and of commands. This documentation set covers those changes.
 
-If you have used OpenQM, or SD on Linux, much of SD Core will still be
+If you have used OpenQM, or upstream `sdb64`, much of SD Core will still be
 familiar: the same data model, the same query processor, the same
 BASIC.
 
-**SD Core Solo for Windows is Windows only.** There are no `#ifdef` branches
-keeping Linux alive in this source — Linux SD is a separate project and
-this is not a build of it.
+**SD Core Solo for Windows is Windows only, and for one user.** It is the
+single-user edition of SD Core for Windows: one account, `sduser`, run as you.
+There are no `#ifdef` branches keeping Linux alive in this source — SD Core
+Solo for Linux is a separate project, kept in behavioral parity by deliberate
+policy, and this is not a build of it.
 
-SD Core is free software under the GNU General Public Licence v3. `config gpl`
-displays the licence and `config contrib` the list of contributors. The
+SD Core is free software under the GNU General Public License v3. `config gpl`
+displays the license and `config contrib` the list of contributors. The
 installer carries compiled binaries; the source is a separate download.
 
 ## The four components
@@ -87,10 +90,12 @@ ed customers 1001
 to insert, type your lines, a full stop on its own line to stop
 inserting, then `fi` to file and exit.
 
-You can also use `edit` (Microsoft Edit, a full-screen editor) or `micro` (a
-full-screen editor with syntax highlighting). Both come with SD and both open
-in your session with nothing to unlock — see *Programmer commands* in the
-GettingStarted set.
+`sed` is a full-screen editor that runs inside SD, with drop-down menus and
+color for SD BASIC that you turn on when you want it; it needs no operating
+system permission. You can also use `edit` (Microsoft Edit, a full-screen
+editor) or `micro` (a full-screen editor that highlights SD BASIC) once the
+administrator has turned the `os` switch on (`set.os.access os on`; it is off
+as delivered, because they run outside SD).
 
 ```
 list customers
@@ -105,14 +110,14 @@ dots, so `clear-select` reaches `clear.select` too.
 
 A program lives in a `bp` file — a directory file, which is an ordinary
 Windows folder with one file per program. You can write it in `ed`,
-in `edit`, in `micro`, or in any text editor you like (Notepad, VS Code,
-etc.) — the folder is on disk at:
+in `micro` or `edit` (once the `os` switch is on), or in any text editor you
+like (Notepad, VS Code, etc.) — the folder is on disk at:
 
 ```
 %USERPROFILE%\SDCoreSolo\user_accounts\sduser\bp
 ```
 
-Compile and catalogue it from inside SD:
+Compile and catalog it from inside SD:
 
 ```
 basic bp myprog
@@ -141,28 +146,19 @@ computer, the global password. It lasts until you leave SD or type
 
 ## What is not in SD Core
 
-The following were in OpenQM, in ScarletDME, or in SD on Linux, and
+The following were in OpenQM, in ScarletDME, or in upstream `sdb64`, and
 are not in SD Core Solo for Windows:
 
 | Gone | Why |
 |---|---|
-| QMNet (remote files) | Removed; the API is the supported way to reach another SD server |
+| SDNet (the old `server;file` remote files) | Removed. A new SDNet client (a VOC pointer of type `N`, `set.server`, `set.netlogin`) is in, **off as delivered**; see *SDNet - Files on Another SD Server*. The API is the other way to reach another SD server |
 | Embedded Python (a Python interpreter loaded into `sd-solo.exe` itself) | Gone permanently - `sd-solo.exe`'s MSYS2 runtime cannot safely share a process with Python. Calling Python **from** a BASIC program is not gone: it runs as a separate helper process instead - see *SD BASIC - Python Integration* |
 | `sdlnxd` daemon | Linux-only; a scheduled task starts SD on Windows |
-| `ENCRYPT.FIELD` verb | Removed; `sdencrypt()` and `sddecrypt()` in SDBasic are the supported route |
-| `sed`, `update.record`, `modify` editors | Gone; use `edit`, `micro` or `ed` |
+| `ENCRYPT.FIELD` verb | Removed; `sdencrypt()` and `sddecrypt()` in SDBasic, with `sdkey()` for the key, and the `XE` conversion are the supported route |
+| `update.record`, `modify` editors | Gone; use `sed`, `edit`, `micro` or `ed` |
 | PROC language | Removed; use paragraphs instead |
-| `SET.LANGUAGE`, `LOAD.LANGUAGE` | Removed; SD Core is English only |
-| Accounts, groups and grants | Not in Solo: there is one account, `sduser` |
-
-## Where the listings came from
-
-**The listings in this set were produced by running commands on the multiuser
-SD Core for Windows W1.0-0.** Solo shares its runtime — the compiler, the query
-processor, the file system — so they show what Solo does too, but they were not
-repeated on Solo. Where a page describes something that differs on Solo, it
-says so; the account name in a listing may read `DON` or `SDSYS` where Solo
-would say `sduser`.
+| `SET.LANGUAGE`, `LOAD.LANGUAGE` | Removed; SD Core is English only (NLS, for currency and separators, is kept) |
+| Accounts other than `sduser` | Solo has one account. `create.account`, `grant` and the rest are gone |
 
 ## Document conventions
 

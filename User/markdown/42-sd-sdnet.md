@@ -142,7 +142,8 @@ there, for this session, and `release` or a `close` or the end of the process gi
 or locks a file of a server defined `read` is refused with message 12506 (or sets `status()` under `on error`) and
 **nothing is sent**.
 
-**`recordlocked(f, id)` needs the same two things as a lock**: the server must be defined `write` here, and the login
+**`recordlocked(f, id)` needs the same two things as a lock** (changed on 21 October 2026, carried from SD Core's rule of
+20 October): the server must be defined `write` here, and the login
 on the other machine must be allowed to ask. A `read` definition stops the program with message 12506
 (`recordlocked is refused`) and nothing is sent; the function has no `on error` clause, so a refusal always stops the
 program. A SD Core server answers request 34, the one `recordlocked()` sends, only to a login that is in its write

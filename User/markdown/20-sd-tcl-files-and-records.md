@@ -67,7 +67,7 @@ clear.file {dict|data} file
 `delete.file` removes the file and its VOC record. **`force` is needed if the
 file is not empty.** `clear.file` empties a file and keeps it, along with its
 dictionary, its indexes and its `creating.seqkey` counter (the next sequential id carries on; this is
-SD's behaviour, and `configure.file` *file* `next 1` starts it again).
+SD's behavior, and `configure.file` *file* `next 1` starts it again).
 
 ## Changing a file after it exists
 
@@ -90,12 +90,12 @@ for `immediate`. It changes nothing else, and without it nothing is shown.
 `no.case` / `case` and `resize` / `no.resize` are the pairs that turn a setting
 on and off. For a directory file, `binary` turns on mark mapping.
 
-**`next` *n*** sets the next record id that `write ... creating.seqkey` will give out in a
+**`next` *n*** sets the next record id that `write … creating.seqkey` will give out in a
 **hashed** file (see [SD Basic - File Handling](07-sd-basic-file-handling.html)); **`next query`** says
-what it is (*The next sequential record id is 103*, message 12356). A new file's counter is 1, `clear.file`
-keeps it (SD's behaviour), and rebuilding a file with a different group size carries the
-counter over. A file made by `copy` starts its own counter at 1; `write ... creating.seqkey` skips an id that
-already names a record. A directory file is refused: *NEXT applies to a hashed file only* (message 12355).
+what it is (*The next sequential record id is 103*, message 12356). A new file's counter is 1, `clear.file` keeps it (SD's behavior), and rebuilding a file
+with a different group size carries the counter over. A file made by `copy` starts its own
+counter at 1; `write … creating.seqkey` skips an id that already names a record. A directory file is refused:
+*NEXT applies to a hashed file only* (message 12355).
 
 ## Looking at a file
 
@@ -133,7 +133,10 @@ The Hot Spot Monitor. `display` is the default. It counts each program's
 opens, reads, writes and deletes as well as its calls and processor time, and
 the report has a column for each. **What a program asks for through the `open`
 of a name (its VOC lookup), or through `readv` and `writev`, which read and
-write the record themselves, is not counted against it.**
+write the record themselves, is not counted against it.** `hsm user n` shows
+another session's program names and file names, and each control character,
+`del`, byte from 128 to 159 and mark character in them is shown as `?`, so that a
+session cannot send a code to your terminal by what it opens (as `pstat` does).
 
 ```
 profiler on {user n} {event ...}
@@ -149,6 +152,8 @@ are `call` (a subroutine), `open`, `read` (including `readu`, `readv` and
 `matread`), `write`, `delete`, `openseq`, `readseq`, `writeseq`, `execute` (the
 first 32 characters of the command) and `object` (a call of a class module's
 object). Name some after `on` to log only those; none means all of them.
+The names the display shows (files, subroutines, commands, programs) are made safe to print: a
+control character, `del`, a byte from 128 to 159 or a mark character is shown as `?`.
 
 `display` is a list of the event types with a count of each. Type the **number** of
 a line to open it: the names the events were on (the file, the subroutine, the
@@ -165,7 +170,9 @@ that user), and an ordinary user sees only their own. It holds 4,000 different
 events: when there are more, `display` says how many were not logged. A user's
 program is named by the pathname of its compiled code. Only a program's own
 statements are counted: a `readv` is one `read`, not that and the reads the
-language does for it.
+language does for it. The listings, and the four levels of `display`, are under
+*Where the work goes: `profiler`* in
+[SD TCL - Processes and Phantoms](30-sd-tcl-processes-and-phantoms.html).
 
 ```
 list.files
@@ -182,16 +189,98 @@ The limit is the `NUMFILES` configuration parameter. **The peak is what matters
 when you are sizing it** — the current figure moves constantly and tells you
 almost nothing.
 
+### A line for every file: `file.stat`
+
+```
+file.stat {dict} {file ...} {lptr {n}} {no.page}
+```
+
+One line for each file: its type, how big it is, how many records it holds, and
+a column of `Y` and `N` for the things a file can have.
+
+```
+File name                Typ  Cur Mod  Min Mod Grp  Record Cnt     Primary    Overflow  Total Size AK TR ST NC NR EN RP JN
+T3                       DYN        1        1   2           5        4096        2048        6144  Y  N  N  Y  N  N  N  N
+T1                       DYN        1        1   2           2        4096        2048        6144  N  N  N  Y  N  N  N  N
+```
+
+| Column | |
+|---|---|
+| `Typ` | `DYN` a dynamic hashed file, `DIR` a directory file, `COL` a collection file |
+| `Cur Mod` · `Min Mod` · `Grp` | the current and the minimum modulus, and the group size |
+| `Record Cnt` | the number of records |
+| `Primary` · `Overflow` · `Total Size` | bytes in the primary subfile, in the overflow subfile, and both |
+| `AK` `TR` `ST` `NC` `NR` | `Y` if the file has indices, a trigger, statistics collecting (`fstat`), case insensitive record ids, and `no.resize` |
+| `EN` `RP` `JN` | encryption, replication and journalling. **Always `N`**: the columns are kept so the report keeps its layout, and none of the three is a property a file has in this system |
+
+**A directory file shows its type and its record count and nothing else.** With
+no file names the report covers the files on an active select list (list 0) or,
+if there is none, **every file your VOC points at with an `F` entry**; `dict`
+asks about the dictionaries instead. The report is about 122 columns wide.
+
+### What one file is: `find.file`
+
 ```
 find.file {dict} file
 ```
 
-A summary of one file, opened the way any program would open it: its type
-(*Dynamic hashed file, group size 1, modulus 3*, or *Directory file*), its
-pathname, and a line for each of these that is true of it — *File uses case
-insensitive record ids*, *File has indices*, *File has trigger* name, *File is
-read only*. A name that is not in the VOC, or a file that will not open, is said
-so. Unlike `analyze.file` it does not walk the file.
+Opens the file the way any program would and says what it is. It is for the
+file that is not behaving as you expect.
+
+```
+Dynamic hashed file, group size 2, modulus 1
+Pathname: <the full path of the file>
+File uses case insensitive record ids
+File has indices
+```
+
+(The real listing gives the full path.) The lines after the pathname appear only when they are true: case insensitive record ids, indices, a trigger,
+read only. A directory file is reported as one. A file that cannot be opened is
+not described; the reason is given instead (*NOSUCH is not defined in your
+VOC*, for a name the VOC does not have, and *Invalid file name* when there is no
+name at all). **Because it opens the file as a program would, it can reach only
+what your VOC and the operating system access switch allow.**
+
+### File activity by session: `fstat.user`
+
+```
+fstat.user {top} {user n} {lptr {unit}} {no.page}
+```
+
+How many records each session has read, written and deleted since it started.
+These are the counts `fstat global` keeps for the whole system, kept for each
+session as well. The sessions come in user number order; **`top` puts the busiest
+first** (reads + writes + deletes), which shows where a slow system is busy.
+
+```
+ User Name.......................Reads..........Writes.........Deletes
+    7 sduser                      1143               0               2
+```
+
+`user` *n* shows every count of one session:
+
+```
+File activity for user 10
+
+Opens                                  2
+Reads                                 68
+Writes                                 1
+Deletes                                4
+Clears                                 0
+Selects                                0
+Index reads                            0
+Index writes                           0
+Index deletes                          0
+Splits                                 0
+Merges                                 0
+
+Counted since 21 Oct 00:07
+```
+
+**An administrator sees every session; anyone else sees the sessions of their
+own login name.** A number that is not a session of yours, or not logged in,
+gives *No file activity to show for user 99: not logged in, or not a session of
+yours*. The report is shown once, not repeated; run it again for another look.
 
 ## Reaching a file in another account
 
@@ -248,11 +337,79 @@ cname {dict} file.name old.record.name to new.record.name
 ```
 
 A comma may be used instead of `to`. (`rename`, a second name for this verb, was
-removed in 1.2-0.) `@system.return.code` is `0` on success and `-1` if the arguments were
+removed in 2.0-0.) `@system.return.code` is `0` on success and `-1` if the arguments were
 wrong.
 
 **`cname` on a file renames the VOC record too**, which is the point — the
 name you type and the name on disk stay together.
+
+### Comparing two files: `compare.files`
+
+```
+compare.files {dict} file1 {dict} file2 {detail}
+```
+
+Compares the records of two files (a dictionary is named with `dict` in front of
+its file, so a file and its dictionary can be compared with each other or with
+another) and
+counts them in four groups: only in the first, only in the second, in both but
+different, and the same.
+
+```
+compare.files T1 T2
+```
+
+```
+Records only in T1: 1
+Records only in T2: 1
+Records in both that differ: 0
+Records that are the same: 1
+```
+
+`detail` lists the record ids of the first three groups under their counts:
+
+```
+Records only in T1: 1
+   COUNT
+Records only in T2: 1
+   SORT
+Records in both that differ: 0
+Records that are the same: 1
+```
+
+**`@system.return.code` is 0 when the two files hold the same records and 1 when
+they do not**, so a paragraph can test it. With one file name the verb answers
+*Two file names required*, and a file that will not open stops it (*Cannot open*
+the name). The records of a data collection file are compared as their JSON text,
+so two equal collections count as the same.
+
+### Taking the carriage returns out: `fixdir`
+
+```
+fixdir file {id ...}
+```
+
+For a directory file whose records arrived with Windows line ends. **It removes
+every carriage return from each record it is given**; a record with none is not
+written again. With no record ids every record of the file is done.
+
+```
+fixdir BP crtest
+```
+
+```
+1 record(s) fixed in BP
+```
+
+A second run of the same command says `0 record(s) fixed in BP`. A file that is
+not a directory file is refused (*T3 is not a directory file*), a file that will
+not open stops it (*Cannot open*), and a file name is required. The global
+catalog's directories (`gcat` and `global.bp.out`) and `solo.policy` are
+refused as they are for `ed` and `copy`: only a session signed in with the global
+password may change them.
+
+The refusal of the global catalog's directories is read from the source and was
+not run on Windows.
 
 ## Seeing what is actually in a record
 
@@ -268,61 +425,6 @@ is in use, and `lptr` {*n*} to send it to a print unit.
 
 **Every account has both `ct` and `dump`** — they run the same code, reached
 by two separate VOC records rather than one.
-
-## Comparing two files
-
-```
-compare.files {dict} file1 {dict} file2 {detail}
-```
-
-Counts what two files hold: the records **only in the first**, **only in the
-second**, **in both but different**, and **the same**. `detail` lists the ids of
-the first three groups, indented three spaces under their count. A dictionary
-is named with `dict` in front of its file, so a file and its dictionary can be
-compared with each other or with another.
-
-```
-compare.files stock stock.new detail
-```
-
-```
-Records only in stock: 1
-   1004
-Records only in stock.new: 1
-   1006
-Records in both that differ: 1
-   1002
-Records that are the same: 3
-```
-
-**`@system.return.code` is 0 when the two files hold the same records and 1 when
-they do not**, so a paragraph can test it. Two names are required (*Two file names
-required*), and a file that will not open stops it (*Cannot open* the name). The
-records of a data collection file are compared as their JSON text, so two equal
-collections count as the same.
-
-## Taking the carriage returns out of directory file items
-
-```
-fixdir file {id ...}
-```
-
-An item of a **directory file** has a carriage return at the end of each line when
-it was written with CR LF line ends, which a program that expects LF only (a tool
-from another system, say) does not want. `fixdir` takes the carriage return off the
-end of each line of the items named; with no ids it does every item of the file.
-
-```
-fixdir notes
-```
-
-```
-1 record(s) fixed in notes
-```
-
-An item with no carriage return is **not rewritten**, so a second run says
-*0 record(s) fixed in notes*. The file must be a directory file (*is not a
-directory file*), and it must open (*Cannot open*). A file name is required.
 
 ## Copying an operating system file
 
@@ -349,12 +451,22 @@ that is not there is reported (*Source ... not found*); any other failure says
 subroutine `!ioscopy` does a whole tree — and a program does the same as the
 verb with `!oscopy`.
 
-**The copy is done by Windows as you, so it has your own permissions and nobody
-else's**, and a path with a single quote in it is refused. **A path outside the
-account's own directory needs the account's OS-access switch** (`set.os.access
-os on`, off as delivered); without it the answer is *name has no OS access, so a
-file or directory outside its own account cannot be reached by pathname* and
-nothing is copied.
+**The copy is done by Windows as you, so it has your own permissions and nobody else's**, and a
+path with a single quote in it is refused. **A path outside the account's own
+directory needs the OS switch** (`set.os.access os on`), the same one as
+`OS.EXECUTE`; without it you get *name has no OS access, so a file or directory
+outside its own account cannot be reached by pathname* and nothing is copied.
+
+**The account's own VOC is closed to it by pathname, inside the account too.** The
+VOC is a directory of the account (`voc/%0`, `voc/%1`), and a path that runs through a
+directory called `voc` below the account's own directory is a change to it, as a
+`write` to a record of the VOC would be. A session without the OS switch that gives such
+a path as the target gets the same *has no OS access* message (`!oscopy` and `!ioscopy`
+answer `-4`) and nothing is copied; the source is only read, so it is not asked. The
+administrator (after `admin`) and an account with the OS switch on are not asked: the
+second has a shell and reached those files as it always could. (SD Core asks the same
+question for a program file or a dictionary as well; Solo has no edit gates, so the VOC
+is the one place it is asked.)
 
 ## Triggers
 
@@ -367,8 +479,8 @@ set.trigger file.name
 Set, remove, or display a file's trigger function. An empty string in quotes
 removes it; no argument at all displays it. **`all`** in place of the modes sets
 every one of them: pre- and post-write, pre- and post-delete, read, and pre- and
-post-clear. **The function must be catalogued** first — *Trigger function is not
-catalogued* otherwise.
+post-clear. **The function must be cataloged** first — *Trigger function is not
+cataloged* otherwise.
 
 ```
 set.trigger stock zztrig all
@@ -380,29 +492,29 @@ Modes: PRE.WRITE, PRE.DELETE, POST.WRITE, POST.DELETE, READ, PRE.CLEAR, POST.CLE
 ```
 
 ```
-list.triggers {file ...}
+list.triggers {file.name ...} {lptr {n}}
 ```
 
-**`list.triggers` says the same for every file of the account at once**: the file,
-its trigger function and the modes it is set for, with a count at the end. It looks
-at the data part and the dictionary of every file the account's VOC points to; with
-names after it, only those files.
-
-```
-list.triggers
-```
+`set.trigger` with no option tells you about one file; `list.triggers` does it
+for all of them. It looks at the data part and the dictionary of every file your
+VOC points at with an `F` entry, or only at the files you name, and lists each
+one that has a trigger function with the function's name and the modes it is on
+for:
 
 ```
 File                 Trigger function     Modes
 -------------------  -------------------  ------------------------------
-stock.new            zztrig               PRE.WRITE, PRE.DELETE
-stock                zztrig               PRE.WRITE, PRE.DELETE, POST.WRITE, POST.DELETE, READ, PRE.CLEAR, POST.CLEAR
-2 file(s) with a trigger function
+t3                   p9                   PRE.WRITE, POST.WRITE
+
+1 file(s) with a trigger function
 ```
+
+With nothing to report the list is empty and the last line says `0 file(s) with
+a trigger function`.
 
 ### A trigger on a directory file
 
-A directory file can have a trigger function too (18 Oct 2026). `set.trigger` works on it as on a hashed file, and
+A directory file can have a trigger function too (16 Oct 2026). `set.trigger` works on it as on a hashed file, and
 `list.triggers` lists it. The directory has no header to hold the trigger, so it is kept in a small text file named
 `%header%` in the directory itself, which SD makes when the trigger is set and removes when it is taken away:
 
@@ -423,40 +535,8 @@ are set, in the same order as for a hashed file, with the same arguments, and a 
 operation with `@trigger.return.code` or change the data being written. **`writeseq`, `writeblk`, `oswrite` and `osdelete` do
 not call it**, so a query report sent to a file, or a compile listing, never does; that is openQM's limit too. **A change to the
 trigger takes effect when the file is next opened**, not for a program that has it open already (`set.trigger` itself needs the
-file to itself, as it does for a hashed file). If the header names a function that is not catalogued, the first operation that
+file to itself, as it does for a hashed file). If the header names a function that is not cataloged, the first operation that
 needs it stops with *Trigger function 'name' not loaded for the file*.
-
-## Sizes and who is busy: `file.stat` and `fstat.user`
-
-```
-file.stat {dict} {file ...} {lptr {n}} {no.page}
-fstat.user {top} {user n} {lptr {unit}} {no.page}
-```
-
-**`file.stat`** prints one line for each file of **the current account**: the type
-(`DYN`, `DIR` or `COL`), the current and minimum modulus, the group size, the number
-of records, the bytes in the primary and overflow subfiles and their total, and `Y` or
-`N` for indexes (`AK`), trigger (`TR`), statistics (`ST`), case-insensitive ids (`NC`),
-`NO.RESIZE` (`NR`), encryption (`EN`), replication (`RP`) and journalling (`JN`).
-A directory file shows its type and record count only. With no names it takes the files
-on an active select list (list 0) or, if there is none, every file the VOC points at with
-an `F` entry; `dict` reports the dictionaries instead. The report needs **122 columns**.
-`EN`, `RP` and `JN` are always `N`: SD has no file encryption, replication or journalling.
-**openQM can also report on other accounts (`file.stat account.list`, `file.stat all`);
-SD does not**: the report reads each file, and another account's files are the business
-of that account's users and of the administrator, who has `list.files` and the
-account's own session.
-
-**`fstat.user`** reports file activity by session: how many records each has read,
-written and deleted since it started — the counts the system keeps in `fstat global`,
-kept for each session as well. Sessions come in user number order, or with **`top`** in
-descending order of reads + writes + deletes, which shows where a slow system is busy.
-**`user n`** shows all the counts of one session: opens, reads, writes, deletes, clears,
-selects, index reads, writes and deletes, splits and merges. **An administrator sees
-every session; anyone else sees the sessions of their own login name**, because the file
-activity of other people is theirs to see only through an administrator. openQM's verb
-repeats the report every two seconds and takes `t`, `i`, `d` and `u` at the keyboard; this
-one shows it once — run it again for another look.
 
 ## Moving data in and out: `import.csv`, `import.json`, `import.xml` and `convert.data`
 
@@ -521,11 +601,11 @@ dictionary), so nothing more is asked.
 
 **Every account has all of them now** — there is no longer a withheld set.
 `ct`, `list.files`, `set.file`, `analyze.file`, `clear.file`,
-`cname`, `configure.file`, `compare.files`, `copy`, `create.file`,
-`delete`, `delete.file`, `dump`, `file.stat`, `fixdir`, `find.file`, `fstat`,
-`fstat.user`, `hsm`, `import.csv`, `import.json`, `import.xml`, `convert.data`,
-`list.triggers`, `oscopy`, `set.trigger` are all in every
-account's VOC. (`set.mode` is not provided.)
+`cname`, `compare.files`, `configure.file`, `convert.data`, `copy`,
+`create.file`, `delete`, `delete.file`, `dump`, `file.stat`, `find.file`,
+`fixdir`, `fstat`, `fstat.user`, `hsm`, `import.csv`, `import.json`,
+`import.xml`, `list.triggers`, `oscopy`, `set.trigger`
+are all in every account's VOC. (`set.mode` is not provided.)
 
 ## What is not here
 

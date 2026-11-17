@@ -39,6 +39,8 @@ formlist array {to list}
 | `selectn` | as `select`, but does not clear the list first |
 | `selectv` | the list into a **variable** rather than a numbered list |
 | `sselectv` | the sorted ids into a **variable**: `sselect` and `selectv` in one. The file may be a dynamic array instead, and `to` is required |
+| `selectindex` | from an alternate key index — see [SD Basic - Alternate Key Indexes](09-sd-basic-alternate-key-indexes.html) |
+| `formlist` | builds a list from a dynamic array you already have |
 
 `selectv f` and `sselectv f` with no `to` are a compile error. (Until 27 October 2026
 `$mode selectv` made `to` optional and put the list in a default select list variable; the
@@ -47,8 +49,6 @@ mode is gone.)
 The sort clauses of the sorted forms may come before or after `to`.
 **`right.aligned`** sorts numeric ids as numbers (1, 9, 10, 100) instead of as
 text (1, 10, 100, 9); **`descending`** reverses the order.
-| `selectindex` | from an alternate key index — see [SD Basic - Alternate Key Indexes](09-sd-basic-alternate-key-indexes.html) |
-| `formlist` | builds a list from a dynamic array you already have |
 
 On a file holding two records:
 

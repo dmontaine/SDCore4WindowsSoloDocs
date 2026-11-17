@@ -826,7 +826,7 @@ def main():
                     metavar='PATH', help='.md files, or directories of them')
     ap.add_argument('--out', required=True, metavar='DIR')
     ap.add_argument('--product', default='SD Core Solo for Windows')
-    ap.add_argument('--version', default='WS1.1-2')
+    ap.add_argument('--version', default='WS2.0-0')
     args = ap.parse_args()
 
     sources = []

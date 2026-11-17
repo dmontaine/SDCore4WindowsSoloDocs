@@ -59,6 +59,19 @@ ended this way does not run its own logout.
 > Get-Process sdwind
 > ```
 
+**A script may capture what `sd-solo -start` prints.** `$x = sd-solo -start` or
+`sd-solo -start | Tee-Object start.log` returns as soon as SD has started. The
+background process it leaves running does not keep the script's pipe: it writes
+to `/dev/null` instead, so anything it prints after the start is not seen there.
+Sent to a file or a console window, its output goes there as before.
+
+**One arrangement still waits.** `sd-solo -start` run through `cmd /c ... > file`
+from a PowerShell script whose own output is captured (`*> file`) returned, but
+the script went on waiting until SD was stopped: the background process kept a
+Windows handle to the script's output, which it cannot see to give back. Run
+`sd-solo -start` directly as above, or use `sd-solo -restart`, which was measured
+returning at once.
+
 ## After an unclean shutdown
 
 If SD is stopped abruptly — the power goes, or the process is killed — it
@@ -71,13 +84,17 @@ Discarding the shared segment left by the previous boot -
 SD did not shut down cleanly.
 ```
 
-A segment belonging to a running SD is never touched.
+**This changes nothing while the machine is running.** A segment belonging to a live SD is still never touched, and `sd-solo -start` still refuses to disturb a system that is already up.
 
 ## SD will not start a second time inside itself
 
 If you leave SD with **`sh`** and then type `sd-solo` in that shell, it says so and
-returns you to the session you already have. `sh` is yours to use, with no
-`admin` — see [Operating system access](06b-operating-system-access.html).
+returns you to the session you already have.
+
+Worth knowing alongside it: **`sh` itself needs its switch**, which is off as
+delivered, so you cannot leave SD this way until the administrator turns it on
+with `set.os.access sh on`. See
+[Operating system access](06b-operating-system-access.html).
 
 ## The command line
 
@@ -120,7 +137,7 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 
 | | |
 |---|---|
-| Programs | `usr\bin\` |
+| Programs | `usr\bin\` — `sd-solo.exe`, `sdwind.exe` (the daemon), `sdtic.exe`, `sdconv.exe`, `sdfix.exe`, `sdidx.exe`, `sdclilib.dll` |
 | The changelog | `changelog` |
 | Configuration | `sd.conf` |
 | SD's own files | `sdsys\` |

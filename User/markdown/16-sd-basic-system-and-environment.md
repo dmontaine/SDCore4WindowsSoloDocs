@@ -42,7 +42,7 @@ system(key)
 
 | Key | | Value |
 |---|---|---|
-| `31` | licence number | `0` |
+| `31` | license number | `0` |
 | `42` | IP address | *empty* |
 | `91` | **is this Windows?** | `1` |
 | `1006` | Windows NT style? | **`0`** |
@@ -61,7 +61,7 @@ Windows**; it is the key this port sets deliberately for that purpose.
 
 ### Paths, and they are not all in the same form
 
-| Key | | An example value |
+| Key | | Value |
 |---|---|---|
 | `32` | the `sdsys` directory | `C:\Users\you\SDCoreSolo\sdsys` |
 | `38` | the temporary directory | `/cygdrive/c/Users/you/AppData/Local/Temp`, from `TMP` |
@@ -116,13 +116,12 @@ Q-pointer and the other forms `open` takes are resolved as `open` resolves them.
 `status()` is 0 if it was found; a null string comes back with the error of the
 open if it was not. `account.path()` gives the directory of an account from the
 accounts register, in either case of the name, and a null string when there is no
-such account.
+such account (Solo has one, `sduser`).
 
 **A path is told only where the account could open it.** The account's own
-directory and the files in it always; anything else only to an account that has
-OS access (the `os` switch), and to any other the answer is a null string (with
-`status()` 3035 from `vocpath()`). So a program cannot learn where another
-account lives, or which accounts there are, by asking.
+directory and the files in it always; anything else only to a session that has
+the OS switch (`set.os.access os on`), and to any other the answer is a null string
+(with `status()` 3035 from `vocpath()`).
 
 ### Unique values, and a few more
 
@@ -222,12 +221,12 @@ does not exist, and a caller cannot tell the two apart:
 
 **Keep every `config()` name to eight characters and upper case.**
 
+Neither call aborts the caller: a name that is too long comes back empty with
+a status, the same as a name that does not exist.
+
 `config('TIMEZONE')` is the zone the epoch functions convert in (see
 [SD Basic - Data Conversion](06-sd-basic-data-conversion.html)); `config('USPLIT')`
 is `1` when the administrator has turned on the split of user numbers.
-
-Neither call aborts the caller: a name that is too long comes back empty with
-a status, the same as a name that does not exist.
 
 ## SYSMSG()
 

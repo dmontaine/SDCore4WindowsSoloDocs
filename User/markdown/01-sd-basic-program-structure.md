@@ -19,7 +19,7 @@ function name {(argument, ...)} {var.args}
 
 | | |
 |---|---|
-| **program** | runs on its own. Started by `run`, by its catalogued name, or from another program with `execute` |
+| **program** | runs on its own. Started by `run`, by its cataloged name, or from another program with `execute` |
 | **subroutine** | called by `call`, and returns nothing. Its arguments carry values back |
 | **function** | called inside an expression, and returns a value with `return` |
 
@@ -82,7 +82,7 @@ There is no function form of `call` (`subr()` is gone). Where you want a result
 in an expression, declare a function with `deffun` and call that.
 
 There is no call by file and program name (`call "bp prog"`): a program is
-called by its catalogued name.
+called by its cataloged name.
 
 **Arguments are passed by reference, not by value.** A subroutine that
 assigns to one of its parameters changes the caller's variable. That is how a
@@ -100,7 +100,7 @@ catalogued(name)
 
 reports whether a name can be called. `catalogued('ZZNOSUCH')` is
 `0`. Use it before a `call @variable` whose name came from data, because an
-uncatalogued name is a runtime abort rather than a testable failure.
+uncataloged name is a runtime abort rather than a testable failure.
 
 ## Variables
 
@@ -191,6 +191,7 @@ the include is an error only when the last has not got it either.
 
 ```
 dim name(rows {, columns})
+dimension name(rows {, columns})
 mat name = expression
 mat name = mat other.name
 ```
@@ -374,9 +375,8 @@ additions; each is described by what it does and does **not** do.
 | **`partial.expressions`** | `A and B` does not evaluate `B` when `A` is false, and `A or B` does not evaluate `B` when `A` is true. That makes `if idx matches '1-2N' and s<idx> # 0` safe, and a function with a side effect on the right-hand side runs only when it is needed. **The value of every expression is the same as without the mode**; only what is evaluated changes |
 | **`debug.equates`** | a program compiled for the debugger also keeps its `equate` and `$define` tokens in the object, so the debugger can show, `set` and `watch` them (see *Debugging*). It makes the object a little larger; programs compiled without the mode are as they were |
 | **`explicit`** | every scalar has to be named in a `dim` statement before it is used, or the compiler refuses the program with *Variable xx has not been declared* |
-| **`trap.unused.main`** | like `trap.unused`, but it warns only about a variable that is assigned a value in the program itself, not in an include record |
+| **`trap.unused.main`** | like `trap.unused`, but it warns only about a variable that is assigned a value in the program itself, not in an include record. Both warn only of a variable given its value by a plain `x = ...` and never read: a variable a statement fills (`readu`, `locate ... setting`, `findstr`, `input`, `capturing`) is not reported, and a call made only for its effect is written `void name(...)` |
 | **`non.durable.txn`** | every `commit` the program contains is a *non-durable* commit: a transaction **nested** in another writes nothing at its `commit` but hands its records, deletions and locks to the enclosing transaction, which writes them when it commits or throws them away if it aborts. A commit that is not nested writes as ever. See [SD Basic - Locks and Transactions](14-sd-basic-locks-and-transactions.html) |
-| **`conditional.statements`** | accepted, and it changes nothing: `read`, `readu`, `readv`, `readnext`, `readseq`, `readblk`, `readcsv`, `matread`, `open`, `openpath`, `openseq`, `writeseq`, `writeblk`, `writecsv`, `seek`, `send`, `filelock`, `fileunlock`, `flush`, `getlist`, `locate`, `find` and `findstr` may always be the condition of `while` and `until` |
 
 ## Options that change how SD runs a program
 
@@ -389,25 +389,27 @@ additions; each is described by what it does and does **not** do.
 | **`git`** | a directory file keeps `.gitignore` and `.gitattributes` under their own names on the disk. Without it the leading dot of every such name is replaced by `%D`, which git does not read. **Only these two names**: any other name with a leading dot is mapped as ever |
 | **`dir.dtm`** | writing a record to a directory file moves the directory's date and time modified. The system moves it only when a name is added or removed, so a replaced record leaves it as it was. **Closing a written sequential file does not do this** |
 | **`spool.command`** | shows the operating system command that prints a job, just before it runs; a diagnostic aid |
-| **`correlative.nocase`** | string operations in a correlative or an I-type ignore case. The option is read when the correlative runs, not when it was compiled. For one correlative alone, begin it `A;NOCASE;` (as in `A;NOCASE;N(CODE) = 'AX'`): that sets its own flag, whatever the option says |
-| **`correlative.reuse`** | the array operators of a correlative or an I-type act as if `reuse()` had been applied to each operand: the last value of a shorter array is used again for the missing ones, where otherwise they count as zero. Read when the correlative runs |
-| **`assoc.all`** | the query processor ignores the associations in the dictionary and treats every field as one association. With `by.exp` on one multivalued field, each line then shows the matching value of the other fields, where fields in other associations show all of theirs on every line |
-| **`clear.select`** | the command processor clears the default select list (list 0) when a command ends **if the list was already active when the command began**: a list the command made itself is kept, so `select` followed by `list` still works. A program that was meant to use what is left of a list and leave it says **`keep.select`**, and then the list stays (below) |
 
-### `keep.select`
+## Changing the size of a matrix passed in: `redim`
 
 ```
-keep.select
+redim name(rows {, cols})
 ```
 
-A program that finds a select list active, takes some of it and ends leaves the
-rest behind, where the next command may take it up by accident. With `option
-clear.select` on, the command processor clears list 0 as the command ends. A
-program that **means** to leave what is left of the list for the next command
-says `keep.select` and it stays. The word belongs to the command that ran it and
-is forgotten when that command ends, so a second command that does not say it
-loses the list. **Without `option clear.select` the statement does nothing**,
-since nothing was going to clear the list.
+Inside a subroutine, `redim` gives a matrix argument (`mat a`) a new size, and **the
+caller's matrix takes that size**: what the subroutine stores in it, in the old elements
+and in the new ones, is there when the call returns.
+
+```
+subroutine grow(mat a)
+   redim a(10)
+   a(8) = 'eight'
+   return
+end
+```
+
+A matrix argument needs no `dim` of its own in the subroutine, in a `local subroutine`
+either: it is the caller's matrix, with the caller's size, until a `redim` changes it.
 
 ## What is not here
 

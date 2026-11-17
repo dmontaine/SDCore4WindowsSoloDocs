@@ -154,8 +154,10 @@ No record name specified.  Usage: edit {dict} <file> <record>
 
 ## Who has these verbs
 
-**Your account has `edit`, `micro` and `ed`**, and all three run with nothing
-to unlock. `ed` also works with no terminal at all.
+**Your account has `edit`, `micro` and `ed`.** `ed` always runs, and works
+with no terminal at all. `edit` and `micro` run outside SD, so they are behind
+the `os` switch, off as delivered and turned on by the administrator with
+`set.os.access os on` (see *The OS switch, and one condition* above).
 
 ## See also
 

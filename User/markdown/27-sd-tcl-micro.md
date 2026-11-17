@@ -139,10 +139,11 @@ none is mangled. The full rules are on
 
 ## Who has these verbs
 
-**Your account has `micro`, `edit` and `ed`.** All three run with nothing to
-unlock — see [SD TCL - The edit Screen
-Editor](26-sd-tcl-edit.html#the-os-switch-and-one-condition); `ed` is the
-one that also works with no terminal.
+**Your account has `micro`, `edit` and `ed`.** `ed` is SD's own line editor and
+always runs. `micro` and `edit` run outside SD, so they are behind the `os`
+switch, off as delivered and turned on by the administrator with
+`set.os.access os on` — see [SD TCL - The edit Screen
+Editor](26-sd-tcl-edit.html#the-os-switch-and-one-condition).
 
 ## See also
 

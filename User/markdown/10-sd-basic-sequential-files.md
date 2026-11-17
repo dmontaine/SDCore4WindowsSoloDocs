@@ -140,19 +140,19 @@ osdelete pathname
 `osread` reads the **whole** of the file into the variable, byte for byte: a
 newline stays a newline and is not turned into a field mark, and a mark
 character stays what it is. `then` is taken when the file was read; `else` when
-it could not be opened or read (a missing file, or no Windows permission on it),
-and the variable is then the null string. A file over
+it could not be opened or read (a missing file, no permission, **a path the
+account may not reach**), and the variable is then the null string. A file over
 a gigabyte takes `else`. `oswrite` makes the file, or replaces it and **cuts it
 to the length of the data**, with no change to a byte; `status()` is 0 if it was
 written. `osdelete` deletes a file and says nothing if it cannot: `status()`
 tells. **It deletes a file only**, where the openQM statement deletes a
 directory too, so that a mistake cannot take a directory and what is in it.
 
-They are built on `openseq` and `deleteseq`, so **they reach what those reach**:
-whatever the Windows user the session runs as can read, write or delete (a
-failure leaves `status()` at the system error, 3035 for a refused write).
-openQM's `on error` clause is not supported; a fault is the `status()`. They
-take no locks.
+They are built on `openseq` and `deleteseq`, so **the OS access switch
+(`set.os.access os on`) is the same as theirs**: an account without it reaches only its own directory by these
+statements (`oswrite` to anywhere else leaves `status()` 3035 and writes
+nothing), and one with it reaches what the user can. openQM's `on error`
+clause is not supported; a fault is the `status()`. They take no locks.
 
 **What was read about the file: `system(1071)`.** After a successful `osread` it
 gives the file's `status` array, as the system reported it for the file that was read;
@@ -230,8 +230,9 @@ how a program tells the two apart.
 **The wait is for each character, not for the whole read**: a read of 100 characters with
 `waiting 5` can take as long as the characters keep arriving inside five seconds of each other.
 
-A pipe or device is opened by its pathname, as any other `openseq` of a path. **It has not been
-tried here on a pipe, a serial port or any other device**; it has been tried on an ordinary file. `get` with no `from` is still a class
+A pipe or device is opened by its pathname, so the OS access switch applies as it does to
+any other `openseq` of a path. **It has not been tried here on a pipe, a serial port or any other
+device**; it has been tried on an ordinary file. `get` with no `from` is still a class
 module's property declaration, as in [SD Basic - Modern Program Structure](18-sd-basic-modern-program-structure.html).
 
 ## Asking about the file
@@ -257,6 +258,18 @@ deleteseq pathname then ... else ...
 Removes the file. `close` releases the variable without deleting anything;
 a sequential file left open is closed when the program ends, but the buffered
 tail is only guaranteed once `close` has run.
+
+**The account's own VOC is not changed by pathname.** A pathname that runs through a
+directory called `voc` below the account's own directory reaches a file of the VOC
+(`voc/%0`, `voc/%1`) as a `write` to its record would, which a session without the
+OS switch (`set.os.access os on`) may not do. For such a session `openseq` on
+one of those files is opened **read only** and `creating` there is refused (a
+`writeseq` on it fails), `deleteseq` of one leaves `status()` 3035 and deletes nothing, and
+the operating system path function with its delete, create-directory and
+create-directory-tree keys answers false with the same status. The administrator (after `admin`) and an account with the OS
+switch on are not asked. A link inside the account that leads into the VOC's directory
+does not get round it, because the name is resolved before the question is put. A
+record called `voc` in an ordinary directory file is a plain file, not a VOC.
 
 ## Directory files, and where the marks go
 

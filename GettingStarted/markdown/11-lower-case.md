@@ -1,9 +1,9 @@
 Title: Lower case
-Subtitle: Commands, file names, record ids and the account name are lower case — and nothing you type has to change.
+Subtitle: Commands, file names and record ids in SD's own files are lower case — and nothing you type has to change.
 
-**Everything that can be lower case is lower case.** SD used to be inconsistent
-about it: BASIC source is free-form and usually written lower case, while file
-names, field names and account names were forced up.
+**Everything that can be lower case is lower case, completely.** SD used to be
+inconsistent about it: BASIC source is free-form and usually written lower case,
+while file names, field names and account names were forced up.
 
 **What you type does not change.** `LIST`, `list` and `List` all run the same
 verb, and so does every keyword — `with`, `by`, `no.page` and the rest.
@@ -19,15 +19,17 @@ as typed  →  lower  →  upper
 A name that matches exactly still wins, so nothing that works today changes. A
 name that exists in **no** case is still reported as not found.
 
-This order is used everywhere: the parser, the query processor, `RUN`,
-the `LOGIN` paragraph lookup, and `SET.FILE`'s default `qfile` pointer.
+This order is used everywhere: the parser, the query processor, `run`,
+the `login` paragraph lookup, and `set.file`'s default `qfile` pointer.
 
-## What is spelled in lower case
+## What is spelled in lower case, and that is the whole of it
 
 | | |
 |---|---|
 | Commands in the VOC | **`list`**, `count`, **`select`**, **`create.file`**, **`setptr`** … and that is how they appear in `list voc` and `ct voc` |
-| System files on disk | `accounts`, `bp`, `bp.out`, `messages`, `newvoc`, `pcode.out`, `syscom`, `voc` and the rest under `sdsys` |
+| BASIC source and include records | the records of `gpl.bp` and `syscom` — all of them |
+| System files on disk | `accounts`, `bp`, `bp.out`, `gpl.bp`, `gpl.bp.out`, `messages`, `newvoc`, `pcode.out`, `syscom`, `voc_template` and the rest under `sdsys` |
+| The `bp` VOC entry | `bp` |
 | The hold file | `$hold` |
 | The saved select list file | `$savedlists` |
 | The command stack record | `$command.stack` |
@@ -38,7 +40,7 @@ the `LOGIN` paragraph lookup, and `SET.FILE`'s default `qfile` pointer.
 asked — but the stored path text is user-visible through `list voc with type = "F"` and the
 current-directory reporting, which is the point.
 
-## Record ids in directory files are not case sensitive
+## Record ids in directory files are no longer case sensitive
 
 Two changes that go together:
 
@@ -52,9 +54,9 @@ regardless of casing.
 
 ## One correction worth reading
 
-**`LIST` and `CT` used to disagree about the same name.** `list voc $HOLD`
-answered *"'$HOLD' not found"* on the very record `ct voc $HOLD` had just shown
-you. `LIST`, `SORT`, `SELECT` and the rest of the query language now use the
+**`list` and `ct` used to disagree about the same name.** `list voc $hold`
+answered *"'$HOLD' not found"* on the very record `ct voc $hold` had just shown
+you. `list`, `sort`, `select` and the rest of the query language now use the
 same as-typed → lower → upper order as everything else.
 
 ## The account name

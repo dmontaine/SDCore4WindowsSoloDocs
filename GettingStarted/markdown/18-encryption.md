@@ -65,7 +65,7 @@ start the helper only when the operating system switch is on, as for `SH` and
 
 ## The functions an application uses
 
-All of these are ordinary BASIC functions. **Any program may compile a call to
+All of these are ordinary BASIC functions. **Any session may compile a call to
 them: nothing is gated**, because they compute on data the program already holds
 and give nothing away. The programmer's page for them, with a worked example, is
 in the User set.
@@ -86,16 +86,8 @@ application derives the key once per run.
 
 `status()` after a failure: **10206** the salt is not base64 for 16 bytes,
 **10207** the passphrase is empty or over 65,536 bytes, **10204** a key of the
-wrong length, **10201** a wrong key or a damaged value.
-
-### Before this existed
-
-`sdencrypt('The quick brown fox', 'secretkey', 202)` returns nothing and sets
-`status()` to **10204**: a passphrase is not a key. Until the three functions
-above the only way to turn a passphrase into a key was `sdext()`'s
-`SD_KEYFROMPW`, which is internal-only, so an ordinary program could not obtain
-a key these functions accepted. That is no longer so, and `10204` for a
-passphrase passed straight in is still the answer.
+wrong length (a passphrase passed straight in as the key is this), **10201** a
+wrong key or a damaged value.
 
 ## The XE conversion and the key ring
 
@@ -109,8 +101,10 @@ process**, put there by `!keyset` (a subroutine a program calls) or by the
   zeroed when released; the source also asks the system to keep it out of swap
   and out of a dump, which the system may refuse. It is never written to a file,
   the audit trail, the error log or `$como`.
-- **Cleared** at sign-on, at `logto`, at sign-off and by `!keyclear`. **Not
-  handed to a phantom**: a phantom starts with an empty ring.
+- **Cleared** when the session takes its name (an API login does this once, after
+  the SCRAM proof is accepted), at sign-off, and by `!keyclear`. A session starts
+  with an empty ring, there being no `logto` here. **Not handed to a phantom**: a
+  phantom starts with an empty ring.
 - **16 keys**, each under a name of 1 to 31 letters, digits, dots, dashes or
   underscores. The newest key of a name encrypts; the older ones stay to read
   what they made, which is how a key is changed.
@@ -150,10 +144,10 @@ rtnval = sdext(arg, isargmv, key)
 whether `arg` holds several values rather than one.
 
 **It cannot be called from an application.** `sdext` is in the compiler's
-internal function table, so an ordinary program does not merely get refused —
+internal function table, so an ordinary account does not merely get refused —
 it gets a misleading error. An unknown function is read as a matrix reference,
 so the complaint is about a `dim` statement the program does not contain,
-reported at the last line rather than at the call. That behaviour is covered by
+reported at the last line rather than at the call. That behavior is covered by
 *SD Basic - Restricted Commands* in the User set.
 
 `$internal` needs both halves: the compiler tests for internal mode **and** for
@@ -165,7 +159,7 @@ admits a session only on a one-shot marker file the installer writes — see
 
 ### The keys
 
-Thirteen are implemented. Every binary value is base64, because the interface
+Fifteen are implemented. Every binary value is base64, because the interface
 carries NUL-terminated strings and a raw 32-byte digest would contain a mark
 character about one time in nine. The argument buffers are zeroed when a call
 ends.
@@ -181,10 +175,16 @@ ends.
 | `SD_RANDBYTES` | 107 | count | Random bytes |
 | `SD_XORBYTES` | 108 | two equal-length values | Their exclusive-or |
 | `SD_CTEQUAL` | 109 | two values | `1` or `0`, compared in constant time |
-| `SD_TLS_CBIND` | 110 | none | The API session's channel-binding value, for the SCRAM login. Empty when the session is not TLS |
+| `SD_TLS_CBIND` | 110 | none | This session's TLS channel binding, as the `c=` value its SCRAM login must carry; empty when the session is not TLS (a local pipe session) |
+| `SD_FILE_PRIVATE` | 111 | path, then `FILE` or `DIR` | `1` when the path is closed to everyone but its owner, `SYSTEM` and Administrators, `0` for anything else, including every failure: a caller that tests for `1` refuses |
+| `SD_USER_HOME` | 112 | a path relative to the home, or empty | The absolute path of that directory below the running user's `AppData\Local`, made private when it is missing; empty on every failure |
 | `SD_DPAPI_PROTECT` | 130 | one | Encrypts the argument with Windows' DPAPI, for this Windows user; the result is base64. **`$internal` callers only** |
 | `SD_DPAPI_UNPROTECT` | 131 | one | The reverse. **`$internal` callers only** |
 | `SD_KEYRING` | 120 | `set` name key · `clear` name · `list` | The key ring of the XE conversion: the key id, the number removed, or one field per key. Reached only through `!keyset`, `!keyclear` and `!keylist` |
+
+Numbers 102 and 103 were the POSIX effective-identity calls. They were removed
+and the numbers are not reused, so a program calling one gets the unknown-key
+response rather than a different function.
 
 `SD_CTEQUAL` reports a malformed argument as an error rather than as `0`,
 because by the time the login path compares these values both sides are the
@@ -193,27 +193,29 @@ caller deciding whether to admit a login must still treat the error as a
 refusal.
 
 **The two DPAPI keys are the kept copy of your account password.** (They were
-111 and 112 until 20 October 2026; 130 to 139 are the numbers reserved for keys
-that exist only on Windows.) DPAPI
+111 and 112 until 20 October 2026, which are now `SD_FILE_PRIVATE` and
+`SD_USER_HOME`, as on Linux; 130 to 139 are the numbers reserved for keys that
+exist only on Windows.) DPAPI
 encrypts for a Windows user, so what the first produces only that user can turn
 back. It is Solo's, not the multiuser SD's, and the plaintext each one held is
 wiped after use.
 
 ### What uses it
 
-Eleven shipped programs call `sdext()` for these keys, and they are the whole of
-its use apart from the Python programs: `APISRVR`, `CRED_SET`, `CRED_VERIFY`,
-`LOGIN`, `SD_GET_SALT`, `SD_KEY_FROM_PW`, `SDCLIENT`, `SOLO_STORE_PW`, and the
-three key ring subroutines `KEYRING_SET`, `KEYRING_CLEAR` and `KEYRING_LIST`.
-Between them they set a credential, verify one, run the API's SCRAM exchange,
-keep and read back the account password for `sd-solo <command>`, and hold the
-key ring. The six `PY_*` programs that start, stop and run the Python helper call
-it too, with their own keys, described in the Python chapter.
-
-The last three are catalogued for general use as `!keyset`, `!keyclear` and
-`!keylist`, so an application reaches the ring without reaching `sdext()`.
-**None of the other seven has a VOC entry**, so they are not an indirect route to
-the interface. `LOGIN` is the program SD runs at every sign-in.
+The programs that call `sdext()` are the credential and login ones —
+`apisrvr`, `cred_set`, `cred_verify`, `login`, `sd_get_salt`, `sd_key_from_pw`,
+`sdclient` and `solo_store_pw` (which keeps and reads back the account password
+for `sd-solo <command>`) — the programs for scheduled jobs, phantoms, the remote door and network
+logins (`solojob`, `tool_solojobs`, `phantom`, `ipc_seal`, `remotedoor`,
+`setnetlogin`, `netcred`), the two that keep a recovery copy or a debugger
+store in a private folder (`edit_recovery`, `pdbg_store`), the embedded-Python interface (the
+`py_*` programs, with their own keys, described in the Python chapter), and the
+three key ring subroutines `keyring_set`, `keyring_clear` and `keyring_list`. The
+last three are cataloged for general use as `!keyset`, `!keyclear` and
+`!keylist`, so an application reaches the ring without reaching `sdext()`. The
+others are not cataloged for general use as a way to reach the interface, so they
+are not an indirect route to it either. `login` is the program SD runs at every
+sign-in.
 
 ## Two constants that are not SDEXT keys
 

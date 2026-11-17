@@ -15,20 +15,20 @@ in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
 > **The listings on this page were produced by running them**, on SD Core for
-> Windows W1.0-0. The two exceptions are `phantom` and `pdebug`, and the reason
+> Windows. The two exceptions are `phantom` and `pdebug`, and the reason
 > is on the page: neither can be driven down a pipe, so both are described from
 > their source rather than shown.
 
 ## What is not on this page
 
-**Listing every session, and ending them all, need `admin`.** `listu` lists
-every session on the computer and `logout all` ends every one but yours; both
-are in the GettingStarted set, under *Sessions and locks*.
+**Seeing the sessions, and ending them, are administrator verbs.** `listu`
+lists every session on the computer, and `logout all` ends every one but yours;
+both need `admin` first. They are documented under *Sessions and locks* in the
+GettingStarted set. `logout` *n*, which ends one session by number, needs
+nothing.
 
-**`logout` with no argument, and `logout` *n*, need nothing** — `logout` ends
-your own session and is `quit` under another name, which is worth knowing
-before typing it intending to list something, and `logout` *n* ends another
-session, since on Solo every session is `sduser`.
+**`logout` with no argument ends your own session** — it is `quit` under another
+name, which is worth knowing before typing it intending to list something.
 
 What is here is **your own processes**: what this session is doing, work you
 started in the background, and how to look at either.
@@ -44,7 +44,7 @@ With no arguments it reports every session; **`user`** *n* restricts it to one.
 ```
 :pstat
 User Detail
-  27 Account: DON
+  27 Account: SDUSER
      Command: pstat
      $PSTAT 141 (262)
   12 (Not responding)
@@ -56,6 +56,12 @@ and the address in hexadecimal.
 
 For a process that is **waiting for a lock**, `pstat` also shows when the wait
 began, as `list.readu detail` already did.
+
+**What `pstat` prints is another session's text, and it is made safe first.**
+The command, the record it waits for, its program names and its account are shown with each control
+character, `del`, byte from 128 to 159 and mark character as `?`, so that a session cannot send a code to
+your terminal by what it types or locks. The text of `@pstat` (below) gets the same treatment, except that
+its marks are still shown as spaces.
 
 ### The levels are additive
 
@@ -71,7 +77,7 @@ at the prompt there is nothing on the stack but `pstat` itself:
 
 ```
 User Detail
-  27 Account: DON
+  27 Account: SDUSER
      Command: pstat user 27 level 1
      $PSTAT 141 (262)
      Command processor
@@ -264,21 +270,31 @@ User  Started            Command
 not `listu` — a phantom somebody else started does not appear. The register it
 reads is keyed by the parent's user number.
 
-## Every phantom that is running: `list.phantoms`
+## Which phantoms are running: `list.phantoms`
 
 ```
-list.phantoms
-list.phantoms user name
+list.phantoms {user username}
 ```
 
-Lists the phantoms, **and no other session**: a header, then a line for each
-with its user number, its operating system process id, the login name it runs
-as, the time it started and the account it is in (the phantom starts in its
-parent's account). `user` *name* shows only that user's (the name is case
-sensitive). **The account is shown for the administrator and for your own
-phantoms, and left blank for anyone else's**, as `listu` does. **openQM's
-`pool` word is refused** (*SD has no pools of phantom processes*), and `user`
-without a name is *User name required after USER*.
+`listu` limited to the phantom processes, with their user number, process id,
+user name, login time and account:
+
+```
+  User  Pid          Username                          Login time    Account
+    26  87576        sduser                            21 Oct 00:11  sduser
+```
+
+`user` *username* shows the phantoms of one user name (the name is case
+sensitive; one nobody has gives the heading and no rows). **As in `listu` the
+account is shown for the administrator and for your own phantoms, and left blank
+for anyone else's.** `list.phantoms pool` is refused (*SD has no pools of phantom
+processes*), `user` with no name is *User name required after USER*, and any
+other word is *Unexpected token*.
+
+**A phantom is listed only once it has signed on.** `phantom` reports the user
+number it has given the new process at once, and a `list.phantoms` typed in the
+same second showed the heading and nothing under it; the row was there a moment
+later.
 
 ## Telling a phantom what to do: `child()` and `signal()`
 
@@ -325,10 +341,9 @@ Dumping process state as C:\Users\you\SDCoreSolo\sdsys/sddump.27
 
 It holds the `@`-variables, the current sentence and command, the call stack,
 open files and their locks, and named and unnamed common — which is to say **it
-holds application data**, and it is a file in your own profile that anything
-running as you can read. Treat a dump as you would the data of the program that
-produced it, and delete it when the question it was written to answer has been
-answered.
+holds application data**. Each dump file is created readable by its owner alone.
+Treat a dump as you would the data of the program that produced it, and delete
+it when the question it was written to answer has been answered.
 
 | refusal | when |
 |---|---|
@@ -365,11 +380,85 @@ debugger on.
 The debugger itself — the commands it takes once it is attached — is in
 [SD Basic - Debugging](17-sd-basic-debugging.html).
 
+## Where the work goes: `profiler`
+
+```
+profiler on {user n} {event ...}      start logging
+profiler off {user n}                 stop logging and keep what was logged
+profiler {display} {user n}           show it
+```
+
+The kernel of the process being profiled counts its events: what it called, what
+it opened, read, wrote and deleted, and what it executed. `on` starts the count,
+`off` stops it and keeps the table, `display` (the default) shows it. The events
+are `call` `open` `read` `write` `delete` `openseq` `readseq` `writeseq`
+`execute` and `object`; none named means all of them. Without `user` the verb
+profiles your own session.
+
+```
+profiler on read write
+list t3 name
+profiler off
+```
+
+```
+Profiler on for user 28
+...
+Profiler off for user 28: 29 events in 13 entries
+```
+
+(The `...` is the report `list` printed.) **The table is kept in SD's `$ipc`
+file under the user number, so no file is left on the disk.** A profile outlives
+the session that made it.
+
+`profiler` (or `profiler display`) then shows it. With several profiles it lists
+them and asks which to open:
+
+```
+Profiles available (user number, events, entries):
+    25       24        9
+    28       29       13
+User number to open, or Q to quit:?
+```
+
+With exactly one profile it opens that one without asking, and
+`profiler display user 28` names one. There are four levels, and you go down by
+typing the number of a line and up with `b`; `q` leaves:
+
+| Level | Shows |
+|---|---|
+| 1 | the types of event, with a count of each |
+| 2 | what the events of that type were on: a file, a subroutine, a command |
+| 3 | the programs that did them |
+| 4 | the lines of the program, with the count at each |
+
+```
+Event types
+   1         29  READ
+Line number to open, B to go back, Q to quit:?1
+
+READ events, by name
+   1          4  (none)
+   2         14  T3
+Line number to open, B to go back, Q to quit:?
+```
+
+A program with no line table (an I-type) has none to show at level 4 (*No line
+numbers were recorded for this program*), and a profile that filled up says how
+many events it did not log. A profile that is not there is *There is no profile
+for user 1 - use profiler on, run the programs, then profiler off*. **Another
+user's process can be profiled by the administrator only**, because a profile
+holds the files that user's programs open and the commands they execute
+(*Only the administrator can profile another user's process*). The listings were
+taken from the Linux Solo text; levels 3 and 4, the full-profile message and the
+refusal for another user's process are read from the source, and none of this was
+run on Windows.
+
 ## Who has these verbs
 
-**Your account has `status`, `phantom`, `pstat`, `pdebug` and `pdump`**, and
-none of them needs `admin`. `pdump` *n* and `pstat` work on any session, since
-every session is yours.
+**Your account has `status`, `phantom`, `pstat`, `pdebug`, `pdump`,
+`list.phantoms` and `profiler`**, and none of them needs `admin`. `pdump` *n* and
+`pstat` work on any session, since every session is yours.
 
 ## See also
 

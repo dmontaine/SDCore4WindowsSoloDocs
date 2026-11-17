@@ -46,7 +46,7 @@ SD Core for Linux server, which signs in with that password. The server can put
 compiled programs into the global catalogue (`global.bp.out`,
 `sync.global.catalog`) and keep a list of commands the user may not run
 (`deny.verbs`). An installer control file, `sd-solo-setup.conf`, sets up many
-computers the same way. See [Managed computers](15-managed-mode.html).
+computers the same way. See [Managed mode](15-managed-mode.html).
 
 ## Installing and running
 

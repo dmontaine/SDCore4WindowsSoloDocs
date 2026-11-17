@@ -98,7 +98,7 @@ password first.
 
 **A key never replaces the password; it is another way in.** The SD Core for
 Linux server adds its own key on a managed computer, through the API (see
-[Managed computers](15-managed-mode.html)), and removes it again if it is asked to.
+[Managed mode](15-managed-mode.html)), and removes it again if it is asked to.
 
 **To sign in from your own computer with a key**, add your public key to
 `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` as one line (the file is in your

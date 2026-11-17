@@ -128,19 +128,62 @@ show it.
 39 sduser
 ```
 
-**On Solo the account is always `sduser`**, so the short form is the only one
-you will see. On the multiuser SD Core for Windows, `who` grows a third part
-after a `logto` — `29 PAYROLL from DON`, where `from` names the account you
-logged in as — and that is how it shows whether a `logto` took effect. Solo has
-one account, so there is nowhere to `logto` to, and it has no `logto` verb:
-typing it answers `logto is not in your VOC`, like any word SD does not know.
+**There is no `logto` in SD Core Solo** (it was removed in WS1.1-3). There is
+one account, `sduser`, so there is nowhere to switch to, and SDSYS is never
+entered on a Solo computer: the administrator commands are in your own account
+behind `admin`. Typed anyway, `logto` answers like any word that is not a
+verb, *logto is not in your VOC*.
+
+## Logging every command: `command.logging`
+
+```
+command.logging {on | off}
+```
+
+`on` starts a log of every command this session runs; `off` stops it. With
+neither word the verb says whether logging is on and, if it is, where the log is:
+
+```
+Command logging is off
+```
+
+```
+Command logging is on: <account directory>/clog.19.log
+```
+
+(*account directory* stands for the account's directory, and the 19 is the user
+number of that session.) **The log is named `clog.`*user number*`.log` and is kept
+in the account directory.** SD does not put it in a shared temporary directory,
+because another user could make a file of that name first. Each session adds to
+it and nothing empties it.
+
+Each line has five fields separated by tabs: the time as a number of seconds
+since 1 Jan 1970, the user number, the login name, where the command came from,
+and the command:
+
+```
+1792566633	19	sduser	User	WHO
+```
+
+| Origin | The command came from |
+|---|---|
+| `User` | the prompt |
+| `Cmd` | the command line `sd` was started with |
+| `PA` | a line of a paragraph |
+| `Exec` | `execute`, `chain` or a menu |
+
+The `on` that starts the log is not in it; every command after it is, and the
+`off` that ends it is the last line. A word after `on` or `off`, or any word but
+those two, is refused with *Unexpected token*, and if the log cannot be made
+(*The command log could not be started*) nothing is logged. The listings were
+read from the source and the Linux Solo listings; they were not run on Windows.
 
 ## What is not here
 
 **There is no online help and `help` is not a verb.** The command processor
 still has internal verb 14 reserved for it and the routine is an empty stub —
 its body is commented out and it returns immediately. **No VOC record points at
-it**, in any account type, so the name is not even recognised. The F1 key at the
+it**, in any account type, so the name is not even recognized. The F1 key at the
 command prompt reaches the same empty routine and therefore does nothing. **This
 documentation is the help system.**
 
@@ -149,7 +192,7 @@ routine that reports or sets the file-creation mask, and **no VOC record points
 at it either**. It cannot be typed. `umask()` from SD BASIC still works — see
 [SD Basic - System and Environment](16-sd-basic-system-and-environment.html).
 
-**PROC is removed.** So are `sed` and `update.record`. A `PQ`-type VOC record
+**PROC is removed.** So is `update.record`. A `PQ`-type VOC record
 is **refused by name** rather than being reported as a bad dispatch code,
 because the record itself is valid PROC and it is the interpreter that is gone.
 Nothing that ships is type `PQ`, so this can only be met in a VOC record
@@ -157,15 +200,17 @@ somebody wrote.
 
 ## Who has these verbs
 
-Your account has every verb on this page, and none of them needs `admin`:
+Everything on this page is in your account, and none of it needs `admin`:
 
 | | |
 |---|---|
-| **your account** | `abort` `alias` `clear.abort` `clear.stack` `display` `get.stack` `go` `if` `list.vars` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
+| **all of them** | `abort` `alias` `clear.abort` `clear.stack` `command.logging` `display` `get.stack` `go` `if` `list.vars` `off` `option` `pause` `quit` `report.src` `save.stack` `set` `set.exit.status` `stop` `who` `who.am.i` |
 
-**The `OS` verb is the exception and is not documented here.** `sh` reaches
-the Windows shell. It is in the GettingStarted set, under *Operating system
-access*.
+**The `OS` verb is not documented here.** `sh` reaches the Windows
+shell with your own permissions, once the `sh` switch is on (it is off as
+delivered, and the administrator turns it on with `set.os.access sh on`), needs no
+`admin` after that, and refuses a command that carries a shell metacharacter. It
+is described under *Operating system access* in the GettingStarted set.
 
 ## See also
 

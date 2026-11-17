@@ -28,13 +28,13 @@ sd-solo
 ```
 
 You land at the `:` prompt. That is TCL — the command processor. From
-here you compile, catalogue and run programs. The programs themselves
+here you compile, catalog and run programs. The programs themselves
 are written in SDBasic, which is a different language from TCL.
 
 Your `bp` file is an ordinary Windows folder. You can write programs
-in `ed` from inside SD, in `edit` or `micro` if your account can run
-external programs, or in any text editor you like — Notepad, VS Code,
-anything. The folder is on disk at:
+in `ed` from inside SD, in `edit` or `micro` once the administrator has
+turned the `os` switch on (it is off as delivered; `set.os.access os on`), or in
+any text editor you like — Notepad, VS Code, anything. The folder is on disk at:
 
 ```
 %USERPROFILE%\SDCoreSolo\user_accounts\sduser\bp

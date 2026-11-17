@@ -21,31 +21,49 @@ OpenQM documents are not authoritative here.
 additions, changes and deletions — of features, of structure, of security and
 of commands. **These pages cover those changes.**
 
-## With or without a global password
+If you have used OpenQM, or SD Core for Windows, much of SD Core will still be
+familiar: the same data model, the same query processor, the same BASIC.
 
-**The installer asks for a global password, and you may leave it blank.** Whether
-there is one is fixed until you reinstall.
+## Two ways to use it, one install
+
+**There is one installer and no mode to choose.** It asks for a **global
+password** last, and you can leave it blank:
 
 | | |
 |---|---|
 | **No global password** | a single-user database on this computer, in the way SQLite is. Nothing else manages it |
-| **A global password** | a local database that an **SD Core for Linux** server also manages — one of several computers it looks after. The server signs in with the global password |
+| **A global password** | a local database that an **SD Core for Linux** server also manages — one of several computers it looks after. The server signs in with the global password you gave the installer. Such a computer is called **managed** |
 
-Only the SD Core for Linux server manages a Solo computer; there is no Windows
+**A computer is managed if, and only if, it has a global password.** It is set
+at installation and fixed until you reinstall: no command creates it, so a
+computer installed without one needs a reinstall to be managed.
+
+Only an SD Core for Linux server manages a Solo computer; there is no Windows
 management server. What the server can do today is on
-[Managed computers](15-managed-mode.html), and it will grow as management features
+[Managed mode](15-managed-mode.html), and it will grow as management features
 are added to SD Core for Linux.
+
+## What "used to" means in these pages
+
+These pages describe changes, so **used to**, **no longer** and **now** run all
+through them. **The comparison is against the multiuser SD Core for Windows
+this product was made from** — what it does differently in this release is in
+[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html)
+— and, behind it, SD on Linux, ScarletDME and OpenQM 2.6.6.
 
 ## The pages
 
-**Read them in numerical order the first time; after that they stand alone.**
-**A number with a letter after it continues the page before it**, split so
-that no page runs longer than a reader will scroll.
+**They are numbered.** Read them in numerical order the first time; after that
+they stand alone.
+
+**A number with a letter after it is the second half of a long page**, split so
+that no page runs longer than a reader will scroll: `01a` continues `01`, and so
+on. Nothing was renumbered when they were split.
 
 | | | |
 |---|---|---|
 | **00** | Start here | this page |
-| **00a** | [Copyright and licence](00a-copyright-and-licence.html) | The copyright and the licence for this set, in full and in one place |
+| **00a** | [Copyright and license](00a-copyright-and-licence.html) | The copyright and the license for this set, in full and in one place |
 | **01** | [Installing](01-installation.html) | What the installer asks, what it puts where, and the control file for installing many computers |
 | **01a** | [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) | Installing a new release over an existing one, and taking SD off the computer |
 | **01b** | [Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html) | What Solo leaves out, adds and does differently |
@@ -56,6 +74,7 @@ that no page runs longer than a reader will scroll.
 | **06** | [Administrator commands](06-administrator-commands.html) | The commands that need `admin` first |
 | **06a** | [Sessions and locks](06a-sessions-and-locks.html) | Who is signed in, what is locked, and clearing it |
 | **06b** | [Operating system access](06b-operating-system-access.html) | Reaching Windows from inside SD |
+| **06c** | [Backing up and restoring the account](06c-backup-and-restore.html) | Writing your account to a zip file, putting it back, and recording the system's settings |
 | **07** | [Development and file commands](07-programmer-commands.html) | Compiling, editing, and the verbs that maintain files and indexes |
 | **08** | [ssh access](08-ssh-access.html) | Reaching SD on this computer over ssh |
 | **09** | [API access](09-api-access.html) | The client API, its port, and its login |
@@ -63,9 +82,9 @@ that no page runs longer than a reader will scroll.
 | **11** | [Lower case](11-lower-case.html) | Case in commands, file names and record ids |
 | **12** | [Security](12-security.html) | What protects the database, and what does not |
 | **12a** | [Security and the operating system](12a-security-and-the-operating-system.html) | Reaching the computer from inside SD, and the audit trail |
-| **13** | [Other hardening](13-hardening.html) | The global catalogue, the logs, and the rest |
+| **13** | [Other hardening](13-hardening.html) | The global catalog, the logs, and the rest |
 | **14** | [Not in SD Core](14-not-in-sd-core.html) | What has been removed, and what to use instead |
-| **15** | [Managed computers](15-managed-mode.html) | What an SD Core for Linux server can do to a managed computer |
+| **15** | [Managed mode](15-managed-mode.html) | What an SD Core for Linux server can do to a managed computer |
 | **16** | [Configuration](16-configuration.html) | `sd.conf` and its parameters |
 | **16a** | [System limits](16a-system-limits.html) | The sizes and counts SD works within |
 | **17** | [The installed scripts](17-the-installed-scripts.html) | The PowerShell scripts in the installed folder |
@@ -73,14 +92,22 @@ that no page runs longer than a reader will scroll.
 | **17b** | [The scripts a verb calls](17b-scripts-a-verb-calls.html) | The ones a verb runs, and the one SD runs as it starts |
 | **18** | [Encryption and the SDEXT interface](18-encryption.html) | What encryption SD has, and the interface behind it |
 | **19** | [Features the developers could not test](19-features-the-developers-could-not-test.html) | What nobody has watched work |
-| **20** | [The MCP door](20-the-mcp-door.html) | Letting an AI agent's MCP client use your account through read-only tools: the two switches (both off), the audit line, and what the door does not add |
+| **20** | [sdfix, the file check tool](20-sdfix.html) | Checking a hashed file's structure on disk, and recovering space |
+| **20a** | [sdfix: what it checks and repairs](20a-sdfix-checks-and-repairs.html) | Every error a check reports, and what `-F` or `-Q` does about it |
+| **21** | [sdidx, the index relocation tool](21-sdidx.html) | Where a file's indexes are kept, and moving or deleting them |
+| **22** | [sdconv, the byte order convertor](22-sdconv.html) | What it converts (compiled programs only), and what it refuses |
+| **23** | [Giving an AI agent an installation of its own](23-giving-an-ai-agent-its-own-installation.html) | A recipe with no code: why the wall for an agent has to be a computer |
 | **24** | [The AI helper](24-the-ai-helper.html) | Asking an AI model a question from SD: the provider, the key, the gate, and what a helper that runs as you cannot promise |
+| **25** | [The MCP door](25-the-mcp-door.html) | Letting an AI agent's MCP client use your account through read-only tools: the two switches (both off), the audit line, and what the door does not add |
+| **26** | [Migrating to SD](26-migrating-to-sd.html) | Bringing programs and queries from another MultiValue database: where the compatibility words are set, and the words SD does not accept |
+| **26a** | [Option words](26a-migrating-option-words.html) | The words of the `option` command, one line each |
+| **26b** | [Mode words](26b-migrating-mode-words.html) | The names `$mode` accepts and the lines of a `$basic.options` record, one line each |
 
 ## The five things most likely to surprise you
 
 **1. Every session asks for the account password.** At the keyboard, over ssh
 and through the API. Being signed in to Windows is not enough. A command given
-on the command line — `sd-solo LIST VOC` — uses a copy of the password kept for you
+on the command line — `sd-solo list voc` — uses a copy of the password kept for you
 by Windows, so a script or a scheduled job does not have to type it. See
 [The account and its passwords](05-account-types.html).
 
@@ -90,8 +117,8 @@ they work for the rest of that session. See
 [Administrator commands](06-administrator-commands.html).
 
 **3. There is one account and you cannot make another.** It is called
-`sduser` on every computer, whatever your Windows name is. The account and
-grant commands are gone. See
+`sduser` on every computer, whatever your Windows name is. There is no
+`sdsys` sign-in and no groups to join. The account and grant commands are gone. See
 [Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html).
 
 **4. Commands and names are lower case.** Typing in upper case still works —
@@ -106,22 +133,17 @@ See [ssh access](08-ssh-access.html) and [API access](09-api-access.html).
 
 ## What this release is
 
-**WS1.1-3.** Windows only. WS1.1-1 was the first release. WS1.1-2 added the
-SD Core server's ssh key install for managed computers and first-use trust of
-a server's certificate for client libraries (see [Managed computers](15-managed-mode.html)
-and [API access](09-api-access.html)). This one starts SD Core Solo with the
-name `sd-solo`, fixes the API at port 4249, and adds backing up and restoring the
-account (see [Backing up and restoring the account](06c-backup-and-restore.html)).
-**It is a hobby project with no release schedule.**
+**WS2.0-0.** Windows only and English only. **It is a hobby project with no
+release schedule.**
 
 This set covers installing and running SD Core Solo for Windows, administering
-it, managed computers, and what differs from the multiuser SD Core for Windows. The
+it, managed mode, and what differs from the multiuser SD Core for Windows. The
 reference for the language and the command processor is the separate User set.
 
 ## Where the source is
 
 **Both repositories are public, and everything in them is open source.** SD is
-GPL software — `config gpl` at an `sd-solo` prompt displays the licence, and the
+GPL software — `config gpl` at an `sd-solo` prompt displays the license, and the
 installed folder carries it as the file `sdsys\licence`.
 
 | | |
@@ -130,8 +152,11 @@ installed folder carries it as the file `sdsys\licence`.
 | These pages | <https://github.com/dmontaine/SDCore4WindowsSoloDocs> |
 
 **Neither repository contains a built binary, deliberately** — no `.exe`, no
-`.dll`, no object files. A clone builds. The documentation repository holds
-the **Markdown only**; the HTML and PDF you are reading are generated from it.
+`.dll`, no object files. A clone builds. That is why installing means building,
+and why there is no download of a compiled artifact in the repository itself.
+
+The documentation repository holds the **Markdown only**; the HTML and PDF you
+are reading are generated from it and are not stored there.
 
 ## Reporting what you find
 
@@ -140,14 +165,17 @@ the **Markdown only**; the HTML and PDF you are reading are generated from it.
 SD itself, and on the documentation repository for an error in these pages. If
 you are not sure which, the server one is the right guess.
 
-**Issues rather than pull requests.** Both repositories are writable only by
-the author, so a change cannot be merged from outside; a clear issue is worth
-more than a patch nobody can apply. A patch attached to an issue is welcome.
+**Issues rather than pull requests.** Both repositories are readable by anyone
+and **writable only by the author**, so a change cannot be merged from outside;
+a clear issue is worth more than a patch nobody can apply. A patch attached to
+an issue is welcome, it just travels that way.
 
 The two things worth reporting in most detail are **anything that behaves
 differently from OpenQM and is not described here**, and **anything in these
-pages that turns out not to be true of the build you are running**.
+pages that turns out not to be true of the build you are running**. The second
+is as valuable as the first.
 
-**Quote the version as `WS1.1-3`** — the string in the header bar of every page
+**Quote the version as `WS2.0-0`** — the string in the header bar of every page
 here, in the installer's file name, in the sign-on banner, and in what
-`sd-solo --version` reports.
+`sd-solo --version` reports. The `WS` says it is Solo for Windows, and that is
+the part worth keeping in a report.

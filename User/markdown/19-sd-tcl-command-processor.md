@@ -62,41 +62,22 @@ type `list voc` or `LIST VOC` and reach the same file.
 **Account names are the deliberate exception.** They are still folded upward,
 and that is what makes signing in case-insensitive.
 
-### A hyphen is accepted where the verb has a dot
+### A hyphen may stand for a dot
 
-After the three case attempts, the command processor tries the name again with
-any hyphens changed to dots. **So every dotted verb also answers to a hyphen.**
+When the three case attempts find nothing, the command processor tries once
+more with **every hyphen changed to a dot**, in lower case and then in upper
+case. So `clear-select` runs `clear.select` and `list-readu` runs
+`list.readu`. (The hyphen form is the Pick spelling of a dotted verb.) A
+hyphenated name with no dotted verb behind it is still not found:
+`no-such-verb` answers `NO-SUCH-VERB is not in your VOC`. The dotted name is
+the one SD itself writes.
 
-```
-:clear-select
-Cleared numbered select list 0
-:clear.select
-Cleared numbered select list 0
-```
+### If the VOC has nothing, the catalog is tried
 
-This is a spelling variant rather than a second verb, and two controls show it:
-
-```
-:zzz-nosuch
-zzz-nosuch is not in your VOC
-:ct voc create-account
-Record 'create-account' not found
-```
-
-The first shows the fallback is not accepting anything at all. The second shows
-there is no `create-account` record in the VOC — the resolution happens in the
-command processor, not in the file.
-
-**The dotted spelling is the documented one** and is what every page here uses.
-The hyphen form is supported, and it is worth knowing because a typed hyphen
-will not produce the error you expect.
-
-### If the VOC has nothing, the catalogue is tried
-
-A name that is not in the VOC is looked for in the **private catalogue** of the
-account and then in the **global catalogue**, `gcat`. A hit is treated exactly
+A name that is not in the VOC is looked for in the **private catalog** of the
+account and then in the **global catalog**, `gcat`. A hit is treated exactly
 as though the VOC had held `V` / `CA` / *name*. This is why a program you have
-catalogued can be run by typing its name with no VOC record of its own.
+cataloged can be run by typing its name with no VOC record of its own.
 
 If neither has it, the command is refused by name.
 
@@ -117,18 +98,18 @@ Field 2 of a verb record says how to run it, and field 3 says what to run:
 
 | | | |
 |---|---|---|
-| `CA` | *name* | a catalogued program — 95 of the shipped verbs |
+| `CA` | *name* | a cataloged program — 95 of the shipped verbs |
 | `IN` | *n* | internal verb *n*, handled by the command processor itself — 42 |
 | `OS` | *text* | an operating-system command — `sh` |
-| `CS` | *path* | a locally catalogued function |
+| `CS` | *path* | a locally cataloged function |
 
 Field 4 carries dispatch options and **field 5 names a security subroutine**. If
 field 5 is present, that subroutine is called before the verb runs and can
 refuse it, in which case you are told the command is restricted. None of the
-shipped verbs uses field 5 — **your account has the whole of `newvoc`**, and
-what needs `admin` is checked by the verb's own program, not by a security
-subroutine — but the mechanism is there for a site that wants a verb guarded
-rather than absent.
+shipped verbs uses field 5 — **your account has the whole VOC, and what needs
+`admin` is checked by the verb's own code**, not by a security subroutine —
+but the mechanism is there
+for a site that wants a verb guarded rather than absent.
 
 There are **41 internal verbs**, numbered, and the numbers are positional in the
 command processor's dispatch list. Several names share one: `off` and `quit` are
@@ -179,33 +160,28 @@ Paragraphs nest, and `abort` unwinds all of them.
 redo {times n} {every s} command
 ```
 
-Runs *command* again and again, the rest of the line as you typed it. **`times`**
-*n* is how many runs in all (a whole number of 1 or more); left out, it goes on
-until the break key is pressed. **`every`** *s* is the number of whole seconds from
-the *start* of one run to the start of the next, and defaults to 1; a run that
-takes longer than that is followed at once by the next.
+`redo` hands the rest of the line, as typed, to the command processor again and
+again. **Without `times` it goes on until the break key is pressed.**
 
-```
-redo times 3 every 1 date
-```
-
-```
-Tuesday, 13 October 2026  09:48pm
-Tuesday, 13 October 2026  09:48pm
-Tuesday, 13 October 2026  09:48pm
-```
-
-The words in front of the command are checked before anything runs, and a bad
-one stops `redo` with the reason:
-
-| said | when |
+| | |
 |---|---|
-| *The number after times must be a whole number of 1 or more* | `times 0`, or a word where the number should be |
-| *The number after every must be a whole number of seconds* | `every x` |
-| *Command required* | nothing after the words |
+| `times` *n* | how many runs in all. A whole number of 1 or more; `times 0` is refused with *The number after times must be a whole number of 1 or more* |
+| `every` *s* | the number of seconds **from the start of one run to the start of the next**. The default is 1. A run that takes longer than that is followed at once by the next |
+| *command* | required: with nothing after the options `redo` says *Command required* |
 
-**`redo` has no idea what the command does**, so a command that waits for a person
-holds up every later run, and one that changes data changes it every time.
+```
+redo times 3 every 1 display tick
+```
+
+```
+tick
+tick
+tick
+```
+
+**`every 0` is accepted, and it means no pause at all**: the command is run
+again the moment it ends, for as long as nobody presses the break key. Give such
+a `redo` a `times`.
 
 ## Continued in
 

@@ -38,8 +38,34 @@ SD started cannot collect passwords by pretending to be SD.
 **A client that sends a password in clear is refused** with *"Cleartext login
 is no longer supported; this server requires SCRAM authentication"*.
 
+**The client library pins the server's certificate.** The first connection from a
+client to an address and port is trusted, and its certificate is remembered — the
+SHA-256 of the whole certificate — in `%USERPROFILE%\.sdcore\known_servers` (or the
+file named by the environment variable `SD_KNOWN_SERVERS`), one line,
+`<host>:<port> <64 hex digits>`, per server. A different port is a different
+server. Any later connection to the same address and port that presents another
+certificate is **refused before a single byte of the login is sent**, with a
+message that names both fingerprints and the line to remove. A reinstalled
+computer has a new certificate: remove its line and connect again. **Removing the
+line is the remedy**, and only if you know why the certificate changed. **A store
+the client cannot read or write refuses the connection** rather than connecting
+unchecked. This is done in the client library, so it applies to every program that
+uses `SDConnect`. **The very first connection is trusted**, as with ssh.
+
+**A managed computer's server can ask this computer to install its ssh key** over
+the API, once it has signed in with the global password: see
+[Managed mode](15-managed-mode.html).
+
 **A wrong password is refused**, and the refusal is written to the audit trail
-— for example `api refused user=sduser reason=wrong password`.
+— for example `api refused user=sduser reason=wrong password`. It is written
+**before** the three-second wait SD adds to slow down guessing, so a program that
+hangs up during the wait is recorded as well.
+
+**The only account an API session may enter is `sduser`.** Asking for SDSYS, or any
+other name, is answered *User not allowed in requested account* — the same wording
+for an account that does not exist, so the API cannot be used to find out what
+accounts there are. **The administrator password is not an API login**: it is
+refused.
 
 **On a computer installed from a control file that gave a global password**,
 until the account password has been chosen at the keyboard, only the global
@@ -112,6 +138,37 @@ no rule, and an *Allow* there makes rules open to any address.
 > **The API always demands the account's password.** To turn the API off, take
 > away its listener, `APIPORT`.
 
+### Everything that reaches SD from outside, on one screen: `tool.remote`
+
+```
+tool.remote
+```
+
+A full-screen page for the administrator (`admin` first; 140 columns by 43 lines or
+more) of four views, chosen with the keys `1` to `4`:
+
+| View | What it shows and does |
+|---|---|
+| `1` doors | what `remote.api` and `remote.ssh` say with no keyword: **the machine's own answer**, read back from `sd.conf` and the firewall rules. `A` changes the API and `S` ssh (`off`, `local` or `open`, from a list that starts on `off`); `open` wants the word `open` typed. After the box the terminal goes to the verb, which asks for the administrator password again |
+| `2` servers | the SDNet servers you have defined. `X` deletes the one under the cursor (`delete.server`); `N` asks every field and gives **the terminal to `set.server`**, whose `connect` step shows the key the server presents and asks whether to trust it |
+| `3` connected | every session now by the door it came through: user number, kind (user, api, sdnet, phantom), login user, account and origin |
+| `4` TLS | this installation's TLS identity as `settings.report` gives it. Never the private key |
+
+Each change runs only after a box showing the command was answered Run (**Cancel is
+what Enter chooses**); the verbs write their own audit lines, and opening the page
+writes `tool start app=tool.remote`. `F5` reads again, `F1` explains, `Ctrl-Q` leaves.
+
+### How big a request may be
+
+A request starts with a 4-byte length counting the whole packet and a 2-byte code,
+so the smallest packet is 6 bytes. **Before the login, a packet may be 6 to 65,536
+bytes; after it, 6 to 1,073,741,832** (the largest SD string plus the 10-byte header
+the client library allows for). Anything else is not read: the server ends the
+session and writes one line to its log (`API packet length ... refused (before
+login)` or `(after login)`). The client library never breaks the rule; it matters
+to a program that speaks the protocol itself. *Read from the source (`op_tio.c`),
+not run on a Windows install.*
+
 ## An API session is you
 
 **It runs as your Windows user**, in the account `sduser`, with the same
@@ -123,7 +180,7 @@ encryption runs on a restricted copy of your Windows token that cannot read
 your files; the session itself is ordinary and unelevated.
 
 **A session signed in with the global password is a server session**, with
-the administrator commands unlocked. See [Managed computers](15-managed-mode.html).
+the administrator commands unlocked. See [Managed mode](15-managed-mode.html).
 
 ### A session is confined to its own account
 
@@ -139,7 +196,7 @@ this confinement, not a missing file.
 **If your data lives outside the account**, name the directory in the
 **`NETDIRS`** setting in `sd.conf`, separating several with a semicolon.
 `config('NETDIRS')` prints what is in force. SD's password file, its program
-catalogue and its account register are never reachable from an API session,
+catalog and its account register are never reachable from an API session,
 and cannot be added to `NETDIRS`. A server session may reach `global.bp.out`.
 
 ## Request 29, the NET gate and `NETFILES`
@@ -188,34 +245,6 @@ This is read from the source and compiled; it has not been run on an install.
 
 **Use a client library from this release or later.** One that predates SCRAM
 is refused. See [Client distribution](10-client-distribution.html).
-
-## The client library remembers each server's certificate
-
-**The first time a client library connects to a server, it keeps that server's
-certificate; after that it connects only to a server that presents the same
-one.** This is *first use* trust: the first connection is taken on trust, and
-every later one is checked. It closes the one gap SCRAM leaves — someone
-posing as the server could otherwise collect a login and try to guess the
-password offline.
-
-| | |
-|---|---|
-| **What is kept** | the SHA-256 of the server's whole certificate, as 64 lower-case hex digits |
-| **Where** | `%USERPROFILE%\.sdcore\known_servers`, or the file named by the environment variable `SD_KNOWN_SERVERS`; one line per server, `host:port` and the digits. A different port is a different server |
-| **When it is checked** | right after the secure connection is made and before anything is sent — no login byte, no password |
-
-**A changed certificate is refused**, with *"THE SERVER'S CERTIFICATE HAS CHANGED
-since this client first connected to host:port (pinned ..., now ...). The
-connection was refused before any password was sent. If the server was
-reinstalled, remove the line for host:port from ... and connect again"*. Nothing
-updates the file by itself and nothing asks you; **removing the line is the
-remedy**, and only if you know why the certificate changed. **A file that cannot
-be opened or written refuses the connection** ("cannot pin the server: cannot
-open ...") rather than connecting unchecked.
-
-**Installing SD Core Solo again makes a new certificate**, because the
-installation is replaced. A client that already knew the computer will refuse it
-until its line is removed.
 
 **Programs using the `!sdclient` class** — SD BASIC reaching another SD over
 the API — speak the same login, from this release at both ends.

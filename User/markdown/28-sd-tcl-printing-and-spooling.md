@@ -59,7 +59,7 @@ the prompt:
 
 | | |
 |---|---|
-| **`as`** *name*, **`as pathname`** *path* | the name or path a mode 3 unit writes to |
+| **`as`** *name*, **`as pathname`** *path* | the name or path a mode 3 unit writes to; a path through the account's own `voc` directory is refused (*The VOC can only be changed after admin*) unless the session is the administrator's or the OS switch is on |
 | **`at`** *printer* | the Windows printer to send to |
 | **`brief`** | suppress the confirmation prompt |
 | **`keep.open`** | hold the unit open between jobs — see below |
@@ -266,21 +266,25 @@ No default report style has been set
 
 which is what a fresh account reports. **`off`** clears it again.
 
-## Large letters: `block.print` and `block.term`
+
+
+## Big letters: `block.print`
 
 ```
 block.print text
-block.term text
 ```
 
-The text in large letters, each character drawn as a 7 by 7 block of the letter **W**
-with two blank columns after it, so that **eight characters fill an 80-column line**.
-`block.print` goes to the default printer (print unit 0), `block.term` to the terminal.
-Long text wraps, breaking at a space where it can; lower case prints as upper case.
-Letters, digits and `. , ! ? - : / + = * ( ) '` have shapes, any other character prints as a
-question mark, and a space is a blank block. **openQM can change the drawing character and the
-shapes through a `$BIGLTRS` record in the VOC of QMSYS. SD has no such record: the letter is
-always W.**
+Prints *text* in large letters on print unit 0, the default printer. Each
+character is drawn in a block 7 rows high and 7 columns wide made of the letter
+`W`, with two blank columns after it, so **eight characters fill an 80 column
+line**. Long text wraps, breaking at a space where it can. Lower case prints as
+upper case. Letters, digits and `. , ! ? - : / + = * ( ) '` have shapes; any other
+character prints as a question mark, and a space is a blank block. The letter
+is always `W`.
+
+`block.term` is the same program writing to the terminal; it is described, with a
+listing, in
+[SD TCL - The Terminal and the Session](29-sd-tcl-the-terminal-and-the-session.html).
 
 ## Printing on this port
 

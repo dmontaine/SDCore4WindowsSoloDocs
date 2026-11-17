@@ -53,7 +53,7 @@ name `sduser`. `backup.account sduser` and `backup.account all` are accepted too
 sduser: 4 files, 78848 bytes, 6 directories
 ```
 
-**There is no globally catalogued program in a Solo backup**, and the zip says
+**There is no globally cataloged program in a Solo backup**, and the zip says
 the product is `windows-solo`.
 
 ## Restoring: `restore.account`

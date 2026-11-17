@@ -1,5 +1,5 @@
 Title: SD Client API
-Subtitle: The sdclilib client library, its functions across four language bindings, and the server status codes.
+Subtitle: The sdclilib client library, its functions across eight language bindings, and the server status codes.
 
 The SDClient API lets an external application connect to SD, open
 files, read and write records, execute commands, call subroutines,
@@ -7,9 +7,10 @@ and manage select lists — all through a single shared library.
 
 **The API is a normal way to use SD**, not a facility reserved for developers
 and administrators. A person running a custom GUI program that talks to SD needs
-the API switched on and the account password, and may need nothing else. On
-Solo the API is on only if it was chosen at installation, or if the computer is
-managed — see *API access* in the GettingStarted set.
+API access and may need nothing else. **On SD Core Solo for Windows the API is
+off unless you chose it when installing** (a computer a server manages needs it
+open), and it signs in to the one account, `sduser`, with the account password —
+see *API access* in the GettingStarted set.
 
 ## The library
 
@@ -75,14 +76,20 @@ the PATH.
 
 | | |
 |---|---|
-| `SDConnect(host, port, user, pass, account)` | over the network, to port **4249** (the default when you name none). The user and the account are both `sduser` |
-| `SDConnectLocal(account)` | **disabled on Solo.** It signed in with no password, which Solo does not allow: it answers *SDConnectLocal is not available in SD Core Solo for Windows - connect with SDConnect and the account password* |
+| `SDConnect(host, port, user, pass, account)` | over the network, to port **4249**. Use `127.0.0.1` for this computer; `user` is `sduser` |
+| `SDConnectLocal(account)` | **disabled on Solo.** Returns false at once |
 
-> `SDConnectUDS` (Unix Domain Socket) appears in the header but is not
-> applicable on Windows. The Windows port supports TCP connections only.
+> **`SDConnectUDS` (Unix Domain Socket) is not available, on either
+> port.** It sent its credential over the socket in a way that predates
+> SCRAM, and was removed for the same reason the old cleartext API login was.
 
-**To reach SD from a program on the same computer, call `SDConnect` with
-`127.0.0.1`.** The API has to be on; see *API access* in the GettingStarted set.
+### Why SDConnectLocal is disabled
+
+`SDConnectLocal` sends no password, and every SD Core Solo for Windows session
+proves the account password. It now returns false immediately and the error text
+(`SDError()`) reads *SDConnectLocal is not available in SD Core Solo for Windows -
+connect with SDConnect and the account password*. The API has to be on; see
+*API access* in the GettingStarted set.
 
 **The login is SCRAM-SHA-256, inside TLS 1.3.** A client that sends a password in
 clear is refused. The server sets a puzzle only someone who knows the
@@ -113,14 +120,29 @@ account needs, but cannot open, rename, delete or list anything else.
 
 | Function | Returns | Description |
 |---|---|---|
-| `SDConnect(host, port, user, pass, account)` | Boolean | connect over TCP |
-| `SDConnectLocal(account)` | Boolean | connect on the same machine |
+| `SDConnect(host, port, user, pass, account)` | Boolean | connect over TCP. A connection that fails returns false and `SDError()` says why; the session number it was given is the current one afterwards, so **select the session you were using with `SDSetSession`** before going on |
+| `SDConnectLocal(account)` | Boolean | **disabled on Solo** — always false |
 | `SDConnected()` | Boolean | is a session active |
 | `SDDisconnect()` | none | end the current session |
 | `SDDisconnectAll()` | none | end all sessions |
 | `SDGetSession()` | Integer | get the current session number |
 | `SDSetSession(session)` | Boolean | switch to a session |
-| `SDLogto(account)` | Boolean | switch to another account. Solo has only `sduser` |
+| `SDLogto(account)` | Boolean | switch to another account: true if the server moved there, false (and `SDError()` says why) if not, in which case the session stays where it was. Solo has one account, so there is nowhere else to go |
+
+**Sessions.** One program can hold up to **1024** sessions at once, each with its own server process and number. The server's own user table (`USERPOOL`) is the real ceiling. Open more than one with `SDConnect`, one after another, noting `SDGetSession()` each time, and move between them with `SDSetSession`.
+
+**Threads.** The client library may be used from several threads of one process, as OpenQM's QMClient may, on these rules:
+
+- **The current session belongs to the thread.** `SDSetSession` and `SDGetSession` act on the calling thread's own selection, so two threads can work on two sessions at the same time. A thread that has not selected a session starts on session 0, which is the one the first connection of the process received; a thread given a session by another thread must `SDSetSession` it before use.
+- **A session must not be used by two threads at the same time.** The library does not serialize requests on one session. If more than one thread can reach it, take your own lock round each action, and treat an `SDExecute` and the `SDRespond` calls that answer it as one action.
+- **The table of sessions is shared**, so `SDConnect`, `SDDisconnect` and `SDDisconnectAll` may be called from any thread; each connect is given a slot of its own however many start at the same moment.
+- **The transfer buffer and the `SDCallx` / `SDGetArg` arguments are per thread**, so one thread's call does not overwrite another's results. They are released when the thread ends, or when no session is left.
+- **A connection that fails keeps its slot for the thread that made it**, so that `SDError()` still says why after another thread has connected and disconnected; the slot is given back by that thread's next `SDConnect`, `SDSetSession` or `SDDisconnect`, by its end, or by `SDDisconnectAll`.
+- The same applies to a session that dies under its thread (`SDConnected()` is false for it and `SDError()` says why).
+
+**A session whose server has ended** — its `AUTOLOGOUT` period ran out, it was logged out, the process was killed — does not hang the client: the next request on it comes back empty, `SDError()` says the connection failed, and `SDDisconnect()` cleans it up. A session can set its own limit by executing the `AUTOLOGOUT` command (`SDExecute("AUTOLOGOUT 10")`: ten minutes idle; the period is in minutes, 0 turns it off).
+
+(The sessions and threads text is carried from the Linux Solo page; it was not run against this library on Windows.)
 
 ### File operations
 
@@ -137,6 +159,7 @@ account needs, but cannot open, rename, delete or list anything else.
 | `SDDeleteu(fileNo, id)` | none | delete with an update lock |
 | `SDRecordlock(fileNo, id, updateLock, wait)` | none | set a record lock |
 | `SDRelease(fileNo, id)` | none | release a record lock |
+| `SDRecordlocked(fileNo, id)` | Integer | query the lock on a record, as `recordlocked()` does: **-3** another user holds a file lock, **-2** an update lock, **-1** a read lock; **0** not locked; **1** this session holds a read lock, **2** an update lock, **3** a file lock. A file number that is not open gives 0 and `SDError()` says so |
 | `SDMarkMapping(fileNo, state)` | none | enable/disable mark mapping |
 
 ### Record manipulation
@@ -154,11 +177,12 @@ account needs, but cannot open, rename, delete or list anything else.
 | Function | Returns | Description |
 |---|---|---|
 | `SDField(str, delim, first, occurrences)` | String | extract a field from a delimited string |
-| `SDDcount(src, delim)` | Long | count delimiters |
+| `SDDcount(src, delim)` | Long | the number of delimited items: 1 more than the number of times `delim` occurs, counting non-overlapping occurrences from the left; 0 for a null string or a null delimiter. **The delimiter may be more than one character** (`a::b::c` by `::` is 3) |
 | `SDChange(str, old, new, occurrences, start)` | String | replace substrings |
 | `SDMatch(src, template)` | Boolean | match a string against a pattern |
 | `SDMatchfield(src, template, component)` | String | extract a matched component |
 | `SDSubstr(...)` | String | substring (language-specific) |
+| `SDChecksum(data)` | Long | the number SD's own `checksum()` gives for the same string, worked out in the library **with no connection to SD**. A byte of 128 or more is taken as a signed character, as the server reads it. A check for accidental damage, not a hash for security (the message digests are the server's `digest()`); the null string is 0 |
 
 ### Command execution
 
@@ -167,8 +191,9 @@ account needs, but cannot open, rename, delete or list anything else.
 | `SDExecute(cmnd, err)` | String | execute a TCL command |
 | `SDRespond(response, err)` | String | respond to a prompt from `SDExecute` |
 | `SDEndCommand()` | none | end a multi-line command |
-| `SDCall(name, argcount, ...)` | none | call a catalogued subroutine (pass by reference) |
-| `SDCallx(name, argcount, ...)` | Integer | call a catalogued subroutine (pass by value) |
+| `SDCall(name, argcount, ...)` | none | call a cataloged subroutine; the arguments the subroutine changed are put back into yours |
+| `SDCallx(name, argcount, ...)` | none | the same call, but your arguments are **not** changed: read each one the subroutine changed with `SDGetArg(n)` afterwards |
+| `SDGetArg(argNo)` | String | argument *n* (1 to 20) of the last `SDCallx`; free it with `SDFree` |
 
 > `SDCall` and `SDCallx` are variadic: 0 to 20 arguments. Each binding
 > provides per-arity wrappers — `SDCall0` through `SDCall20`, and
@@ -187,7 +212,7 @@ account needs, but cannot open, rename, delete or list anything else.
 | `SDReadNext(listNo, err)` | String | read next select list id |
 | `SDReadList(listNo, err)` | String | read the whole list as a dynamic array |
 | `SDClearSelect(listNo)` | none | clear a select list |
-| `SDRelease(fileNo, id)` | none | release a read lock |
+| `SDIndices(fileNo, indexName)` | String | `indices()` on the server: with a null name the names of the file's alternate key indexes, with a name that index's details; the null string for an index the file has not |
 
 ### The server: revision, variables, SYSTEM(), TRANS() and transactions
 
@@ -236,13 +261,11 @@ Their numbers begin at 10001 and are not those of `SDOpen`, so a number of one k
 
 **Not run on SD Core Solo for Windows yet.** These functions and the requests behind them are SD Core for Windows' and Linux Solo's, and compile here; they have not been run against a Solo server.
 
-### Session and package management
+### Packages
 
 | Function | Returns | Description |
 |---|---|---|
-| `SDEnterPackage(name)` | Boolean | enter a package context |
-| `SDExitPackage(name)` | Boolean | exit a package context |
-| `SDGetArg(argNo)` | String | get a command argument |
+| `SDEnterPackage(name)`, `SDExitPackage(name)` | Boolean | **not supported**: licensed packages are not part of SD and the server refuses both. The library still exports them, and the language headers do not declare them |
 
 ### Error handling
 
@@ -255,12 +278,12 @@ Their numbers begin at 10001 and are not those of `SDOpen`, so a number of one k
 
 ## Language bindings
 
-The API headers define bindings for six languages. The function
+The API headers define bindings for eight languages. The function
 signatures are identical in meaning; the syntax differs. **The installation
-carries all of them**, in `sdsys\syscom`: the C header `sdclilib.h`, Gambas
-(`sdclient.module`), PureBasic (`sdclient.pb`), Free Pascal
-(`sdclilibbind.pas`), Python (`sdclient.py`), C# (`sdclient.cs`) and PHP
-(`sdclient.php`).
+carries all of them**, in `sdsys\syscom`: the C header `sdclilib.h`, Visual
+Basic (`sdclient.bas`), Gambas (`sdclient.module`), PureBasic
+(`sdclient.pb`), Free Pascal (`sdclilibbind.pas`), Python (`sdclient.py`), C#
+(`sdclient.cs`) and PHP (`sdclient.php`).
 
 ### Gambas3
 

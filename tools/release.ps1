@@ -3,7 +3,7 @@
     deliverable with a checksum.
 
     command line:
-        tools\release.ps1 [-Set GettingStarted] [-Version WS1.1-2] [-OutDir <dir>]
+        tools\release.ps1 [-Set GettingStarted] [-Version WS2.0-0] [-OutDir <dir>]
                           [-Force] [-NoZip]
 
     WHY THIS EXISTS, and it is not the ten minutes it saves.  Moving the
@@ -27,7 +27,7 @@
 [CmdletBinding()]
 param(
     [string]$Set     = 'GettingStarted',
-    [string]$Version = 'WS1.1-2',
+    [string]$Version = 'WS2.0-0',
     [string]$OutDir,
     [switch]$Force,
     [switch]$NoZip

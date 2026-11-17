@@ -296,9 +296,9 @@ exception, `catch sys.program` the ones in that group, and so on down.
 **Not every error has a name.** An error with no row here still aborts, whatever
 handlers there are, and a few that could be caught are left alone on purpose:
 the failure of a transaction's commit, and the refusal of a path or an operating
-system command by the account's gates. **Catching an error does not undo what
-caused it**: a refused operation stays refused, and a write that failed has not
-been made.
+system command by the account's operating system access switch. **Catching an
+error does not undo what caused it**: a refused operation stays refused, and a
+write that failed has not been made.
 
 **A phantom that reaches the debugger with no one to debug it** (a `debug`
 statement, say, with no `pdebug` command waiting for it) normally ends. If

@@ -5,9 +5,9 @@ This page continues [Security](12-security.html).
 
 ## Reaching the operating system from inside SD
 
-**There are three ways out of SD onto the computer, and all three are off as
-delivered.** The administrator turns them on with `set.os.access`, in two
-switches, `sh` and `os`.
+**There are three ways out of SD onto the computer, and each is behind a switch
+that is off as delivered.** The administrator turns a switch on with
+`set.os.access` (after `admin`), `sh` or `os`; no other command does.
 
 | | What it is | Switch |
 |---|---|---|
@@ -35,7 +35,7 @@ password matters, and why it should be one only you know.
 **On a managed computer**, the SD Core for Linux server can put `sh` on the
 list of denied commands. **A program's `OS.EXECUTE` is
 not a command the list can hold**, so the list alone does not close the
-computer off from a program. See [Managed computers](15-managed-mode.html).
+computer off from a program. See [Managed mode](15-managed-mode.html).
 
 ## Privileged work is done through a script, not a command line
 
@@ -59,18 +59,19 @@ each, with the date, time and user:
 2026-09-29 00:15:34 user=sduser uid=105 pid=1043 global password set
 ```
 
-Every word before the first `=` is lower case. What follows an `=` is as it
-was: an account name keeps its case, and so does the text of a reason. A
-file that was started before this was the rule holds both spellings, so search
-it without regard to case.
+Every word before the first `=` is lower case, the event names included. What
+follows an `=` is data and keeps its case: the account name, a `reason=` text,
+and what a caller typed in `command=`. Lines written before 7 October 2026 are
+upper case (`LOGIN REFUSED`) and are not rewritten, so search a long-lived file
+without regard to case.
 
 | Recorded | |
 |---|---|
-| **Sign-ins** | every one, with how the password was proved — `via=account`, `via=global`, or `via=stored` for a command-line `sd-solo <command>` — and every refusal |
+| **Sign-ins** | every one, with how the password was proved — `via=account`, `via=global`, `via=first` (the first password, chosen at the console), `via=stored` for a command-line `sd-solo <command>`, or `via=windows-user` for a scheduled job's `run.job` — and every refusal |
 | **`admin`** | every unlock and every refusal |
 | **Passwords** | a change of the account, administrator or global password, and a refused change |
 | **The API** | every login, every refused request, and every failed login with its reason — `api refused user=sduser reason=wrong password`. **The address is not recorded** |
-| **A managed computer** | `deny.verbs` changes and `sync.global.catalog` runs, and the installer's own internal sessions |
+| **Managed mode** | `deny.verbs` changes and `sync.global.catalog` runs, and the installer's own internal sessions |
 
 **The refusals are the interesting half.** An `admin refused`, a
 `login refused` or an `api refused` is somebody trying something that did not

@@ -83,9 +83,9 @@ An administrator-only full-screen page (140 columns by 43 lines at least), and a
 | A | the file of certificate authorities (you type `ca` to confirm) | |
 | L | change a limit | |
 | T | the standing text, in a box with an editor | the same |
-| F6, or Left and Right | change box | change box |
+| F6, Shift-F6, Left, Right | change box (F6 goes on to the AI line when the AI is on) | change box |
 | F1, `?` or a click on `[?]` | explain the box | explain the box |
-| F5 | read the helper's settings again | read the helper's settings again |
+| F5 | read the machine again | read the machine again |
 | Ctrl-Q | leave | leave |
 
 **The page keeps nothing itself and never shows a key.** Every change is a `set.ai` sentence, shown with its effect in a box that you answer Run or Cancel (Enter chooses Cancel). The page then runs exactly that sentence. The exception is the setup dialog, whose Save is the confirmation.
@@ -132,13 +132,13 @@ The limits, and what they are as delivered:
 | `timeout` | 30 | seconds to wait for the provider (at most 300) |
 | `bytes-request` | 65536 | the most that may be sent in one request |
 | `bytes-reply` | 65536 | the most that may come back |
-| `max-tokens` | 1024 | the longest answer asked for, at the prompt and on every page: raise it for longer answers, lower it for shorter ones (a provider may refuse a figure above its model's own limit) |
+| `max-tokens` | 1024 | the longest answer asked for, at the prompt (`ai`) and on every page: raise it for longer answers, lower it for shorter ones (a provider may refuse a figure above its model's own limit) |
 
 ## The standing text
 
 Press **T** on `tool.ai` (or choose Provider, Standing text). A box shows the text that is sent first with every AI request, and says whether it is SD's default or yours. Edit it there: Enter starts a new line and Tab moves to the buttons. **Save** shows the command and its effect in a Run / Cancel box (Enter chooses Cancel), and Run keeps your text. **Shipped default** removes yours, so SD's default is sent again. **Cancel** or Esc changes nothing.
 
-The default tells the AI what SD is, that it should answer for SD and not for another multivalue product, that command words are lower case, which dictionary types there are, that access to the operating system and the shell is a gate that is off as delivered, and where SD's help is. Put your own facts in it, such as which files matter and how your programs are named.
+The default tells the AI that this is SD Core Solo for Windows, that it should answer for SD and not for another multivalue product, that command words are lower case, which dictionary types there are, that there is one user and one account and that `admin` makes the same person the administrator, that access to the operating system and the shell is a gate that is off as delivered, and where SD's help is: F1 and the `[?]` buttons, the `pdf` command, and the documentation on the web. Put your own facts in it, such as which files matter and how your programs are named.
 
 What is kept:
 
@@ -151,7 +151,7 @@ At the prompt the verb takes the text as one word of hexadecimal (`set.ai contex
 
 ## The key
 
-The key is typed at the helper's own prompt (`set.ai key anthropic`) or in the setup dialog on the page. At the prompt it goes from your console straight to the helper's client and SD never sees it; the prompt shows one `*` for each character you type or paste (Backspace takes one back, Ctrl-U clears the line), and the key itself is never shown. From the dialog it passes through your SD session's memory and a hand-over file only you and SYSTEM can reach, which is removed at once (see above). Either way the helper encrypts it with DPAPI for your Windows user and writes it to `sdsys\ai\keys\anthropic`, open only to you and SYSTEM; SD does not keep it, print it or put it in the audit trail, and the page and the verb read back only whether it is **set**. `set.ai key anthropic clear` removes it. A key is never an argument of a command, so it is in no process list and no history.
+The key is typed at the helper's own prompt (`set.ai key anthropic`) or in the setup dialog on the page. At the prompt it goes from your console straight to the helper's client and SD never sees it; the prompt shows one `*` for each character you type or paste (Backspace takes one back, Ctrl-U clears the line), so a long key shows that it arrived, and the key itself is never shown (the number of stars is its length, which anyone looking at the screen can count). From the dialog it passes through your SD session's memory and a hand-over file only you and SYSTEM can reach, which is removed at once (see above). Either way the helper encrypts it with DPAPI for your Windows user and writes it to `sdsys\ai\keys\anthropic`, open only to you and SYSTEM; SD does not keep it, print it or put it in the audit trail, and the page and the verb read back only whether it is **set**. `set.ai key anthropic clear` removes it. A key is never an argument of a command, so it is in no process list and no history.
 
 If a key is lost or shown to someone, clear it and ask the provider for a new one: SD cannot tell you who has seen it.
 
@@ -178,6 +178,8 @@ set.ai ca file=C:/Users/you/ca.pem
 set.ai limit name=tokens-day value=50000
 set.ai context bytes=1640
 set.ai context=default
+set.ai context refused name=gpl.bp
+ai refused why=context app=home name=gpl.bp
 tool start app=tool.ai
 ```
 
@@ -193,7 +195,7 @@ The `ai request` line is written by the SD kernel **before** the helper is start
 | `The AI is not set up for anthropic: the administrator has not set its key (tool.ai or set.ai)` (or, for Custom, `model`) | the provider is chosen but its key (or Custom's model) is missing; or a key is set and this session cannot open it (see [What is weaker](#what-is-weaker-than-in-sd-core-said-plainly)) |
 | `The AI did not answer: refused (the provider refused the request (HTTP 400): ...)` | the provider's own words follow the status: often a model it does not have; choose one from its list with S |
 | `The AI did not answer: limit (...)` | one of the limits above is used up; wait, or raise it |
-| `The AI did not answer: net (...)` or `timeout` | the provider could not be reached; check the address, the certificate, the clock, and whether the computer needs a proxy to reach the internet (the helper uses none) |
+| `The AI did not answer: net (...)` or `timeout` | the provider could not be reached; check the address, the certificate, the clock, and whether the machine needs a proxy to reach the internet (the helper uses none) |
 
 ## What has not been shown
 

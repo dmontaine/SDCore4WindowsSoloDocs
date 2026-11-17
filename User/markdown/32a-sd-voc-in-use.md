@@ -32,12 +32,12 @@ Types](32b-sd-voc-private-vocabulary-and-parser.html), which also describes
 `$voc.parser`, the record that hands a VOC record of a type SD does not know
 to a program of your own.
 
-### If neither has it, the catalogue is tried
+### If neither has it, the catalog is tried
 
-A name that is not in the VOC or the private vocabulary is looked for in the **private catalogue**
-of the account and then in the **global catalogue**, `gcat`. A hit is
+A name that is not in the VOC or the private vocabulary is looked for in the **private catalog**
+of the account and then in the **global catalog**, `gcat`. A hit is
 treated exactly as though the VOC had held `V` / `CA` / *name*. This is
-why a program you have catalogued can be run by typing its name with no
+why a program you have cataloged can be run by typing its name with no
 VOC record of its own.
 
 If neither has it, the command is refused by name.
@@ -158,26 +158,33 @@ entry actually contains without an editor.
 
 ## The VOC and the account
 
-Solo has one account, and the installer's account step copies the whole of
-`NEWVOC` from the system directory into its VOC — **420 records**, counted
-directly. There is no second, larger VOC.
+The installer copies the account's VOC from `newvoc` in the system directory —
+**440 records**, counted directly on 17 Nov 2026. (SDSYS's own VOC, which nobody
+signs in to, is built from `voc_template` instead — **449 records**, the same verbs plus a few
+system file pointers.) `update.accounts`, which needs
+`admin`, and an upgrade, add to the account's VOC whatever a new release ships;
+neither takes anything away.
 
-**The multiuser account and grant commands are not in it.** `create.account`,
-`delete.account`, `modify.account`, `grant`, `revoke`, `list.grants` and the
-remote-access verbs are absent from Solo's `NEWVOC`, so the name is simply not
-recognised. What needs `admin` is refused by the verb's own program, and is
-described in the GettingStarted set.
+**Administration is in the verb, not in the VOC.** Your account has `config`,
+`set.date`, `clean.account`, `list.readu`, `list.locks`, `lock`, `unlock`,
+`listu`, `update.accounts` and the rest — and each one refuses with *Command
+requires administrator privileges* until `admin`. There is no `create.account`,
+`delete.account`, `modify.account`, `grant`, `revoke` or `list.grants` anywhere:
+an unknown name is simply not recognized. See *Administrator commands* in the
+GettingStarted set.
 
 ## Case on disk
 
-Since 18 Aug 2026 the VOC ids are stored in lower case — `list`,
-`create.file` and so on. This changes nothing about what you type —
+The VOC ids are stored in lower case — `list`, `create.file` and so on. This changes nothing about what you type —
 SD tries a name as typed, then lower, then upper. What it changes is what
 SD prints back: `CT VOC LIST` answers `VOC list`.
 
 The file-pointer entries — `bp`, `bp.out`, `gpl.bp`, `gpl.bp.out` — moved
-to lower case on 19 Aug 2026. `VOC`, `NEWVOC`, `ACCOUNTS`, `MESSAGES`,
-`SYSCOM` and `QFILE` are still upper case on disk and are next.
+to lower case on 19 Aug 2026. **The migration is complete, not partial**: an
+account's own `voc`, and the system directory's `newvoc`, `accounts`,
+`messages` and `syscom`, are all lower case on disk too — there is nothing left
+in upper case to migrate. `qfile` was never a path of its own; it is a VOC
+pointer to `@SDSYS/$ipc`, the session IPC area, and has no on-disk name to fold.
 
 ## What is not here
 
@@ -185,7 +192,11 @@ to lower case on 19 Aug 2026. `VOC`, `NEWVOC`, `ACCOUNTS`, `MESSAGES`,
 and `ED VOC`*name* is how you edit a VOC record by hand. But there is no
 verb whose purpose is to create or modify VOC entries — `set.file` writes
 one kind, `.s` writes two, and everything else is done with `ED` or with
-`copy from voc`.
+`copy from voc`. **On Solo every direct change to the VOC needs `admin`** —
+`ed voc`, a program's `write` or `delete` to it, `copy` into it, `.s` and `.d`
+with a name — and is refused with *The VOC can only be changed after admin*
+without it. What SD writes to the VOC itself — `create.file`'s entry, the command
+stack — is not gated.
 
 **`PROC` is removed.** A `PQ`-type record is refused by name. Nothing
 that ships is type `PQ`, so this can only be met in a VOC record somebody

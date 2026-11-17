@@ -1,7 +1,7 @@
-Title: Features the Developers Could Not Test
+Title: Features the developers could not test
 Subtitle: The parts of SD Core Solo for Windows that were built and reasoned about but never exercised, what is known about each, and what it would take to settle it.
 
-Everything else in this documentation describes behaviour that was run and
+Everything else in this documentation describes behavior that was run and
 watched. **This page is the exception, and it exists so that the exception is
 visible in one place rather than scattered through the reference as
 footnotes.**
@@ -9,7 +9,7 @@ footnotes.**
 Nothing here is known to be broken. Each entry is something that **compiles,
 or exists, or follows from the source, and was never put under load or into
 the condition that would prove it.** Treat them as the list of things to pilot
-before you depend on them.
+before an application depends on them.
 
 **Two kinds of entry.** The first three sections are about SD's runtime —
 locks, sockets, real data — which Solo shares with the multiuser SD Core for
@@ -70,7 +70,7 @@ select lists and sequential files, and the system files it bootstraps with are
 real ones.
 
 **Not known.** **No production application's data has been loaded into this
-port.** Nothing here has met a file of hundreds of thousands of records, a
+release.** Nothing here has met a file of hundreds of thousands of records, a
 deep dictionary, or a schema built over years by somebody else.
 
 **To settle it.** Restore an existing account and run it.
@@ -243,7 +243,7 @@ for your Windows user. See [Scheduled jobs](04-scheduled-jobs.html).
 
 **Known.** The launcher `solo-mcp.py` was run as an MCP client runs it, on pipes, against a stand-in for `sd-solo`
 that answers as `mcp.call` does: the messages, the tools offered, the request it writes, the cuts and the
-refusals; the rules inside `set.mcp` and `mcp.call` are checked in their source. See [The MCP door](20-the-mcp-door.html).
+refusals; the rules inside `set.mcp` and `mcp.call` are checked in their source. See [The MCP door](25-the-mcp-door.html).
 
 **Not known.** **Any call through the door on an installed SD Core Solo, from a real MCP client** - the
 switches turned on and off, a tool's answer, a refused word, the audit line.
@@ -259,7 +259,7 @@ then `set.mcp off` and see the next call refused.
 | `chgphant()` | needs a phantom process to change |
 | `ccall()` | needs a C function registered into the executable |
 
-**Known.** All three compile in an ordinary account.
+**Known.** All three compile.
 
 **Not known.** What any of them does. Nothing else in the documentation
 depends on them.
@@ -277,8 +277,8 @@ editor is right and the page is wrong.
 belong here — it is either fixed or it is a known issue.
 
 **Anything a reader might merely find surprising is not a gap either.** The
-places where this port deliberately differs from OpenQM, ScarletDME or SD on
-Linux are documented as differences, in the pages that describe the feature.
+places where this release deliberately differs from OpenQM, ScarletDME, upstream
+`sdb64`, SD Core for Linux or the multiuser SD Core for Windows are documented as differences, in the pages that describe the feature.
 This page is only about what nobody has watched happen.
 
 ## See also

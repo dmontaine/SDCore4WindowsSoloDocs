@@ -28,7 +28,7 @@ import html as html_mod
 
 # THE PALETTE IS IMPORTED, NOT COPIED.  It used to be written out three times -
 # here for the set index, here again for the master index, and in mkdoc.py for
-# every content page - so a colour change had to be made in three places and
+# every content page - so a color change had to be made in three places and
 # was twice made in one.  mkdoc.py defines CSS at module level and guards its
 # main() behind __name__, so importing it costs nothing and runs nothing.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +36,7 @@ import mkdoc
 
 DOCS_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PRODUCT = "SD Core Solo for Windows"
-VERSION = "WS1.1-2"
+VERSION = "WS2.0-0"
 
 # ── Set definitions ──────────────────────────────────────────
 
@@ -46,6 +46,10 @@ SETS = {
     },
     "User": {
         "desc": "For programmers and operators. SDBasic, TCL, the VOC, dictionaries, the file system, the client API, and what an ordinary program may not compile.",
+    },
+    # 17 Nov 26 (four-version audit round 1, P-3961..P-3971): the TUI Guide, as in SDCore4WindowsDocs and SDCore4LinuxSoloDocs.
+    "TUIGuide": {
+        "desc": "SD Text User Interface - Programmer's Guide. Building a full-screen page of your own in SD BASIC with the !tk routines: the frame, the menu bar, the finder, forms, confirm boxes and pick lists, with worked examples.",
     },
 }   # Administrator merged, Solo ruling 38
 
@@ -332,10 +336,10 @@ def add_navigation(set_name, pages):
           f"{f', {already} already had them' if already else ''}")
 
 
-# ── Exactly one licence block per set ─────────────────────────
+# ── Exactly one license block per set ─────────────────────────
 
 def check_licence_block(set_name, pages):
-    """One page per set carries the copyright and licence in full - no more.
+    """One page per set carries the copyright and license in full - no more.
 
     OWNER, 5 September 2026: the block comes off every page and is "available
     once for each set of documents".  Once is a number, so it is checked.
@@ -344,7 +348,7 @@ def check_licence_block(set_name, pages):
     say whether the ONE page it is rendering asked for the block; whether a set
     ends up with a copy - or with two - is a question about the set, and
     add_nav is the only thing that looks at a whole set.  A set that lost its
-    licence page would render clean, link clean and ship."""
+    license page would render clean, link clean and ship."""
     html_dir = os.path.join(DOCS_ROOT, set_name, "html")
     carriers = []
     for page in pages:
@@ -355,7 +359,7 @@ def check_licence_block(set_name, pages):
 
     if len(carriers) != 1:
         raise SystemExit(
-            'add_nav: %s has %d page(s) carrying the licence block and must '
+            'add_nav: %s has %d page(s) carrying the license block and must '
             'have exactly 1%s' % (set_name, len(carriers),
                                   (' - ' + ', '.join(carriers)) if carriers else ''))
     # AND IT MUST BE THE FIRST PAGE OF THE SET.  Counting it was not enough:
@@ -369,12 +373,12 @@ def check_licence_block(set_name, pages):
     # than left to whoever next reads a rendered set.  PRE_RELEASE 181.
     if carriers[0] != pages[0]:
         raise SystemExit(
-            'add_nav: %s opens with %s and its licence page is %s - the '
-            'licence page must sort first.  Rename so it does; do not '
+            'add_nav: %s opens with %s and its license page is %s - the '
+            'license page must sort first.  Rename so it does; do not '
             'special-case the order here, because the book takes this same '
             'order and the two must agree' % (set_name, pages[0], carriers[0]))
 
-    print(f"  {set_name}: licence block on {carriers[0]}, first page of the "
+    print(f"  {set_name}: license block on {carriers[0]}, first page of the "
           f"set, and on no other page")
 
 
@@ -485,7 +489,7 @@ def create_master_index():
 <div class="page">
 <main class="master-index">
 <h1>Documentation</h1>
-<p class="mi-subtitle">The {PRODUCT} documentation is organised into three sets, each aimed at a different audience. Each page is a self-contained HTML file.</p>
+<p class="mi-subtitle">The {PRODUCT} documentation is organized into three sets, each aimed at a different audience. Each page is a self-contained HTML file.</p>
 <div class="mi-sets">
 {sets_html}
 </div>
@@ -547,7 +551,7 @@ print("Adding prev/next navigation...")
 for set_name, info in SETS.items():
     add_navigation(set_name, info["pages"])
 
-print("\nChecking the licence block...")
+print("\nChecking the license block...")
 for set_name, info in SETS.items():
     check_licence_block(set_name, info["pages"])
 

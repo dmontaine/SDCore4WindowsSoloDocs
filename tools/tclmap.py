@@ -175,7 +175,7 @@ DOCS = [
    clear.locks inhibit.login list.locks list.readu listu lock lock.tracer logout tool.sessions unlock
  """),
  # 11 Nov 26 SOLO 57 (Linux Solo S.211): the MCP door
- ('GettingStarted', '20-the-mcp-door.md', """
+ ('GettingStarted', '25-the-mcp-door.md', """
    mcp.call set.mcp
  """),
  # 16 Nov 26: tool.viewers (SOLO 54) beside set.viewer; the AI's verbs (RELEASE_1.1 246's Solo carry) on the AI pages, as in SD Core for Windows.
@@ -210,6 +210,10 @@ DOCS = [
  """),
  ('GettingStarted', '08-ssh-access.md', """
    remote.ssh
+ """),
+ # 17 Nov 26: the scheduled jobs verbs (SOLO 74) are explained on page 04, which the map had no entry for.
+ ('GettingStarted', '04-scheduled-jobs.md', """
+   run.job set.job set.jobs.access tool.jobs
  """),
 ]
 

@@ -23,6 +23,7 @@ the computer, from reading or changing the files directly.
 | **Windows** | your profile from other Windows users | it from you, and from the computer's administrators, who can read `SDCoreSolo` — the credential store included |
 | **The account password** | every SD session: keyboard, ssh, API, and a command line | the files themselves |
 | **`admin`** | the administrator commands and direct VOC edits, in a session | a program that reads the files |
+| **The `sh` and `os` switches** | the way out of SD onto the computer from inside a session: the `sh` verb, `OS.EXECUTE`, files and directories outside the account, the embedded Python, `micro` — off as delivered | what a program that already runs as you does outside SD |
 | **The global password** | a managed computer, for the SD Core for Linux server | — |
 | **The deny list** | commands the user may not run on a managed computer | the same files, outside SD |
 
@@ -38,12 +39,15 @@ are reached from other computers. See
 |---|---|
 | Every session | asks the account password |
 | Administrator commands | refused until `admin`. The eight that had no check of their own — `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` — are gated too. See [Administrator commands](06-administrator-commands.html) |
-| The VOC | direct edits need `admin`; the global catalogue is changed by nobody in a session |
+| The VOC | direct edits need `admin`; the global catalog is changed by nobody in a session |
+| The shell and OS access | refused until the administrator turns the `sh` or `os` switch on with `set.os.access`: off on a new install unless you answered yes when the installer asked, and kept as they were on an upgrade — see [Operating system access](06b-operating-system-access.html) |
+| The NET gate | API request 29 (open an `account;file` file for a client) is refused until the administrator sets `NETFILES=2` in `sd.conf` and turns the gate on with `set.net.access on`: both off as delivered; and a VOC pointer that leads out of the account is refused unless the account has the `os` switch on — see [API access](09-api-access.html) |
 | File transfer | an sftp program on another computer can put text files into the account's file `xfer.in` and take them from `xfer.out`, over Solo's ssh (port 4251). **Off twice as delivered**: `XFER=1` in `sd.conf` (read when Solo starts) and `set.xfer.access on`. Opening it means a program that knows your Windows password can bring files into the account while you wait in `receive`; it sees only that one folder, only plain text, within the size limits (`XFERFILE`, `XFERSLOT`) and only while the transfer is open. **The SD account password is not asked of the sftp connection** (it has no terminal to give it): what stands in for it is that nothing moves unless your own session, which did give it, is waiting in `receive` or `send` at that moment — see *Moving Files In and Out* in the User documentation |
 | Scheduled jobs | SD's own jobs (`set.job`) run one of your SD commands from a Windows Task Scheduler task, as your Windows user, **whether you are signed in or not**. **Off as delivered**: `set.jobs.access on`, and off refuses every job at its next run. A job is made or changed only with the account password typed at that moment. The task is made by the installer's SYSTEM helper (only an administrator can make a task that runs while you are signed out), which is told only the job's name and schedule; the command stays in SD. While you are signed out Windows will not open the kept copy of the password, so `run.job`, and nothing else, signs in by being the Windows user who owns SD's password folder. That adds no way in: while you are signed in any program of yours can sign in with the kept copy, and while you are signed out a program can run as you only from a task an administrator registered — see [Scheduled jobs](04-scheduled-jobs.html) |
 | The daemon | runs as you on an ordinary token, Administrators deny-only and Medium integrity, even from an administrator's account |
 | ssh | your own Windows account name and password only, on Solo's own port 4251, forced into `sd-solo`, no forwarding; the server runs as SYSTEM with its configuration in an administrators-only folder — see [ssh access](08-ssh-access.html) |
 | The API | off unless chosen; SCRAM inside TLS 1.3; a session confined to the account's files — see [API access](09-api-access.html) |
+| `sd-solo -internal` | closed once the installer has finished |
 
 **The account is the same one for every session**, so the gates are about *how
 you arrived and what you unlocked*, not about which account you are in.
@@ -71,11 +75,21 @@ in to**: nobody logs in to it, and Solo has no `logto` verb.
 ## On a managed computer
 
 **The SD Core for Linux server can add to what is locked** — the global
-catalogue, the list of denied commands — and it signs in with the global
+catalog, the list of denied commands — and it signs in with the global
 password. **All of that is SD enforcing it, and none of it is Windows
 enforcing it**: the user of the computer owns the files and can change them
-from outside SD. What a global password protects is what happens *inside* SD. See
-[Managed computers](15-managed-mode.html).
+from outside SD. What managed mode protects is what happens *inside* SD. See
+[Managed mode](15-managed-mode.html).
+
+**The server can also put an ssh key on the computer.** Only a session signed in
+with the global password may, at most four keys are kept, each can start
+`sd-solo` and nothing else, and every use is audited. That is the global password
+reaching one step further — into Solo's own ssh key file — so **whoever holds the
+global password can now also reach this computer over ssh as your Windows user**.
+It could already run the administrator commands. **On the client side, the
+library pins the computer's TLS certificate on first use**, which stops someone
+posing as the computer from collecting a login proof to crack offline; the first
+connection is trusted. See [API access](09-api-access.html).
 
 ## What you can do further
 
@@ -91,7 +105,12 @@ computers do not need it, or **leave it off** — see
 port 4251, your Windows sign-in lands in SD and the server starts with
 Windows. Anyone who can reach the port can try passwords
 for your Windows account, so keep the firewall rule limited to this computer
-unless you need it open.
+unless you need it open. **Do not give the ssh key line to anything you would
+not give the account password to** — see [ssh access](08-ssh-access.html).
+
+**Enable full-disk encryption (BitLocker) and a screen lock**, as you would for
+any computer that holds data you care about: everything above assumes the
+computer itself is in your hands.
 
 ## Continued in
 

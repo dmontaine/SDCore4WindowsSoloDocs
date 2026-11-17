@@ -95,15 +95,23 @@ computer's keyboard asks you to choose one:
 This account has no password yet. Choose one now - SD Core Solo for Windows asks for it every time it is used.
 ```
 
-**Until then, only the global password is accepted** — over ssh and the API
-the answer is:
+You get three tries; each of a weak password, one equal to the global
+password, and a confirmation that does not match is refused and counted. An
+empty answer gives up, and nothing is set.
+
+**Only the console offers it.** A session over ssh, through the API, or a
+command on the `sd-solo` command line is never asked to choose — otherwise
+whoever reached the computer first would own the account. **Until the password
+is set, only the global password is accepted** there, and the answer is:
 
 ```
 This account has no password yet. Set it at this computer's keyboard first; until then only the global password is accepted.
 ```
 
 So the SD Core for Linux server can reach a computer it has just set up, and
-nobody else can.
+nobody else can. Choosing the password also keeps the copy for
+`sd-solo <command>` and gives the account the global password's salt, so the
+server still signs in afterwards.
 
 ## The administrator password
 
@@ -126,11 +134,11 @@ It must differ from the global password.
 
 ## The global password
 
-**Only on a computer installed with one** — leaving it blank at installation
-means there is none. The SD Core for Linux server signs in as `sduser` with
-it, and every such session has the administrator commands unlocked. A few
-commands need it and refuse the administrator password — the ones that are the
-server's rather than the user's. See [Managed computers](15-managed-mode.html).
+**Optional: only a managed computer has one** (the installer lets you leave it
+blank). The SD Core for Linux server signs in as `sduser` with it, and every
+such session has the administrator commands unlocked. A few commands need it
+and refuse the administrator password — the ones that are the server's rather
+than the user's. See [Managed mode](15-managed-mode.html).
 
 **Only a session signed in with the global password can change it**, with
 `set.password global`, and **such a session can change all three**. Anyone
@@ -138,7 +146,7 @@ else — `admin` included — is told *The global password can only be changed b
 the SD Core server*. It must differ from the account and administrator
 passwords.
 
-**Whether a global password exists is fixed at installation**: nothing creates
+**Whether there is one is fixed at installation**: nothing creates
 or removes one afterwards. On a computer with none, `set.password global` says
 *This computer has no global password - no SD Core server manages it*.
 

@@ -48,15 +48,16 @@ Under `%USERPROFILE%\SDCoreSolo`:
 | `usr\bin\` | **both** DLL pairs again, beside `sd-solo.exe`. That folder is on your PATH, so it is where a 32-bit utility finds its client at run time |
 
 **The C header is installed, but not beside the DLLs**: `sdclilib.h` is in
-`%USERPROFILE%\SDCoreSolo\sdsys\syscom`, with the Gambas and PureBasic bindings,
-`sdclient.bas` and `sdclient.pb`. The other language bindings are in the
-source repository.
+`%USERPROFILE%\SDCoreSolo\sdsys\syscom`, with the language bindings that ship:
+`sdclient.py` (Python), `sdclient.cs` (C#), `sdclient.php` (PHP),
+`sdclient.module` (Gambas), `sdclilibbind.pas` (Lazarus and Free Pascal),
+`sdclient.bas` (Visual Basic) and `sdclient.pb` (PureBasic).
 
 ## The one file no installer can update
 
 **An application that carries its own copy of the client** keeps it beside
 its executable, and **Windows searches an executable's own directory before
-`PATH`** — so no installer entry and no PATH change will ever update it. It
+`PATH`** — so no installer entry and no `PATH` change will ever update it. It
 has to be replaced by hand.
 
 **This is the most likely way to test an old client without realising it.**

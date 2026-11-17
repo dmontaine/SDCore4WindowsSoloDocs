@@ -19,8 +19,8 @@ folds case, so any of this may be typed in either case.
 **The roster is the VOC, not an opinion.** It is computed by
 reading `newvoc` directly, so it cannot drift from what the account
 actually gets. **A verb your account does not have is not refused — the
-name is simply not recognised.** Solo has one account, and it has all
-215 of them; whether a verb needs `ADMIN` is in the GettingStarted set.
+name is simply not recognized.** Solo has one account, and it has all
+215 of them; whether a verb needs `admin` is in the GettingStarted set.
 
 ## The verbs
 
@@ -34,7 +34,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`analyze.file`** | **`analyze.file`** {**`dict`**} *file* {**`statistics`**} {**`lptr`**} |
 | **`append.sd.path`** | **`append.sd.path`** {**`on`** \| **`off`**} |
 | **`autologout`** | **`autologout`** {*minutes*} |
-| **`backup.account`** | **`backup.account`** {*account*} {**`to`** *folder*} |
+| **`backup.account`** | **`backup.account`** {*account* \| **`all`**} {**`to`** *directory*} |
 | **`basic`** | **`basic`** {*file*} *record* {*record* …} |
 | **`bell`** | **`bell on`** \| **`off`** |
 | **`block.print`** | **`block.print`** *text* |
@@ -64,7 +64,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`copy`** | **`copy from`** {**`dict`**} *src* {**`to`** {**`dict`**} *tgt*} {*id* …} {**`(options`**} |
 | **`copy.list`** | **`copy.list`** *list* {**`,`***new*} {**`from`** *src*} {**`to`** *tgt*} {*options*} |
 | **`count`** | **`count`** {**`dict`**} *file* {*selection*} |
-| **`create.file`** | **`create.file`** {**`dict`**} *voc.name* {**`directory`**} {*parameters*} |
+| **`create.file`** | **`create.file`** {**`dict`**} *voc.name* {**`directory`**} {*parameters*} {**`server`** *server* {**`as`** *remote.name*}} |
 | **`create.index`** | **`create.index`** *file* *field* … {**`no.nulls`**} {**`pathname`** *path*} |
 | **`ct`** | **`ct`** {**`dict`**} *file* {*id* … \| **`*`**} {**`(options`**} |
 | **`date`** | **`date`** \| **`internal`** \| *n* \| *date* |
@@ -164,7 +164,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`remote.ssh`** | **`remote.ssh`** {**`off`** \| **`local`** \| **`open`**}  —  the listener of Solo's own ssh server, port 4251 (administrator): no listener, this computer only, or every address; without a word, reports what is installed and changes nothing |
 | **`report.src`** | **`report.src on`** \| **`off`** \| **`report.src`** to toggle |
 | **`report.style`** | **`report.style`** {*name* \| **`off`**} |
-| **`restore.account`** | **`restore.account`** *zipfile* {*account*} {**`no.query`**}  ·  **`restore.account latest`** {*account*} {**`no.query`**} |
+| **`restore.account`** | **`restore.account`** *zipfile* {*account* \| **`all`**} {**`no.query`**}  ·  **`restore.account latest`** {*account* \| **`all`**} {**`no.query`**} |
 | **`restore.voc`** | **`restore.voc`** *account* *id*  ·  **`restore.voc`** *account* **`all`**  —  put back the newest saved copy of a record the VOC update removed; never overwrites |
 | **`run`** | **`run`** {*file*} *record* {*arguments*} |
 | **`run.job`** | **`run.job`** *name*  —  what a job's task runs (the one-shot **`sd-solo.exe run.job`** *name*); refused anywhere else |
@@ -179,7 +179,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`send`** | **`send`** *file* *id* {*id* …} |
 | **`set`** | **`set`** *name* *value* |
 | **`set.ai`** | **`set.ai`**  ·  **`set.ai gate`** **`on`** \| **`off`**  ·  **`set.ai provider`** *name* \| **`none`**  ·  **`set.ai model`** *provider* *name* \| **`-`**  ·  **`set.ai models`** *provider*  ·  **`set.ai key`** *provider* {**`clear`** \| **`handover`**}  ·  **`set.ai custom`** *name* *url* *format* *auth* *version* *maxparam* \| **`clear`**  ·  **`set.ai ca`** *path* \| **`-`**  ·  **`set.ai limit`** *name* *number*  ·  **`set.ai context`** *hex* \| **`-`**  —  whether the AI may be used, and its provider, model, key, limits and standing text (administrator); the key is typed at the helper's own prompt, or in tool.ai's setup dialog, which hands it over |
-| **`set.backup.directory`** | **`set.backup.directory`** {*folder*} |
+| **`set.backup.directory`** | **`set.backup.directory`** {*directory*} |
 | **`set.config`** | **`set.config`** *parameter* *value*  —  changes one of 14 tuning parameters of this SD's **`sd.conf`** (administrator); *value* is a whole number inside the range SD enforces |
 | **`set.date`** | **`set.date`** *date* |
 | **`set.exit.status`** | **`set.exit.status`** *n* |
@@ -200,7 +200,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`set.viewer`** | **`set.viewer`** {{**`add`** \| **`remove`**} **`pdf`** *program*}  —  the programs that may be started without the **`os`** switch to show a document (none is allowed as delivered); *program* is a full path or a bare name this computer's App Paths knows (**`msedge`**); without arguments, lists them |
 | **`set.xfer.access`** | **`set.xfer.access`** \| **`set.xfer.access on`** \| **`set.xfer.access off`**  —  whether the account may move files with **`receive`** and **`send`** over Solo's ssh (administrator; off as delivered, and **`XFER`** in sd.conf must be 1 too); without a word, says which |
 | **`setptr`** | **`setptr`** *unit* \| **`default`**`,`*width*`,`*depth*`,`*top*`,`*bottom*`,`*mode* {`,`*options*}  ·  **`setptr display`**  ·  **`setptr`** *unit*`,`**`display`** |
-| **`settings.report`** | **`settings.report`** {*folder*} |
+| **`settings.report`** | **`settings.report`** {*directory*} |
 | **`sh`** | **`sh`** *command* |
 | **`show`** | **`show`** {**`dict`**} *file* {*selection*} |
 | **`show.list`** | **`show.list`** {*n*} |
@@ -217,7 +217,7 @@ name is simply not recognised.** Solo has one account, and it has all
 | **`stop`** | **`stop`** |
 | **`sum`** | **`sum`** {**`dict`**} *file* {*selection*} *field* |
 | **`sync.global.catalog`** | **`sync.global.catalog`** |
-| **`term`** | **`term`** \| *width*{`,`*lines*} {*type*} \| **`colour`** *bg*{`,`*fg*} \| **`default`** \| **`display`** |
+| **`term`** | **`term`** \| *width*{`,`*lines*} {*type*} \| **`color`** *bg*{`,`*fg*} \| **`default`** \| **`display`** |
 | **`time`** | **`time`** \| **`internal`** |
 | **`tool.ai`** | **`tool.ai`**  —  the AI choice page (administrator): the provider with a check box (Anthropic, OpenAI, Google, DeepSeek or Custom), its model (each named provider has a default) and key in one setup dialog, and the one switch, the ai gate |
 | **`tool.audit`** | **`tool.audit`**  —  the audit trail on one screen (administrator): read from its end a screen at a time, with filters by time, event, account, user and text, go to a time, follow, the rotated files, and the lines shown saved to a record of **`$HOLD`**; it runs no command |

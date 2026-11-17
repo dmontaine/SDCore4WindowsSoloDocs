@@ -1,7 +1,7 @@
 Title: Installing
 Subtitle: What the installer asks, what it puts where, and the control file for installing many computers.
 
-**The installer is one file, `sd-solo-setup-WS1.1-3.exe`, and it installs for
+**The installer is one file, `sd-solo-setup-WS2.0-0.exe`, and it installs for
 the Windows user who runs it.** Everything goes into that user's profile, in
 `%USERPROFILE%\SDCoreSolo`. Nothing is installed for other users of the
 computer, and there is no Windows service.
@@ -45,7 +45,7 @@ question; otherwise the passwords are asked as for any new installation. See
 
 ### 1. The passwords
 
-Asked in this order, each typed twice:
+Asked in this order, each typed twice, hidden as you type:
 
 | | |
 |---|---|
@@ -56,11 +56,11 @@ Asked in this order, each typed twice:
 **A computer is managed if and only if it has a global password.** Leave it
 blank and no SD Core server manages the computer: it is a database for this
 computer alone, and there is nothing else to choose. Enter one and the computer
-is managed by an SD Core for Linux server — see [Managed computers](15-managed-mode.html).
+is managed by an SD Core for Linux server — see [Managed mode](15-managed-mode.html).
 
-**Whether there is a global password is fixed at installation.** Nothing
-creates or clears one afterwards; the server can change an existing one with
-`set.password global`. To add one to a computer that has none, install again as
+**Whether the computer has a global password cannot be changed later except by
+a new installation**: no command creates or removes one, and only a session the
+server signs in with can change it (`set.password global`). To add one to a computer that has none, install again as
 described under *Changing any of it afterwards*. An upgrade never adds, changes
 or removes it.
 
@@ -245,7 +245,7 @@ only what it gives; its presence does not make a computer managed.
 | `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade always asks |
 | `start=` | `menu` (the home screen) or `terminal` (the command prompt): where new sessions start (see *Where sessions start* above). Blank: the installer asks. Used on a new installation only; an upgrade keeps what the installation has |
 | `viewer=` | `none`, or the name of a PDF reader to allow for `pdf` (see *PDF reader* above), such as `msedge`; it must pass `set.viewer`'s test. Blank: the installer asks when it finds a known reader. Used on a new installation only |
-| `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed computers](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
+| `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed mode](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
 
 **The account password is deliberately not in it.** With a global password, the
 user sets the account password **the first time they run `sd-solo` at that
@@ -294,12 +294,15 @@ report, and ends each with a verdict.
 | Whether there is a global password | uninstall and choose **Keep**, then install again with a control file that gives the passwords (`admin-password=`, and `global-password=` filled in or left blank), and reload your saved data: the passwords it gives replace the kept ones. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) |
 | The API or ssh choices | the same — uninstall (Keep), install again and answer the API and ssh questions. Or change the firewall and `sd.conf` by hand |
 | The passwords | `set.password`, `set.password admin`, and on a managed computer `set.password global` from the server. See [The account and its passwords](05-account-types.html) |
-| Your PATH | `APPEND.SD.PATH`. See [Administrator commands](06-administrator-commands.html) |
+| Your PATH | `append.sd.path`. See [Administrator commands](06-administrator-commands.html) |
 
-**Installing over a working installation is an upgrade**, and asks nothing.
-See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
+**Installing over a working installation is an upgrade**, and asks one question,
+*Shell and OS access*. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 ## Continued in
 
 [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) —
-installing a new release over an existing one, and taking SD off the computer.
+upgrading an existing installation, and uninstalling.
+
+[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html)
+— what Solo leaves out, adds and does differently.

@@ -10,7 +10,7 @@ are shown here in lower case. In the tables, *italics* mark something you supply
 and **bold** marks a word typed as it stands; braces mark an optional part.
 
 > **Every listing on this page was produced by running it**, on SD Core for
-> Windows W1.0-0, in an account with the full VOC. The file being queried is `voc`,
+> Windows, in an administrator account. The file being queried is `voc`,
 > because it is the one file every account has.
 
 ## The one thing to understand first
@@ -118,10 +118,12 @@ select.dir C:/Users/pat/reports
 ```
 
 There is no option to keep only files or only directories. The directory is read
-**as you**, with the permissions of the Windows user the session runs as. A directory
-that cannot be read is *Cannot read directory* and the
-pathname; a missing pathname is *Directory pathname required*. A `to` with no
-number, or a bad one, is *Select list number missing or invalid*.
+**as you**, with your own permissions. A path outside the account's own directory
+needs the OS switch (`set.os.access os on`), as `oscopy` does; without it the verb
+says *name has no OS access, so a file or directory outside its own account
+cannot be reached by pathname*. A directory that cannot be read is *Cannot read
+directory* and the pathname; a missing pathname is *Directory pathname required*.
+A `to` with no number, or a bad one, is *Select list number missing or invalid*.
 
 ## Numbered lists
 
@@ -307,8 +309,9 @@ does not for union and intersection.
 ## Who has these verbs
 
 **All of them are in every account.** Building, saving and combining lists
-is reading, and nothing on this page changes a record. (`select.dir` reads an
-operating system directory, with the Windows user's own permissions.)
+is reading, and nothing on this page changes a record. `show.list`,
+`sort.list`, `move.list` and `execute.list` are in every account
+too; `execute.list` changes records only if the commands it runs do.
 
 ## See also
 

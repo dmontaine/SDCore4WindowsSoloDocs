@@ -9,15 +9,19 @@ documentation talks about.
 
 **This page is that half of the language.** [SD Basic - Program
 Structure](01-sd-basic-program-structure.html) covers the traditional shape —
-one program, one flat variable space, `gosub` to a label, `call` to a catalogued
+one program, one flat variable space, `gosub` to a label, `call` to a cataloged
 subroutine — and everything here is an alternative to it, not an extension of
 it.
 
-**Everything on this page was compiled and run** on SD Core for Windows W1.0-0
-before it was written down. Where a listing shows an error, that error was
-produced, not composed. The programs are in the documentation repository —
-<https://github.com/dmontaine/SDCore4WindowsDocs> — as
-`tools\probes\p18-class-base.b`, `p18-class.b` and `p18-objects.b`.
+**Everything on this page was compiled and run on SD Core for Windows**
+before it was written down, and not re-verified against this port for
+this fork — `class`/`object` support is `bcomp`'s own shared compiler
+behavior, not something either port implements separately, but that has
+not been confirmed by actually running these probes here. Where a listing
+shows an error, that error was produced there, not composed. The
+programs are in this documentation repository's own `tools/probes/` —
+`p18-class-base.b`, `p18-class.b` and `p18-objects.b` — still exactly as
+copied from SD Core for Windows's docs, unadapted.
 
 ## Scope, and the one thing to get straight first
 
@@ -71,7 +75,7 @@ have never been set.
 gosub tally(3, 4, answer)
 ```
 
-`call` looks in the catalogue. Against a local subroutine it compiles cleanly
+`call` looks in the catalog. Against a local subroutine it compiles cleanly
 and then fails at run time:
 
 ```
@@ -147,8 +151,8 @@ end
 `private` and `public` declare member *variables*; `public subroutine` and
 `public function` declare methods; `get` and `set` declare a property.
 
-A class is catalogued and instantiated like any other program, and **a private
-catalogue is enough** — nothing here needs `admin`:
+A class is cataloged and instantiated like any other program, and **a private
+catalog is enough** — nothing here needs `admin`:
 
 ```
 :basic bp zzcls
@@ -161,7 +165,7 @@ ZZCLS added to private catalogue
 ## Objects
 
 ```
-object(catalogued.name {, arguments})   create an instance
+object(cataloged.name {, arguments})   create an instance
 objinfo(variable, 0)                    1 if the variable holds an object
 objinfo(variable, 1)                    the class name
 variable = ''                           release it
@@ -289,7 +293,7 @@ A variable with no value starts as it always did.
 ## Running a class
 
 A class module with a `main` subroutine can be run from TCL, by its module name or by its
-catalogue name, as a program is:
+catalog name, as a program is:
 
 ```
 class zzcm1
@@ -427,11 +431,11 @@ does.**
 |---|---|
 | **`gosub` label** | a few lines, used once, sharing the program's variables on purpose |
 | **local subroutine or function** | anything with working variables of its own, or that you want to be sure touches nothing else |
-| **catalogued subroutine** | logic more than one program needs |
+| **cataloged subroutine** | logic more than one program needs |
 | **class module** | state that has a lifetime — something opened, held and closed — or several instances of the same thing at once |
 
 ## See also
 
 [SD Basic - Program Structure](01-sd-basic-program-structure.html) ·
 [SD Basic - Program Control](02-sd-basic-program-control.html) ·
-[SD TCL - Programs and the Catalogue](24-sd-tcl-programs-and-the-catalogue.html).
+[SD TCL - Programs and the Catalog](24-sd-tcl-programs-and-the-catalogue.html).

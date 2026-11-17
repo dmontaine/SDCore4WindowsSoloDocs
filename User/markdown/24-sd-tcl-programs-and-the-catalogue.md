@@ -1,17 +1,15 @@
-Title: SD TCL - Programs and the Catalogue
+Title: SD TCL - Programs and the Catalog
 Subtitle: Compiling SD BASIC, running it, and giving it a name you can type.
 
 Getting from source to something you can type is three steps: **compile it, put
-it in a catalogue, then call it by name.** Only the first is compulsory.
+it in a catalog, then call it by name.** Only the first is compulsory.
 
 SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **The listings on this page were produced by running them**, on the
-> multiuser SD Core for Windows W1.0-0, against a two-line program in an
-> account's `bp` file. The commands are the same on Solo; where they differ, the
-> text says so — the global catalogue below is the one place.
+> **Every listing on this page was produced by running it**, on SD Core for
+> Windows, against a two-line program in an account's `bp` file.
 
 ## Compiling
 
@@ -52,7 +50,7 @@ a source record `ZZPROG` compiles to an object record `zzprog`. That is this
 port's naming, and it is worth knowing before you go looking for the object by
 the name you typed.
 
-## Running without cataloguing
+## Running without cataloging
 
 ```
 run {file} record
@@ -69,13 +67,13 @@ ZZPROG OK
 `run` needs the file and record name every time. It is what you use while you
 are still writing the thing.
 
-## The catalogue is what gives a program a name
+## The catalog is what gives a program a name
 
 ```
 catalog {file {call.name}} {program | *} {local | global | pcode} {no.xref}
 ```
 
-Catalogue it and the name becomes a command:
+Catalog it and the name becomes a command:
 
 ```
 catalog bp zzprog
@@ -91,35 +89,35 @@ ZZPROG OK
 read `zzprog hello`, so arguments arrive as typed and the program parses them
 itself.
 
-**A program run by its catalogue name takes `lptr` and `no.page` as `run`
+**A program run by its catalog name takes `lptr` and `no.page` as `run`
 does.** The words stay in the sentence for the program to see. A word in
-quotation marks is not a keyword. This applies to a catalogue name only, not to
+quotation marks is not a keyword. This applies to a catalog name only, not to
 the name of a VOC verb.
 
-### Three catalogues, and they are not the same
+### Three catalogs, and they are not the same
 
 | | |
 |---|---|
 | **private** | the account's own. The default when no keyword is given |
 | **local** | a VOC entry in the account, so the name works only there |
-| **global** | `gcat` in SD's system files — **you can run what is in it, and you cannot add to it** |
+| **global** | `gcat` in the system account — **every account sees it** |
 
-**On Solo nobody can catalogue a program globally from a session, `admin`
-included.** `catalog ... global` is refused, and so is the implicit form — a
-name chosen with a `!`, `_` or `$` prefix rather than by the `global`
-keyword — so the prefix is not a way round it. The global catalogue holds SD's
-own programs; on a managed computer it also holds the programs the SD Core for
-Linux server puts there, and only the server may.
+**Nobody catalogs globally on Solo — `admin` or not.** `catalog ... global` is
+refused with *"The global catalog holds the SD Core server's programs from
+global.bp.out and is changed only by sync.global.catalog"*. **The same refusal
+applies to an implicit global catalog** — one chosen by a `!`, `_` or `$`
+prefix on the call name rather than by the `global` keyword (the `*` and `-`
+prefixes were removed in 2.0-0) — so the prefix is not a way round it. On a managed computer the global catalog is the SD Core
+for Linux server's, and only it can change it — see *Managed mode* in the
+GettingStarted set. Catalog your own programs `private` or `local`.
 
-Private and local cataloguing need none of this and work with no `admin`. You
-may run a globally catalogued program, `call name` from BASIC among them. The
-GettingStarted set's *Managed computers* page says how the server's programs get
-there.
+Private and local cataloging need none of this and work in a programmer's own
+account.
 
 **`catalog ... local` asks before it overwrites.** When the VOC already holds a
-local catalogue pointer under that name and it points at a different object
+local catalog pointer under that name and it points at a different object
 file, you are asked first (Return is no). `no.query` goes ahead without asking,
-and cataloguing the same file again does not ask.
+and cataloging the same file again does not ask.
 
 ### Seeing and removing
 
@@ -149,16 +147,21 @@ delete.catalog name... {global | local}
 ZZPROG deleted from the private catalogue
 ```
 
-**`delete.catalog` of a global entry is refused**, for the same reason as
-cataloguing one.
+> **`map` also takes a `file` option**, which writes the map to a file instead
+> of the screen. **It asks before overwriting** — *"File xx will be cleared and
+> overwritten. Continue (Y/N)?"* — so it is not usable from a script driving SD
+> down a pipe.
+
+### Removing a local entry and its object code: `decatalog`
 
 ```
-decatalog {file} name ...
+decatalog {file.name} name ...
 ```
 
-**`delete.catalog ... local` removes only the VOC entry**, and leaves the object
-code it pointed to lying in the account's object directory. **`decatalog` removes
-both** — the local catalogue entry and the compiled program it names:
+`delete.catalog` *name* `local` removes the VOC pointer that `catalog ... local`
+made, and **leaves the object file where it was**. `decatalog` removes the
+pointer **and the object code it points to**. The file name, which other systems
+need, is accepted and ignored: the pointer holds the pathname of the object code.
 
 ```
 catalog bp zzdocprog local
@@ -170,31 +173,24 @@ zzdocprog added to local catalogue
 zzdocprog deleted from the local catalogue
 ```
 
-Several names may be given. A name that is not in the local catalogue is said so
-(*zzdocprog is not in the local catalogue*) and the rest are still done; an object
-file that cannot be deleted is reported as *Cannot delete the object code* and
-the entry is gone all the same. A file name in front of the program name is
-accepted and ignored, because the entry already holds the object's pathname.
-`decatalog` works on **local** entries only — a private or global catalogue entry
-is removed with `delete.catalog`.
+A name that is not a local entry is *zzdocprog is not in the local catalog* (the
+name as you typed it), and the rest are still done; an object file that cannot be
+deleted is reported as *Cannot delete the object code* and the entry is gone all
+the same. No name at all is *Catalog name required*. It acts on the local catalog
+only; the private and the global catalog are `delete.catalog`'s.
 
-> **`map` also takes a `file` option**, which writes the map to a file instead
-> of the screen. **It asks before overwriting** — *"File xx will be cleared and
-> overwritten. Continue (Y/N)?"* — so it is not usable from a script driving SD
-> down a pipe.
-
-## Which copy will run: `find.program`
+### Where a program is cataloged: `find.program`
 
 ```
 find.program name {detail}
 ```
 
-For the case where the system seems to run the wrong version of a program
-because it is catalogued in more than one place. It looks in the three places a
-program is loaded from, **in the order they are searched** — the local catalogue
-(a VOC entry that points at the object file), the private catalogue (the
-account's `cat` directory, or the directory `$PRIVATE.CATALOGUE` names) and the
-global one — and reports every one that has it:
+For the case where the wrong version of a program seems to run because it is
+cataloged in more than one place. It reports where *name* is, **in the order a
+program is loaded**: the local catalog (a VOC entry that points at the object
+file), the private catalog (the account's `cat` directory, or the directory named
+by `$private.catalogue`) and the global catalog (`gcat` in the system directory),
+and reports every one that has it:
 
 ```
 Program is in the local catalogue
@@ -210,7 +206,7 @@ arguments* or *Class module*. `detail` adds the object code size in bytes and th
 flags of the object (`internal`, `debug`, `recursive`, `trusted`, `case sensitive`,
 `sdcall`). **SD's object code carries no compiler version and no source
 pathname, so those two lines of openQM's `detail` are not there.** A name found
-nowhere is *xx is not catalogued*. The name is looked for as typed; a global
+nowhere is *xx is not cataloged*. The name is looked for as typed; a global
 program is named with its prefix (`!acc_hold`, `$listphan`).
 
 ## Formatting source
@@ -241,6 +237,7 @@ the active select list if there is one.
 |---|---|
 | **`compile.dict local`** | every dictionary in the account |
 | **`compile.dict all`** | every dictionary visible from the account |
+| **`compile.dict data file`** | reads the records of the file's *data* part as if they were dictionary items, and compiles those that look like one: a record whose first character is `I`. Every other record is skipped without a word. It is for the rare file whose data holds items of that kind; on an ordinary data file a record that happens to begin with `I` is reported as a compilation error |
 
 Compiling a dictionary is a performance step, not a correctness one: it is what
 a query using those entries runs against.
@@ -302,17 +299,17 @@ different there. The keys every full-screen page shares are in
 
 | part | what it is |
 |---|---|
-| menu bar | the top row; F10 or Esc opens it, and a click on a title opens that menu (a click on the bar beside the titles does nothing). Its right end says *ide* and who you are, as the toolkit pages do |
+| menu bar | the top row; F10 or Esc opens it, and a click on a title opens that menu (since 19 October 2026; a click on the bar beside the titles does nothing). Its right end says *ide* and who you are, as the toolkit pages do |
 | tree | the account's files on the left (**the entries whose names start with a dollar sign - `$acc`, `$hold`, `$map`, `$release` - are not listed**: they belong to SD itself). Return on a file lists its records (the first 2000, and a message says when there are more), and Return again closes the list. **A file that has a dictionary shows the dictionary as a node of its own under it**, read only when you open it, and its items are listed the same way. Return on a record opens it. A letter jumps to the next entry that starts with it. **With operating system access on (`set.os.access os on`; off as delivered) there is also an *Operating system files* node after the files**: Return on it lists `/`, the root as SD's runtime sees it (a Windows drive is under `/cygdrive`: `C:\` is `/cygdrive/c`), Return on a directory lists its entries (directories first, then files, each in the order of the names; 1000 at most) and again closes it, and Return on a file opens it in a tab, as `path:/full/name` does. Names that hold a control character or a byte from 248 to 255 cannot be shown or put in a path; a message says how many entries were left out. A directory the operating system does not let the session read says so, with the operating system's error number. Without the access there is no node |
 | editor | on the right, a tab for each open record. **While it has the focus the character at the cursor is shown in the highlight style** (as well as the terminal's own cursor being put there), so the place shows on a terminal that draws its cursor poorly. It is the text area `screen memo` uses, so its keys are `memo`'s: selection, cut, copy and paste, undo and redo, find, line numbers. Text is colored as SD BASIC, C, Python, JSON, shell or Markdown, chosen by the name of the file, then the record id, then the first line - so a script with no suffix that begins `#!/bin/sh` is shell - and then the languages a site added in `&sed.syntax&`. **A horizontal scroll bar runs along its bottom row** (`<` and `>` at the ends, a thumb as long as the visible part is of the longest line; none to speak of when every line fits); clicking an arrow scrolls 8 columns and clicking the track a page |
 | table | under the editor: the compiler's errors, or search results |
-| pane marks | **`[*]` or `[-]` in the top right corner of each pane that can have the keyboard**: the files (on the frame above the tree), the editor (on the frame above it), the tab strip (at its right end) and the messages (at the right end of their bar). `[*]` is on the pane that has the keyboard, `[-]` on the others; F6 moves it round in that order |
+| pane marks | **`[*]` or `[-]` in the top right corner of each pane that can have the keyboard** (since 19 October 2026): the files (on the frame above the tree), the editor (on the frame above it), the tab strip (at its right end) and the messages (at the right end of their bar). `[*]` is on the pane that has the keyboard, `[-]` on the others; F6 moves it round in that order |
 | status line | **the pane that has the focus** first, in brackets (`[Files]`, `[Tabs]`, `[Editor]`, `[Messages]`: F6 goes round them in that order, past the messages when there are none), then the record, the cursor's line and column, and a star when there are unsaved changes |
 
 | key | |
 |---|---|
 | F8 · Build, Compile | save and compile; the compiler's lines go in the table. Return on one goes to its line, F4 to the next |
-| Shift-F9 · Build, Compile and catalog | the build: compile and catalogue. *Cataloged* is said only if `catalog` added the program |
+| Shift-F9 · Build, Compile and catalog | the build: compile and catalog. *Cataloged* is said only if `catalog` added the program |
 | F9 · Build, Run | compile and run (F5 draws the screen again, as on every page) |
 | F7 · Build, Debug | compile with debugging and run the debugger. **Shift-F7** (Build, Toggle breakpoint) marks the cursor's line as a breakpoint for it, Build, Clear breakpoints takes the marks away and Build, Debug from the first line stops at line 1: see [SD Basic - Debugging](17-sd-basic-debugging.html) |
 | Ctrl-S · File, Save | save the record (an untitled buffer asks for its file and name first; an unchanged record says *No changes to save*). **Ctrl-S is the only save key**; F2 finds an action, as on every page |
@@ -340,7 +337,7 @@ different there. The keys every full-screen page shares are in
 | Up · Down in a Run a command question | bring back the commands run from either Run a command in this session (twenty) |
 | Build, Run a command at the terminal | for a command that needs the terminal: **the screen is given to the command**, Return brings the IDE back with the tabs as they were. A command that aborts gives the IDE back too. A record the command changed is not read again by the tab that holds it |
 | Build, Run with arguments | asks for the words to put after the program's name, then compiles and runs it as Run does (`run bp prog words`); the program reads them with `SENTENCE()` |
-| Saving a record | when a subroutine `source.control` is catalogued, every save calls it before the write, as `ed` does: it can refuse the write or change the record |
+| Saving a record | when a subroutine `source.control` is cataloged, every save calls it before the write, as `ed` does: it can refuse the write or change the record |
 | Alt-= · View, Character code | the code of the character at the cursor, its name when it is a control character, and its field, value and subvalue, on the status line |
 | View, Syntax color · View, Line numbers | switch the color and the line numbers off for every tab, and on again |
 | View, Mouse | stops the terminal reporting the mouse, and starts it again; while it is off a click does nothing and the terminal's own selection works. Every command has a key or a menu entry, so nothing needs the mouse |
@@ -369,7 +366,7 @@ starts on the record id. If a record of that name
 already exists, **the form says so and stays open** for you to correct it; Esc leaves it and nothing is
 written. A new record or an untitled buffer is not written until you save it, and Compile, Catalog,
 Run and Edit as fields on an untitled buffer name and save it first - so a program can be typed,
-compiled, fixed, saved and catalogued without leaving the IDE. **The write is made under the record's
+compiled, fixed, saved and cataloged without leaving the IDE. **The write is made under the record's
 lock**, and if the file refuses it (a trigger, a full disk) the IDE says so and your text stays in the
 editor. **Catalog reports "Cataloged"
 only if `catalog` said it added the program**; otherwise its answer is shown in a box. In the editor the
@@ -648,7 +645,7 @@ It is shown as it is, with the marks drawn as the characters they are, and the s
 file looks at the real records, and replace works on the real record, so neither matches a token;
 the item mark is not converted.
 
-**The AI in the IDE.** When the AI is on (see
+**The AI in the IDE** (since 24 October 2026). When the AI is on (see
 [Asking the AI](29b-sd-tcl-asking-the-ai.html)) the IDE has an **AI** menu before Help and an
 **`AI>`** row under the editor and the messages table (the table is one row shorter); without the AI
 neither is there and nothing else changes. F6 goes round the panes to the AI row (Shift-F6 the other
@@ -753,11 +750,13 @@ program in a phantom process"*. The debugger itself is covered in
 
 ## Who has these verbs
 
-**Your account has all of them**: `format`, `list.common`, `basic`,
-`catalog`, `compile.dict`, `debug`, `delete.catalog`, `delete.common`, `find.program`, `generate`, `map`, `run`.
+**Every account has all of them now**: `format`, `list.common`, `basic`,
+`catalog`, `compile.dict`, `debug`, `decatalog`,
+`delete.catalog`, `delete.common`, `find.program`,
+`generate`, `ide`, `map`, `run`.
 
-**Running a catalogued program never needed any of these anyway** — a
-catalogued name runs by being typed, with no VOC record of its own — so an
+**Running a cataloged program never needed any of these anyway** — a
+cataloged name runs by being typed, with no VOC record of its own — so an
 application deployed this way was always reachable regardless of what
 verbs an account had.
 

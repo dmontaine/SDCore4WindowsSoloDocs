@@ -35,8 +35,8 @@ read what actually happened.
    `update.accounts`, because an upgrade replaces the shipped VOC records but
    does not rebuild the account's own;
 5. removes the system programs' source from the VOC and, where there is a
-   global password, makes the global catalogue match `global.bp.out` again after an upgrade has
-   replaced the catalogue;
+   global password, makes the global catalog match `global.bp.out` again after an upgrade has
+   replaced the catalog;
 6. stops SD, so that the scheduled task — which the next script registers —
    starts it and owns it.
 

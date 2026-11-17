@@ -44,6 +44,27 @@ end
 ends, so `close` matters mainly in a long-running program that opens files in a
 loop.
 
+### A temporary file
+
+```
+opentemp {pathname} {non.transactional} to file.variable
+   then statements
+else statements
+```
+
+`opentemp` makes a new dynamic file and opens it; **the file is deleted when the
+file variable is closed** (or goes out of scope). With no pathname, or a null
+string, SD makes the file in its temporary directory (the `TEMPDIR` setting;
+`system(38)` names it) under a name built from the process number and a counter.
+A name that already exists is refused — `else` is taken — never taken over. A temporary file's updates are never part of
+a transaction, so that closing it really deletes it, and a session that is killed
+leaves its file behind.
+
+**It needs the operating system access of `openpath`** (`set.os.access os on`):
+both the temporary directory and a pathname you give lie outside the account's own
+directory. Without the access `opentemp` works only with a name inside the
+account's own directory, and takes `else` for the others.
+
 ### Flushing the file cache
 
 ```
@@ -111,6 +132,11 @@ There is no "insert only" form — read first if that distinction matters, and
 hold a lock between the read and the write or two sessions will both find it
 absent.
 
+`delete file.variable, record.id` removes a record. After
+`delete f, 'R2'`, reading `R2` takes the `else` branch.
+
+`clearfile file.variable` empties the file but leaves it in place.
+
 ### Letting the file number its records: `creating.seqkey`
 
 ```
@@ -131,7 +157,7 @@ sets the next id (`next query` shows it).
 **An id that already names a record is skipped.** Before it uses an id, `write ... creating.seqkey`
 looks in the file: if a record is already there (written by a copy, by a load, or by a program that
 chose its own numbers) it takes the next id instead, so that record is never overwritten. **This is
-SD's behaviour, not openQM's** - openQM does not look, and its manual tells the programmer to write
+SD's behavior, not openQM's** - openQM does not look, and its manual tells the programmer to write
 every record of the file this way. The skipped numbers leave gaps. In a transaction only the records
 already committed to the file are looked at; an id this process took earlier is never given out twice.
 **`clear.file` keeps the counter**, so the ids go on from where they were; `configure.file`
@@ -172,24 +198,6 @@ qualifier may be left out where the action does not use it. The internal program
 ordinary programs. On a file reached through an `N` pointer to another SD server the call goes to
 that server, which decides whether to allow it ([SDNet - Administering a Remote File](42a-sd-sdnet-administration.html)).
 
-### Forced writes: `sync`
-
-A file that must survive a power failure can be told to write to disk as it goes. Without it SD, like any
-program that writes files, leaves data in the operating system's cache for a short while.
-
-```
-open 'LEDGER' to f.ledger sync else stop 'cannot open'
-openpath 'C:/data/ledger' to f.ledger sync else stop
-x = fileinfo(f.ledger, FL$SYNC)          ;* 1 if this open has it on
-x = fcontrol(f.ledger, FC$SYNC, 1)       ;* or turn it on, or off, for a file already open
-```
-
-With the state on, every write and delete flushes the primary and the overflow subfiles before the
-statement returns. The `S` flag in field 6 of the file's VOC entry (an `F` entry) gives the same state to every
-`open` of it, and bit 4 of the `FSYNC` parameter in `sd.conf` gives it to every hashed file. **It is much slower: a write costs a disk flush, so use it on the
-files that need it and not on all.** It protects the file you flagged and nothing else on the machine, and a file
-that is not hashed (a directory file) does not take it.
-
 ### Line terminators: `fcontrol` `FC$CRLF` and the letters `L C B X`
 
 A directory file record is a file of text, and a field mark in a record is a line end on the disk. What counts as a line end
@@ -209,7 +217,7 @@ open file starts in the mode its VOC entry names with one of the letters in fiel
 ignores them), and `fcontrol(f, FC$CRLF, mode)` changes it for that file variable only. **A file with no letter and no
 `fcontrol` behaves as it always has here:** a `read` ends a line at CR LF or LF and keeps a lone CR, a `write` ends it with
 CR LF, a `readseq` ends a line at LF and drops a CR in front of it, a `writeseq` adds CR LF. So a program that never asks
-changes nothing. **That behaviour is none of the four modes**, so `fcontrol(f, FC$CRLF, -1)` on such a file gives the number
+changes nothing. **That behavior is none of the four modes**, so `fcontrol(f, FC$CRLF, -1)` on such a file gives the number
 SD Core for Linux gives, 0 for a directory file and 2 for a sequential file, which is not exactly what this port does; setting
 a mode makes the file follow the table. The modes are for a directory that another system's tools write: a CRLF file read in
 mode 2 or 3 has no stray CR on each line (it has one on every line in mode 0), and a file read in mode 1 can hold an LF inside
@@ -223,10 +231,23 @@ was = fcontrol(f.in, FC$CRLF, FC$CRLF.NOCR)   ;* was = 0, the number for a file 
 read rec from f.in, 'from.linux' then ... else ...
 ```
 
-`delete file.variable, record.id` removes a record. After
-`delete f, 'R2'`, reading `R2` takes the `else` branch.
+### Forced writes: `sync`
 
-`clearfile file.variable` empties the file but leaves it in place.
+A file that must survive a power failure can be told to write to disk as it goes. Without it SD, like any
+program that writes files, leaves data in the operating system's cache for a short while.
+
+```
+open 'LEDGER' to f.ledger sync else stop 'cannot open'
+openpath 'C:/data/ledger' to f.ledger sync else stop
+x = fcontrol(f.ledger, FC$SYNC, 1)       ;* or turn it on, or off, for a file already open
+x = fileinfo(f.ledger, FL$SYNC)          ;* 1 if this open has it on
+```
+
+With the state on, every write and delete flushes the primary and the overflow subfiles before the
+statement returns. The `S` flag in field 6 of the file's VOC entry (an `F` entry) gives the same state to every
+`open` of it, and bit 4 of the `FSYNC` parameter in `sd.conf` gives it to every hashed file. **It is much slower: a write costs a disk flush, so use it on the
+files that need it and not on all.** It protects the file you flagged and nothing else on the machine, and a file
+that is not hashed (a directory file) does not take it.
 
 ## Locking
 
@@ -278,7 +299,7 @@ indefinitely with no message. **Any interactive read-for-update should have
 one.**
 
 `filelock` and `fileunlock` lock a whole file, and `lock` / `unlock` take one
-of 64 numbered general-purpose semaphores — used to serialise something that is
+of 64 numbered general-purpose semaphores — used to serialize something that is
 not a record at all, such as a report run.
 
 **The rest of this is its own page.** What the other session sees, what every

@@ -1,38 +1,46 @@
 Title: Other hardening
-Subtitle: The global catalogue, the pcode library, the logs, line endings, the terminal, and the rest of the smaller changes.
+Subtitle: The global catalog, the pcode library, the logs, line endings, the terminal, and the rest of the smaller changes.
 
 Everything on this page is a change you may notice while testing, grouped by
 what it touches. The passwords and what each one guards are on
 [Security](12-security.html); this is the remainder.
 
-## The global catalogue
+## The global catalog
 
-**Nobody can add to or remove from the system-wide catalogue from a session —
-`admin` and the account password do not change that.** The global catalogue
-holds the programs SD runs for everybody, `$login` among them; on a managed
-computer it also holds the SD Core for Linux server's programs, and only the
-server puts them there. See [Managed computers](15-managed-mode.html).
-
-**Refused, for every session:**
-
-| | |
-|---|---|
-| `catalog bp myprog global` | the spelled-out form |
-| `catalog bp myprog` with a name beginning `!`, `_` or `$` | the same thing, spelled with a prefix |
-| `delete.catalog` of a global entry | |
-
-**Nothing changes for local and private cataloguing**, which is what
-programmers use day to day:
+**Nobody changes the global catalog in a session** — not with `admin`, not with
+the global password. `catalog ... global`, and `delete.catalog` of a name that is
+global (a name starting `!`, `_` or `$`), are refused, and so is a program's
+own `write`, `delete` or `clear` of `global.bp.out` and `gcat`:
 
 ```
-catalog bp myprog          private catalogue
-catalog bp myprog local    your VOC
+:catalog bp myprog global
+The global catalog holds the SD Core server's programs from global.bp.out and is changed only by sync.global.catalog
 ```
 
-Both work, and need no `admin`. The only thing you cannot do is catalogue a
-program whose name starts with `!`, `_` or `$` — those characters mean
-*system-wide*. Name it without one. You may **run** a globally catalogued
-program.
+This matters because the global catalog holds the programs SD runs for
+everybody, `$login` among them. **Replacing one runs your code in every session,
+and deleting one stops everybody signing in.** In the multiuser product `admin`
+was enough to overwrite SD's own `$` and `!` programs; here it is not.
+
+**On a managed computer the catalog is the server's**, made from the compiled
+programs the server puts in `global.bp.out` and kept in step by
+`sync.global.catalog`, which only a session signed in with the global password
+can run. See [Managed mode](15-managed-mode.html). **On a computer with no
+global password the global catalog is only SD's own** and `sync.global.catalog`
+says there is nothing to manage.
+
+**Nothing changes for local and private cataloging**, which is what programmers
+use day to day:
+
+```
+catalog bp myprog          private catalog, this account
+catalog bp myprog local    this account's VOC
+```
+
+Both still work, and neither offers to remove a same-named global entry any
+more. The only thing you cannot do is catalog a program whose name starts with
+`!`, `_` or `$` — those characters mean *global*. Name it without one. You may
+**run** a globally cataloged program.
 
 ## The pcode library
 
@@ -53,7 +61,7 @@ has its own page: **[Scheduled jobs](04-scheduled-jobs.html)**.
 
 ## The logs
 
-There are two, and they are not interchangeable.
+There are two SD keeps itself, and they are not interchangeable.
 
 | File | Where | For |
 |---|---|---|
@@ -66,7 +74,7 @@ Every accepted API connection adds a line naming the Windows process and
 account at the other end:
 
 ```
-API connection from 127.0.0.1:59314 - pid 11448, ACE\don
+API connection from 127.0.0.1:59314 - pid 11448, DESKTOP-1\sam
 ```
 
 **Nothing is refused on the strength of it.** This records who connected; it
@@ -85,16 +93,18 @@ normally.
 
 ### Two things about error-log trimming
 
-**`ERRLOG` applies to these lines too.** The background daemon writes an entry
-per connection, and it discards the oldest part of the log on reaching the
-`ERRLOG` size in `sd.conf`. **If you have set `ERRLOG` unusually large,
-consider what an entry per connection adds to it.**
+**`ERRLOG` now applies to these lines too.** The background daemon used to
+append without ever trimming — it only wrote at start-up and on failure, so it
+never grew. Now that it writes per connection, it discards the oldest part of
+the log on reaching the `ERRLOG` size in `sd.conf`. **If you have set `ERRLOG`
+unusually large, consider what an entry per connection adds to it.**
 
 **After the log is trimmed, its first line may have no timestamp.** An entry
 is two lines — a timestamped header and the message indented below it — and
 trimming restarts the file at a **line**, not at an entry, so the first message
 can be left without its header. **This is not damage** and no entry after it is
-affected.
+affected. SD has always trimmed this way; it is only visible now because the log
+turns over more often.
 
 ## Line endings
 
@@ -137,7 +147,7 @@ reads either, so this is untidy rather than a problem.
 
 ## The terminal
 
-**The default terminal type is `WINDOWS`.** `TERM` on its own should say
+**The default terminal type is now `WINDOWS`.** `TERM` on its own should say
 `Device : windows`.
 
 **THE ARROW KEYS DID NOTHING in cmd, PowerShell or Windows Terminal** on
@@ -168,41 +178,44 @@ a definition that is not there.
 
 **Backspace works**, at the prompt and when you are asked for a password.
 
-### The page is 120 × 36, not 80 × 24
+### The page is 140 × 43, not 80 × 24
 
-**SD's default terminal size is 120 columns by 36 lines.** It is not a
-cosmetic default: the shipped `@` dictionary records and the default `list`
-report layouts are formatted for 120 columns. **A console window narrower than
-that makes ordinary reports look wrapped or truncated**, which reads as a
-formatting bug and is not one.
+**SD's default terminal size is 140 columns by 43 lines** (it was 120 by 36
+in earlier builds). **A console window narrower than that
+makes wide reports look wrapped or truncated**, which reads as a formatting bug
+and is not one. SD's own full-screen programs (`sed`, `ced`, `ide`, the home
+screen) want at least 140 columns by 43 lines and refuse a smaller window.
 
 `term` reports the size in force, above the `Device` line:
 
 ```
 :term
-Page width: 120
-Page depth: 36
+Page width: 140
+Page depth: 43
 Device    : windows
 ```
 
 **The size is worked out at login**, in this order: the `LINES` and `COLUMNS`
 environment variables if they are numeric, otherwise the terminfo entry's
-`lines` and `cols`, **otherwise 36 and 120** — then raised to a minimum of
+`lines` and `cols`, **otherwise 43 and 140** — then raised to a minimum of
 10 × 20 if smaller. So a console or ssh session normally gets its real window
-size and 120 × 36 is the fallback when nothing answers, which is the case for a
+size and 140 × 43 is the fallback when nothing answers, which is the case for a
 phantom or a piped script.
 
 > **`term default` restores it, and it prints nothing when it does.** It sets
-> the same 120 × 36 the login path falls back to and returns silently, so run a
-> bare `term` after it to see the result. `term 120,36` does the same by hand.
+> the same 140 × 43 the login path falls back to and returns silently, so run a
+> bare `term` after it to see the result. `term 120,36` does the same by hand
+> for the old size.
 
 ## Paths
 
-**A Windows path typed at the command prompt is not cut off at the first
-backslash.** `C:\Data\Sales` is read as the whole path, not as `C:` with the
-rest treated as a second, separate thing.
+**A Windows path typed at the command prompt is no longer cut off at the first
+backslash.** Typing `C:\Data\Sales` was read as just `C:`, with the rest
+treated as a second, separate thing. A command that is given a folder was the
+most likely to show it — the work went to the wrong place, or the command failed
+for a reason that made no sense from what you had typed.
 
-Forward slashes always worked and still do. **Both are read the same way.**
+Forward slashes always worked and still do. **Both are now read the same way.**
 
 ## PowerShell execution policy — leave it alone
 

@@ -24,7 +24,7 @@ choose one now:
 This account has no password yet. Choose one now - SD Core Solo for Windows asks for it every time it is used.
 ```
 
-The sign-on banner names the product and its version, `WS1.1-3`.
+The sign-on banner names the product and its version, `WS2.0-0`.
 
 ## 2. Look around
 
@@ -44,8 +44,18 @@ term
 `term windows` for this session and see
 [Other hardening](13-hardening.html#the-terminal).
 
-**`term` also reports the page size, and SD's default is 120 × 36 — not
-80 × 24.**
+**`term` also reports the page size, and SD's default is 140 × 43 — not
+80 × 24.** **A console window narrower than that makes ordinary reports look
+wrapped or truncated** and the report is not at fault. SD's own full-screen
+programs (`sed`, `ced`, `ide`, the home screen) want a window of at least 140
+columns by 43 lines, **which is the size SD's own window starts at**: SD always
+runs in a window of its own, whether from the Start Menu or typed at a prompt
+(see [Running SD](03-running-sd.html)). For full screen, press **Alt+Enter** (in
+SD's window F11 goes to SD). If a report still looks cramped, widen the window,
+or set it for the session with `term default` — which puts the 140 × 43 back and
+prints nothing while doing it, so check with a bare `term` afterwards.
+`term 140,43` is the same thing typed out. See
+[Other hardening](13-hardening.html#the-terminal).
 
 ## 3. Make a file and put something in it
 
@@ -54,10 +64,13 @@ create.file customers
 ed customers 1001
 ```
 
-**`ed`** is the **line** editor. If you would rather have a full screen,
-**`edit`** opens the same record in Microsoft Edit and **`micro`** opens it in
-micro; both come with SD. See
-[Development and file commands](07-programmer-commands.html#editors).
+**`ed`** is the **line** editor, and it needs nothing installed. If you would
+rather have a full screen, **`edit`** opens the same record in Microsoft Edit and
+**`micro`** opens it in micro; both come with SD. See
+[Development and file commands](07-programmer-commands.html#editors). The old
+full-screen editors `update.record` and `modify` are gone; `sed` is back, and
+runs inside SD with no operating-system permission — see *The SED Screen Editor*
+in the User set, and [Not in SD Core](14-not-in-sd-core.html).
 
 In **`ed`**: `i` to insert, type your lines, a full stop on its own line to stop
 inserting, then `fi` to file and exit.
@@ -71,7 +84,8 @@ inserting, then `fi` to file and exit.
 > ```
 >
 > Save the file, then **`basic`** and **`catalog`** it from inside SD as usual.
-> SD folds CR+LF line endings on the way in — see
+> SD folds CR+LF line endings on the way in, so a Windows editor's output needs
+> nothing done to it — see
 > [Other hardening](13-hardening.html#line-endings).
 
 ```
@@ -79,8 +93,8 @@ list customers
 count customers
 ```
 
-**Commands are lower case now.** Typing `LIST` still works — SD tries what you
-typed, then lower case, then upper. See [Lower case](11-lower-case.html).
+**Commands are lower case now**, and so are the VOC records behind them. Typing
+`LIST` still works — SD tries what you typed, then lower case, then upper. See [Lower case](11-lower-case.html).
 
 **THIS IS THE POINT AT WHICH MOST THINGS SHOULD FEEL LIKE OpenQM.** If
 anything in ordinary data work behaves differently and is not described in this
@@ -104,7 +118,7 @@ admin
 
 Type the administrator password — or, on a managed computer, the global
 password — and `listu` works, and so does every other administrator command,
-until you leave. See [Administrator commands](06-administrator-commands.html).
+until you type `admin off` or leave. See [Administrator commands](06-administrator-commands.html).
 
 ## 5. Leave
 
