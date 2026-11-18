@@ -163,7 +163,7 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-fire
 Exit **0** applied, **1** failed, **2** refused (for example, not elevated).
 `-Show` changes nothing and needs no elevation. `-Open` allows any address,
 `-Restrict` this computer only. **The rule is the second wall**: Solo's ssh server set to `local`
-listens on `127.0.0.1` only, so `-Open` alone lets nobody else in; `remote.ssh open` in SD changes
+listens on `127.0.0.1` and `::1` only, so `-Open` alone lets nobody else in; `remote.ssh open` in SD changes
 both (see [ssh access](08-ssh-access.html)). The port is always 4251; the script takes no
 port.
 

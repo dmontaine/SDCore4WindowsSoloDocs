@@ -154,22 +154,23 @@ administrator has turned it on (`set.os.access sh on`) — see
 
 | | |
 |---|---|
-| **`local`** | the listener is `127.0.0.1:4251`: `ssh -p 4251 you@127.0.0.1` works, nothing else can connect. Unticked, or `ssh=local` in the control file |
-| **`open`** | the listener is `0.0.0.0:4251` (every IPv4 address, none on IPv6), and the firewall rule lets other computers in. The box **Let other computers on your network connect to this one over ssh (port 4251)**, or `ssh=open` |
+| **`local`** | the listener is `127.0.0.1:4251` and `[::1]:4251`: `ssh -p 4251 you@localhost` works, nothing else can connect. Unticked, or `ssh=local` in the control file |
+| **`open`** | the listener is `0.0.0.0:4251` (every IPv4 address) and `[::1]:4251` (IPv6 for this computer only), and the firewall rule lets other computers in. The box **Let other computers on your network connect to this one over ssh (port 4251)**, or `ssh=open` |
 | **A managed computer** | needs it open, because the SD Core for Linux server connects from elsewhere. Nothing opens it for you |
 
 **Two walls, not one.** The listen address is the first: for `local` the server answers on
-`127.0.0.1` only, so another computer finds nothing on port 4251 whatever the firewall says. The
-firewall rule for port 4251 is the second: limited to `127.0.0.1` for `local`, any address for
-`open`. The listen address is the `ListenAddress` line of `C:\ProgramData\SDCoreSolo\ssh\sshd_config`.
-**An upgrade keeps what you had**: an ssh server that was open stays open; one from an earlier
-release that answered every address behind a rule for this computer only answers on `127.0.0.1` after it.
+`127.0.0.1` and `::1` only, so another computer finds nothing on port 4251 whatever the firewall
+says. The firewall rule for port 4251 is the second: limited to `127.0.0.1` for `local`, any
+address for `open`. The listen addresses are the `ListenAddress` lines of
+`C:\ProgramData\SDCoreSolo\ssh\sshd_config`. **An upgrade keeps what you had**: an ssh server that
+was open stays open; one from an earlier release that answered every address behind a rule for this
+computer only answers on `127.0.0.1` and `::1` after it.
 
-**Use `127.0.0.1` rather than `localhost` for a connection from this computer**:
-Windows' ssh client tries the IPv6 address first and does not fall back to
-IPv4, and Solo's ssh server does not listen on IPv6. `ssh -p 4251 you@127.0.0.1`
-works for `local` and `open`, because Windows does not filter traffic that never
-leaves the computer.
+**Why `::1` in both modes.** Windows' ssh client tries `localhost` at its IPv6 address, `::1`,
+first, and when nothing answers there it gives up without trying `127.0.0.1`. So Solo's ssh server
+listens on `::1` as well, and `ssh -p 4251 you@localhost` and `ssh -p 4251 you@127.0.0.1` both work
+for `local` and `open`. It does not listen on any other IPv6 address, so `open` lets other computers
+in over IPv4 only. (SD Core Solo for Linux has no `::1` listener; Linux's ssh client falls back.)
 
 **The rule is Solo's own, named `SD-Solo-SSH-In-TCP`**, and creating it needs an
 administrator: a firewall rule is machine-wide. The uninstaller removes it.

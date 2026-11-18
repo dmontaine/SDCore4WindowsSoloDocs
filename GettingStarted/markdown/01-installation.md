@@ -79,7 +79,7 @@ Asked on every new installation, whether or not there is a global password.
 | **Provide the SD Core API (port 4249)** | starts the API listener. Off by default |
 | **Let other computers on your network reach it** | opens port 4249 in Windows Firewall. Without it the API answers this computer only |
 | **Provide Solo's ssh server (port 4251)** | shown when an OpenSSH server is already installed. On by default. Unticked, Solo has no ssh server |
-| **Let other computers on your network connect to this one over ssh (port 4251)** | Solo's ssh server listens on every IPv4 address (`0.0.0.0`) and its own firewall rule for port 4251 is open to the network. Without it, the server listens on `127.0.0.1` only and answers this computer only |
+| **Let other computers on your network connect to this one over ssh (port 4251)** | Solo's ssh server listens on every IPv4 address (`0.0.0.0`) and on `::1`, and its own firewall rule for port 4251 is open to the network. Without it, the server listens on `127.0.0.1` and `::1` only and answers this computer only |
 | **Install the OpenSSH server** | shown when no ssh server is installed. Installs the MSI from `ssh-server\` and sets up Solo's own ssh server. Off by default |
 | **Let other computers on your network connect to this one over ssh (port 4251)** | the same, for the box above |
 

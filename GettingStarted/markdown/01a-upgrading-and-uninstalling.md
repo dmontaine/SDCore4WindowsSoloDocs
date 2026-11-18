@@ -45,7 +45,7 @@ with a verdict. The startup task is registered again. So is the ssh task
 only where Solo's ssh server is already set up: an upgrade never turns ssh on
 for a computer that chose none. An existing firewall rule is not touched. **Solo's ssh server
 keeps its reach**: one that was open (its rule open to other computers) listens on every IPv4
-address, `0.0.0.0`; any other listens on `127.0.0.1` only from this release on (an earlier
+address, `0.0.0.0`, and `::1`; any other listens on `127.0.0.1` and `::1` only from this release on (an earlier
 release listened on every address and left the firewall rule to keep other computers out).
 
 **Upgrading from a release before WS1.1-3 changes how ssh works**, and does it
