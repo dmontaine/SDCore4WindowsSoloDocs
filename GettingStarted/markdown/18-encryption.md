@@ -53,7 +53,7 @@ the machine's.
 process, `sdpy.exe`, not a library inside `sd-solo.exe` — the two cannot
 safely share a process (`long` is a different width on each side of the MSYS2
 boundary). `SDPYFUNC.H` and its twenty-one `PY_*` functions are documented in
-full in the User set's *SD BASIC - Python Integration* chapter. A session may
+full in the User set's *Embedded Python* chapter. A session may
 start the helper only when the operating system switch is on, as for `SH` and
 `OS.EXECUTE` — see [Operating system access](06b-operating-system-access.html).
 

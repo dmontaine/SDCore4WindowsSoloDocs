@@ -97,7 +97,7 @@ the API and ssh. With either off, or open to this computer only, the server
 cannot reach the computer until the choice is changed. An administrator who
 sets up many computers gives these two answers in the control file.
 
-### 3. Shell and OS access — on a new installation and on an upgrade
+### 3. Shell and OS access — on a new installation only
 
 A page of its own, **Shell and OS access**, with two boxes, both unticked:
 
@@ -113,13 +113,12 @@ at the keyboard, over ssh or through the API — do what your Windows user can
 do**: read [Operating system access](06b-operating-system-access.html) before
 ticking one.
 
-**An upgrade asks the same page.** A Solo from before 2.0-0 had its shell and
-OS access always on, so an existing Solo would otherwise lose them without a
-word; tick each you want to keep. Unticked, an upgrade turns nothing on, and the
-switches stay as the account's record has them (off, unless an earlier
-`set.os.access` turned one on). A silent installation, which shows no page, turns
-nothing on either. The installer writes the answer with `set.os.access`, reads
-both switches back, and says what they are in `install-summary.log`.
+**An upgrade does not show this page.** It keeps the switches the installation
+has (off, unless an earlier `set.os.access` turned one on), so it neither shuts
+what the administrator opened nor opens what was shut. A silent installation,
+which shows no page, turns nothing on. On a new installation the installer
+writes the answer with `set.os.access`, reads both switches back, and says what
+they are in `install-summary.log`.
 
 ### 4. Where sessions start — on a new installation only
 

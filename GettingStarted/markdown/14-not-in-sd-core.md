@@ -147,7 +147,7 @@ is the `os` switch, off as delivered and turned on by the administrator with
 `set.os.access` — see [Operating system
 access](06b-operating-system-access.html). All
 twenty-one functions, their arguments and their error codes are in the User
-set's *SD BASIC - Python Integration* chapter.
+set's *Embedded Python* chapter.
 
 ## Field-level encryption
 

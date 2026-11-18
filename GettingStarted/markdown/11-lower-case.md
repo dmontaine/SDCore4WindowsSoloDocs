@@ -71,6 +71,18 @@ a record under an older upper-case spelling, `update.accounts` adds the
 lower-case one beside it, so you may hold both. That is harmless — they
 dispatch to the same programs.
 
+**An upgrade converts the files you already had** to case-insensitive record
+ids, and leaves what it cannot convert safely: a file with two ids that differ
+only by case, an indexed file, and a file under SDSYS that your VOC names (SDSYS's
+own files are made new by the install). Solo has one user who owns every file, so
+a file your VOC names outside the account is converted too. The installer runs
+this step (`upgrade_nocase`) after the compile, and writes everything it did to
+`nocase-upgrade.log` in the Solo folder, naming each file it left. When it left
+any, the install report in `install-summary.log` says **WARNING** and names that
+log; convert each such file yourself with `configure.file` and `no.case`, after
+resolving the two ids that differ only by case. A step that does not finish is
+reported as a failure, not a warning.
+
 ## A related refusal that no longer depends on case
 
 **`delete.file`**'s refusal to delete `voc` and `$acc` no longer depends on the

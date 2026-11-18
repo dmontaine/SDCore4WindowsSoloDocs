@@ -8,12 +8,11 @@ This page continues [Installing](01-installation.html).
 **Run the new installer while the old release is installed.** It recognizes
 the installation and upgrades it. It asks no passwords and no API or ssh
 choices — and it keeps them all. It never adds, changes or removes the global
-password. **It asks one question: *Shell and OS access*.** A Solo from before 2.0-0
-had its shell and OS access always on; now they are off unless the administrator
-turns them on, so an upgrade asks which you want to keep, with both boxes
-unticked (see [Installation](01-installation.html)). Unticked, nothing is turned
-on and nothing already turned on is turned off. A silent upgrade shows no page
-and turns nothing on.
+password. **It does not show the *Shell and OS access* page**: an upgrade keeps
+the shell (`sh`) and OS access (`os`) switches the installation has, so it
+neither shuts what the administrator opened nor opens what was shut (see
+[Installation](01-installation.html)). The administrator changes them later
+with `admin`, then `set.os.access`.
 
 **SD is stopped first**, because an upgrade replaces `sd-solo.exe`. It starts again
 at the next Windows start-up, or with `sd-solo -start` (see

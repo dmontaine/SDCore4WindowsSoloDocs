@@ -16,7 +16,7 @@ only what it gives; its presence does not make a computer managed.
 | `api=` | `off`, `local` (this computer only) or `open` (other computers too) |
 | `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer |
 | `reload-data=` | `yes` or `no`, where the folder holds data kept by an earlier uninstall: reload it, or start clean (the kept data is moved aside, never deleted). Blank: the installer asks, or reloads when the file answers everything else too. Where nothing is kept it does nothing, so one file can say it for every computer |
-| `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade always asks |
+| `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade keeps the switches the installation has |
 | `start=` | `menu` (the home screen) or `terminal` (the command prompt): where new sessions start (see *Where sessions start* above). Blank: the installer asks. Used on a new installation only; an upgrade keeps what the installation has |
 | `viewer=` | `none`, or the name of a PDF reader to allow for `pdf` (see *PDF reader* above), such as `msedge`; it must pass `set.viewer`'s test. Blank: the installer asks when it finds a known reader. Used on a new installation only |
 | `deny-verbs=` | a comma-separated list of commands the user of the computer may not run without the administrator or global password. See [Managed mode](15-managed-mode.html). Only a global-password session changes the list afterwards, so on a computer with no global password it stays as given until a new installation |
@@ -79,8 +79,8 @@ report, and ends each with a verdict.
 | The passwords | `set.password`, `set.password admin`, and on a managed computer `set.password global` from the server. See [The account and its passwords](05-account-types.html) |
 | Your PATH | `append.sd.path`. See [Administrator commands](06-administrator-commands.html) |
 
-**Installing over a working installation is an upgrade**, and asks one question,
-*Shell and OS access*. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
+**Installing over a working installation is an upgrade**, and does not show the
+*Shell and OS access* page: it keeps the switches the installation has. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 ## Continued in
 

@@ -53,9 +53,9 @@ name is simply not recognized.** Solo has one account, and it has all
 | **`command.logging`** | **`command.logging`** {**`on`** \| **`off`**} |
 | **`como`** | **`como on`** {*record*} \| **`off`** \| **`pause`** \| **`resume`** |
 | **`compare.files`** | **`compare.files`** {**`dict`**} *file1* {**`dict`**} *file2* {**`detail`**} |
-| **`compile.dict`** | **`compile.dict`** *file* {*i-type* …} {**`no.query`**} {**`no.page`**}  ·  **`compile.dict data`** *file* {*i-type* …}  ·  **`compile.dict local`**  ·  **`compile.dict all`** |
+| **`compile.dict`** | **`compile.dict`** {**`data`**} *file* {*i-type* …} {**`no.query`**} {**`no.page`**}  ·  **`compile.dict local`**  ·  **`compile.dict all`** |
 | **`config`** | **`config`** {**`lptr`** \| **`gpl`** \| **`contrib`** \| *param* *value*} |
-| **`configure.file`** | **`configure.file`** {**`dict`**} *voc.name* {*parameters*} \| **`default`** |
+| **`configure.file`** | **`configure.file`** {**`dict`**} *voc.name* {*parameters*} \| **`default`**  ·  **`configure.file`** *voc.name* **`next`** *n* \| **`query`** |
 | **`convert.data`** | **`convert.data`** *from.pathname* *to.pathname* {**`from`** *format*} {**`as`** *format*} {**`header`**} {**`no.query`**} |
 | **`copy`** | **`copy from`** {**`dict`**} *src* {**`to`** {**`dict`**} *tgt*} {*id* …} {**`(options`**} |
 | **`copy.list`** | **`copy.list`** *list* {**`,`***new*} {**`from`** *src*} {**`to`** *tgt*} {*options*} |
@@ -108,7 +108,7 @@ name is simply not recognized.** Solo has one account, and it has all
 | **`import.xml`** | **`import.xml`** *pathname* *file* {**`id`** *name* \| **`generate`**} {**`overwriting`**} |
 | **`inhibit.login`** | **`inhibit.login`** {**`on`** \| **`off`**} |
 | **`list`** | **`list`** {**`dict`**} *file* {*selection*} {*fields*} {*options*} |
-| **`list.common`** | **`list.common`** {**`all`**} |
+| **`list.common`** | **`list.common`** {**`all`**} {**`detail`**} |
 | **`list.files`** | **`list.files`** |
 | **`list.index`** | **`list.index`** *file* {*field* …} |
 | **`list.item`** | **`list.item`** {**`dict`**} *file* {*selection*} |

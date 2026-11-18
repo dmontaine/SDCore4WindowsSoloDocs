@@ -11,10 +11,10 @@ independent switches, with `set.os.access`.
 | Switch | What it lets the account do |
 |---|---|
 | **`sh`** | the `sh` verb |
-| **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `OPENTEMP`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the Python helper; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
+| **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `OPENTEMP`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the pathname of a socket trace log (`SET.SOCKET.MODE` with `SKT$INFO.TRACE`) outside it; the Python helper; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
 
-**Both are off as delivered, on a new install and on an upgrade unless you said
-yes when the installer asked.** The account's own directory is never asked
+**Both are off as delivered on a new install unless you said yes when the
+installer asked; an upgrade keeps the switches the installation has.** The account's own directory is never asked
 about: inside it everything works whatever the switches say. **The
 administrator needs no switch**: after `admin` the session passes both for as
 long as it lasts.
@@ -262,17 +262,15 @@ password; see [Security](12-security.html).
 
 ## At install and at upgrade
 
-**The installer asks**, on a new install and on an upgrade, on one page, **Shell
-and OS access**, with two boxes, both unticked: *Shell (SH)* and *OS access
-(OS.EXECUTE, files outside the account, Python, editors)*. A Solo from before
-2.0-0 had its shell and OS access always on, so an upgrade asks the same, and an
-existing Solo would otherwise lose them without a word: tick each you want to
-keep. The answer can also be given in the control file, `os-access=none`, `sh`,
-`os` or `both`, on a new installation (an upgrade always asks); with a silent
-install, or a page left unticked, nothing is turned on here, which on a new
-account is off and on an upgrade leaves the switches as they were. The installer
-writes the answer with `set.os.access`, and says in `install-summary.log` what
-it was.
+**The installer asks**, on a new install only, on one page, **Shell and OS
+access**, with two boxes, both unticked: *Shell (SH)* and *OS access
+(OS.EXECUTE, files outside the account, Python, editors)*. **An upgrade does not
+show the page**: it keeps the switches the installation has, so it neither shuts
+what the administrator opened nor opens what was shut. The answer can also be
+given in the control file, `os-access=none`, `sh`, `os` or `both`, on a new
+installation; with a silent install, or a page left unticked, nothing is turned
+on. The installer writes the answer with `set.os.access`, and says in
+`install-summary.log` what it was.
 
 ## On a managed computer
 

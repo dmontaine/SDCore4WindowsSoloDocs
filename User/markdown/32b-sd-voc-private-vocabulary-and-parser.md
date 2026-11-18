@@ -191,11 +191,12 @@ already work:
 
 A handler that only prints something leaves the commands it was given
 undone. Because `run` and `off` are commands too, **the record cannot then be
-corrected from inside the account.** On SD Core for Linux it was removed from
-outside, by a program that opened the account's `voc` by its path and deleted
-`$voc.parser`; after that the account worked again. On Solo the account's `voc`
-is a directory of files under the account's folder, so the way out is to remove
-that record from there with the operating system's own tools. Test
+corrected from inside the account.** On Solo the account's `voc` is a
+directory of files under the account's folder, so the way out is from outside:
+remove the `$voc.parser` record there with the operating system's own tools
+(or, from an administrator session or an account with the OS access switch, with
+a program that opens it by its path and deletes it); after that the account
+works again. Test
 a new entry on a copy of the account you can reach from outside before you put it
 on the one you use.
 

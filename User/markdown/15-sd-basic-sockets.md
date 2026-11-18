@@ -187,7 +187,8 @@ inherited from the folder), set before a byte is written; **an existing file at 
 that list before it is emptied**, and if that cannot be done nothing is traced. **A link, a junction
 or a folder at the path is refused** (the last name is not followed), and **the pathname is held to
 the OS access switch**: an account without it (`set.os.access os on`) may trace only into its own
-directory. A refusal returns 0 from `set.socket.mode` with nothing written, and so does a path that
+directory, and not into a directory called `voc` below it (the VOC's own files; see the
+sequential files page). A refusal returns 0 from `set.socket.mode` with nothing written, and so does a path that
 cannot be made. SD's own key number; the openQM manual names the key without one.
 
 ## Waiting on several sockets: `select.socket()`
