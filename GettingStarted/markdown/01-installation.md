@@ -134,7 +134,8 @@ prompt**: the installer runs `set.start.default terminal` and reads the file it
 writes back, and `install-summary.log` says which was chosen. The administrator
 can change it later with `set.start.default menu` or `set.start.default
 terminal`, or on the Starts in row of `tool.menus`. **An upgrade does not ask**:
-it keeps the start the installation has. A silent installation, which shows no
+it keeps the start the installation has, and an installation from before the home
+screen keeps starting at the prompt. A silent installation, which shows no
 page, keeps the home screen.
 
 ### 5. PDF reader — only where one is installed and none is allowed

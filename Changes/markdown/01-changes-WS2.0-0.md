@@ -45,7 +45,7 @@ the section at the end says what is Solo's own.
 | The ssh key request | Changed | the API request that lets a managed computer's server install its ssh key was number **49**; it is now **72**, and 49 asks the server for its revision, as in SD Core. A program of your own that sent 49 to install a key must send 72 |
 | The terminal's size | Changed | every session started at the terminal type's 120 by 36; now SD asks the terminal how big it is at the start and when it is resized (`term w,h` still sets it by hand); a session with no terminal to ask (a phantom, a piped script, the API) starts at 140 by 43, as `term default` sets |
 | `when field` with no operator | Changed | kept the null values; now keeps the values that are **not** null |
-| Where a session starts | Changed | a session on a terminal started at the command prompt; now it opens the home screen, **an upgrade from WS1.1-3 included** (`admin`, then `set.start.default terminal`, gives the prompt back) |
+| Where a session starts | Changed | was the command prompt; a new installation starts at the **home screen** of tiles unless the installer's question is answered with the prompt; **an upgrade from WS1.1-3 keeps the prompt**; `set.start.default` changes it later |
 
 ## Sections
 
@@ -322,7 +322,7 @@ Commands and VOC verbs that every account has, and the command language.
 |---|---|---|
 | `autologout` | Changed | works in the full-screen programs (the screen library, `ide`, the home screen, the tool pages): idle time is counted across their short timed waits, and only a typed key (or the break key) starts the period again; a program that polls with very short timed `keyin`s and works between them counts as waiting |
 | `block.print`, `block.term` | Added | print text, or show it on the terminal, in letters seven rows high <!--s g11 g12--> |
-| `catalog ... global c` | Added | puts the prefix `!`, `_` or `$` in front of every call name that has none of its own, so a whole select list can be cataloged globally |
+| `catalog ... global c` | Added | the form of SD Core's (the prefix `!`, `_` or `$` before every call name that has none of its own); on SD Core Solo `catalog ... global` is refused for every session, because only `sync.global.catalog` changes the global catalog |
 | `catalog ... local relative` | Added | stores the object file's path relative to the account <!--s 131--> |
 | catalog name as a command | Changed | a program run by its catalog name takes `lptr`, `no.page` and the like |
 | `catalog` overwrite | Changed | pointing a local catalog entry at a different object file asks first <!--s 490--> |
