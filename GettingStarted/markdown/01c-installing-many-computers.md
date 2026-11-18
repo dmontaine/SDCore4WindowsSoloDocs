@@ -27,7 +27,11 @@ user sets the account password **the first time they run `sd-solo` at that
 computer's keyboard**. Until then ssh and the API accept only the global
 password — the server can reach the computer, and nobody else can. **With no
 global password the installer asks for the account password**, so an
-installation with no global password cannot run unattended.
+installation with no global password cannot run unattended, unless the account
+password comes from a file: **`/ACCOUNTPASSWORDFILE=`*file*** on the installer's
+command line sets it at install time from the file's first line (a new
+installation only; it must keep the password rules and differ from the other two
+passwords, or nothing is installed). Delete the file afterwards.
 
 **A blank answer is asked for**, except the global password above, and so is
 one the installer cannot accept: a password that breaks the rules, an `api=`
