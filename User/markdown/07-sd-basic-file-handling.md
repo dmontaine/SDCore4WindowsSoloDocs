@@ -137,6 +137,18 @@ absent.
 
 `clearfile file.variable` empties the file but leaves it in place.
 
+### Files an account may not change: the VOC
+
+The **VOC** (a file called `voc`) can be changed by a program only after `admin`
+(the administrator password); Solo has no `voc-on`, `bp-on` or `dict-on`, so there
+is `admin` or there is not. Without it `write`, `writev`, `delete` and `clearfile`
+on the VOC change nothing and stop the program with an error: `clearfile` with
+*The VOC can only be changed after admin (the administrator password)*, and
+`write`, `writev` and `delete`, with an `on error` clause, take that clause and
+leave `status()` set. Reading is never refused, and neither is a file of any
+other name, a dictionary and a program file included. A VOC reached by a pathname is held to the same rule (see
+[SD Basic - Sequential Files](10-sd-basic-sequential-files.html)).
+
 ### Letting the file number its records: `creating.seqkey`
 
 ```
