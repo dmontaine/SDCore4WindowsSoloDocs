@@ -175,8 +175,9 @@ DOCS = [
  ('GettingStarted', '06a-sessions-and-locks.md', """
    list.readu listu logout
  """),
+ # 18 Nov 26 (round 5, Linux Solo's split of the lock pages): lock.tracer is on 06a1 now.
  ('GettingStarted', '06a1-task-locks-and-forcing-a-lock-open.md', """
-   clear.locks list.locks lock tool.sessions unlock
+   clear.locks list.locks lock lock.tracer tool.sessions unlock
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
    sh
@@ -243,7 +244,7 @@ DOCS = [
  """),
  # 16 Nov 26: copy.listp, set.queue, sp.assign and ! are removed verbs (voc_removed) and left the map.
  ('GettingStarted', '06a-sessions-and-locks.md', """
-   inhibit.login lock.tracer
+   inhibit.login
  """),
  ('GettingStarted', '06-administrator-commands.md', """
    list.voc.removed restore.voc

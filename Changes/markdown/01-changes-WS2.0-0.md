@@ -72,7 +72,7 @@ Administrator commands from the openQM list.
 | `inhibit.login` | Added | administrator only: stops new sessions while maintenance is done; a killed backup no longer locks everybody out <!--s 387 g46--> |
 | `lock.tracer` | Added | administrator only: logs every lock taken and released, with program and line, to the file `locktrace` <!--s g57--> |
 | `logout` | Changed | `logout n group` also ends the phantoms n started; `logout` of a session whose process has gone clears the entry and its locks <!--s 386--> |
-| `newvoc.mods` | Changed | applied to SDSYS's own VOC when SD is installed, as it already was to new accounts and by `update.accounts` <!--s 501--> |
+| `newvoc.mods` | Added | an optional directory file of VOC records of your own in the SD system directory, written to the account's VOC (and SDSYS's) after the standard ones at install and at every `update.accounts`; the uninstaller's Keep keeps it <!--s 501--> |
 | `SCREENTHEME` | Changed | readable with `config()`; the shipped `sd.conf` says `SCREENTHEME=paper`, and an upgrade adds that line to a kept `sd.conf` that has none (a line that is there is kept); a terminal with no color stays `mono` |
 
 ## API
@@ -644,6 +644,7 @@ Three simple layers, with no vault and nothing on by default.
 | changes document | Added | a release package carries it beside the installer as `sd-core-solo-for-windows-<version>-changes.pdf`, `.html` and `.md`, and the installer copies the three into the installation's `pdf` folder |
 | documentation PDFs | Added | the manuals found beside the installer are put in the installation's `pdf` folder through `docs.install`; anything else is left alone |
 | setup file sample | Changed | `sd-solo-setup.conf.sample` documents the `viewer` item the installer reads (a PDF reader for `pdf`, or none) |
+| setup file `ssh-public-key-file=` | Added | a public key whose owner may ssh straight into `sd-solo` on port 4251, on a new installation; with `ssh=` blank it turns ssh on (`local`). A key file the installer cannot read, or a key with `ssh=off`, is refused and nothing is installed |
 | Shell and OS access page | Added | the installer asks, on a new installation only, with two boxes, both unticked (an upgrade does not show the page and keeps the switches the installation has); the control file's `os-access=` (`none`, `sh`, `os` or `both`) answers it on a new installation; a silent installation, or an unticked page, turns nothing on |
 | source not installed | Changed | the complete source (C, `gpl.bp`, build and installer scripts) is `SDCore4WindowsSolo-source-<version>.zip` beside the installer and is no longer installed |
 | Start Menu entry | Added | the install puts SD Core Solo in your own Start Menu, opening a classic console window; the uninstaller removes it |
