@@ -25,7 +25,7 @@ foot of this page. The full-screen editors need nothing extra.
 | **`generate`** | generate source |
 | **`phantom`** | start a background process |
 
-> **Nobody catalogs globally.** `catalog ... global`, a name beginning `*`, `!`,
+> **Nobody catalogs globally.** `catalog ... global`, a name beginning `!`,
 > `_` or `$`, and `delete.catalog` of a global entry, are refused whoever asks and
 > whether or not `admin` is unlocked: *The global catalog holds the SD Core
 > server's programs from global.bp.out and is changed only by

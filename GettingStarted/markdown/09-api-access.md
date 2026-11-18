@@ -179,16 +179,20 @@ your files; the session itself is ordinary and unelevated.
 **A session signed in with the global password is a server session**, with
 the administrator commands unlocked. See [Managed mode](15-managed-mode.html).
 
-### A session is confined to its own account
+### A session is held to its own account
 
 | | |
 |---|---|
-| **Allowed** | everything inside the account, and the SD system files every account needs — messages, `syscom`, the dictionaries |
-| **Refused** | opening, renaming, deleting or listing anything else |
+| **Allowed** | everything inside its own account, and the shipped system files every account needs — messages, `syscom`, the dictionaries — which the account's VOC names. Ordinary programs are unaffected |
+| **Not allowed** | opening, renaming, deleting or listing a file by a pathname outside the account |
 
-**A refused `OPEN` takes the `ELSE` branch and `STATUS()` is 3035** — *not
-permitted*, not *not found*. That distinction matters when debugging: 3035 is
-this confinement, not a missing file.
+**This is the account's `os` switch, the same one a session at the keyboard is held by.**
+While it is off, as delivered, a refused `OPEN` takes the `ELSE` branch and
+`STATUS()` is 3035, which means *not permitted* rather than *not found*: 3035 is a
+containment refusal, not a missing file. Once the administrator has turned the `os`
+switch on (`set.os.access os on`) the session has no such limit, which is why the
+switch is the thing to weigh — see
+[Operating system access](06b-operating-system-access.html).
 
 **If your data lives outside the account**, name the directory in the
 **`NETDIRS`** setting in `sd.conf`, separating several with a semicolon.
@@ -198,6 +202,9 @@ overlaps the Solo folder or any account is ignored and named in the error log wh
 `config('NETDIRS')` does not read it: read the file. SD's password file, its program
 catalog and its account register are never reachable from an API session,
 and cannot be added to `NETDIRS`. A server session may reach `global.bp.out`.
+`SDCLIENT` in `sd.conf` is the further control: any non-zero value stops files being
+opened by an API session, and `2` also refuses a subroutine that is not compiled as
+callable from a client (`0`, the default, allows everything).
 
 ## Request 29, the NET gate and `NETFILES`
 

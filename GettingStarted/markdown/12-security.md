@@ -38,7 +38,7 @@ are reached from other computers. See
 | | |
 |---|---|
 | Every session | asks the account password |
-| Administrator commands | refused until `admin`. The eight that had no check of their own — `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` — are gated too. See [Administrator commands](06-administrator-commands.html) |
+| Administrator commands | refused until `admin`. The eight that had no check of their own — `config`, `listu`, `list.locks`, `list.readu`, `lock`, `clear.locks`, `set.date`, `clean.account` — are gated too. See [Administrator commands](06-administrator-commands.html) |
 | The VOC | direct edits need `admin`; the global catalog is changed by nobody in a session |
 | The shell and OS access | refused until the administrator turns the `sh` or `os` switch on with `set.os.access`: off on a new install unless you answered yes when the installer asked, and kept as they were on an upgrade — see [Operating system access](06b-operating-system-access.html) |
 | `NETDIRS` | a door in `sd.conf`, **no line as delivered**: folders outside the account, separated by semicolons, that a session with the `os` switch off may still read and write by pathname. Listing one is a loosening for every session of the account, on every route — see [Configuration](16-configuration.html) |
@@ -69,7 +69,8 @@ files under them.
 
 **`sd-solo -internal` is how the installer runs SD's setup steps**, and it is admitted
 only by a one-shot marker file the installer writes and SD consumes — the
-setup log shows *Internal session admitted (opened by solo-setup)*. It is not a
+setup log shows *Internal session admitted (opened by solo-setup)* and the audit
+trail shows *internal session admitted* with the name of the writer. It is not a
 way into a running system. **SDSYS, SD's own system account, is never signed
 in to**: nobody logs in to it, and Solo has no `logto` verb.
 
@@ -111,7 +112,8 @@ not give the account password to** — see [ssh access](08-ssh-access.html).
 
 **Enable full-disk encryption (BitLocker) and a screen lock**, as you would for
 any computer that holds data you care about: everything above assumes the
-computer itself is in your hands.
+computer itself is in your hands. How to put SD's folder on an encrypted drive is
+on [Encrypting the data SD keeps on disk](18a-data-at-rest.html).
 
 ## Continued in
 

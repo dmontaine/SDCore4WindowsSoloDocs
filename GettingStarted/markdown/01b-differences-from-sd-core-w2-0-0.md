@@ -30,10 +30,10 @@ See [The account and its passwords](05-account-types.html).
 
 | SD Core for Windows W2.0-0 | Solo |
 |---|---|
-| the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `admin` first** — including eight that had no check of their own because only SDSYS had them: `CONFIG`, `LISTU`, `LIST.LOCKS`, `LIST.READU`, `LOCK`, `CLEAR.LOCKS`, `SET.DATE`, `CLEAN.ACCOUNT` |
+| the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `admin` first** — including eight that had no check of their own because only SDSYS had them: `config`, `listu`, `list.locks`, `list.readu`, `lock`, `clear.locks`, `set.date`, `clean.account` |
 | editing the VOC directly is any account's own business | `ED VOC`, a program's `WRITE` or `DELETE` to the VOC, `COPY` into it, and saving or deleting a sentence with `.S` and `.D` **need `admin`**. What SD writes to the VOC as a side effect — `CREATE.FILE`'s entry, the command stack — does not |
 | an administrator can `CATALOG ... GLOBAL` | **nobody changes the global catalog**, `admin` or not. On a managed computer it holds the SD Core for Linux server's programs. See [Other hardening](13-hardening.html) |
-| `ssh.server`, `remote.ssh`, `remote.api` | **gone.** The API and ssh are chosen when installing |
+| `ssh.server`, `remote.ssh`, `remote.api` | **`ssh.server` is gone.** The API and ssh are chosen when installing, and `remote.ssh` and `remote.api`, each `off`, `local` or `open` (after `admin`), change them afterwards. See [ssh access](08-ssh-access.html) and [API access](09-api-access.html) |
 | `APPEND.SD.PATH` changes the system PATH | it changes **your** PATH, and needs no elevation |
 
 See [Administrator commands](06-administrator-commands.html).

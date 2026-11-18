@@ -33,13 +33,14 @@ where the passphrase lives before it writes the application.
 
 | Layer | What it is | Protects against | Does not protect against |
 |---|---|---|---|
-| The disk | encryption of the volume the SD folder is on, by the operating system (BitLocker, or the file system's own encryption). SD is unchanged and this set has no page for it | a stolen or discarded disk; a backup copied off the machine | anyone signed in to the running system; an administrator; a mounted volume |
+| The disk | encryption of the volume the SD folder is on, by the operating system (BitLocker, or the file system's own encryption). SD is unchanged | a stolen or discarded disk; a backup copied off the machine | anyone signed in to the running system; an administrator; a mounted volume |
 | The program | `sdkey()` and `sdencrypt()` in an application | a copy of the SD files, a backup, a person with file access but not the key | the program itself, its variables, anyone who holds the key |
 | The conversion | `XE` in a dictionary item, with the key held in a ring in the process | the same, and the field reads decrypted for a session that holds the key | the same, and an administrator or a debugger on that process |
 
 None of them hides the record id, the other fields, which values are empty or
 how long a value is. The second and third are the application's; the first is
-the machine's.
+the machine's. How to put SD's folder on an encrypted drive is on
+[Encrypting the data SD keeps on disk](18a-data-at-rest.html).
 
 ## What was removed
 

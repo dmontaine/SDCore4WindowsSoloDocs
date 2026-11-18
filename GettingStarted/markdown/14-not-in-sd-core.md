@@ -172,8 +172,8 @@ another MultiValue system will otherwise assume they exist.
 
 **`scp` and `sftp` do not work inbound once SD has configured the ssh server.**
 This is the accepted cost of putting every ssh session straight into SD.
-**Pull files rather than pushing them** — see
-[ssh access](08-ssh-access.html#the-cost-no-scp-or-sftp-to-your-user-and-no-windows-prompt).
+**Pull files rather than pushing them**, or use `receive` and `send`, which move plain-text files over the same login once the administrator has turned file transfer on — see
+[ssh access](08-ssh-access.html#the-cost-no-scp-or-general-sftp-and-no-windows-prompt).
 A computer with no ssh server is unaffected, because SD has configured nothing.
 
 **The cleartext API login is gone**, and a client that still sends a password

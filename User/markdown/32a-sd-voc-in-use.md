@@ -168,7 +168,7 @@ neither takes anything away.
 
 **Administration is in the verb, not in the VOC.** Your account has `config`,
 `set.date`, `clean.account`, `list.readu`, `list.locks`, `lock`, `unlock`,
-`listu`, `update.accounts` and the rest — and each one refuses with *Command
+`listu`, `update.accounts`, `remote.ssh`, `remote.api` and the rest — and each one refuses with *Command
 requires administrator privileges* until `admin`. There is no `create.account`,
 `delete.account`, `modify.account`, `grant`, `revoke` or `list.grants` anywhere:
 an unknown name is simply not recognized. See *Administrator commands* in the

@@ -127,11 +127,20 @@ that key into the new file, keeps a copy of your old file beside it as
 `authorized_keys.sdcoresolo-backup`, and leaves any key of your own in the old
 file alone.
 
-## The cost: no scp or sftp to your user, and no Windows prompt
+## The cost: no scp or general sftp, and no Windows prompt
 
-**Your ssh sign-in cannot copy files in or give you a Windows prompt.** The
-command is forced, so there is no file-transfer subsystem left to run and no
+**Your ssh sign-in cannot give you a Windows prompt or a general file copy.** The
+command is forced, so there is no system file-transfer subsystem left to run and no
 shell. That is the accepted cost of landing in SD.
+
+**File transfer is the one way in, and it is closed as delivered.** SD has a small sftp
+server of its own for plain-text files. You use it by typing `receive` (to bring files in) or
+`send` (to take copies of records out) in your own SD session, then connecting an sftp client
+with the same ssh login. It is off twice as delivered: `XFER` in `sd.conf` is 0, and the account's
+switch is off (`set.xfer.access`). Turning both on lets a program that knows your Windows password
+bring text into your account while you wait in `receive`, and take copies of records out, into one
+folder each way and nothing else; there is no shell behind it. See *Moving Files In and Out* in the
+User documentation.
 
 **The cost is inbound only.** `scp` or WinSCP running **on** this computer,
 connecting outward, is an ssh *client* and is not affected. So copy files by
@@ -222,4 +231,4 @@ This account has no password yet. Set it at this computer's keyboard first; unti
 The configuration names a local user by the lower-case user name, and a domain
 user as `name@domain`. On a domain-joined computer, check that your ssh sign-in
 lands in SD before relying on it. See
-[Features the developers could not test](19-features-the-developers-could-not-test.html).
+[Known limits](19-features-the-developers-could-not-test.html).

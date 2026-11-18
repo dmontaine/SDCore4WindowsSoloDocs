@@ -249,7 +249,7 @@ XML element as `xparse()` gives it, and is refused for CSV and JSON Lines. A fil
 there is asked about (*Overwrite(y/<n>)?*, Enter is no) unless `no.query`.
 
 **All four go through the same gates as `oswrite` and `write`.** The pathnames need the
-account's OS-access switch (`os-on`) for anything outside the account's own directory
+account's OS-access switch (`set.os.access os on`) for anything outside the account's own directory
 (*has no OS access ... can reach by pathname only a directory the administrator opened to it*, and nothing is read or written).
 Solo has no edit gates (SD Core also asks whether the account may change a program file, VOC or
 dictionary), so nothing more is asked.

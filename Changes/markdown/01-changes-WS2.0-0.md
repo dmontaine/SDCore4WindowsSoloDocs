@@ -602,6 +602,7 @@ Three simple layers, with no vault and nothing on by default.
 | key ring subroutines | Added | `!keyset`, `!keyclear`, `!keylist`: fill, empty and list the session's key ring, kept in the memory of its own process |
 | `sdkey()` and friends | Added | `sdsalt()`, `sdkey()`, `sdrandkey()`: a salt, a key from a passphrase, and a random key for `sdencrypt()` and `sddecrypt()`, open to every program; every `sdencrypt()` uses a fresh random nonce <!--s 504 g116 g123--> |
 | `xe` conversion | Added | a dictionary item with `xe` (or `xe;name`) shows a field decrypted for a session that holds the key and the cipher text for one that does not; `iconv` encrypts |
+| encrypting the disk | Added | a Getting Started page, *Encrypting the data SD keeps on disk*: BitLocker for the drive that holds `%USERPROFILE%\SDCoreSolo`, where SD keeps its data, what the sort work area, the backup folder, the page file and the hibernation file need, and what the encryption does not cover |
 
 ### Files
 

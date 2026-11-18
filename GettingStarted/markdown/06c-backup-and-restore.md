@@ -151,4 +151,4 @@ back**: it is a record for you, not something that can be restored.
 
 [Administrator commands](06-administrator-commands.html) ·
 [Configuration](16-configuration.html) for `BACKUPDIR` ·
-[Features the developers could not test](19-features-the-developers-could-not-test.html).
+[Known limits](19-features-the-developers-could-not-test.html).

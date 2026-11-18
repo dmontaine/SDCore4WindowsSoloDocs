@@ -130,10 +130,9 @@ sync global catalog done 1 cataloged 0 removed 0 refused
 
 A session with no administrator rights can then `CALL myprog(x)`. **A program
 cataloged in the account under the same name is found first**, as for any
-`CALL`. (Before 2.0-0 the server's programs were cataloged as `*name` and called
-as `CALL *name`; the `*` prefix is gone, and the first `sync.global.catalog` of
-this release removes the old `*` entries and catalogs the programs again under
-their plain names.)
+`CALL`. The server's programs have plain names and no prefix: a left-over
+`*name` entry from an older release is removed by the first `sync.global.catalog`,
+which catalogs the programs again under their plain names.
 
 **To remove one**, delete it from `global.bp.out` and run
 `sync.global.catalog` again; the `myprog` entry goes:
