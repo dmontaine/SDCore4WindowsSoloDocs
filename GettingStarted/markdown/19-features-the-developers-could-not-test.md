@@ -303,7 +303,7 @@ belong here — it is either fixed or it is a known issue.
 
 **Anything a reader might merely find surprising is not a gap either.** The
 places where this release deliberately differs from OpenQM, ScarletDME, upstream
-`sdb64`, SD Core for Linux or the multiuser SD Core for Windows are documented as differences, in the pages that describe the feature.
+`sdb64`, or the multiuser SD Core for Windows are documented as differences, in the pages that describe the feature.
 This page is only about what nobody has watched happen.
 
 ## See also

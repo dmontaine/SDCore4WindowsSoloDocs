@@ -8,9 +8,8 @@ writes to.
 SD folds case, so a command may be typed in either case. Commands are shown
 here in lower case.
 
-> The parameter list and categories on this page are read from `config.c` itself
-> (`tools/confmap.py`), and the shipped file and the `config` output were checked
-> on a Solo tree; the sample output below is abbreviated.
+> The sample output below is illustrative; the values on your system will
+> differ where your configuration does.
 
 ## The file
 
@@ -48,7 +47,8 @@ chooses it like any other. `solo-api-listener.ps1` switches it; see
 
 Lines beginning `#` are comments. The shipped file is heavily commented and
 those comments record why each value was chosen. Read them before changing
-anything.
+anything. **An upgrade keeps your `sd.conf`** — see
+[Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 ### A name SD does not recognize stops it starting
 
@@ -118,7 +118,7 @@ of contributors — those two need no `admin`.
 Editing `sd.conf` and restarting SD is the durable route, and for most
 parameters it is the only one. Fourteen tuning parameters can also be changed
 from SD itself, with `set.config` or the `E` key of `tool.config` (see
-*Changing a parameter from SD*, below).
+[Changing a Parameter from SD](16b-changing-a-parameter-from-sd.html)).
 
 **Some parameters can also be changed for the current session** (after `admin`):
 
@@ -155,7 +155,7 @@ tool.config
 
 A full-screen page for the administrator (`admin` first; a window of 140 columns by 43 lines or
 more). **It looks, and it can change 14 of the parameters**; it writes no file itself. A change is
-made by the verb `set.config` (below), and only after you have typed a value, the page has checked
+made by the verb [`set.config`](16b-changing-a-parameter-from-sd.html), and only after you have typed a value, the page has checked
 it against the range SD enforces and a box has shown the exact command and been answered Run. The
 other parameters are not changed from SD; editing the file and restarting SD stays the way to change
 them.

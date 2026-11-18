@@ -54,21 +54,21 @@ against the source tree it was built from, and they are destructive.
 Windows will not run a PowerShell script unless its **execution policy**
 allows it. On Windows desktop editions the default is `Restricted`, which
 allows no script at all; on Windows Server it is `RemoteSigned`, which allows
-a script written on the computer itself.
+a script written on the machine itself.
 
 **SD does not depend on that setting, and you should leave it alone.** The
 scripts are launched with an explicit `-ExecutionPolicy Bypass` on their own
 command line — by the installer, and by the SD verbs that call one (through the
 `SH1` line of `sd.conf`). That switch applies to **that one PowerShell process,
-for that one script**. It changes nothing on the computer and nothing about any
+for that one script**. It changes nothing on the machine and nothing about any
 other script.
 
 **What happens if you change it anyway:**
 
 | what you do | what happens to SD |
 |---|---|
-| **Tighten it** to `Restricted` or `AllSigned`, for the computer or for your own account | **Nothing. SD carries on working.** The switch SD passes takes precedence over both of those settings |
-| **Loosen it** to `RemoteSigned`, `Unrestricted` or `Bypass` | **Nothing — and you have gained nothing.** SD was already unaffected. You have made the computer more permissive for every *other* script on it, which is a real cost for no benefit |
+| **Tighten it** to `Restricted` or `AllSigned`, for the machine or for your own account | **Nothing. SD carries on working.** The switch SD passes takes precedence over both of those settings |
+| **Loosen it** to `RemoteSigned`, `Unrestricted` or `Bypass` | **Nothing — and you have gained nothing.** SD was already unaffected. You have made the machine more permissive for every *other* script on it, which is a real cost for no benefit |
 | **Set it through Group Policy** | **This one stops SD.** See below |
 
 **One thing it does not cover.** The `sh` verb opens an ordinary PowerShell
@@ -86,10 +86,10 @@ A **Group Policy** setting — *Turn on Script Execution*, under
 `Computer Configuration` or `User Configuration` → `Administrative Templates`
 → `Windows Components` → `Windows PowerShell` — **outranks the switch SD
 passes.** Group Policy sits above the per-process setting in PowerShell's
-order of precedence, so on a computer where a policy sets the execution policy,
+order of precedence, so on a machine where a policy sets the execution policy,
 SD cannot override it.
 
-**On a domain-joined or otherwise managed computer, check this before
+**On a domain-joined or otherwise managed machine, check this before
 installing.** In an ordinary PowerShell prompt:
 
 ```
@@ -98,7 +98,7 @@ Get-ExecutionPolicy -List
 
 If the `MachinePolicy` or `UserPolicy` row says anything other than
 `Undefined`, a policy is in force. **`RemoteSigned`, `Unrestricted` or
-`Bypass` there is fine** — SD's scripts are written on the computer by the
+`Bypass` there is fine** — SD's scripts are written on the machine by the
 installer, not downloaded. **A policy of `Restricted` or `AllSigned` will stop
 the installer's steps and the verbs that call a script**, and the symptom is
 the *"running scripts is disabled on this system"* message from the installer,

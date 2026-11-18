@@ -1,7 +1,7 @@
 Title: Lower case
-Subtitle: Commands, file names and record ids in SD's own files are lower case — and nothing you type has to change.
+Subtitle: Commands, file names, record ids and account names are lower case now — and nothing you type has to change.
 
-**Everything that can be lower case is lower case, completely.** SD used to be
+**Everything that can be lower case is lower case.** SD used to be
 inconsistent about it: BASIC source is free-form and usually written lower case,
 while file names, field names and account names were forced up.
 
@@ -22,7 +22,7 @@ name that exists in **no** case is still reported as not found.
 This order is used everywhere: the parser, the query processor, `run`,
 the `login` paragraph lookup, and `set.file`'s default `qfile` pointer.
 
-## What is spelled in lower case, and that is the whole of it
+## What is spelled in lower case now
 
 | | |
 |---|---|

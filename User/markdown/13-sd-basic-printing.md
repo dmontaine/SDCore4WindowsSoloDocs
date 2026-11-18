@@ -97,7 +97,7 @@ The text may contain codes, written inside quotes within the string:
 | `'T'` | the time |
 | `'N'` | suppress the automatic page break |
 | `'L'` | a line break within the heading |
-| `'C'` | centre what follows |
+| `'C'` | center what follows |
 
 Because the codes are quoted inside the heading, the heading itself needs the
 other kind of quote around it:

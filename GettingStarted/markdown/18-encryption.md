@@ -46,7 +46,7 @@ the machine's.
 | | |
 |---|---|
 | The `encrypt.field` verb | Removed. It pointed at a program, `$CRYPTO`, which never existed in the GPL release, so the verb could not have worked in any build derived from it |
-| `encrypt()` and `decrypt()` | Removed upstream and replaced by `sdencrypt()` and `sddecrypt()`. The old names do not compile |
+| `encrypt()` and `decrypt()` | Removed and replaced by `sdencrypt()` and `sddecrypt()`. The old names do not compile |
 | `SD_EUID_SET` and `SD_EUID_RESTORE` | Removed. They were the Linux setuid model, which has no meaning on Windows. Keys 102 and 103 are left unused, so an old program that calls one gets the answer any unknown key gets |
 
 **The Python half of SDEXT is not on this list.** It was removed along with
@@ -91,10 +91,10 @@ A dictionary item names a key and never holds one: field 3 is `XE` or
 process**, put there by `!keyset` (a subroutine a program calls) or by the
 `encrypt.key` verb (a person, at a hidden prompt), and taken out by `!keyclear`.
 
-- **Held in memory only.** The ring is libsodium's protected memory
-  (`sodium_malloc`): guard pages that fault, no access at all between uses, and
-  zeroed when released; the source also asks the system to keep it out of swap
-  and out of a dump, which the system may refuse. It is never written to a file,
+- **Held in memory only.** The ring is `sodium_malloc` memory: locked against
+  swap and left out of a core dump where the system allows it, guarded by pages
+  that fault, protected against all access between uses and zeroed when
+  released. It is never written to a file,
   the audit trail, the error log or `$como`.
 - **Cleared** when the session takes its name (an API login does this once, after
   the SCRAM proof is accepted), at sign-off, and by `!keyclear`. A session starts
@@ -187,9 +187,8 @@ caller deciding whether to admit a login must still treat the error as a
 refusal.
 
 **The two DPAPI keys are the kept copy of your account password.** (They are
-`SD_FILE_PRIVATE` and
-`SD_USER_HOME`, as on Linux; 130 to 139 are the numbers reserved for keys that
-exist only on Windows.) DPAPI
+`SD_DPAPI_PROTECT` and `SD_DPAPI_UNPROTECT`, keys 130 and 131; 130 to 139 are
+the numbers reserved for keys that exist only on Windows.) DPAPI
 encrypts for a Windows user, so what the first produces only that user can turn
 back. It is Solo's, not the multiuser SD's, and the plaintext each one held is
 wiped after use.
@@ -216,5 +215,4 @@ sign-in.
 `SD_ENCODEHX` (201) and `SD_ENCODE64` (202) are defined alongside the SDEXT
 keys and are easily mistaken for them. They are not keys and `sdext()` does not
 implement them — passing either as a key returns a key error. They are the
-third argument to `sdencrypt()` and `sddecrypt()`, and they are documented
-above.
+third argument to `sdencrypt()` and `sddecrypt()`.

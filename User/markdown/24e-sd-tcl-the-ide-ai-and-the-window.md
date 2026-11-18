@@ -4,7 +4,7 @@ Subtitle: The AI in the IDE, recovery copies and the window, and debug and gener
 This page continues [Programs: The IDE's Zoom, Fields View and Dictionary
 Items](24d-sd-tcl-the-ide-zoom-fields-and-dictionary-items.html).
 
-**The AI in the IDE**. When the AI is on (see
+**The AI in the IDE.** When the AI is on (see
 [Asking the AI](29b-sd-tcl-asking-the-ai.html)) the IDE has an **AI** menu before Help and an
 **`AI>`** row under the editor and the messages table (the table is one row shorter); without the AI
 neither is there and nothing else changes. F6 goes round the panes to the AI row (Shift-F6 the other

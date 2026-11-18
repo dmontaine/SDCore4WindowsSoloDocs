@@ -5,10 +5,10 @@ This page exists so you do not spend time hunting for something that is not
 there. **It names what is gone and what to use in its place; it does not
 document the removed features themselves.**
 
-Everything here was in OpenQM, in ScarletDME, or in SD on Linux, and is not in
-SD Core Solo for Windows. **What the multiuser SD Core for Windows has and Solo
+Everything here was in OpenQM, in ScarletDME, or in upstream `sdb64`, and is not
+in SD Core Solo for Windows. **What the multiuser SD Core for Windows has and Solo
 does not — accounts, groups, `SDSYS`, the Windows service — is on
-[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html)**,
+[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)**,
 not here.
 
 > **If you had a use for any of these, say so.** Several were removed on the
@@ -23,12 +23,10 @@ not here.
 | `modify` — the full-screen record editor from OpenQM | **`sed`**, **`edit`** or **`ed`** |
 | `nano` — the second external editor (removed in 2.0-0) | **`micro`**, **`sed`** or **`ed`** |
 
-**`sed` was on this page and has come off it.** It was removed once because its
-Emacs-style keys are hard to remember, and came back with a menu bar that shows
-the key of every action. It runs inside SD, so it needs no operating-system
-permission, and it needs a window of 140 columns by 43 lines. With it came
-`ced`, a full-screen editor for a record that is a data collection, and `ide`, a
-workbench for programs and files.
+**`sed` has a menu bar that shows the key of every action.** It runs inside SD,
+so it needs no operating-system permission, and it needs a window of 140 columns
+by 43 lines. With it came `ced`, a full-screen editor for a record that is a data
+collection, and `ide`, a workbench for programs and files.
 
 **SD Core's full-screen editing is `sed`, `edit` and `micro`**; the last two open
 the record in Microsoft Edit and in micro, and need the `os` switch — see
@@ -36,10 +34,7 @@ the record in Microsoft Edit and in micro, and need the `os` switch — see
 what each is good for and what they cannot do. The three removed programs above
 are gone as *programs*; the capability is not.
 
-`modify` is not in SD Core at all.
-
-**`modify.password` is gone too**: `set.password` changes your account password
-— see [The account and its passwords](05-account-types.html).
+`modify` is not in SD Core at all, for any account.
 
 > **`ed`** was never affected by any full-screen keyboard fault — it reads whole
 > lines and goes through the command-line editor.
@@ -86,7 +81,9 @@ See [API access](09-api-access.html).
 
 **SD has never been able to open a virtual file system.** Nothing in the
 file-opening code ever recognized a `VFS:` pathname. What the language carried
-was the *outline* of one, and none of it could be reached.
+was the *outline* of one, and none of it could be reached: a VOC F-pointer
+written as `VFS:something` was reported as a virtual file system, passed the
+name resolver, and then failed to open with an unrelated error.
 
 All of it has been removed, so the language no longer offers a feature it
 cannot perform. **These names are no longer defined, and a program mentioning
@@ -99,15 +96,9 @@ ER$VFS.CLASS     SYSCOM ERR.H
 ER$VFS.NGLBL     SYSCOM ERR.H
 ```
 
-`ftype` no longer returns `VFS` for a `VFS:` pathname. **Error numbers 3038,
-3039 and 3040 are retired and will not be given a new meaning.**
-
-**If one of your programs refers to any of these, it was testing for a state
-SD could not reach, and the test can be deleted.**
-
-Two unreachable pieces went with it: `_EXTENDLIST`, installed into the SDSYS
-`gpl.bp` file and loaded at every start-up although nothing ever called it; and the debugger's `(Networked)` file
-type, which no file could report once SDNet was gone.
+`ftype` no longer returns `VFS` for a `VFS:` pathname. **If one of your programs
+refers to any of these, it was testing for a state SD could not reach, and the
+test can be deleted.**
 
 ## Tape and restore
 
@@ -179,14 +170,15 @@ by name and touches nothing else in `bp`.
 These are not removals. They are stated here because a reader coming from
 another MultiValue system will otherwise assume they exist.
 
-**scp AND sftp DO NOT WORK INBOUND ONCE SD HAS CONFIGURED THE ssh SERVER.**
+**`scp` and `sftp` do not work inbound once SD has configured the ssh server.**
 This is the accepted cost of putting every ssh session straight into SD.
 **Pull files rather than pushing them** — see
 [ssh access](08-ssh-access.html#the-cost-no-scp-or-sftp-to-your-user-and-no-windows-prompt).
 A computer with no ssh server is unaffected, because SD has configured nothing.
 
 **The cleartext API login is gone**, and a client that still sends a password
-in clear is refused outright. See [API access](09-api-access.html).
+in clear is refused outright. So is `SDConnectLocal`, which sent none. See
+[API access](09-api-access.html).
 
 ## Linux-only mechanisms
 

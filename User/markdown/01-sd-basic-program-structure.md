@@ -191,7 +191,6 @@ the include is an error only when the last has not got it either.
 
 ```
 dim name(rows {, columns})
-dimension name(rows {, columns})
 mat name = expression
 mat name = mat other.name
 ```
@@ -367,7 +366,7 @@ $mode -name
 
 A mode changes how one program is compiled. **Every mode is off unless the
 program asks for it**, and a program that does not ask sees no change. A name
-with a minus in front turns the mode off again. The ones below are the 1.2-0
+with a minus in front turns the mode off again. The ones below are the 2.0-0
 additions; each is described by what it does and does **not** do.
 
 | mode | what it does |

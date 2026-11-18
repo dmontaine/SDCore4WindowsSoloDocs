@@ -157,7 +157,7 @@ WARNING: KERNEL is not assigned a value
 ```
 
 A name the compiler does not know as a function is read as a **matrix
-reference**, so the error is about a `dim` statement you never wrote, at a line
+reference**, so the complaint is about a `dim` statement you never wrote, at a line
 number nowhere near the call. **If a function you are sure exists produces
 that, it exists and this account may not call it.** A call with three arguments
 gives a different but equally misleading answer — `sdext(101, 'pw', 'salt')`

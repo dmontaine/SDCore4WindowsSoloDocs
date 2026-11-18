@@ -11,7 +11,7 @@ SD Core Solo for Windows has **one account**, `sduser`, and its two OS switches 
 
 ## The two OS switches
 
-**The shell and OS access are two switches, `sh` and `os`, both off as delivered** ([Operating System Access](06b-operating-system-access.html)). With them off, `sh`, `os.execute`, the embedded Python, the editors that run outside SD and a path outside the account are refused to a session that has not typed `admin`. **Switched on, they run with the rights of your Windows user, and then they are not a wall**: what an agent's installation can reach is what its Windows user can reach. The switches are the administrator's to turn on or off (`set.os.access`), and the installer asks about them once.
+**The shell and OS access are two switches, `sh` and `os`, both off as delivered** ([Operating system access](06b-operating-system-access.html)). With them off, `sh`, `os.execute`, the embedded Python, the editors that run outside SD and a path outside the account are refused to a session that has not typed `admin`. **Switched on, they run with the rights of your Windows user, and then they are not a wall**: what an agent's installation can reach is what its Windows user can reach. The switches are the administrator's to turn on or off (`set.os.access`), and the installer asks about them once.
 
 ## Two shapes
 
@@ -19,7 +19,7 @@ The full recipe is `sdb_ai\sd64\agent-pack\recipe\agent-account.md` in the SD Co
 
 **Shape 1: the agent is a client of your installation, with both switches off.** It gets the account and nothing outside it: it cannot run a Windows command, read or write a file outside the account's folder, or change the VOC. It can read, change and delete everything the account holds, **including your production data**, so use it only where the agent may touch that data.
 
-1. **Check the switches are off.** Type `ADMIN`, then `set.os.access` with no argument: it says `Account sduser has SH no, OS.EXECUTE no`. If it does not, `set.os.access sh off` and `set.os.access os off` put it right, and the next sign-in sees it.
+1. **Check the switches are off.** Type `admin`, then `set.os.access` with no argument: it says `Account sduser has SH no, OS.EXECUTE no`. If it does not, `set.os.access sh off` and `set.os.access os off` put it right, and the next sign-in sees it.
 2. **Give it a way in that is not your Windows sign-in.** Over ssh, give it a key, never your Windows password: add the agent's public key as one line of Solo's own key file, `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys` ([ssh access](08-ssh-access.html)); it signs in on port 4251 with the key and types the account password at the SD prompt, and the sign-in runs `sd-solo`, never a shell. Or the API on port 4249 ([API access](09-api-access.html)), which takes the account password. The agent runs on another computer, as a client.
 3. **Give it the account password and nothing else**, never the administrator password, the global password or your Windows password. Change the account password when the work ends (`set.password`).
 4. **Prove the walls** before you trust them. As the agent, try what the guide says is refused: `sh`, `os.execute`, a path outside the account, `config`, a `copy` into the VOC, `catalog ... global`. Each must be refused in the words the guide quotes. If one succeeds, a switch is on that you did not mean to turn on.
@@ -37,10 +37,10 @@ The full recipe is `sdb_ai\sd64\agent-pack\recipe\agent-account.md` in the SD Co
 
 ## What this does not give you
 
-There are no scopes inside the account: the agent can read, change and delete everything in `sduser`, and with a switch on everything its Windows user can reach, which is why your data is somewhere else or behind shape 2. A switch turned on later takes the refusal away from then on. The audit trail names what the agent did, not what it saw. The MCP door ([The MCP Door](25-the-mcp-door.html)) is another way in, off as delivered, run by an MCP client on this computer; this recipe does not use it, and the `.mcp.json` example in the source is the shape of a remote door that is not built, not something to use. And no setting protects you from a prompt that persuades the agent to ask *you* for more: the answer to a request for the administrator password, or for a switch, is yours, and the safe default is no.
+There are no scopes inside the account: the agent can read, change and delete everything in `sduser`, and with a switch on everything its Windows user can reach, which is why your data is somewhere else or behind shape 2. A switch turned on later takes the refusal away from then on. The audit trail names what the agent did, not what it saw. The MCP door ([The MCP door](25-the-mcp-door.html)) is another way in, off as delivered, run by an MCP client on this computer; this recipe does not use it, and the project-scope `.mcp.json` example in the source is the shape of a remote door that is not built, not something to use: Solo's own ssh server runs `sd-solo` for every sign-in and discards the command the client asked for. And no setting protects you from a prompt that persuades the agent to ask *you* for more: the answer to a request for the administrator password, or for a switch, is yours, and the safe default is no.
 ## See also
 
-[Operating System Access](06b-operating-system-access.html) ·
+[Operating system access](06b-operating-system-access.html) ·
 [Security](12-security.html) ·
-[The MCP Door](25-the-mcp-door.html) ·
+[The MCP door](25-the-mcp-door.html) ·
 and, in the User documentation, the page *SD and AI Agents*.

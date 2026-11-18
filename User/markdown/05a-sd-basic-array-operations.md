@@ -245,18 +245,19 @@ element, while its own example uses that form to read the keys back. SD follows
 the example.
 
 **Equal keys.** Keys that compare as equal come out newest first, and with
-`srt$unique` the duplicate that arrived first is the one kept. That is meant to hold
+`srt$unique` the duplicate that arrived first is the one kept. That holds
 whether the sort stays in memory or is large enough to spill to work files (the
-`SORTMEM` setting), and however many files `SORTMRG` merges at once. The one exception is a right justified key that holds numbers and text
-together: the comparison of a number with text is not consistent, so there the order
-depends on how the sort was cut into runs. Do not rely on the order of equal keys
-beyond that; the order of *different* keys is the same either way.
-
+`SORTMEM` setting), and however many files `SORTMRG` merges at once. The order does not depend on `SORTMEM` or `SORTMRG`. The one
+exception is a right justified key that holds numbers and text together: the
+comparison of a number with text is not consistent, so there the order depends on
+how the sort was cut into runs. Do not rely on the order of equal keys beyond
+that; the order of *different* keys is the same either way.
 Many equal keys, or keys that arrive already in order, do not
-make a sort slow: the keys of a run are collected and sorted once. A sort with `srt$unique`, `srt$compound` or
-`srt$strict`, or with a right justified key that holds numbers and text together, is
-sorted as before and is not faster. Lowering `SORTMEM` is no longer a way to speed up a
-sort of equal keys.
+make a sort slow: the keys of a run are collected and sorted once, so 100,000 equal
+keys take a fraction of a second. A sort with
+`srt$unique`, `srt$compound` or `srt$strict`, or with a right justified key that
+holds numbers and text together, is sorted as before and is not faster. Lowering
+`SORTMEM` is no longer a way to speed up a sort of equal keys.
 
 **The values of *flags*.** `srt$left` 0, `srt$right` 1, `srt$compound` 2,
 `srt$right.float` 3 and `srt$strict` 4 choose how two keys are compared, the

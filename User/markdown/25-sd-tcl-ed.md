@@ -13,7 +13,7 @@ BASIC and runs inside SD, so it needs no operating-system permission either;
 hand the record to a full-screen Windows program, so they are behind the `os`
 switch. Use one of those when you are sitting at a terminal and want to see the
 whole record at once. A record that is a data collection has an editor of its
-own, [ced](27b-sd-tcl-ced.html).
+own, [ced](27b-sd-tcl-ced.html), also reached from the IDE (F12) or by `call !ced`.
 
 SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
@@ -21,7 +21,7 @@ marks a word typed as it stands; braces mark an optional part. **`ed`'s own
 commands are shown in upper case**, which is how `ed`'s `HELP` prints them; it
 folds case too.
 
-The listings use a scratch record in an account's `bp` file.
+> **The listings on this page** use a scratch record in an account's `bp` file.
 
 ## Starting it
 
@@ -157,7 +157,7 @@ before the current line rather than after it.
 |---|---|
 | **`P`**n* | display *n* lines from the current line |
 | **`PL`**{**`-`**}*n* | *n* lines relative to the current line |
-| **`PP`**n* | *n* lines centred on the current line |
+| **`PP`**n* | *n* lines centered on the current line |
 | **`PB`** | the block |
 | **`L`** *string* | the next line **containing** *string* |
 | **`F`**{*col*} *string* | the next line with *string* **at** column *col*, default 1 |
@@ -347,7 +347,7 @@ FIle [[filename] record.id]
                 Write record and end edit
 ```
 
-### External commands: a catalogued subroutine as an ED command
+### External commands: a cataloged subroutine as an ED command
 
 **You can add commands to `ed`** by writing a subroutine and naming
 the commands it handles in the `$ed.options` record of the VOC. A line of that
@@ -357,7 +357,7 @@ record such as
 EXTERNAL zzedx1 WHERE DUMP UPCASE "'ADD 'A0X"
 ```
 
-says that the catalogued subroutine `zzedx1` handles the commands `WHERE`,
+says that the cataloged subroutine `zzedx1` handles the commands `WHERE`,
 `DUMP`, `UPCASE`, and any command that matches the template `'ADD 'A0X`.
 After the subroutine's name come one or more patterns, one after another, with
 no quotes needed; a pattern with a space in it is put in double quotes. A
@@ -385,7 +385,7 @@ Set `error` to true if the command fails: the editor says *External command
 `name` failed* and changes nothing. Otherwise it takes `info(3)` as the new
 data and `info(4)` to `info(6)` as the new positions, which it keeps inside the
 record (999 becomes the last line, -3 the top). `OOPS` undoes what the
-subroutine did. The subroutine must be catalogued where the user can reach it.
+subroutine did. The subroutine must be cataloged where the user can reach it.
 
 **What this does not do:** the editor does not check that the subroutine exists
 until a command that names it is typed; a missing one then stops the editor with
@@ -426,7 +426,7 @@ bp zzed
 
 **Field 1 is a marker, not a command. it must begin with `E`** — `ED` is the
 usual thing to write — and `ed` refuses a record that does not with *"Record is
-not a prestored edit sequence"*. Nothing was run for it above, and the
+not a prestored edit sequence"*. The
 line numbers in error messages count it: an unrecognized command in **field 2**
 is reported as line 2.
 
@@ -461,4 +461,4 @@ turned on by the administrator with `set.os.access os on`. See
 
 [SD TCL - The edit Screen Editor](26-sd-tcl-edit.html) ·
 [SD TCL - The micro Screen Editor](27-sd-tcl-micro.html) ·
-[SD TCL - Programs and the Catalogue](24-sd-tcl-programs-and-the-catalogue.html).
+[SD TCL - Programs and the Catalog](24-sd-tcl-programs-and-the-catalogue.html).

@@ -21,8 +21,10 @@ OpenQM documents are not authoritative here.
 additions, changes and deletions — of features, of structure, of security and
 of commands. **These pages cover those changes.**
 
-If you have used OpenQM, or SD Core for Windows, much of SD Core will still be
-familiar: the same data model, the same query processor, the same BASIC.
+If you have used OpenQM, or SD on Linux, much of SD Core will still be
+familiar: the same data model, the same query processor, the same BASIC. If you
+are bringing programs over from another MultiValue database, start with
+[Migrating to SD](26-migrating-to-sd.html).
 
 ## Two ways to use it, one install
 
@@ -38,43 +40,42 @@ password** last, and you can leave it blank:
 at installation and fixed until you reinstall: no command creates it, so a
 computer installed without one needs a reinstall to be managed.
 
-Only an SD Core for Linux server manages a Solo computer; there is no Windows
-management server. What the server can do today is on
-[Managed mode](15-managed-mode.html), and it will grow as management features
-are added to SD Core for Linux.
+Only an SD Core for Linux server manages a Solo computer. What the server can
+do today is on [Managed mode](15-managed-mode.html), and it will grow as
+management features are added to SD Core for Linux.
 
 ## What "used to" means in these pages
 
 These pages describe changes, so **used to**, **no longer** and **now** run all
 through them. **The comparison is against the multiuser SD Core for Windows
 this product was made from** — what it does differently in this release is in
-[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html)
-— and, behind it, SD on Linux, ScarletDME and OpenQM 2.6.6.
+[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)
+— and, behind it, upstream `sdb64`, ScarletDME and OpenQM 2.6.6.
 
 ## The pages
 
-**They are numbered.** Read them in numerical order the first time; after that
-they stand alone.
-
-**A number with a letter after it is the second half of a long page**, split so
-that no page runs longer than a reader will scroll: `01a` continues `01`, and so
-on. Nothing was renumbered when they were split.
+**Read them in numerical order the first time; after that they stand alone.**
+**A number with a letter after it continues the page before it**, split so
+that no page runs longer than a reader will scroll.
 
 | | | |
 |---|---|---|
-| **00** | Start here | this page |
+| **00** | Start here | this page — what the set is and what it leaves out |
 | **00a** | [Copyright and license](00a-copyright-and-licence.html) | The copyright and the license for this set, in full and in one place |
 | **01** | [Installing](01-installation.html) | What the installer asks, what it puts where, and the control file for installing many computers |
 | **01a** | [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) | Installing a new release over an existing one, and taking SD off the computer |
-| **01b** | [Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html) | What Solo leaves out, adds and does differently |
+| **01b** | [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html) | What Solo leaves out, adds and does differently |
+| **01c** | [Installing many computers](01c-installing-many-computers.html) | The control file, what the installer checks when it finishes, when a step fails, and changing any of it afterwards |
 | **02** | **[Your first thirty minutes](02-first-run.html)** | **Start here if you just want it working** |
 | **03** | [Running SD](03-running-sd.html) | How SD starts, stopping it, and the command line |
 | **04** | [Scheduled jobs](04-scheduled-jobs.html) | Running an SD command on a timer |
 | **05** | [The account and its passwords](05-account-types.html) | `sduser`, the account password, the administrator and global passwords |
 | **06** | [Administrator commands](06-administrator-commands.html) | The commands that need `admin` first |
 | **06a** | [Sessions and locks](06a-sessions-and-locks.html) | Who is signed in, what is locked, and clearing it |
+| **06a1** | [Task locks and the sessions screen](06a1-task-locks-and-forcing-a-lock-open.html) | Task locks, forcing a lock open, and the sessions and locks screen |
 | **06b** | [Operating system access](06b-operating-system-access.html) | Reaching Windows from inside SD |
-| **06c** | [Backing up and restoring the account](06c-backup-and-restore.html) | Writing your account to a zip file, putting it back, and recording the system's settings |
+| **06b1** | [Showing a document with pdf](06b1-showing-a-document-with-pdf.html) | The one bypass of the `os` switch, naming a reader, and the context help |
+| **06c** | [Backing up and restoring the account](06c-backup-and-restore.html) | Writing the account to a zip file, putting it back, and recording the system's settings |
 | **07** | [Development and file commands](07-programmer-commands.html) | Compiling, editing, and the verbs that maintain files and indexes |
 | **08** | [ssh access](08-ssh-access.html) | Reaching SD on this computer over ssh |
 | **09** | [API access](09-api-access.html) | The client API, its port, and its login |
@@ -87,6 +88,8 @@ on. Nothing was renumbered when they were split.
 | **15** | [Managed mode](15-managed-mode.html) | What an SD Core for Linux server can do to a managed computer |
 | **16** | [Configuration](16-configuration.html) | `sd.conf` and its parameters |
 | **16a** | [System limits](16a-system-limits.html) | The sizes and counts SD works within |
+| **16b** | [Changing a parameter from SD](16b-changing-a-parameter-from-sd.html) | `set.config` and the `E` key of the configuration screen |
+| **16c** | [Configuration - the parameters](16c-the-parameters.html) | Every parameter SD accepts, by subject, and the ones that were removed |
 | **17** | [The installed scripts](17-the-installed-scripts.html) | The PowerShell scripts in the installed folder |
 | **17a** | [The scripts SD runs itself](17a-scripts-sd-runs-itself.html) | The ones the installer and the startup tasks run, which nobody types |
 | **17b** | [The scripts a verb calls](17b-scripts-a-verb-calls.html) | The ones a verb runs, and the one SD runs as it starts |
@@ -96,8 +99,9 @@ on. Nothing was renumbered when they were split.
 | **20a** | [sdfix: what it checks and repairs](20a-sdfix-checks-and-repairs.html) | Every error a check reports, and what `-F` or `-Q` does about it |
 | **21** | [sdidx, the index relocation tool](21-sdidx.html) | Where a file's indexes are kept, and moving or deleting them |
 | **22** | [sdconv, the byte order convertor](22-sdconv.html) | What it converts (compiled programs only), and what it refuses |
-| **23** | [Giving an AI agent an installation of its own](23-giving-an-ai-agent-its-own-installation.html) | A recipe with no code: why the wall for an agent has to be a computer |
+| **23** | [Giving an AI agent an installation of its own](23-giving-an-ai-agent-its-own-installation.html) | Why the wall for an agent has to be a computer, and the recipe |
 | **24** | [The AI helper](24-the-ai-helper.html) | Asking an AI model a question from SD: the provider, the key, the gate, and what a helper that runs as you cannot promise |
+| **24a** | [Setting up the AI helper](24a-setting-up-the-ai-helper.html) | The AI choice page, the `set.ai` verb, the standing text, the key, a custom provider, the audit trail and troubleshooting |
 | **25** | [The MCP door](25-the-mcp-door.html) | Letting an AI agent's MCP client use your account through read-only tools: the two switches (both off), the audit line, and what the door does not add |
 | **26** | [Migrating to SD](26-migrating-to-sd.html) | Bringing programs and queries from another MultiValue database: where the compatibility words are set, and the words SD does not accept |
 | **26a** | [Option words](26a-migrating-option-words.html) | The words of the `option` command, one line each |
@@ -118,8 +122,8 @@ they work for the rest of that session. See
 
 **3. There is one account and you cannot make another.** It is called
 `sduser` on every computer, whatever your Windows name is. There is no
-`sdsys` sign-in and no groups to join. The account and grant commands are gone. See
-[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html).
+`sdsys` sign-in and no groups to join. The account and grant commands are gone.
+See [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
 
 **4. Commands and names are lower case.** Typing in upper case still works —
 the lookup tries what you typed, then lower, then upper. See

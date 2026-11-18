@@ -57,8 +57,7 @@ upper left corner and stops taking keys while the cursor is off the screen — s
 the SED page. A `screen open` program of your own asks for the size it needs
 with `minsize`, and SD asks nothing more of it.)
 
-**SD's default is 140 columns by 43 lines, not 80 × 24** (it was 120 by 36
-in release WS1.1-3). It is what a session gets when there is no terminal to
+**SD's default is 140 columns by 43 lines, not 80 × 24.** It is what a session gets when there is no terminal to
 ask — a phantom, a piped script, a service — and a report that looks wrapped or
 truncated on a narrow window is usually the window, not the report.
 
@@ -102,13 +101,10 @@ this line is worth reading when screen handling misbehaves.
 list.term.types {lptr {n}}
 ```
 
-Lists the terminal types SD has a definition for — the names of the entries under
-`terminfo` in the SD directory, which is what the type in `term` and in the `TERM`
-setting is looked up in — and how many there are. `lptr` sends it to a print unit.
-
-```
-list.term.types
-```
+Lists the terminal types for which SD has a terminfo definition: the names of
+the entries under `terminfo` in the SD system directory, which is what the type
+you give `term` is looked up in. They come out in columns, and the last line
+counts them (an excerpt):
 
 ```
 ansi            ansi-generic    dec-vt100       dec-vt220       dec-vt330       dec-vt340
@@ -118,10 +114,54 @@ xterm
 37 terminal type(s)
 ```
 
-(The list is cut short here: it is 37 names in rows of six, and the count depends
-on the release. The Data General, MDC Prism, Prime and Televideo 910 definitions that
-were once on it were removed in 2.0-0.) **A type that is not on it has no definition of its own**, and SD
+`lptr` sends the list to a print unit. The list is cut short here, and the count
+depends on the release. **A type that is not on it has no definition of its own**, and SD
 substitutes one for it.
+
+### What a key does: `tool.keys`
+
+```
+tool.keys
+```
+
+A full-screen diagnostic for the terminal and the keyboard. It changes nothing and
+reads nothing private (it shows the terminal type, the window and the locale, which
+the session already knows), and it needs no administrator password. It needs a
+window of at least **140 columns by 43 lines** and says so, with the size it found,
+if the window is smaller (or bigger than 500 by 300, which it also refuses before
+it draws). Use it when a function key does nothing, an arrow prints
+`^[[A`, color looks wrong or the mouse does not answer.
+
+| box | what it shows |
+|---|---|
+| **Terminal** | the terminal type SD is using (`TERM (SD)`, what `term` sets) and the one in the environment (`TERM (env)`), the window and the layout, the locale and whether the borders are line characters (UTF-8) or `+ - \|`, whether the terminal can show color, the theme, how many mouse events have arrived, how keys are being read, and how many of the 52 keys in the grid have been seen |
+| **Last keys** | the 25 newest keys, newest first. **Names** (the start): the name the screen library reports for the key — `up`, `f5`, `ctrl-g`, `alt-s`, `mouse`, or the character itself with its code. **Raw** (Ctrl-R): the bytes the terminal sent, the first eight, in hex, with the characters beside them |
+| **Keys seen** | the arrows, home, end, paging, insert, delete, backspace, tab, back-tab, Enter, Esc, the twelve function keys, the control keys, an Alt-letter, a printable character and the mouse; a key is ticked, and drawn bold, once it has been pressed |
+| **Mouse** | the last mouse event (press, release, drag, wheel), where it was, and the counts |
+| **Box drawing** and **Styles** | the borders the library draws with, and the library's sixteen styles each drawn in itself, so the theme in force can be seen on this terminal |
+
+Every key is shown **before** the program acts on it. The program uses five:
+**Ctrl-L** clears what has been seen (it uses no function key, so every function key can be tested), **Ctrl-R** switches between names and raw
+bytes, **Ctrl-T** takes the next theme and keeps it for you, as on every page (a terminal that cannot
+show color keeps mono and says so), **Ctrl-K** lists these keys and **Ctrl-Q** leaves, so a key that ends the
+program can only be tested by leaving. `tool.keys` has no menu bar, so that Esc and F10 can be
+tested here like any other key.
+
+**A key that makes the terminal beep and shows nothing in names mode is one SD
+has no name for.** SD understands the usual keys of every terminal in both
+cursor-key modes (the arrows, Home, End, Insert, Delete, Page Up and Down,
+Shift-Tab, F1 to F12, and the Ctrl, Shift and Alt forms of them such as
+`ctrl-left` and `ctrl-pgup`), then adds those of the terminfo entry for the type
+in force. A control sequence it has no name for is ignored whole: it is no longer
+typed into your text. A byte of 128 or more is never a key. Press **Ctrl-R**,
+then press the key again: the bytes it sent are shown, which is what a terminfo
+entry needs. An Alt-letter shows as `alt-x` on a terminal that sends Alt+x as Esc
+and x. Pasted text arrives as one `paste` key, however long it is.
+
+Make the window smaller while it runs and the cursor lock takes the keyboard
+with the message that the window is too small; make it larger again and the
+screen comes back. Ctrl-Q, then `y`, leaves from the lock. If the input ends (a
+piped session) the program ends.
 
 ## The wire: `pterm`
 
@@ -146,7 +186,7 @@ gone quiet — it takes a keyword and `display` is one of them. The full set:
 | **`pterm newline cr`** \| **`lf`** \| **`crlf`** | the output line ending |
 | **`pterm return cr`** \| **`lf`** | the input line ending |
 | **`pterm binary on`** \| **`off`** | pass bytes through untranslated |
-| **`pterm telnet on`** \| **`off`** | recognise `TN_IAC` |
+| **`pterm telnet on`** \| **`off`** | recognize `TN_IAC` |
 | **`pterm reset`** *string* | the terminal reset string |
 | **`pterm prompt`** `":"` `"::"` | change the command prompt and the continuation prompt |
 
@@ -183,315 +223,8 @@ The first `who`, and `hush off` itself, produced no line at all. **If you are
 debugging a script that has gone quiet, an unmatched `hush on` looks exactly
 like a hang.**
 
-## The bell
-
-```
-bell on
-bell off
-```
-
-Sets or clears the character SD sends to sound the terminal bell. **Neither form
-prints anything**, and `bell` with no keyword is an error rather than a toggle:
-*Mode keyword missing or invalid*.
-
-## Clearing type-ahead and stored prompts
-
-```
-clear.input
-clear.prompts
-```
-
-**`clear.input`** discards anything typed ahead but not yet read.
-**`clear.prompts`** discards the inline prompt and response text a previous
-command left behind. Neither prints anything.
-
-(The run-together spellings `clearinput` and `clearprompts` were second names
-for the same verbs and were removed in 2.0-0.)
-
-> **Neither can be demonstrated down a pipe, and `clear.input` should not be
-> sent down one at all.** In a piped session the input stream *is* the script,
-> so discarding unread input discards the commands that have not run yet —
-> including the `off` that would have ended the session. **A run that did this
-> hung, was killed, and left a session in the user table that had to be cleared
-> with `sd-solo -cleanup`.** Both verbs are for a person at a terminal.
-
-## The inactivity timer
-
-```
-autologout
-autologout n
-```
-
-```
-:autologout
-Autologout is disabled
-```
-
-which is the shipped state. Setting a timer ends a session that has been idle
-too long — useful on a machine where people walk away from a prompt, and worth
-thinking about before enabling on a machine where a long-running interactive job
-is normal.
-
-*n* is minutes and 0 turns it off. **It applies to an API session too**: a client that
-executes `autologout 10` (`SDExecute("AUTOLOGOUT 10")`) has its server session ended after
-ten minutes in which it sent nothing, and its next request fails at once
-(see [SD Client API](37-sd-client-api.html)). The setting belongs to the one session that gave it.
-
-**It works in the full-screen programs too.** The screen library, `ide`, the
-home screen and every tool page wait for a key one second at a time, and each of those waits used to
-start the timer again, so a session left in one of them was never logged out. SD now adds up the time
-spent waiting across such short waits: only a key actually typed (or the break key) starts the period
-again, and the logout is the same as at the prompt. A page left open without typing, `tool.sessions`
-included, is therefore logged out like any other session. A program that waits for a key with no time
-limit behaves as before, and a timed wait exactly as long as the `autologout` period still ends with a
-plain timeout. **A program that polls the keyboard with very short timed `keyin`s and does work between
-them counts as waiting**, because the polls add up with nothing typed: `autologout` can end it, and
-only a key resets the count.
-
-## The command echo: `echo`
-
-```
-echo on
-echo off
-echo
-```
-
-**`echo off` stops SD echoing what you type**; with no keyword it toggles.
-Neither form prints anything, and `echo off` suppresses its own confirmation
-along with everything else.
-
-```
-:echo off
-:28 DON
-:who
-28 DON
-```
-
-That is one `who` under `echo off` and one after `echo on`. **The first has no
-`:who` line above it** — its output ran straight on after the prompt — and
-`echo on` produced no line of its own either, because the echo it restores does
-not apply to the command that restores it.
-
-**It is not `hush`, and confusing the two wastes time.** `echo` decides
-whether your **input** is shown back; `hush` decides whether SD's **output** is
-shown at all. A session that has gone completely silent has `hush on` set; one
-where the commands vanish but the answers still appear has `echo off`.
-
-## Dates and times
-
-```
-date                    today, spelled out
-date internal           today as SD's internal day number
-date n                  day number n, spelled out
-date some-date          that date's day number
-time                    the time and the date
-time internal           seconds since midnight
-```
-
-```
-:time
-14:10:34 27 AUG 2026
-:date
-Thursday, 27 August 2026  02:10pm
-```
-
-**`date` prints the time and `time` prints the date.** Both print both, in
-different formats and a different order, and neither name says so. `date` is
-the long spelled-out form and `time` is the short one.
-
-**`internal`** on either gives the raw number a program would see:
-
-```
-:date internal
-21424
-:time internal
-51088
-```
-
-the day number and seconds since midnight. **`date` with an argument is a
-converter, and which way it converts depends on what you give it** — a bare
-number is read as a day number and comes back as a date, anything else is read
-as a date and comes back as a day number:
-
-```
-:date 20000
-Monday, 03 October 2022
-:date 4 jul 2026
-21370
-:date zznotadate
-Invalid date format
-```
-
-`time` takes no argument other than `internal`.
-
-### Which way round a date is read: `date.format`
-
-```
-date.format on | off | display
-```
-
-```
-:date.format display
-European date format is off
-```
-
-**`on`** selects European (day-first) date format for the session, **`off`**
-returns to the default, and **`display`** reports which is in force. If a default
-conversion code other than `D` is set, `display` names that too.
-
-**`date.format` with no keyword prints nothing** — like `pterm`, it wants one.
-
-**Setting the session's date is a different thing** — `set.date` needs `admin`,
-and it moves the date SD reports in your session only, not the computer's clock.
-It is described under *Administrator commands* in the GettingStarted set.
-
-## Currency and separators: `nls`
-
-```
-nls
-nls currency | thousands | decimal
-nls currency | thousands | decimal value
-nls default
-```
-
-Three values control how a number is written: the currency symbol, the thousands
-separator and the decimal separator. **`nls` with nothing after it shows all
-three**, one to a line:
-
-```
-Currency symbol     : '$'
-Thousands separator : ','
-Decimal separator   : '.'
-```
-
-Naming one of the three shows just that one. Naming one and a value sets it, and
-**`nls default`** puts all three back to `$`, `,` and `.`. A setting lasts for the
-session: the next session starts from the defaults. Anything other than the three
-names is refused, *"x is not a recognised NLS key"*.
-
-These are the same three values that **`getnls`** and **`setnls`** read and set
-from SD BASIC (see [Data Conversion](06-sd-basic-data-conversion.html)). SD Core
-Solo for Windows is English only; `nls` has nothing to do with the language of messages, month
-names or day names.
-
-## Waiting
-
-```
-sleep n
-sleep hh:mm{:ss}
-```
-
-A number is seconds; a time is *until* that time, rolling over midnight if it
-has already passed. **`sleep` with no argument returns immediately** rather than
-sleeping for ever — the argument parses as zero.
-
-## A log of the commands a session runs: `command.logging`
-
-```
-command.logging {on | off}
-```
-
-`on` starts a log of every command this session runs and where it came from;
-`off` stops it; with neither word it says whether it is on and where the file
-is. The log is a file named `clog.`*user number*`.log` **in the account
-directory**, mode 0600 (nobody but its owner can read it), added to and never
-emptied. A line is tab separated: the time as an epoch value, the user number,
-the login name, the origin and the command.
-
-| origin | |
-|---|---|
-| `User` | typed at the prompt |
-| `Cmd` | the command line `sd` was started with |
-| `PA` | a line of a paragraph |
-| `Exec` | any other command a program or a menu runs, such as `execute` |
-
-The `command.logging on` itself is not in the log, because the log starts after
-it; `command.logging off` is. **openQM writes the file in `TEMPDIR` and has a
-`CMDLOG` parameter that logs every session into one directory; SD has neither.**
-`TEMPDIR` is `/tmp` unless `sd.conf` says otherwise, a directory anyone can
-write to, where another user could create the file first and be handed the log.
-A symbolic link left where the file would be made is refused (*The command log
-could not be started*). Logging belongs to the session and is off in the next.
-
-## Big letters: `block.term`
-
-```
-block.term text
-```
-
-Writes *text* to the terminal in large letters. Each character is drawn in a
-block 7 rows high and 7 columns wide made of the letter `W`, with two blank
-columns after it, so **eight characters fill an 80 column line**. Long text wraps,
-breaking at a space where it can. Lower case prints as upper case. Letters,
-digits and `. , ! ? - : / + = * ( ) '` have shapes; any other character prints as
-a question mark, and a space is a blank block.
-
-```
-block.term Hi 2
-```
-
-```
- W   W     WWW               WWW
- W   W      W               W   W
- W   W      W                   W
- WWWWW      W                  W
- W   W      W                 W
- W   W      W                W
- W   W     WWW              WWWWW
-```
-
-With no text the verb answers *Text to print required*. `block.print` is the same
-program writing to the default printer; it is described with the printing verbs
-in [SD TCL - Printing and Spooling](28-sd-tcl-printing-and-spooling.html).
-
-## Writing to the error log
-
-```
-logmsg text
-```
-
-Everything after the verb is the message. It prints nothing, and what it writes
-is a stamped, attributed entry in the system error log:
-
-```
-27 Aug 26 13:13:31 User 11 (pid 1786, don):
-   nightly run finished
-```
-
-**The user number, the process id and the account name are added for you**, so
-a message does not need to say who wrote it. The log is
-`%USERPROFILE%\SDCoreSolo\sdsys\errlog`, shared by every session, which makes `logmsg`
-the right way for a phantom or a scheduled job to report something a person will
-read later — there is no terminal to print to and no transcript kept.
-
-## Reading the documentation: `pdf`
-
-```
-pdf
-pdf name
-```
-
-`pdf` alone lists the documents (the PDF files the administrator has put in the `pdf`
-directory of the install directory, without the `.pdf`), and `pdf name` shows one in the
-PDF reader installed on the computer you are sitting at. **It works even when the account
-has no `os` switch**, because the reader it starts is one the administrator has allowed for
-this one purpose and the document is always one of those files, never a path you type.
-
-It needs two things from the administrator and one from you:
-
-* **a reader the administrator has allowed** (`set.viewer`). If none has been, `pdf` says
-  `No viewer has been allowed for documents`; it starts nothing;
-* **the documents installed** (`docs.install`); with none, `pdf` says there are no documents;
-* **a session at the computer**: the reader opens on the screen of the session you are in.
-  Over ssh, or in a background session, `pdf` says so and does nothing.
-
-`pdf guide.pdf` is the same as `pdf guide`. A name that is not a lower case name of letters,
-digits, dot, dash and underscore, or is not in the list, is refused in words. The
-administrator's guide, *Operating system access*, says what is checked each time a reader
-is started and why an allowed reader is not a shell.
-
-## See also
-
-[SD TCL - The Command Processor](19-sd-tcl-command-processor.html) ·
-[SD TCL - Printing and Spooling](28-sd-tcl-printing-and-spooling.html) ·
-[SD Basic - Terminal Input and Output](12-sd-basic-terminal-input-and-output.html).
+## Continued in
+
+[SD TCL - The Terminal and the Session: Timers, Dates and
+Logging](29-sd-tcl-the-terminal-and-the-session-2-timers-dates-and-logging.html)
+— the bell, timers, dates and logging.

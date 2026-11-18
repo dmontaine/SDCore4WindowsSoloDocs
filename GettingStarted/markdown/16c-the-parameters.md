@@ -10,23 +10,23 @@ SD](16b-changing-a-parameter-from-sd.html).
 |---|---|---|
 | `NUMUSERS` | 20 | Maximum concurrent sessions. Sizes the user table in shared memory |
 | `NUMFILES` | 80 | Maximum open files across all sessions |
-| `NUMLOCKS` | 100 | Maximum record locks across all sessions |
+| `NUMLOCKS` | 100 | Maximum record locks across all sessions. Range 1 to 32767 (the lock table's cells are 16 bits; a value outside it stops SD starting) |
 | `MAXCALL` | 10000 | Maximum subroutine call depth. Range 10 to 1000000 |
 | `CMDSTACK` | 99 | Depth of the command stack |
-| `NETWAIT` | 5 | Seconds to wait for a connection to a server defined for SDNet (`set.server`, `set.netlogin`, a file opened through an `N` pointer): the TCP connection, then the TLS handshake, each. 1 to 3600; zero is refused |
-| `NETREPLY` | 30 | Seconds to wait for each reply of such a server. 1 to 3600; zero is refused. `config('NETWAIT')` and `config('NETREPLY')` read them. See the SDNet page of the User set |
-| `FDS` | unset | Limit on file descriptors. No limit when unset |
 | `USERPOOL` | 1023 | The highest user number handed out; user numbers rotate through 1 to this, 0 always takes the lowest free one |
 | `USPLIT` | 0 | `1`: interactive sessions take the lowest free user number and every other process (a phantom, an API session) the highest free one in 1 to `NUMUSERS`, so the two never meet. `PHANTOMS` and `USERPOOL` are ignored while it is on. `config('USPLIT')` reads it |
 | `PHANTOMS` | unset | `base,range` — user numbers kept for phantoms started with `phantom user n`. Nobody else is given one: not a session, not an API session, not a phantom started without `user`. It must lie between 1 and the highest user number, or SD will not start. `config('PHANTOMS')` reads it as `base,range`, null when none are kept |
 | `CLEANUP` | 300 | Seconds between the checks that look for sessions that ended without logging out (a killed terminal, a lost connection) and clear them from the user table. 30 to 3600. The daemon wakes every ten seconds, so an interval is kept to within ten seconds; a very short one costs a pass over the user table that often. `config('CLEANUP')` reads it |
 | `PWDELAY` | 3 | Seconds SD waits after a failed network sign-on before it answers; 0 removes the pause |
+| `NETWAIT` | 5 | Seconds to wait for a connection to a server defined for SDNet (`set.server`, `set.netlogin`, a file opened through an `N` pointer): the TCP connection, then the TLS handshake, each. 1 to 3600; zero is refused |
+| `NETREPLY` | 30 | Seconds to wait for each reply of such a server. 1 to 3600; zero is refused. `config('NETWAIT')` and `config('NETREPLY')` read them. See the SDNet page of the User set |
+| `FDS` | unset | Limit on file descriptors. No limit when unset |
 
 ## Files and locking
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `GRPSIZE` | 4 | Default group size for a new dynamic file, in 1 KB units. Read by `create.file` and `configure.file` when no group size is given. With 200,000 records of 130 bytes, 5 to 11 percent of the groups overflowed at 2 KB and under 2 percent at 4 KB. A Solo that was installed with an older `sd.conf` keeps the 2 that file says until you change it; a file keeps the size it was made with |
+| `GRPSIZE` | 4 | Default group size for a new dynamic file, in 1 KB units. Read by `create.file` and `configure.file` when no group size is given. **4 as shipped**. A Solo installed with an older release keeps the `sd.conf` it has, and so may keep 2 until you change it; a file keeps the size it was made with |
 | `MAXIDLEN` | 63 | Maximum record id length. 63 is also the lower bound |
 | `MUSTLOCK` | 0 | When 1, a `write` or `delete` requires the record to be locked first |
 | `DEADLOCK` | 0 | When 1, SD traps deadlocks |
@@ -64,7 +64,7 @@ not exist is ignored**, and the default applies.
 ## File transfer over ssh
 
 `receive` and `send` (see *Moving Files In and Out* in the User documentation).
-Each takes effect when SD is next started (`sd-solo -stop`, then `sd-solo -start`), as every
+Each takes effect when SD is next started, as every
 parameter not listed above. None of them is one of the 14 parameters `set.config` changes: `XFER`
 is a door, and the limits are added by hand.
 
@@ -202,13 +202,12 @@ Until 2.0-0 seven parameters were parsed and did nothing (`JNLMODE`, `JNLDIR`,
 another product or chose between ways of working that SD no longer has
 (`APILOGIN`, `FILERULE`, `FIXUSERS`, `GDI`, `INVCASE`, `PORTMAP`). All thirteen
 are gone; see [A name SD does not recognize stops it starting](16-configuration.html#a-name-sd-does-not-recognize-stops-it-starting)
-above for what happens to a kept `sd.conf` that still names one. The `PATH:` form
+for what happens to a kept `sd.conf` that still names one. The `PATH:` form
 of a file name went with `FILERULE`: write an F-pointer instead.
 
-`NETFILES` is a live parameter, though an earlier edition of this page said it
-did nothing. A `server;file` VOC reference is
-refused whatever it holds (the old SDNet is gone), and the value is parsed,
-stored, shown by `config` and readable with `config('NETFILES')`. **One thing
+`NETFILES` is a live parameter. A `server;file` VOC reference is refused
+whatever it holds, and the value is parsed, stored, shown by `config` and
+readable with `config('NETFILES')`. **One thing
 still reads it:** the API server's request 29, "open an SDNet file", which
 opens the file that a VOC entry of the named account names, for a client that
 has signed in. It is refused unless bit 2 of `NETFILES` is set. The delivered

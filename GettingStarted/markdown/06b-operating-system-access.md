@@ -19,12 +19,6 @@ about: inside it everything works whatever the switches say. **The
 administrator needs no switch**: after `admin` the session passes both for as
 long as it lasts.
 
-**One narrower door for files only.** With the `os` switch off, an `sd.conf` line such as
-`NETDIRS=D:\Data\Sales;D:\Data\Shared` lets the account read and write files in the folders it
-names, and below them, by pathname, without turning the switch on. None is listed as
-delivered, and listing one is a loosening for every session of the account. See
-[The parameters](16c-the-parameters.html#netdirs-directories-outside-the-account).
-
 **What they run as, when they are on:** your Windows user, on an ordinary
 unelevated token — even when your Windows account is an administrator, because
 SD drops those rights (see [Running SD](03-running-sd.html)). A command that
@@ -32,8 +26,11 @@ needs elevation fails as it would in any unelevated window. Turning a switch on
 is therefore not a small thing: whoever signs in to SD, at the keyboard, over
 ssh or through the API, can do what your Windows user can do.
 
-SD folds case, so a command may be typed in either case. Commands are shown here
-in lower case.
+**One narrower door for files only.** With the `os` switch off, an `sd.conf` line
+`NETDIRS=D:\Data\Sales;D:\Data\Shared` lets the account read and write files in the folders it
+names, and below them, by pathname, without turning the switch on. None is listed as
+delivered, and listing one is a loosening for every session of the account. See
+[Configuration](16-configuration.html).
 
 ## Looking and changing: `set.os.access`
 
@@ -121,21 +118,29 @@ says so and opens no box.
 With both switches off:
 
 ```
+:sh echo hi
 sduser is not permitted to use the operating system shell
 ```
 
-A program's `OS.EXECUTE` is a run-time error that says `sduser is not permitted
-to use OS.EXECUTE`. A path outside the account given to `OPENSEQ`, `OPENPATH`,
-`DELETESEQ`, `DIR()` or the other routes in the table is the `ELSE` branch with
-`STATUS()` 3035, the number of "permission"; `DIR()` and `DIGEST` give a null
-string, and the `OSPATH()` keys answer false (or a null string, for the keys that
-return one). A print file or a `SETPTR ... AS PATHNAME`
-outside the account says:
+A program's `OS.EXECUTE` is a run-time error, and a path outside the account is
+the `ELSE` branch with status 3035 (the number of "permission"; it is the same
+number as the VOC refusal, and the statement says what was refused):
 
 ```
-sduser has no OS access, so a file or directory outside its own account cannot be reached by pathname (the administrator can give it: set.os.access os on)
+<address>: sduser is not permitted to use OS.EXECUTE at line 2
 ```
 
+```
+   openseq 'C:\Windows\win.ini' to f then crt 'opened' else crt 'refused ' : status()
+refused 3035
+   x = dir('C:\Windows') ; crt dcount(x, @fm) : ' ' : status()
+0 3035
+```
+
+`DIGEST` of an outside file, `OSPATH()` and `OPENTEMP` give nothing and status
+3035; a print file or a `SETPTR ... AS PATHNAME` outside the account says
+`sduser has no OS access, so a file or directory outside its own account cannot
+be reached by pathname (the administrator can give it: set.os.access os on)`;
 `edit` and `micro` say that they need OS.EXECUTE permission and name
 `set.os.access os on`. `ed`, SD's own line editor, needs none of it.
 
@@ -145,7 +150,8 @@ sduser has no OS access, so a file or directory outside its own account cannot b
 sh command
 ```
 
-Everything after the verb is the command:
+With `sh` on, everything after the verb is the command. It runs in the
+account's own directory, at your own Windows permissions:
 
 ```
 :sh echo hello-from-the-shell
@@ -171,8 +177,21 @@ command that holds `;`, `|`, `&`, `$`, a backquote, `<`, `>` or a line break, fo
 everyone, the administrator included and switch or no switch, with `Error 2
 executing operating system command`. The filter stops a one-line command being
 turned into two. For more than one step, write a script and run the script:
-`sh powershell -File .\nightly.ps1`. **`sh` with nothing after it** starts the
-interactive shell, where you may type what you like.
+`sh powershell -File .\nightly.ps1`.
+
+```
+:sh echo alpha-beta | findstr alpha
+Error 2 executing operating system command
+:sh echo gamma > zzsh.txt
+Error 2 executing operating system command
+```
+
+**That is a sanitizer, not a permission.** It stops a one-line command being
+turned into two by accident — a record id or a variable pasted into it — and it
+is applied the same way to everyone. A plain command with arguments is fine:
+`sh Get-ChildItem -Name`. **A bare `sh`, with nothing after it, starts an
+interactive shell** (the filter is for a typed command); `exit` brings you back
+to the SD prompt. It needs the `sh` switch like any other `sh`.
 
 ## The shell you get is Windows PowerShell 5.1
 
@@ -188,32 +207,32 @@ Each `sh` is a new shell, but **the working directory persists between them**:
 gamma
 ```
 
-## SD refuses to nest
+## `OS.EXECUTE` is not filtered
+
+**A program's `OS.EXECUTE` runs the string it is given as written**, pipes and
+all, with the same rights as `sh`, once the `os` switch is on:
 
 ```
-:sh sd-solo
-SD is already running in this session - type EXIT to return to it.
+   os.execute 'echo alpha-beta | findstr alpha'
+   crt 'status=':status()
 ```
 
-The child shell is marked, and SD checks the mark:
-
 ```
-:sh Get-ChildItem Env:SD_SESSION
-Name                           Value
-----                           -----
-SD_SESSION                     1
+alpha-beta
+status=0
 ```
 
-**That is worth knowing when writing a script for `sh` to run** — anything it
-invokes inherits `SD_SESSION`, so a script that starts SD as part of its work
-will be refused, wherever it is called from.
+That is the way to run a command SD's filter refuses. **The form `execute 'sh …'`
+from a program goes through the `sh` verb itself**, and is filtered, and asked
+about the `sh` switch, like a typed one.
 
-## `OS.EXECUTE` and the editors
+## The editors
 
-**A program's `OS.EXECUTE` needs the `os` switch**, and so do the screen editors
-`edit` and `micro`, which run as Windows programs: they are a way out of SD.
-`ed`, the line editor, is not. The form `execute 'sh …'` from a program goes
-through the `sh` verb itself, and is asked about the `sh` switch.
+The screen editor `micro` runs as an ordinary Windows program, in your window,
+with your permissions, and is **behind the `os` switch** (it is a way out of
+SD), and so is `edit`; `ed` (SD's own line editor) and `sed` (SD's own
+full-screen editor) are not. See
+[Development and file commands](07-programmer-commands.html#editors).
 
 ## Over ssh and the API
 
@@ -228,8 +247,8 @@ password; see [Security](12-security.html).
 
 **The installer asks**, on a new install and on an upgrade, on one page, **Shell
 and OS access**, with two boxes, both unticked: *Shell (SH)* and *OS access
-(OS.EXECUTE, files outside the account, Python, editors)*. **Before this release
-the shell and OS access were always on**, so an upgrade asks the same, and an
+(OS.EXECUTE, files outside the account, Python, editors)*. A Solo from before
+2.0-0 had its shell and OS access always on, so an upgrade asks the same, and an
 existing Solo would otherwise lose them without a word: tick each you want to
 keep. The answer can also be given in the control file, `os-access=none`, `sh`,
 `os` or `both`, on a new installation (an upgrade always asks); with a silent
@@ -245,118 +264,8 @@ it was.
 denied `sh` needs `admin` even when the switch is on, and `set.os.access` is
 itself an administrator command.
 
-## The one bypass: showing a document with `pdf`
+## Continued in
 
-```
-pdf
-pdf name
-set.viewer
-set.viewer add pdf program
-set.viewer remove pdf program
-tool.viewers
-docs.install directory
-load.help
-```
-
-**`pdf name` shows a documentation PDF in a PDF reader, whatever the `sh` and `os`
-switches say.** It is the one place where SD starts a program outside itself for an
-account that may not run programs, so it is held narrow and it is **off as delivered**:
-until you name a reader, `pdf` says that no viewer has been allowed and starts nothing.
-The installer asks once, unticked, when it finds a known reader and none is allowed yet
-(*Allow msedge to show the documentation*); the control file's `viewer=` answers it.
-
-**What `pdf` starts, and with what.**
-
-* **The program** is the first one on *your* list for `pdf` that passes the test below
-  **at the moment it is started**, not only when it was added. The list is the file
-  `viewers` in the SD system directory, one line to a program:
-  `pdf C:/Program Files/Some Reader/reader.exe`.
-* **The document** is a regular file of the `pdf` directory of the SD system directory,
-  found by its name in lower case letters, digits, dot, dash and underscore. The caller
-  never supplies a path; a link or a directory in that directory is not a document.
-* **The command** is built from those two parts alone, started with PowerShell's
-  `Start-Process`, so a reader that stays open does not hold the session. The reader is
-  given the document as its one argument, in quotes.
-* **A session that is not at the computer** (an ssh session, or one that runs in the
-  background) is told so, and nothing is started.
-* **One audit line**: `pdf open file=name viewer=C:/Program Files/Some Reader/reader.exe`.
-
-**The test a program must pass** (made by `set.viewer add` and again by `pdf`): the full
-path of an `.exe` of letters, digits, space and `: / . _ + - ( )` with no `..`; under
-`Program Files`, `Program Files (x86)` or the Windows folder; an existing regular file (not a
-folder, link or reparse point); owned by SYSTEM, the Administrators or TrustedInstaller;
-and no other user or group has an *Allow* entry that writes, appends, deletes, changes
-permissions or takes ownership of it. **It does not say a program is safe.** A graphical
-reader can open other files its user may read and follow links, so allow only readers you
-trust, and never a shell or an editor.
-
-### Naming a reader: `set.viewer` and the Bypass programs page
-
-```
-set.viewer                                                    says which programs are allowed
-set.viewer add pdf msedge                                     allows it (a bare name is looked up in App Paths)
-set.viewer add pdf "C:/Program Files/Some Reader/reader.exe"   a full path works too
-set.viewer remove pdf msedge                                  stops allowing it
-```
-
-An administrator command (`admin` first; without it: *Command requires administrator
-privileges*). **A bare name** (letters, digits and `. _ + -`) is the program this
-computer's **App Paths** key names for *name*`.exe` — the place Windows records which
-program a name starts; only the machine's key is read, which only an administrator can
-change. **A full path** is written with `/` or `\`; the double quotes are optional and
-take the spaces. Either way the program must pass the test above. Takes effect at once.
-
-**`tool.viewers`**, also an administrator command and a tile (*Bypass programs*) on the
-home screen, is the same list as a page: *Allowed for pdf* (each program and whether it
-still passes the test) and *Found on this machine* (the known readers App Paths names —
-`msedge`, `acrobat`, `acrord32`, `foxitpdfreader`, `sumatrapdf`, `pdfxedit`, `firefox` and
-`chrome` — whether each is allowed and whether it could be). Like the menu management
-page it **writes nothing itself**: Enter on a reader shows the command (`set.viewer add
-pdf msedge`) with its effect in a box answered Run or Cancel (Cancel is what Enter
-chooses), allowing one **asks for its name to be typed**, and the line under the page is
-the verb's own answer. A program on the list under a path App Paths does not give for its
-name is shown and removed at the prompt, because the commands the page may run carry no
-slash. F1, `?` or a click on a `[?]` explains each box.
-
-### Where the documents come from: `docs.install`
-
-The PDFs are generated from the documentation and are not part of the source tree.
-**A release package carries them**, in a folder `pdf` beside the installer, and **the
-installer puts them in the `pdf` directory with `docs.install`**. It also copies the
-release's changes document from beside it (`sd-core-solo-for-windows-<version>-changes.pdf`,
-`.html` and `.md`). An installer run without them says so in its report, and the install
-goes on. At any other time, or for documents of your own, the administrator runs:
-
-```
-docs.install C:/path/to/the/pdf/files
-```
-
-copies every `*.pdf` of that directory into the `pdf` directory of the SD system
-directory (which the installer makes). A file is copied only if its name is lower case
-letters, digits and `. _ -`, ends in `.pdf` and does not begin with a dot, and the file
-begins with `%PDF-`; anything else is skipped and named. A document already there is
-replaced. `pdf` alone lists what is installed. `docs.install` is an administrator command
-(`admin` first).
-
-## The context help: `load.help`
-
-```
-load.help
-```
-
-The `[?]` button on the administrator's pages shows help kept in the file `context.help`
-of the SD system directory, one record to a setting. The installer fills it from the text
-under `helptext` there; `load.help` does the same by hand, after that text changes, and
-is an administrator command (`admin` first). **It replaces the shipped records and keeps
-any you added** under another id (the count says how many). Reading the help is not
-gated: the text is the product's own documentation of its screens.
-
-A record that has more in the documentation names the document on its second line, as the
-`pdf` directory holds it: the book first, then the chapter (`user-29a-sd-tcl-the-home-screen`;
-the books are `user` and `gettingstarted`). The Documentation button runs `pdf` with that name.
-
-## See also
-
-[Administrator commands](06-administrator-commands.html) ·
-[Sessions and locks](06a-sessions-and-locks.html) ·
-[Security and the operating system](12a-security-and-the-operating-system.html).
+[Showing a Document with pdf](06b1-showing-a-document-with-pdf.html) — the one
+bypass of the os switch: showing a document with pdf, naming a reader, where
+the documents come from, and the context help

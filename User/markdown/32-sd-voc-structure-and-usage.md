@@ -12,10 +12,10 @@ here in lower case, which is what this port uses on disk. In the tables,
 *italics* mark something you supply and **bold** marks a word typed as it
 stands; braces mark an optional part.
 
-> **The records on this page were read from a stock account VOC.** On Solo the
+> **The records on this page are those of a stock account VOC.** On Solo the
 > installer's account step copies the whole of the shipped `newvoc` into the
 > account's VOC, so the shapes are the same; **the counts below are Solo's own**,
-> taken from the shipped `newvoc`.
+> those of the shipped `newvoc`.
 
 ## The ten record types
 
@@ -36,8 +36,7 @@ load-bearing and the remaining thirty are not.**
 | `X` | text | miscellaneous data — not a command |
 | `D` | descriptor | a data descriptor, which is what dictionary records are |
 
-**`PQ` is a valid type and is refused.** PROC was removed from this port.
-A record of type `PQ` is reported as *"PROC is not
+**`PQ` is a valid type and is refused.** PROC is not part of this port. A record of type `PQ` is reported as *"PROC is not
 supported"* rather than being dispatched, because the record itself is
 valid PROC and it is the interpreter that is gone.
 
@@ -64,13 +63,13 @@ Counted in this release:
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
 is yours. The account and grant commands are not in it — see *Differences from
-multiuser SD Core for Windows W1.1-1* in the GettingStarted set. (SDSYS's own VOC,
+SD Core for Windows W2.0-0* in the GettingStarted set. (SDSYS's own VOC,
 which nobody signs in to, is built from the larger `voc_template`.)
 
 > **`edit` used to be exactly this kind of trap** — a record present in the
 > VOC whose old type field read `Verb - Full screen editor` rather than `V`,
 > so it looked callable and refused at dispatch with *"Full screen editor is
-> no longer supported."* **That is history, not current behaviour**: `edit`
+> no longer supported."* **That is history, not current behavior**: `edit`
 > is a real `V` record now, and works. The lesson
 > stands even though the example does not: **being in the VOC is not
 > evidence a command works** — check the type field, not just the name.
@@ -166,7 +165,7 @@ processor's dispatch list. Several names share one: `off` and `quit` are
 both internal verb 1, and `clr` is internal verb 2. (`cs` for `clr`, and the
 run-together `cleardata`, `clearinput`, `clearprompts` and `clearselect` for
 `clear.data` and the rest, were second names for the same numbers and were
-removed in 1.2-0.)
+removed in 2.0-0.)
 
 ### The four keyword-verbs
 
@@ -206,7 +205,7 @@ every time it is used**, so editing the referenced record changes what the
 command does without touching the VOC entry. **SD ships no R-record any more**:
 the ten ready-made `list` sentences (`listf`, `listfl`, `listfr`, `listk`,
 `listpa`, `listph`, `listq`, `listr`, `lists`, `listv`) and the `sd.voclib` file
-that held them were removed in 1.2-0. To list the records of one type, ask the
+that held them were removed in 2.0-0. To list the records of one type, ask the
 query processor: `list voc with type = "V"` (`"F"` for files, `"K"` for
 keywords, `"PA"` paragraphs, `"PH"` phrases, `"Q"` Q-pointers, `"R"` R-records,
 `"S"` sentences).
@@ -254,7 +253,7 @@ The record above is a phrase a site might add: named `gt.l`, say, it
 expands to `grand.total "'L'"` wherever `gt.l` appears in a query.
 
 **No phrase ships in the VOC.** The two that did, `no.grand.total` and
-`without`, were removed in 1.2-0; write `grand.total "'L'"` and `with no`
+`without`, were removed in 2.0-0; write `grand.total "'L'"` and `with no`
 in the command instead.
 
 ## The K record — a keyword
@@ -267,7 +266,7 @@ in the command instead.
 This is a keyword record. Field 2 is the keyword number the query
 processor uses. Keywords are not commands in their own right; they are
 the words the query processor — `LIST`, `SELECT`, `SORT` and the rest —
-recognises inside a command line. `all` is `K` with number 5; `and` is `K`.
+recognizes inside a command line. `all` is `K` with number 5; `and` is `K`.
 
 **A K record can also be a command.** When its fields 3 onwards are another
 VOC record (a `V` record, say), typing the K record's name runs that record as

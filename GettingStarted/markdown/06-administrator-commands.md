@@ -44,35 +44,36 @@ password is never displayed, stored or logged.
 | `update.accounts` | refresh the account's VOC |
 | `list.voc.removed`, `restore.voc` | the VOC records SD no longer ships, and putting back one the update removed — [`update.accounts`](#updateaccounts) below |
 | `set.os.access` | show, or turn on and off, the shell and OS access switches — [Operating system access](06b-operating-system-access.html) |
-| `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`; every remote file) — [API access](09-api-access.html) |
+| `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`) — [API access](09-api-access.html) |
 | `set.xfer.access` | show, or turn on and off, file transfer over Solo's ssh (`receive` and `send`, with `XFER=1` in `sd.conf`); off as delivered — [Security](12-security.html), and for the person *Moving Files In and Out* in the User documentation |
 | `set.start.default`, `set.tile`, `set.pins`, `tool.menus` | where a session starts, which tiles the home screen has, whether the account may add its own — [The home screen's settings](#the-home-screens-settings) below |
-| `set.viewer`, `tool.viewers`, `docs.install`, `load.help` | the readers `pdf` may start, the documents it shows, the context help — [Operating system access](06b-operating-system-access.html) |
-| `set.ai`, `tool.ai` | whether the AI may be used (`set.ai gate on`; off as delivered), its provider, model and key, and the page that does it — [The AI helper](24-the-ai-helper.html) |
+| `set.viewer`, `tool.viewers`, `docs.install`, `load.help` | the readers `pdf` may start, the documents it shows, the context help — [Showing a document with pdf](06b1-showing-a-document-with-pdf.html) |
+| `set.ai`, `tool.ai` | whether the AI may be used (`set.ai gate on`; off as delivered), its provider, model and key, and the page that does it — [Setting up the AI helper](24a-setting-up-the-ai-helper.html) |
 | `set.jobs.access` | show, or turn on and off, SD's scheduled jobs (`set.job`, `run.job`, `tool.jobs`); off as delivered, and off refuses every job at its next run — [Scheduled jobs](04-scheduled-jobs.html) |
 | `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
 | `tool.gates` | all six gates on one page (sh, os, net, ai, file transfer and scheduled jobs), and the page that changes them (any session sees it; Enter changes a gate after `admin`) — [Operating system access](06b-operating-system-access.html) |
-| `tool.sessions` | who is signed on, what is locked, and `logout`, `unlock` and `inhibit.login` on one screen — [Sessions and locks](06a-sessions-and-locks.html) |
+| `tool.sessions` | who is signed on, what is locked, and `logout`, `unlock` and `inhibit.login` on one screen — [Task locks and the sessions screen](06a1-task-locks-and-forcing-a-lock-open.html) |
 | `backup.account`, `restore.account`, `set.backup.directory`, `tool.backups`, `settings.report` | [Backing up and restoring the account](06c-backup-and-restore.html) |
 | `set.recovery` | show, or turn on and off, the IDE's recovery copy of text you have not saved |
 | `append.sd.path` | put SD on your PATH, or take it off |
 | `listu`, `logout all` | [Sessions and locks](06a-sessions-and-locks.html) |
-| `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock` | [Sessions and locks](06a-sessions-and-locks.html) |
+| `list.readu` | [Sessions and locks](06a-sessions-and-locks.html) |
+| `list.locks`, `lock`, `clear.locks`, `unlock` | [Task locks and the sessions screen](06a1-task-locks-and-forcing-a-lock-open.html) |
 | anything on the deny list | a deny list is set by the control file or by the server — [Managed mode](15-managed-mode.html) |
 
 **Refused without `admin`, with *The VOC can only be changed after admin*:**
-editing the VOC directly — `ED VOC`, a program's `WRITE` or `DELETE` to the
-VOC, `COPY` into it — and saving or deleting a sentence with `.S` and `.D`.
+editing the VOC directly — `ed voc`, a program's `write` or `delete` to the
+VOC, `copy` into it — and saving or deleting a sentence with `.s` and `.d`.
 What SD writes to the VOC as a side effect of an ordinary command —
-`CREATE.FILE`'s entry, the command stack — is not gated.
+`create.file`'s entry, the command stack — is not gated.
 
-**Refused even with `admin`**: changing the global catalog (`CATALOG ...
-GLOBAL`, `DELETE.CATALOG` of a global entry, a write to `global.bp.out`), and
+**Refused even with `admin`**: changing the global catalog (`catalog ...
+global`, `delete.catalog` of a global entry, a write to `global.bp.out`), and
 the commands that are the SD Core for Linux server's — see
 [Managed mode](15-managed-mode.html).
 
-**`LOGOUT` on its own needs nothing** — it ends your own session, like
-`QUIT` — **and nor does `LOGOUT` *n***, because every session on a Solo
+**`logout` on its own needs nothing** — it ends your own session, like
+`quit` — **and nor does `logout` *n***, because every session on a Solo
 computer runs as `sduser`. **`sh` needs no `admin`, but it needs its
 switch**: it is refused (*is not permitted to use the operating system shell*)
 until the administrator has turned `sh` on with `set.os.access`; see [Operating
@@ -82,7 +83,7 @@ instead; see [The account and its passwords](05-account-types.html).
 
 ## The maintenance verbs
 
-### `CONFIG`
+### `config`
 
 ```
 config                     report every setting
@@ -104,15 +105,15 @@ the wrong one for changing the installation.
 | *Not a recognized private configuration parameter name* | the name cannot be set per session |
 | *Invalid value for this parameter* | it can, and the value is wrong |
 
-### `SET.DATE`
+### `set.date`
 
 ```
 set.date date
 ```
 
 **Sets the date SD reports in this session, not the computer's clock.** SD
-keeps an offset from the real date for the session; `DATE()` and
-`TIMEDATE()` return the new date until the session ends.
+keeps an offset from the real date for the session; `date()` and
+`timedate()` return the new date until the session ends.
 Other sessions and Windows are not affected. The argument goes through SD's
 `D` conversion, so anything `iconv(…, 'D')` accepts will do:
 
@@ -123,7 +124,7 @@ Other sessions and Windows are not affected. The argument goes through SD's
 
 It is for testing date-dependent code without touching the clock.
 
-### `CLEAN.ACCOUNT`
+### `clean.account`
 
 ```
 :clean.account
@@ -206,7 +207,7 @@ leaves the file where it is.** An uninstall that keeps your data keeps it too (s
 [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html)). To see it work,
 put a record in the file and run `update.accounts`; then `ct voc` the id.
 
-### `APPEND.SD.PATH`
+### `append.sd.path`
 
 ```
 append.sd.path             report whether SD is on your PATH
@@ -245,15 +246,20 @@ set.pins {on | off}
 tool.menus
 ```
 
-**The delivered start is the home screen.** `set.start.default terminal` makes the
-command prompt the start, `set.start.default menu` the home screen again, and
-without a word the verb says what it is now. It is read when a session starts. A
-piped session, a window under 140 by 43, a phantom and an API server are never
-given the screen. **After an upgrade, if you want the old start, type `admin` and
-then `set.start.default terminal`.**
+**The delivered start is the home screen.** A session on a terminal opens it
+(tiles for the editor, the IDE, a terminal, the keyboard test, and Sign out, and
+the development tiles), and the command prompt is what is left when it returns.
+`set.start.default terminal` makes the prompt the start, `set.start.default menu`
+the home screen again, and without a word the verb says what it is now. It is
+read when a session starts. A piped session, a window under 140 by 43, a phantom
+and an API server are never given the screen. **After an upgrade, if you want the
+old start, type `admin` and then `set.start.default terminal`.** Starting in the
+menu confines nobody: the Terminal tile is there unless you turn it off.
 
 **`set.tile sduser tile off`** takes a tile off the page, and `on` puts it back
-(every tile is on as delivered; `set.tile` alone says what is off). **Sign out
+(every tile is on as delivered; the ids are `editor`, `ide`, `terminal`, `keys`
+and `signout`, and the development tiles `files`, `voc`, `dict`, `query`, `bulk`,
+`catalog`, `test` and `recent`; `set.tile` alone says what is off). **Sign out
 cannot be turned off.** With **Terminal** off and a start in the home screen, the
 account is never given the prompt: when the screen ends it signs the person out.
 That is a wall only for the prompt the screen gives; the editor and IDE tiles run

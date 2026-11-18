@@ -8,15 +8,15 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-The listings use a six-record file whose field 1 holds five `V` and one
-`K`.
+> **The listings on this page** use a six-record file whose field 1 holds five `V` and one
+> `K`.
 
 ## Create it, then build it
 
 **That is the whole of this page's advice.** `create.index` defines an index and
 `build.index` fills it, and **the half that is easy to miss is the second one**.
 Run both, in that order; what each prints is shown in the next two sections.
-(`make.index`, which did both in one command, was removed in 1.2-0.)
+(`make.index`, which did both in one command, was removed in 2.0-0.)
 
 ## The four verbs
 
@@ -284,15 +284,10 @@ Deleted index F1
 Deleted index F2
 ```
 
-`all` removes every index on the file. Naming them individually also works —
-with one catch:
-
-> **`delete.index` matches the index name exactly, and index names are held in
-> upper case.** `delete.index zzak f1` answers *"Unrecognized index name
-> (f1)"* — on a file where `list.index zzak f1` had just found the index and
-> printed it. **`list.index` folds case and `delete.index` does not**, so a name
-> that lists perfectly well may still refuse to delete. Use **`all`**, or type
-> the name exactly as `list.index` prints it.
+`all` removes every index on the file. Naming them individually works too, and
+**in either case**: `delete.index zzak f1`, `delete.index zzak F1` and
+`delete.index zzak f1 f2` all do what they say (the answer gives the name as the
+index holds it, whichever case you typed).
 
 Deleting the file removes its indexes with it.
 

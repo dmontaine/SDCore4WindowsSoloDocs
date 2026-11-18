@@ -60,7 +60,7 @@ its executable, and **Windows searches an executable's own directory before
 `PATH`** — so no installer entry and no `PATH` change will ever update it. It
 has to be replaced by hand.
 
-**This is the most likely way to test an old client without realising it.**
+**This is the most likely way to test an old client without realizing it.**
 If an application cannot log in after an upgrade, check the date of the client
 DLL beside its executable before anything else.
 
@@ -105,7 +105,7 @@ builds — the same no-binaries rule the whole repository follows.
 > third-party crypto libraries. Any change to the client has to keep working in
 > a 32-bit process.
 
-**There is no client-only installer yet.** What exists is what the section
-above describes: the SD Core Solo for Windows installer places all four DLLs.
-If you need a client on a computer that has no SD Core, copy the pair you
-need from `usr\clients` on one that does.
+The SD Core Solo for Windows installer places all four DLLs, as the section
+above describes; there is no client-only package. If you need a client on a
+computer that has no SD Core, copy the pair you need from `usr\clients` on one
+that does.

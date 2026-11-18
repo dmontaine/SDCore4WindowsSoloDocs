@@ -25,9 +25,6 @@ at once without editing anything.
 In the tables, *italics* mark something you supply and **bold** marks a word
 typed as it stands; braces mark an optional part.
 
-The data collections themselves are described in
-[Data Collections](05b-sd-basic-data-collections.html).
-
 ## Starting it
 
 | | |
@@ -91,7 +88,7 @@ kept; the record is unlocked.
 | **F1** or **`?`** | list the keys |
 
 **Leaving with changes asks whether to save**, with *Yes*, *No* and *Cancel*.
-With several ids, `Q` goes on to the next record and `Ctrl-Q` stops.
+`Q` leaves, at the top level only, and `Ctrl-Q` from any level. With several ids, `Q` goes on to the next record and `Ctrl-Q` stops.
 
 **Which types an element can become** depends on what it holds: a string that
 looks like a number can become a number, `true` or `false` a boolean, an empty

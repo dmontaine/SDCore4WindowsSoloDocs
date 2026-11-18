@@ -187,6 +187,7 @@ for name, (hnd, _c) in list(zip(pub, hp)) + list(zip(internal, hi)):
 
 # ------------------------------------------------------------- the data file
 
+shapes = {}
 # EXTRA LINES: "@card NAME = ..." and "@admin NAME = ..." put a line on ONE page
 # for something the roster has no name for, or has on the other page.  $include
 # is a directive and not a statement; the public ospath() shares its name with
@@ -195,7 +196,6 @@ for name, (hnd, _c) in list(zip(pub, hp)) + list(zip(internal, hi)):
 # Never checked against the roster, so each is checked here instead: a name the
 # roster already puts on that page is refused, because the extra would hide it.
 extras = {'card': {}, 'admin': {}}
-shapes = {}
 with io.open(SHAPES, encoding='utf-8', newline='') as f:
     for n, line in enumerate(f, 1):
         line = line.rstrip('\r\n')
@@ -255,20 +255,20 @@ for name in ALL_NAMES:
     elif name in derived:
         entries[name] = derived[name]
 
-clash = sorted(['card ' + n for n in extras['card'] if n in CARD] +
-               ['admin ' + n for n in extras['admin'] if n in TECHNICAL])
 missing = sorted(ALL_NAMES - set(entries))
 bogus = sorted(set(shapes) - ALL_NAMES)
+clash = sorted(['card ' + n for n in extras['card'] if n in CARD] +
+               ['admin ' + n for n in extras['admin'] if n in TECHNICAL])
 
 print('BCOMP accepts        : %d name(s)' % len(EVERYTHING))
 print('  statements         : %d' % len(STATEMENTS))
 print('  restricted         : %d' % len(RESTRICTED))
 print('  reserved words     : %d' % len(RESERVED))
 print('  intrinsics         : %d' % len(INTRINSICS))
+print('  built-in functions : %d (bf.rows)' % len(BUILTIN))
 print('internal-only        : %d (a separate BCOMP table)' % len(INTERNAL))
 print()
-print('  built-in functions : %d (bf.rows)' % len(BUILTIN))
-print('the User card        : %d + %d extra' % (len(CARD), len(extras['card'])))
+print('the User card       : %d + %d extra' % (len(CARD), len(extras['card'])))
 print('the restricted page  : %d  = %d restricted + %d internal + %d no-such-thing + %d extra'
       % (len(TECHNICAL), len(RESTRICTED), len(INTERNAL), len(NO_SUCH_THING), len(extras['admin'])))
 print('shapes given by hand : %d' % len(shapes))
@@ -290,16 +290,16 @@ if missing:
     print('         is worse than none - the reader concludes it does not')
     print('         exist.  Add the lines to syntax-shapes.txt.')
     sys.exit(1)
+if bogus:
+    print('REFUSED: a name in the data file that BCOMP does not accept is either')
+    print('         a typo or a statement that has been removed.')
+    sys.exit(1)
 if clash:
     print('=== AN EXTRA LINE FOR A NAME THE ROSTER ALREADY PUTS ON THAT PAGE (%d) ===' % len(clash))
     print('  ' + ', '.join(clash))
     print()
     print('REFUSED: the extra would hide the roster\'s own line.  Give the name an')
     print('         ordinary line, or take the extra out.')
-    sys.exit(1)
-if bogus:
-    print('REFUSED: a name in the data file that BCOMP does not accept is either')
-    print('         a typo or a statement that has been removed.')
     sys.exit(1)
 
 # ----------------------------------------------------------------- the pages
@@ -329,15 +329,9 @@ seventeen documents in this set are where that lives.
 braces an optional part. SD folds case, so any of this may be written in
 either case.
 
-> **This page is generated, and it is checked for completeness rather than
-> proof-read for it.** The roster comes from `BCOMP`'s own tables — the same
-> extraction the rest of this set uses — and `tools/mksyntax.py` refuses to
-> write the page if a single name that belongs on it has no line. Argument
-> counts for functions are read out of `BCOMP`'s dispatch table, which is
-> positional against the name list and carries each name in a comment; the
-> script asserts the two agree before it uses either. The shapes that a count
-> cannot express — every statement, and about twenty functions — come from
-> documents 01 to 17, where each one is described in full.
+> This page lists every statement and function an application may use. The shapes
+> that an argument count cannot express — every statement, and about twenty
+> functions — are described in full in documents 01 to 17.
 
 **What is not here, and where it went.** Everything on this card is something
 an application may use. Names that an ordinary program **cannot** compile are
@@ -393,7 +387,7 @@ exist, and this account may not call it.
 **`$internal` needs both halves.** `BCOMP` tests
 `kernel(K$INTERNAL, -1) and kernel(K$ADMINISTRATOR, -1)` — internal mode alone
 was enough until 13 Aug 2026, and it was not safe: internal programs are the
-only ones that may set the administrator flag, and `sd -internal` is not itself
+only ones that may set the administrator flag, and `sd-solo -internal` is not itself
 gated, so any account could have compiled a three-line program that granted
 itself administrator rights. That was demonstrated, not theorised.
 

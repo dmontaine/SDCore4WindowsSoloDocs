@@ -3,7 +3,7 @@ Subtitle: set.config and the E key of the configuration screen: changing a param
 
 This page continues [Configuration](16-configuration.html).
 
-### Changing a parameter from SD: `set.config` and the `E` key
+## Changing a parameter from SD: `set.config` and the `E` key
 
 ```
 set.config cleanup 600
@@ -114,6 +114,8 @@ what existing programs compute. Change them by hand. The page shows the same sen
 | `XFERSLOT` | A transfer limit: raising it lets one slot fill more of the disk. |
 | `XFERWAIT` | A transfer limit: raising it keeps a slot open longer before anyone connects. |
 | `YEARBASE` | Changes how every program reads a two-digit year; SD checks no range. |
+
+**What this does not do.** It does not restart SD: every change to `sd.conf` takes effect when SD is next stopped and started (`sd-solo -stop`, then `sd-solo -start`). It does not reach a file other than the `sd.conf` this SD reads. It cannot change a parameter that SD does not range-check, however useful that would be; such a parameter joins the list when SD itself checks it.
 
 ## Continued in
 

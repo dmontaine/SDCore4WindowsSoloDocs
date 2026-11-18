@@ -88,8 +88,13 @@ SD did not shut down cleanly.
 
 ## SD will not start a second time inside itself
 
-If you leave SD with **`sh`** and then type `sd-solo` in that shell, it says so and
-returns you to the session you already have.
+**Starting `sd-solo` from inside `sh`** is refused. The shell that `sh` and
+`os.execute` start is marked as SD's own (the environment variable `SD_SESSION`
+is set in it), and `sd-solo` typed there answers "SD is already running in this
+session - type EXIT to return to it." in every form of the command. It keeps a
+second session from being nested inside the first; it is not a wall, because the
+mark is an environment variable of that shell. A script that `sh` runs and that
+starts SD is refused the same way, wherever it is called from.
 
 Worth knowing alongside it: **`sh` itself needs its switch**, which is off as
 delivered, so you cannot leave SD this way until the administrator turns it on
@@ -101,6 +106,8 @@ with `set.os.access sh on`. See
 ```
 sd-solo                  enter the account, after the account password
 sd-solo <command>        run one command and return, using the kept password
+sd-solo -a               the same as sd-solo: there is one account
+sd-solo -asduser         enter that account (any other name is refused)
 sd-solo -quiet           suppress the displays on entry
 sd-solo -u               list current sessions
 sd-solo -k <n> | -k all  end session n, or every session
@@ -124,7 +131,8 @@ matches**, what happens depends on where the input comes from:
 `set.password` keeps the copy up to date when you change the password.
 
 **`sd-solo -a` and `sd-solo -a<name>` have nothing to choose between**: there is one
-account, `sduser`, and every session lands in it.
+account, `sduser`, and every session lands in it. `sd-solo -asdsys` is refused,
+saying that the SDSYS account is not entered in SD Core Solo for Windows.
 
 **`sd-solo -u` and `sd-solo -k` need no `admin`.** They are switches on the program,
 outside any SD session, and like `-start` and `-stop` they are the business
@@ -150,7 +158,7 @@ Everything is under `%USERPROFILE%\SDCoreSolo`:
 `sd-solo.exe` deliberately — Windows searches the program's own folder before
 `PATH`, which keeps Git for Windows's rival `msys-2.0.dll` from being picked
 up. **That failure makes SD report "SD has not been started" while it is
-running**, which is worth recognising because it looks like nothing else.
+running**, which is worth recognizing because it looks like nothing else.
 The whole `SDCoreSolo` folder can be moved; its parts cannot be separated.
 
 **The Start Menu has an entry, SD Core Solo**, in your own Start Menu (the

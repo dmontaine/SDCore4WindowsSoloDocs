@@ -27,8 +27,8 @@ sdidx -q $env:USERPROFILE\SDCoreSolo\user_accounts\sduser\orders      # where ar
 * **Give full paths, for the data file and for the index folder.** Either
   slash will do. A relative index path given to `-m` or `-p` is made absolute
   from the current folder before it is stored, as `C:\...`. A path longer than 255 characters, which the
-  file header cannot hold, is refused (`Path is too long (the limit
-  is 255 characters)`, status 1).
+  file header cannot hold, is refused: `Path is too long (the limit
+  is 255 characters)`, status 1.
 * **Close the file in every session first.** The program refuses if the file is
   open within the running SD: see below. **It refuses nothing if SD is not
   running**, because it has nothing to ask.
@@ -72,7 +72,7 @@ file [2]* and exit 1.
 
 Every run prints the banner. Success exits 0; any failure exits 1.
 
-### `-q`, report *(run)*
+### `-q`, report
 
 ```
 > sdidx -q C:\sdi_demo\orders
@@ -86,7 +86,7 @@ Index directory is C:\sdi_demo\a\b\orders.idx
 The three answers are the only ones. It changes nothing. (The word is
 *directory* in the program's own output.)
 
-### `-m`, move *(run)*
+### `-m`, move
 
 ```
 > sdidx -m C:\sdi_demo\orders C:\sdi_demo\a\b\orders.idx
@@ -124,7 +124,7 @@ target is left behind and the file is as before.
   of that name exists* when a component of the path is a file. *akpath* in the
   message is the whole path as you typed it, not the component that failed, and
   the indexes and the header are where they were.
-### `-p`, point *(run)*
+### `-p`, point
 
 `-p` writes the path into the header and moves nothing. Use it when you have
 moved the index files yourself (or restored them elsewhere) and only the header
@@ -141,7 +141,7 @@ is out of date.
 * It does not know about your account folder. It will point a file at any folder
   you can write, inside `user_accounts\sduser` or not.
 
-### `-d`, delete *(run)*
+### `-d`, delete
 
 ```
 > echo y | sdidx -d C:\sdi_demo\o4

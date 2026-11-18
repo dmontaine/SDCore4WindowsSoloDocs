@@ -1,5 +1,5 @@
 Title: Security and the operating system
-Subtitle: Reaching the computer from inside SD, how privileged work is done, and the audit trail.
+Subtitle: Reaching the machine from inside SD, how privileged work is done, and the audit trail.
 
 This page continues [Security](12-security.html).
 
@@ -7,7 +7,7 @@ This page continues [Security](12-security.html).
 
 **There are three ways out of SD onto the computer, and each is behind a switch
 that is off as delivered.** The administrator turns a switch on with
-`set.os.access` (after `admin`), `sh` or `os`; no other command does.
+`set.os.access` (after `admin`); no other command does.
 
 | | What it is | Switch |
 |---|---|---|
@@ -61,8 +61,9 @@ each, with the date, time and user:
 
 Every word before the first `=` is lower case, the event names included. What
 follows an `=` is data and keeps its case: the account name, a `reason=` text,
-and what a caller typed in `command=`. Search a long-lived file
-without regard to case, since older lines may be upper case (`LOGIN REFUSED`).
+and what a caller typed in `command=`. Lines written by an earlier release are
+upper case (`LOGIN REFUSED`) and are not rewritten, so search a long-lived file
+without regard to case.
 
 | Recorded | |
 |---|---|

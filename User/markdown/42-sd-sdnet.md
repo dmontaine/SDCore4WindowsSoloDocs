@@ -163,5 +163,5 @@ changes nothing. `getlocks()` of a remote file is the local view only.
 ## Continued in
 
 [SDNet - Administering a Remote File](42a-sd-sdnet-administration.html) —
-administering a remote file, its indices, the two waits, the audit and what is
-not here
+administering a remote file, its indices, the two waits, what is audited and
+what is not here

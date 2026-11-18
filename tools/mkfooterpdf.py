@@ -58,9 +58,6 @@ import urllib.request
 import uuid
 
 UNIQUE = 'New Features Unique to SD Core Solo'
-# 17 Nov 26 (four-version audit P-3926): the product's name is "SD Core Solo", as in SD Core Solo for Linux's script.  The
-# Changes page's heading still read "SD Core" on this date, so both spellings are accepted until it is renamed.
-UNIQUE_HEADS = (UNIQUE, 'New Features Unique to SD Core')
 
 
 def find_browser():
@@ -249,7 +246,7 @@ def labels_for(pages, heads, title):
             else:
                 h3 = text
             nxt += 1
-        labels.append(h2 + (' \u00b7 ' + h3 if h2 in UNIQUE_HEADS and h3 else ''))
+        labels.append(h2 + (' \u00b7 ' + h3 if h2 == UNIQUE and h3 else ''))
     return labels, nxt
 
 
@@ -383,8 +380,8 @@ def main():
         if not any(args.date in ln for ln in out_pages[idx]):
             sys.stderr.write('mkfooterpdf: page %d of the result has no footer with the date %r\n' % (idx + 1, args.date))
             return 1
-    sys.stdout.write('mkfooterpdf: wrote %s (%d pages; the footer with the date read back on the first and last page)\n'
-                     % (pdf_path, n_out))
+    sys.stdout.write('mkfooterpdf: wrote %s (%d pages; the date %r read back from pages 1 and %d)\n'
+                     % (pdf_path, n_out, args.date, n_out))
     return 0
 
 

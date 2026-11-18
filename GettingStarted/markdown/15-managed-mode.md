@@ -31,8 +31,9 @@ off*): an SD Core server reaches this computer only through what is open to the
 network, so with neither open the computer is managed in name only. An administrator who sets up many computers puts `api=open` and
 `ssh=open` in the control file.
 
-See [Installing](01-installation.html), including the **control file** that
-sets up many computers from one USB stick.
+See [Installing](01-installation.html), and the **control file** that sets up
+many computers from one USB stick in [Installing many
+computers](01c-installing-many-computers.html).
 
 ## How the server signs in
 
@@ -77,7 +78,7 @@ fingerprint and the address the request came from.
 
 **It needs Solo's own ssh server**, which needs the OpenSSH package's
 `sshd.exe` — see [ssh access](08-ssh-access.html). Without it the request is
-refused. A computer installed before this release is moved to the new
+refused. A computer installed before 2.0-0 is moved to the new
 arrangement by an upgrade: the key already added is moved into Solo's key file,
 and the server reaches the computer on port 4251 from then on, not 22.
 
@@ -171,8 +172,8 @@ opens `global.bp.out` and `WRITE`s to it is refused by SD itself, with
 `STATUS()` saying so, whatever the caller's rights.
 
 **On a computer with no global password** there is no server:
-`sync.global.catalog` says *"this computer has no global password, so no SD Core
-server manages it and there is nothing to manage"* and changes nothing, and the
+`sync.global.catalog` says *this computer has no global password, so no SD Core
+server manages it and there is nothing to manage*, changes nothing, and the
 global catalog holds only SD's own programs.
 
 ## Commands the user may not run: `deny.verbs`
@@ -184,15 +185,15 @@ privileges* until `admin`.
 
 ```
 deny.verbs                       list them
-deny.verbs add list,create.file  add to the list
-deny.verbs remove list           take one off
-deny.verbs set list,copy         replace the list
+deny.verbs add sh,create.file    add to the list
+deny.verbs remove sh             take one off
+deny.verbs set sh,copy           replace the list
 ```
 
 **Every form answers with the list as it now stands:**
 
 ```
-deny.verbs 2: list,copy
+deny.verbs 2: sh,copy
 ```
 
 **A command is denied under every name that runs it.** Some names that look

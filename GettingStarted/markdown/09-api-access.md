@@ -35,9 +35,6 @@ any form; the server sets a challenge only someone who knows the password can
 answer, and then proves itself back, so a program that grabbed the port before
 SD started cannot collect passwords by pretending to be SD.
 
-**A client that sends a password in clear is refused** with *"Cleartext login
-is no longer supported; this server requires SCRAM authentication"*.
-
 **The client library pins the server's certificate.** The first connection from a
 client to an address and port is trusted, and its certificate is remembered — the
 SHA-256 of the whole certificate — in `%USERPROFILE%\.sdcore\known_servers` (or the
@@ -56,6 +53,9 @@ uses `SDConnect`. **The very first connection is trusted**, as with ssh.
 the API, once it has signed in with the global password: see
 [Managed mode](15-managed-mode.html).
 
+**A client that sends a password in clear is refused** with *"Cleartext login
+is no longer supported; this server requires SCRAM authentication"*.
+
 **A wrong password is refused**, and the refusal is written to the audit trail
 — for example `api refused user=sduser reason=wrong password`. It is written
 **before** the three-second wait SD adds to slow down guessing, so a program that
@@ -67,12 +67,11 @@ for an account that does not exist, so the API cannot be used to find out what
 accounts there are. **The administrator password is not an API login**: it is
 refused.
 
-**On a computer installed from a control file that gave a global password**,
-until the account password has been chosen at the keyboard, only the global
-password is accepted.
+**On a computer installed from a control file**, until the account password has
+been chosen at the keyboard, only the global password is accepted.
 
-**`SDConnectLocal` is disabled.** It signed in with no password, which Solo
-does not allow; a client calling it gets *SDConnectLocal is not available in
+**`SDConnectLocal` is disabled.** It sends no password, which Solo does not
+allow. A client that calls it gets, at once, *SDConnectLocal is not available in
 SD Core Solo for Windows - connect with SDConnect and the account password*.
 Use `SDConnect` to this computer's own address instead.
 
@@ -144,7 +143,7 @@ no rule, and an *Allow* there makes rules open to any address.
 tool.remote
 ```
 
-A full-screen page for the administrator (`admin` first; 140 columns by 43 lines or
+A full-screen page for the administrator (`admin` first; a window of 140 columns by 43 lines or
 more) of four views, chosen with the keys `1` to `4`:
 
 | View | What it shows and does |

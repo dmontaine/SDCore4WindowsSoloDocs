@@ -7,7 +7,7 @@ This page continues [SD Basic - Debugging](17-sd-basic-debugging.html).
 
 **On a terminal that can address a cell and clear itself, the debugger takes the
 whole screen.** Its test is that the session is a real terminal (SD can read its
-window size) and that the terminal definition has `cup` and `clear`: windows, xterm,
+window size) and that the terminal definition has `cup` and `clear`: `windows` (the default), xterm,
 vt100, vt102, vt220, ansi, and the terminals that behave like
 them. `dumb` and `unknown` have no `cup` and stay line by line. Then:
 
@@ -81,7 +81,8 @@ screen is): when you let the program run, the debugger gives the terminal back
 and the program's output is on its own screen, and it is on the alternate
 screen again at the next stop. The colors are the screen library's: if the
 program asked for no theme, the debugger uses the theme you chose with Ctrl-T,
-else the site's theme (`SCREENTHEME` in `sd.conf`) while it is up, and the
+else the site's theme (`SCREENTHEME` in `sd.conf`, which the installer leaves
+at `paper`) while it is up, and the
 `classic` one when neither names one; and whatever the program asked for
 otherwise. When the debugger lets the program go, the program's theme is given
 back, whether or not the window was resized or `window` *n* was typed on the way.
@@ -103,6 +104,9 @@ terminal"* for any other program.
 To keep the line-by-line debugger on a terminal that would otherwise get the
 full screen, put the word `LINE.MODE` on a line of the VOC record
 `$debug.options` (the same record that holds `WINDOW` *n*).
+Nothing about this gives the debugger more reach than before: the AI line,
+for instance, which the full-screen debugger offers when the AI is switched on,
+is the same gated line it already was.
 
 **In a session that is not a terminal, on `dumb`, `unknown` or `null`, and in a
 window smaller than 140 by 43, the debugger is line by line.** Every command works, as the

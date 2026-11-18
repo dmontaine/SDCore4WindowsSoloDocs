@@ -74,8 +74,9 @@ evaluated before the expression around it.
 ### Dividing by zero
 
 Dividing by zero stops the program with a runtime error, in `/`, `div()`,
-`idiv()` and `rdiv()` alike. Test the
-divisor before you divide.
+`idiv()` and `rdiv()` alike. (There is no `option div.zero.warning`
+to turn the error into a warning that yields zero. Test the
+divisor before you divide.)
 
 ## Dividing to a whole number
 
@@ -120,7 +121,7 @@ rdiv(dividend, divisor)
 >
 > The two differ only for negative results — for positive ones truncation and
 > floor agree. **If the sign can be negative, use `div()`**, which truncates
-> towards zero whatever the argument types are. This behaviour is inherited
+> towards zero whatever the argument types are. This behavior is inherited
 > from OpenQM and has been kept for compatibility; it is not new in this port.
 
 `div()` returns a whole number even when the arguments are fractional:

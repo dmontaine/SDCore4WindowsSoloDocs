@@ -25,7 +25,7 @@ marks a word typed as it stands; braces mark an optional part.
 one refuses with *Command requires administrator privileges* until you type
 `admin`. They are described under *Sessions and locks* in the GettingStarted set.
 
-**What needs no `admin` is `release`**, which gives back locks this session holds.
+**What needs nothing is `release`**, which gives back locks this session holds.
 That is the whole of the TCL lock interface without `admin`, and the reason is
 defensible: a lock you took is yours to give back, and looking at the table or
 taking somebody else's is an administrator's act.
@@ -87,7 +87,7 @@ by hand.
 
 > **A task lock held by a killed session is not given back by `sd-solo -cleanup`.**
 > It stays held, by a user number nothing is behind, until SD itself is
-> restarted — a defect, and it is recorded in the project's fix lists. If a job
+> restarted — a defect. If a job
 > guarded by a task lock will not start again after a crash, that is the first
 > thing to suspect, and clearing it needs `admin` and `unlock tasklock`.
 

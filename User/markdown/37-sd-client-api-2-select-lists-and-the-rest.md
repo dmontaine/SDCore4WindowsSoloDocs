@@ -81,4 +81,4 @@ Their numbers begin at 10001 and are not those of `SDOpen`, so a number of one k
 ## Continued in
 
 [SD Client API: Language Bindings](37b-sd-client-api-bindings.html) — the
-eight language headers and what the API cannot do.
+eight language headers and what the API cannot do

@@ -46,6 +46,8 @@ and the next `writeseq` takes *its* `else` branch.
 | **append** | position at the end, so writes add to what is there |
 | **overwrite** | truncate on open |
 | **readonly** | open without taking a write lock |
+| **creating** | when the name does not exist, make the file now (an existing file is opened as without the word). **The file is made exclusively**: if something has taken the name by the moment it is made, or the name is a symbolic link that leads nowhere, nothing is created and `status()` is 6032. **The same holds for the `openseq file, record` form** (a record whose name is such a link takes the `else`, `status()` 6032, and nothing is made). An `openseq` with a pathname of such a link, without `creating`, opens a file that cannot be written, so the `writeseq` that would have made the link's target is refused; and a link put at the name after the open is refused too. **The file is made only once the lock on its name is held**: when another session holds the name, the `locked` clause runs (or, without one, the open waits) and nothing is made. The directory it goes in must be there; it is never made |
+| **shared** | includes `creating`, but keeps open-or-create, so that several processes can add to one file; it is not exclusive, except that a name that is a symbolic link leading nowhere is refused with `status()` 6032 as it is for `creating` |
 
 ## Reading
 
@@ -117,7 +119,7 @@ so a file written on Linux still reads correctly here.
 than the same file with LF endings, so an offset computed by adding up line
 lengths must allow two bytes per line, not one.
 
-**You can choose the line end, for one file**. `fcontrol(s, FC$CRLF, mode)` on the file variable of an
+**You can choose the line end, for one file.** `fcontrol(s, FC$CRLF, mode)` on the file variable of an
 `openseq` sets one of four modes, and a letter in field 6 of the VOC entry of the directory file does the same
 for every `openseq` of its records: `L` (mode 0) ends a line at LF only, keeps every CR, and `writeseq`
 adds LF; `C` (mode 1) ends it at CR LF only, so a line may hold an LF or a CR of its own, and `writeseq` adds CR LF; `B`

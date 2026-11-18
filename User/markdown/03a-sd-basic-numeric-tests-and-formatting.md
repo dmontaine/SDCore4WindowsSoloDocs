@@ -47,7 +47,8 @@ With `a` holding `1`, `2`, `3` as values, and `b` holding a field of
 
 A non-numeric value used where a number was expected stops the program with a
 runtime error, so a class of silent wrong answers is something you can see.
-`option` on its own
+(There is no `option non.numeric.warning`
+to turn the error into a warning that reads the value as zero.) `option` on its own
 lists every option and its current state; `option all off` clears them.
 
 Negative values are handled correctly: `maximum()` of `-5` and `-3` is `-3`.
@@ -265,7 +266,7 @@ function the OpenQM 2.6.6 documentation lists under that heading is present in
 this port, and this page covers the numeric ones. The comparison and logical
 members of the group — `ands()`, `ors()`, `nots()`, `eqs()`, `nes()`, `gts()`,
 `ges()`, `lts()`, `les()`, `ifs()`, `not()`, `reuse()` — are documented in
-[SD Basic - Dynamic Arrays](05-sd-basic-dynamic-arrays.html), where their multivalue behaviour is the point.
+[SD Basic - Dynamic Arrays](05-sd-basic-dynamic-arrays.html), where their multivalue behavior is the point.
 
 ## See also
 

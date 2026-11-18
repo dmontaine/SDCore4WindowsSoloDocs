@@ -66,7 +66,7 @@ Windows**; it is the key this port sets deliberately for that purpose.
 | `32` | the `sdsys` directory | `C:\Users\you\SDCoreSolo\sdsys` |
 | `38` | the temporary directory | `/cygdrive/c/Users/you/AppData/Local/Temp`, from `TMP` |
 | `1011` | the configuration file | `C:/Users/you/SDCoreSolo/sd.conf` |
-| `1024` | the directory SD was started in | `/cygdrive/c/Users/dmont/OneDrive/Documents` |
+| `1024` | the directory SD was started in | `/cygdrive/c/Users/you/OneDrive/Documents` |
 
 **Three different spellings of a Windows PATH come out of one function.** A
 backslash path, a POSIX `/cygdrive/` path, and a forward-slash path with a
@@ -131,7 +131,7 @@ the OS switch (`set.os.access os on`), and to any other the answer is a null str
 | `20` | print jobs passed to the spooler | a count for the whole system since SD started, all sessions together. openQM gives the job's reference; SD does not read the spooler's own job number back |
 | `19` | a unique value from the date and time | two five digit numbers, the day and the second; a second value in the same second, from **any** process, gets a letter on the end (`a`, `b` … `z`, `aa`). The time is the process's own, so two users in different time zones can get the same value |
 | `21` | a unique value from the date and a sequence | two five digit numbers, the day and a count that starts at 1 again each day |
-| `45` | the name of the running program | its catalogue name |
+| `45` | the name of the running program | its catalog name |
 | `1048` | a sequence number | unique across all sessions until SD restarts, then 1 again |
 | `1049` | is `hush` in effect? | `0` or `1` |
 | `1062` | has `signal()` been raised for this process? | `1` and **cleared by reading it**: `until system(1062)` is the loop of a phantom that waits to be told |

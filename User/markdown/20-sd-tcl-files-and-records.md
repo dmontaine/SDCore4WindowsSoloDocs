@@ -92,10 +92,10 @@ on and off. For a directory file, `binary` turns on mark mapping.
 
 **`next` *n*** sets the next record id that `write … creating.seqkey` will give out in a
 **hashed** file (see [SD Basic - File Handling](07-sd-basic-file-handling.html)); **`next query`** says
-what it is (*The next sequential record id is 103*, message 12356). A new file's counter is 1, `clear.file` keeps it (SD's behavior), and rebuilding a file
+what it is (*The next sequential record id is 103*). A new file's counter is 1, `clear.file` keeps it (SD's behavior), and rebuilding a file
 with a different group size carries the counter over. A file made by `copy` starts its own
 counter at 1; `write … creating.seqkey` skips an id that already names a record. A directory file is refused:
-*NEXT applies to a hashed file only* (message 12355).
+*NEXT applies to a hashed file only*.
 
 ## Looking at a file
 
@@ -217,6 +217,8 @@ T1                       DYN        1        1   2           2        4096      
 no file names the report covers the files on an active select list (list 0) or,
 if there is none, **every file your VOC points at with an `F` entry**; `dict`
 asks about the dictionaries instead. The report is about 122 columns wide.
+openQM can also report on other accounts (`file.stat account.list`, `file.stat all`);
+SD does not.
 
 ### What one file is: `find.file`
 
@@ -234,7 +236,7 @@ File uses case insensitive record ids
 File has indices
 ```
 
-(The real listing gives the full path.) The lines after the pathname appear only when they are true: case insensitive record ids, indices, a trigger,
+(The real listing gives the full path of the file.) The lines after the pathname appear only when they are true: case insensitive record ids, indices, a trigger,
 read only. A directory file is reported as one. A file that cannot be opened is
 not described; the reason is given instead (*NOSUCH is not defined in your
 VOC*, for a name the VOC does not have, and *Invalid file name* when there is no
@@ -341,9 +343,10 @@ removed in 2.0-0.) `@system.return.code` is `0` on success and `-1` if the argum
 wrong.
 
 **`cname` on a file renames the VOC record too**, which is the point — the
-name you type and the name on disk stay together. **A new name that differs from the old
-only in case is refused** (message 6151, *name is already defined in your VOC*): a VOC does
-not tell the two spellings apart, so the rename would lose the record.
+name you type and the name on disk stay together. **The new name is stored in lower
+case.** A new name that already exists in any case, or that differs from the old name
+only in case, is refused (*xx is already defined in your VOC*), so no file ever has two
+spellings and the file's only VOC entry is never lost.
 
 ## Continued in
 

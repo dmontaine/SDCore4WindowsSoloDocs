@@ -1,6 +1,8 @@
 Title: System limits
 Subtitle: The sizes, counts and depths compiled into SD Core Solo for Windows, and which of them a site can change.
 
+> The figures are those of SD Core Solo for Windows itself.
+
 Two kinds of number appear on this page and they behave differently.
 
 A **compiled limit** is fixed in the build. Changing it means rebuilding SD, and
@@ -26,8 +28,8 @@ concatenation, and to anything a program assembles in memory.
 
 **A record id may be longer than 63 characters only if `MAXIDLEN` is raised**,
 and the range starts at 63 rather than 0 — a lower value is refused at start-up
-rather than accepted. The ceiling of 255 is compiled, and the comment in the
-source notes that raising it would require major file-format changes.
+rather than accepted. The ceiling of 255 is compiled, because raising it would
+require major file-format changes.
 
 ## Files
 
@@ -44,15 +46,14 @@ Group size is expressed in 1 KB units, so the compiled maximum of 8 is 8 KB.
 a long path to it leaves less room for the paths SD builds inside it.
 
 **A sort that outgrows `SORTMEM` is written to work files, and an item or a key may be of any
-length SD can hold.** The lengths in a work file were 16 bits, so an item or a key of 32 KB or
-more wrapped when a sort spilled to disk and the result was wrong; they are 32 bits now. The
-count of a sort that returned no data was also one short when the last record ended the file.
+length SD can hold.** The lengths in a work file are 32 bits, so an item or a key of 32 KB or
+more is handled correctly when a sort spills to disk.
 
 **A split of a dynamic file stops before it changes the file when the disk cannot take it.** A
 dynamic file grows by splitting its groups. The split writes the new, empty group first and only
 then advances the file's modulus; it does nothing if that write cannot be made, or if the file
-system holds less than 1 MB, and writes a line to the log. Before, a full disk could leave the
-modulus advanced with no group behind it, and the records that hashed there could not be found.
+system holds less than 1 MB, and writes a line to the log, so a full disk cannot leave the
+modulus advanced with no group behind it.
 **A split that fails after the new group has begun to be used still cannot be undone**: it logs
 the failure and writes the file's header, and the file needs a file check (`sdfix`).
 
@@ -106,7 +107,8 @@ their base name.
 ## What the account gets
 
 **There is one account and one VOC.** The account gets the whole of `newvoc`;
-SDSYS's own VOC is built from the whole of `voc_template`.
+SDSYS's own VOC is built from the whole of `voc_template`, and nobody signs in
+to it.
 
 | | VOC records |
 |---|---|
@@ -115,9 +117,9 @@ SDSYS's own VOC is built from the whole of `voc_template`.
 
 **These are record counts, not verb counts** — a VOC record may be a verb, a
 keyword, a file pointer, a sentence or a paragraph, and only some are verbs.
-Counted directly from the shipped directories. The account and grant commands
-are not among them; see
-[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html).
+The account and grant commands are not among them; see
+[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
+The verb subset specifically is counted on the SD TCL syntax card in the User set.
 
 ## Configuration
 

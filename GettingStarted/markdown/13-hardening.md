@@ -150,12 +150,12 @@ reads either, so this is untidy rather than a problem.
 **The default terminal type is now `WINDOWS`.** `TERM` on its own should say
 `Device : windows`.
 
-**THE ARROW KEYS DID NOTHING in cmd, PowerShell or Windows Terminal** on
-earlier builds. A terminal has two spellings for an arrow key: in its ordinary
-state it sends `ESC [ D` for Left, and the other spelling `ESC O D` only after
-the application asks it to switch — **which SD never does.** The `vt100`
-definition SD was defaulting to lists only the second spelling, so SD was
-listening for a key no Windows console ever sends.
+**The arrow keys work in cmd, PowerShell and Windows Terminal.** A terminal has
+two spellings for an arrow key: in its ordinary state it sends `ESC [ D` for
+Left, and the other spelling `ESC O D` only after the application asks it to
+switch — **which SD never does.** The `vt100` definition lists only the second
+spelling, so it would listen for a key no Windows console ever sends; that is why
+the default is `WINDOWS`.
 
 The shipped `WINDOWS` definition is an exact copy of `LINUX`, which had this
 right all along — its name describes an operating system, but what matters is
@@ -179,8 +179,7 @@ a definition that is not there.
 
 ### The page is 140 × 43, not 80 × 24
 
-**SD's default terminal size is 140 columns by 43 lines** (it was 120 by 36
-in earlier builds). **A console window narrower than that
+**SD's default terminal size is 140 columns by 43 lines**. **A console window narrower than that
 makes wide reports look wrapped or truncated**, which reads as a formatting bug
 and is not one. SD's own full-screen programs (`sed`, `ced`, `ide`, the home
 screen) want at least 140 columns by 43 lines and refuse a smaller window.
@@ -247,5 +246,11 @@ scripts](17-the-installed-scripts.html) has the detail.**
 |---|---|
 | How it starts | a scheduled task, **SD Core Solo** — see [Running SD](03-running-sd.html). There is no Windows service |
 | After an unclean shutdown | SD starts anyway, rather than refusing because the last stop was abrupt |
-| Nested sessions | SD will not start a second time inside itself |
 | `sd-solo <command>` | signs in with the kept copy of the account password, so a script or a scheduled job can use it — see [Running SD](03-running-sd.html) |
+
+## Setting no password
+
+**On Solo every session asks for the account password**, and an account with none
+set cannot be signed in to at all — the installer always sets one, or, on a
+computer installed from a control file, the first `sd-solo` does. See
+[The account and its passwords](05-account-types.html).

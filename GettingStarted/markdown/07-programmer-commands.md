@@ -84,7 +84,7 @@ verbs:
 | **`edit`** | plain text |
 
 **It applies to a `bp` record and to nothing else.** SD names the working
-copy so that micro can recognise the language — a record edited out of any
+copy so that micro can recognize the language — a record edited out of any
 other file is treated as plain text, which is correct for a VOC entry or a
 data record.
 
@@ -104,7 +104,7 @@ data record.
 | | |
 |---|---|
 | **BASIC source** in a `bp` file | what they are for |
-| **VOC records** | fine — a VOC record is a few short fields |
+| **VOC records** | fine — a VOC record is a few short fields (editing the VOC needs `admin`) |
 | **Dictionary records** | fine for a simple one; see the limit below |
 | **Data records with multivalues** | fine — see the tokens below |
 | **Data records with subvalues** | fine — see the tokens below |
@@ -163,8 +163,10 @@ only for who you let use your account — see [Security](12-security.html).
 
 **A terminal editor is the point of an ssh session.** An ssh session reaches SD
 through a terminal like any other, and SD hands the editor that terminal rather
-than reading it through a pipe. **If an editor misbehaves over ssh and not at
-the keyboard, that is worth reporting** with the terminal you connected from.
+than reading it through a pipe.
+
+**If an editor misbehaves over ssh and not at the console, that is worth
+reporting** with the terminal you connected from.
 
 **`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
 need no operating-system permission and no editor installed; they need a terminal

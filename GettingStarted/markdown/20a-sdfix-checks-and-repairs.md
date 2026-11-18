@@ -1,5 +1,5 @@
 Title: sdfix: What It Checks and Repairs
-Subtitle: Every error a check reports, what -F or -Q does about it, the dump and rebuild of mis-hashed groups, and interactive mode.
+Subtitle: Every error a check reports, what -F or -Q does about it, the dump and rebuild of mis-hashed groups, interactive mode, and what the tool will not do.
 
 This is the second half of [sdfix, the File Check Tool](20-sdfix.html), which
 has the options and the rules for running it.
@@ -44,9 +44,7 @@ at what a check reports before you let `-F` act on it.
 ## Dump and rebuild of mis-hashed groups
 
 When `-F` has queued groups, the check ends with a question that **is asked
-even under `-F`**. In this example the file had 305 records in 210 groups, and its
-header's mod value set to 1, so most records hashed to the wrong group; the
-check reported 50 of them and stopped reporting:
+even under `-F`**:
 
 ```
 Further hash errors will not be reported

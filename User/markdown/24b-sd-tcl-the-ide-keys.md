@@ -35,7 +35,7 @@ IDE](24a-sd-tcl-find-program-dictionaries-and-the-ide.html).
 | Up · Down in a Run a command question | bring back the commands run from either Run a command in this session (twenty) |
 | Build, Run a command at the terminal | for a command that needs the terminal: **the screen is given to the command**, Return brings the IDE back with the tabs as they were. A command that aborts gives the IDE back too. A record the command changed is not read again by the tab that holds it |
 | Build, Run with arguments | asks for the words to put after the program's name, then compiles and runs it as Run does (`run bp prog words`); the program reads them with `SENTENCE()` |
-| Saving a record | when a subroutine `source.control` is cataloged, every save calls it before the write, as `ed` does: it can refuse the write or change the record |
+| Saving a record | when a subroutine `source.control` is cataloged, every save calls it before the write, as `sed` and `ed` do: it can refuse the write or change the record |
 | Alt-= · View, Character code | the code of the character at the cursor, its name when it is a control character, and its field, value and subvalue, on the status line |
 | View, Syntax color · View, Line numbers | switch the color and the line numbers off for every tab, and on again |
 | View, Mouse | stops the terminal reporting the mouse, and starts it again; while it is off a click does nothing and the terminal's own selection works. Every command has a key or a menu entry, so nothing needs the mouse |

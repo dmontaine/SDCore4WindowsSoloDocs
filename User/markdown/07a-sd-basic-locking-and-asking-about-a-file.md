@@ -152,7 +152,7 @@ rtrans({dict} file.name, record.id, field, action)
 
 Both fetch one field of one record from a file, opening it if needed. `trans`
 takes a file name; `rtrans` takes an already-open file variable instead.
-(`xlate` was a second name for `trans` and was removed in 1.2-0.)
+(`xlate` was a second name for `trans` and was removed in 2.0-0.)
 
 The *action* says what to do when the record is missing — **or when the file
 cannot be opened at all**, which takes the same action:
@@ -186,7 +186,7 @@ it is what the examples on this page use.
 
 `set.trigger` attaches a program that runs on every write or delete to a file.
 A trigger runs inside the caller's transaction, so anything it does is part of
-the same all-or-nothing unit.
+the same all-or-nothing unit. A directory file can have one too: it is called by `read`, `write`, `delete` and `clearfile`, and not by `writeseq`, `writeblk`, `oswrite` or `osdelete`; see *Triggers* in [SD TCL - Files and Records: Comparing, Triggers and Importing](20-sd-tcl-files-and-records-2-comparing-triggers-and-import.html).
 
 ## What is not here
 

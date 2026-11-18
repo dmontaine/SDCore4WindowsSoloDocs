@@ -170,7 +170,7 @@ ct stock 1001
 | `ct` | the record as **JSON, one element to a line**, indented (the `jb$pretty` layout) |
 | `list.item` | the record as its compact JSON text |
 | `ed` file id · `edit` | the record shown as `ct` shows it, **a line to an element**, filed back as JSON text. The file makes a collection of what comes back, and refuses it — *Write error 1020 - Data not saved* — if it is not a JSON object or array, leaving the stored record as it was |
-| [`ced`](27b-sd-tcl-ced.html) | a full-screen editor that shows the elements of one level and their **types** |
+| [`ced`](27b-sd-tcl-ced.html) | a full-screen editor that shows the elements of one level and their **types**; also `!ced()` from a program and F12 in the `ide` |
 | `copy` | between two collection files the collection is copied; **from** a collection file **to a file that is not one**, the record's JSON text is written (in the compact form the file holds); **to** a collection file, the JSON text of a record is made into a collection |
 | `compare.files` | collection records are compared **as their JSON text**, in which the names are always in order, so two equal collections are the same |
 | `search` · `scan` | look at the JSON text of the record |
@@ -214,10 +214,10 @@ changes is what is stored; a trigger that refuses a write (a non-zero `@trigger.
 post-write trigger does not run. **The API server sends a client the JSON text of a record it reads from a collection file**. **The debugger** shows a collection variable as its JSON,
 and `/c{path}` shows one element: see [SD Basic - Debugging](17-sd-basic-debugging.html).
 
-## What does not work, and what was not tried
+## What does not work
 
 `readv` and `writev` of a field number have no meaning on a collection file, and `matread` is refused. **`analyze.file` does not
-say that a file holds collections**, and `micro` is not for a collection record: use `ced` or `ed`.
+say that a file holds collections**, and `micro` is not for a collection record: use `ced`, the `ide` (F12) or `ed`.
 
 ## See also
 

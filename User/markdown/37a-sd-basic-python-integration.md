@@ -28,6 +28,12 @@ whenever no Python 3.13 or later is registered. Without a usable Python on the
 machine, every `PY_` function returns `-12040` and nothing else about SD is
 affected - `PY_IS_INITIALIZED()` still works and answers `0`.
 
+All twenty-one are `$internal`-compiled and ship already cataloged, so no
+account needs to compile or catalog anything to use them - only a declaration
+(`$INCLUDE SDPYFUNC.H`, below) and a call. Failure is always `status()`, not the
+returned value: several of these functions return an empty string on both
+"genuinely empty" and "failed," so `status()` is what tells them apart.
+
 ## Access control
 
 **`PY_` access is gated exactly like `OS.EXECUTE`** - the same permission
@@ -39,7 +45,7 @@ any `PY_` function, and the decision stands for the rest of the session:
 |---|---|
 | allowed | the helper starts (or a prior failure to start is retried) |
 | `-12041` | this session may not use the operating system, so it may not have Python either |
-| `-12042` | SD could not determine the permission at all (a damaged or unreadable `os.users` record) - one line is written to the error log saying which |
+| `-12042` | SD could not determine the permission at all - one line is written to the error log saying which |
 | `-12040` | the session **is** permitted, but the helper itself could not be started or has died - typically no usable Python on the machine |
 
 On Solo the permission is the account's `os` switch, **off as delivered**: a
@@ -122,19 +128,12 @@ string values - not a general-purpose Python object store.
 
 ## Lists
 
-**`PY_LISTCREATE` is the newest of the twenty-one**. The
-opcode and the C-side dispatch for it existed since Python's return, but
-nothing in BASIC called it, so a list could be appended to and read but
-never actually made - `PY_LISTAPPD` on a name nothing had created simply
-failed. It is shaped exactly like `PY_CREATEDICT`, including reusing its
-"already exists" code (`-12012`) rather than a list-specific one. *(SD Core
-for Linux built the same function independently and called it `PY_LISTCRTE`.
-**Both names now work on every SD Core product**: `PY_LISTCREATE` is the one
-documented here, and `PY_LISTCRTE` is its alias, with the same body.)*
+A Python `list`, likewise held by name. A list has to be made with
+`PY_LISTCREATE` before anything is appended to it.
 
 | | |
 |---|---|
-| `PY_LISTCREATE(name)` | creates an empty list under `name` |
+| `PY_LISTCREATE(name)` | creates an empty list under `name`. `PY_LISTCRTE` is the same function under an older name; both work |
 | `PY_LISTAPPD(name,objname)` | appends the *object* named `objname` - a string, a dictionary, or another list already made with these functions - to the list `name` |
 | `PY_LISTGETS(name)` | returns every item in the list, tab-separated, in one string |
 | `PY_LISTCLR(name)` | empties the list without deleting it |
@@ -159,11 +158,11 @@ used; only the mechanism moved.
 
 | Code | Meaning |
 |---|---|
-| `-12001` | interpreter not initialised |
+| `-12001` | interpreter not initialized |
 | `-12002` | failed to create the dictionary object |
 | `-12003` | failed to link Python's built-ins into the running scope |
 | `-12004` | an exception was raised while running the code |
-| `-12005` | error reported while finalising the interpreter |
+| `-12005` | error reported while finalizing the interpreter |
 | `-12006` | could not open the script file (`PY_RUNFILE`) |
 | `-12007` | key not found in dictionary |
 | `-12008` | failed to convert a Python object to a string |
@@ -242,9 +241,3 @@ SD Core Solo for Linux:
 
 Copy one into your own account's `bp` to compile and run it. Like any use
 of Python, it needs the account's OS switch.
-
-## Continued in
-
-*Differences from W1.0-0*, earlier in this set, for the short version of
-what changed and why Python's return is a rebuild rather than a
-restoration.

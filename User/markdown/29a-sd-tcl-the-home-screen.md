@@ -60,11 +60,15 @@ behind a warning that gives both sizes until the window is big enough again.
 |---|---|
 | **Editor** | runs `sed` (it asks which file and record) |
 | **IDE** | runs `ide` |
-| **Receive files** | runs `receive` ([Moving files in and out](29e-sd-tcl-moving-files-in-and-out.html)), then waits for Enter so you can read what came; it is there only when a transfer can be opened: `XFER=1` in `sd.conf` and the account's switch on (`set.xfer.access on`) |
+| **Receive files** | runs `receive` (*Moving files in and out*), then waits for Enter so you can read what came; it is there only when a transfer can be opened: `XFER=1` in `sd.conf` and the account's switch on (`set.xfer.access on`) |
 | **Terminal** | leaves the screen for the ordinary command prompt (below) |
 | **Keys** | runs `tool.keys`, the terminal and keyboard diagnostic |
 | **Files** · **Vocabulary** · **Dictionary** · **Queries** · **Bulk update** · **Programs** · **Tests** | the group *Develop*: each opens a development page (`tool.files`, `tool.voc`, `tool.dict`, `tool.query`, `tool.bulk`, `tool.catalog`, `tool.test`; see [The Development Tools](29c-sd-tcl-the-development-tools.html)) |
 | **Sign out** | asks `Sign out of SD?` and ends the session |
+
+**A tile for one of SD's own pages (a `tool.*` command) is shown only when that command is in
+your account's VOC**, so a tile never offers a command you cannot run; it appears once the
+command is there. A pinned tile is not asked.
 
 **A tile starts a command exactly as you would have typed it.** It adds no
 access: if the command needs a switch your account does not have, you get the same

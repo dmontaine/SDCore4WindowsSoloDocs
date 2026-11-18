@@ -19,8 +19,8 @@ marks a word typed as it stands; braces mark an optional part.
 **Seeing the sessions, and ending them, are administrator verbs.** `listu`
 lists every session on the computer, and `logout all` ends every one but yours;
 both need `admin` first. They are documented under *Sessions and locks* in the
-GettingStarted set. `logout` *n*, which ends one session by number, needs
-nothing.
+GettingStarted set. `logout` *n* and `sd-solo -k`, which end one session by number,
+need nothing.
 
 **`logout` with no argument ends your own session** — it is `quit` under another
 name, which is worth knowing before typing it intending to list something.
@@ -344,7 +344,7 @@ it when the question it was written to answer has been answered.
 |---|---|
 | *User number required* | `pdump` with no number |
 | *Not logged in* | no session has that user number |
-| *PDUMP not allowed for processes run under other usernames* | the `PDUMP` configuration parameter has bit 1 set and the process is under a different user name. Every session on Solo is `sduser`, so it does not arise |
+| *PDUMP not allowed for processes run under other usernames* | the `PDUMP` configuration parameter has bit 1 set, the session has not typed `admin`, and the target session signed in under another login name; every Solo session has the same one, so it does not arise |
 
 **It is an event, not a call.** `pdump` marks the target and returns; the target
 writes the file when it next looks at its event flags. A process that is wedged
@@ -404,7 +404,7 @@ Profiler off for user 28: 29 events in 13 entries
 
 (The `...` is the report `list` printed.) **The table is kept in SD's `$ipc`
 file under the user number, so no file is left on the disk.** A profile outlives
-the session that made it.
+the session that made it: the profiles of sessions that have already ended can still be listed.
 
 `profiler` (or `profiler display`) then shows it. With several profiles it lists
 them and asks which to open:
@@ -447,9 +447,12 @@ holds the files that user's programs open and the commands they execute
 (*Only the administrator can profile another user's process*).
 ## Who has these verbs
 
-**Your account has `status`, `phantom`, `pstat`, `pdebug`, `pdump`,
-`list.phantoms` and `profiler`**, and none of them needs `admin`. `pdump` *n* and
-`pstat` work on any session, since every session is yours.
+**Every account has `status`, `phantom`, `pstat`, `pdebug`, `pdump`,
+`list.phantoms` and `profiler`** — there is no withheld set any more.
+
+None of them needs `admin`. `pdump` *n* and `pstat` work on any session, since
+every session is the Solo user's: the `PDUMP` setting that refuses a dump of a
+process under another login name has nothing to refuse here.
 
 ## See also
 

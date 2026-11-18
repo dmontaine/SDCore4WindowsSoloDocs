@@ -30,7 +30,7 @@ with elements found in the main SD version and in ScarletDME. ScarletDME was
 a fork of the original GPL release of OpenQM 2.6.6. **Solo is the personal
 edition of SD Core for Windows**: one Windows user, one computer, one account,
 and none of the multi-user machinery. The GettingStarted set has a page,
-*Differences from multiuser SD Core for Windows W1.1-1*, that says exactly what
+*Differences from SD Core for Windows W2.0-0*, that says exactly what
 differs.
 
 **That lineage matters when you go looking for documentation.** Not all
@@ -46,11 +46,11 @@ BASIC.
 
 **SD Core Solo for Windows is Windows only, and for one user.** It is the
 single-user edition of SD Core for Windows: one account, `sduser`, run as you.
-There are no `#ifdef` branches keeping Linux alive in this source — SD Core
-Solo for Linux is a separate project, kept in behavioral parity by deliberate
-policy, and this is not a build of it.
+SD Core Solo for Linux is a separate
+product, built to behave the same way for the people who use it, and this is
+not a build of it.
 
-SD Core Solo for Windows is free software under the GNU General Public License v3. `config gpl`
+SD Core Solo is free software under the GNU General Public License v3. `config gpl`
 displays the license and `config contrib` the list of contributors. The
 installer carries compiled binaries; the source is a separate download.
 

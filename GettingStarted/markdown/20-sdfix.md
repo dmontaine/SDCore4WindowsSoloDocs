@@ -106,7 +106,8 @@ program reads standard input one character; `q` quits, `s` stops paging). The
 **If standard input ends while `-Q` is asking `Fix?`, the end of input is taken
 as `n`**: the program prints `Fix? N (end of input)`, repairs nothing, and
 carries on with the check without waiting for any further answer. At the *Press
-return* pause the end of input means "stop paging". To answer the questions from a
+return* pause the end of input means "stop paging". The *Dump and rebuild*
+question uses the same routine. To answer the questions from a
 script, pipe the answers, one character each: `'Y' | sdfix -B -Q file` repairs a
 file and `'N' | sdfix -B -Q file` does not (PowerShell; the line end it adds
 does no harm). PowerShell has no `<`: for "input that ends" use `$null |
@@ -153,10 +154,11 @@ Fix? Y
 ```
 
 The first error is still there on the next run; the second is gone. `-F` does
-the same for every error, with no questions (`Corrected by resetting to 1`). Which
+the same for every error, with no questions. Which
 errors can be fixed, and how, is on the next page, [sdfix: what it checks and
 repairs](20a-sdfix-checks-and-repairs.html). That page also covers the
-dump-and-rebuild of mis-hashed groups and interactive mode.
+dump-and-rebuild of mis-hashed groups, interactive mode, and what the tool will
+not do.
 
 ## Recovering space with `-R`
 

@@ -116,7 +116,7 @@ command processor's dispatch list. Several names share one: `off` and `quit` are
 both internal verb 1, and `clr` is internal verb 2. (`cs` for `clr`, and the
 run-together `cleardata`, `clearinput`, `clearprompts` and `clearselect` for
 `clear.data`, `clear.input` and the rest, were second names for the same numbers and were
-removed in 1.2-0.)
+removed in 2.0-0.)
 
 ## Sentences and paragraphs
 

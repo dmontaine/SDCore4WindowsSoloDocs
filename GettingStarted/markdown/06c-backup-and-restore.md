@@ -1,29 +1,7 @@
 Title: Backing up and restoring the account
 Subtitle: Writing your account to a zip file, putting it back, remembering the backup folder, and recording the system's settings.
 
-This page continues [Administrator commands](06-administrator-commands.html). **All four verbs need `admin` first.**
-
-## The backup folder: `set.backup.directory`
-
-```
-set.backup.directory folder
-set.backup.directory
-```
-
-With a folder, the verb makes it if it does not exist, proves SD can write in
-it, and remembers it in `sd.conf` as `BACKUPDIR=`. With no folder it shows the one
-that is remembered and changes nothing.
-
-**The folder must be a full path**, such as `C:\Backups` or `P:\backups`. A path
-that depends on the current folder is refused.
-
-**You do not have to run it first.** If no folder is remembered, `backup.account`
-and `restore.account` ask for one and remember the answer exactly as this verb
-would. `restore.account` with `no.query` has nobody to ask and refuses instead.
-
-**An older SD Core Solo will not start on an `sd.conf` that carries a `BACKUPDIR`
-line.** SD stops at start-up on any key it does not know. Remove the line before
-going back to an older release.
+This page continues [Administrator commands](06-administrator-commands.html).
 
 ## Backing up: `backup.account`
 
@@ -105,6 +83,28 @@ not its folder; the swap itself is in `sdrestore.log`, not in the audit trail.
 **Restoring needs SD to be the only session.** Nobody else may be signed in while
 a backup or restore runs, and new sign-ins are refused until it finishes.
 
+## The backup folder: `set.backup.directory`
+
+```
+set.backup.directory folder
+set.backup.directory
+```
+
+With a folder, the verb makes it if it does not exist, proves SD can write in
+it, and remembers it in `sd.conf` as `BACKUPDIR=`. With no folder it shows the one
+that is remembered and changes nothing.
+
+**The folder must be a full path**, such as `C:\Backups` or `P:\backups`. A path
+that depends on the current folder is refused.
+
+**You do not have to run it first.** If no folder is remembered, `backup.account`
+and `restore.account` ask for one and remember the answer exactly as this verb
+would. `restore.account` with `no.query` has nobody to ask and refuses instead.
+
+**An older SD Core Solo will not start on an `sd.conf` that carries a `BACKUPDIR`
+line.** SD stops at start-up on any key it does not know. Remove the line before
+going back to an older release.
+
 ## Backups and restores on one screen: `tool.backups`
 
 ```
@@ -127,14 +127,16 @@ anything.
 | `R` | `restore.account archive all no.query`, the archive under the cursor |
 | `D` | `set.backup.directory path`, for the absolute path you type |
 
-Each shows its command in a box answered Run or Cancel, **and Cancel is what Enter chooses**. The
-page runs those four commands and no other; the verbs ask for the administrator again and write
-their own audit lines. **A restore replaces the account's data**, so its box says so and wants the
-word `restore` typed (in either case); the page then gives `no.query`, because the verb's own question cannot be
-answered through a page. An archive that holds an account other than `sduser` is refused by the
-page, which names it. As at the prompt, the restore is prepared now and the swap happens the next
-time SD starts. `F5` reads the folder, the archives and the sessions again, `F1` explains the page
-and `Ctrl-Q` leaves. Opening the page writes the audit line `tool start app=tool.backups`.
+Each shows its command and what it does in a box answered Run or Cancel, **and Cancel is what
+Enter chooses**. The page runs those four commands and no other; the verbs ask for the
+administrator again and write their own audit lines. **A restore replaces the account's data**, so
+its box says so and wants the word `restore` typed (in either case). The verb's own question
+(Enter is No) cannot be answered through a page, so the page gives `no.query` after its box has
+asked; it does not give it any other way. An archive that holds an account other than `sduser` is
+refused by the page, which names it. As at the prompt, the restore is prepared now and the swap
+happens the next time SD starts. Where a command cannot be done, the verb says why and the page
+shows its last line on the status line. `F5` reads the folder, the archives and the sessions again,
+`F1` explains the page and `Ctrl-Q` leaves. Opening the page writes the audit line `tool start app=tool.backups`.
 
 ## What the system looks like: `settings.report`
 

@@ -73,11 +73,10 @@ The terminfo entries that name a width and a depth say 140 and 43; the
 
 ## The page is 140 × 43
 
-SD's default is **140 columns by 43 lines**, not 80 × 24 — and no longer
-the 120 × 36 of the releases before 2.0-0. A console window
+SD's default is **140 columns by 43 lines**, not 80 × 24. A console window
 narrower than that makes wide reports look wrapped or truncated — which
-reads as a formatting bug and is not one. `term 120,36` gives the old
-size back for a session that wants it.
+reads as a formatting bug and is not one. `term 120,36` gives a
+120 by 36 window for a session that wants it.
 
 The default is only a default. `term w,h` takes any width from 20 to
 32767 and any depth from 10 to 32767, larger or smaller than 140 × 43,

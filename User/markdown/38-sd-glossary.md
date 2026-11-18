@@ -60,6 +60,10 @@ without arguments.
 on input (`iconv`) or output (`oconv`). Examples: `D` for dates, `MR`
 for masked decimal, `MC` for case conversion.
 
+**Correlative** — a computation applied to a field value before the
+conversion is applied. SD has no A or S dictionary items; the computation
+is written as an I-type item.
+
 ## D
 
 **Dictionary** — a file that defines the fields of a data file for the
@@ -153,7 +157,7 @@ TCL commands. Replaces the removed PROC language.
 
 **Programmer** — retired. Used to name the middle of three
 account tiers. Every account now has the full development set (compile,
-catalogue, edit, file creation, index management, bulk record editing,
+catalog, edit, file creation, index management, bulk record editing,
 process introspection) that this tier used to grant — see *Accounts* in
 the *Getting Started* set.
 
@@ -208,7 +212,8 @@ prompt and dispatches it.
 **Terminfo** — the terminal capability database. Defines what
 sequences a terminal sends for keys and what sequences to use for
 screen control. SD ships 26 definitions compiling to 37 terminal
-names. The terminfo compiler (`sdtic`) ships with SD Core Solo for Windows.
+names. The terminfo compiler (`sdtic.exe`) is shipped with SD Core, beside
+`sd-solo.exe`; see [SD Terminfo](39-sd-terminfo.html).
 
 **Transaction** — a group of file updates that succeed or fail together.
 Declared with `start transaction` and committed with `commit` or

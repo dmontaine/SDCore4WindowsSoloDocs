@@ -139,6 +139,10 @@ The `ai request` line is written by the SD kernel **before** the helper is start
 | `The AI did not answer: limit (...)` | one of the limits above is used up; wait, or raise it |
 | `The AI did not answer: net (...)` or `timeout` | the provider could not be reached; check the address, the certificate, the clock, and whether the machine needs a proxy to reach the internet (the helper uses none) |
 
+## Providers and models
+
+The request layouts follow each provider's published documentation. The default model of each provider and each provider's list of models are the provider's to change; if a default model is refused, name another with `set.ai model PROVIDER NAME`.
+
 ## See also
 
 [Administrator commands](06-administrator-commands.html) ·

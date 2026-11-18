@@ -13,6 +13,10 @@ one program, one flat variable space, `gosub` to a label, `call` to a cataloged
 subroutine — and everything here is an alternative to it, not an extension of
 it.
 
+`class` and `object` support is part of the SD BASIC compiler and works the same
+way on every SD Core product. Where a listing shows an error, that is the error
+the compiler gives.
+
 ## Scope, and the one thing to get straight first
 
 A plain `gosub` label shares every variable in the program. A **local
@@ -142,7 +146,7 @@ end
 `public function` declare methods; `get` and `set` declare a property.
 
 A class is cataloged and instantiated like any other program, and **a private
-catalog is enough** — nothing here needs `admin`:
+catalog is enough** — nothing here needs an elevated session:
 
 ```
 :basic bp zzcls

@@ -9,8 +9,8 @@ SD folds case, so a command may be typed in either case. Commands and keywords
 are shown here in lower case. In the tables, *italics* mark something you supply
 and **bold** marks a word typed as it stands; braces mark an optional part.
 
-The file being queried is `voc`,
-because it is the one file every account has.
+> **The listings on this page** are in an administrator account. The file queried is `voc`,
+> because it is the one file every account has.
 
 ## The one thing to understand first
 
@@ -69,7 +69,7 @@ clear.select all
 Cleared all numbered select lists
 ```
 
-(`clearselect`, the same verb spelled without the dot, was removed in 1.2-0.)
+(`clearselect`, the same verb spelled without the dot, was removed in 2.0-0.)
 
 ## Building a list
 
@@ -119,8 +119,8 @@ select.dir C:/Users/pat/reports
 There is no option to keep only files or only directories. The directory is read
 **as you**, with your own permissions. A path outside the account's own directory
 needs the OS switch (`set.os.access os on`), as `oscopy` does; without it the verb
-says *name has no OS access, so a file or directory outside its own account
-cannot be reached by pathname*. A directory that cannot be read is *Cannot read
+says *name has no OS access, so outside its own account it can reach by
+pathname only a directory the administrator opened to it*. A directory that cannot be read is *Cannot read
 directory* and the pathname; a missing pathname is *Directory pathname required*.
 A `to` with no number, or a bad one, is *Select list number missing or invalid*.
 
@@ -277,7 +277,8 @@ A list that is not there is *Saved select list 'name' not found*, and no name is
 (To combine saved lists, pick them up with `get.list` first.)
 
 It finds a key of one list in the other without scanning it,
-so lists of tens of thousands of keys merge in seconds. The result
+so lists of tens of thousands of keys merge in seconds
+and the time does not grow with the product of the two lengths. The result
 is what it always was: a union keeps the first list and adds each new key of
 the second once; an intersection gives the keys of the second list that are in
 the first, a key repeated in the second repeated; a difference takes away one
@@ -296,7 +297,7 @@ merge.list 3 intersect 4 to 6
 ```
 
 The operator words are **`union`**, **`intersect`** and **`diff`**
-(`intersection` and `difference`, which meant the same, were removed in 1.2-0).
+(`intersection` and `difference`, which meant the same, were removed in 2.0-0).
 `to` *n* names the target, defaulting to list 0,
 and `count.sup` suppresses the count line.
 

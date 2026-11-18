@@ -102,11 +102,12 @@ Removes the record. **`.d` *name* at the command prompt asks first**;
 `.s` writes stack lines *s* to *e* into the VOC as *name* — a sentence
 when the range is one line, a paragraph when it is more. `.r` loads a
 sentence or paragraph from the VOC into the stack. **The record type
-follows from what you saved** rather than from anything you say.
+follows from what you saved** rather than from anything you say. A new name is stored in
+lower case; saving over an existing record keeps its name.
 
 ### Listing the VOC by type
 
-SD has no ready-made `list` sentences. (Until 1.2-0 it shipped ten, `listf`,
+SD has no ready-made `list` sentences. (Until 2.0-0 it shipped ten, `listf`,
 `listfl`, `listfr`, `listk`, `listpa`, `listph`, `listq`, `listr`, `lists` and
 `listv`, as R-records into a file called `SD.VOCLIB`; both are gone.) The query
 processor does the same job with the `type` item of the VOC's dictionary:
@@ -180,10 +181,9 @@ SD tries a name as typed, then lower, then upper. What it changes is what
 SD prints back: `CT VOC LIST` answers `VOC list`.
 
 The file-pointer entries — `bp`, `bp.out`, `gpl.bp`, `gpl.bp.out` — are
-lower case. **The migration is complete, not partial**: an
+in lower case. An
 account's own `voc`, and the system directory's `newvoc`, `accounts`,
-`messages` and `syscom`, are all lower case on disk too — there is nothing left
-in upper case to migrate. `qfile` was never a path of its own; it is a VOC
+`messages` and `syscom`, are all lower case on disk too. `qfile` was never a path of its own; it is a VOC
 pointer to `@SDSYS/$ipc`, the session IPC area, and has no on-disk name to fold.
 
 ## What is not here
@@ -207,7 +207,7 @@ longer dispatched; the home screen (`home`, or `menu`) is the menu system.
 
 **`EDIT` runs.** It was once exactly the kind of VOC entry described
 above — present but undispatchable, its type field reading
-`Verb - Full screen editor` rather than `V`. That is no longer so: it is a real `V` record now, a working full-screen editor. See [SD
+`Verb - Full screen editor` rather than `V`. It is a real `V` record now, a working full-screen editor. See [SD
 VOC - Structure and Usage](32-sd-voc-structure-and-usage.html#what-the-shipped-voc-holds).
 
 ## See also

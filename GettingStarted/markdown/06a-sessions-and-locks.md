@@ -9,13 +9,14 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-Paths are shown as they read on a Solo computer.
+> Paths are shown as they read on a Solo computer.
 
 ## Two things are not on this page, on purpose
 
 **A programmer needs to understand locks without being able to force one**, so
-the User set keeps that part of the subject: what a task lock is against a
-database lock, and `release`, which gives back locks your own session holds.
+user documentation keeps the part of the subject that is theirs: what a task
+lock is against a database lock, and `release`, which gives back locks your own
+session holds and needs no privilege at all.
 The same goes for `status`, `phantom`, `pstat`, `pdebug` and `pdump` — a
 programmer's view of their own processes.
 
@@ -92,10 +93,12 @@ group and task lock the session still held**, and says so (then the text of
 message 10167, *User n was not running, so there was nothing to log out*):
 
 ```
-LOGOUT reaped user 43 (pid 1799, sduser) - process was gone.
+LOGOUT reaped user 43 (pid 1799435, sduser) - process was gone.
 ```
 
-The entry matters because **it holds a slot and an exclusive-access claim**:
+For a session ended from outside (with `taskkill /f`, say) while it held a
+record lock, `logout 43` prints the line above, and afterwards `listu` does not
+list the user and `list.readu` does not show the lock. The entry matters because **it holds a slot and an exclusive-access claim**:
 `NUMUSERS` counts it, and any verb that wants a file to itself — `build.index`
 is the usual one — is refused while it is there. So **the way to clear a dead
 session is `logout` *n*** — no `admin`, since every session on a Solo computer
@@ -148,6 +151,23 @@ User File Path........................... Type Id..............................
 | **`Type`** | `RU` update · `RL` read · `FX` exclusive file lock · `SX` shared file lock · `WAIT` a session waiting for one |
 | **`Id`** | the record id; blank for a file lock |
 
+**An id is text a program wrote, and it is shown safely.** A program may lock a
+record whose id holds an escape sequence, and the listing, the deadlock report
+and `tool.sessions` would have sent that sequence to **your** terminal. Now a
+control character, `del`, a byte from 128 to 159 and a mark character in an id,
+a path or a user name are each shown as `?`. The same holds for `getlocks()` and
+`system(1083)` in a program. The locks themselves are not changed (`unlock` and
+`release` act on the real id), and `fileinfo(f, 1039)` still gives a program
+its own ids exactly.
+
+A file lock has no id:
+
+```
+User File Path........................... Type Id..............................
+  23    1 /cygdrive/c/Users/you/SDCoreSol FX
+          o/user_accounts/sduser/ZZLK31A
+```
+
 **The path is the POSIX one and that is not a display fault.** SD holds file
 paths internally in `/cygdrive/c/...` form. It names the same place as
 `C:\Users\you\SDCoreSolo\...`.
@@ -158,7 +178,7 @@ paths internally in `/cygdrive/c/...` form. It names the same place as
 
 ```
 :list.readu detail
-Record lock limit (NUMLOCKS) = 100, Current = 0, Peak = 2
+Record lock limit (NUMLOCKS) = 100, Current = 0, Peak = 1
 There are no active file, read or update locks held by any user
 ```
 
@@ -183,117 +203,6 @@ will not end*), or the `tool.sessions` page's L key.
 **Take the user number to `pstat`.** *(Not responding)* means clear the session
 rather than wait for it.
 
-## Task locks: `list.locks`, `lock`, `clear.locks`
-
-Task locks are **64 numbered flags with no connection to any data**. They mean
-whatever the programs using them agree they mean — usually *only one session
-runs this job at a time*, where the thing being protected is not a single file.
-
-```
-list.locks
-lock n {no.wait}
-clear.locks {n}
-```
-
-```
-:list.locks
-No task locks reserved by any user
-```
-
-and with lock 5 held by user 16, `*` marking your own session:
-
-```
-:list.locks
- 0:       1:       2:       3:       4:       5: 16*   6:       7:
- 8:       9:      10:      11:      12:      13:      14:      15:
-16:      17:      18:      19:      20:      21:      22:      23:
-```
-
-*(64 numbers over eight rows; the rest are blank and are cut here.)*
-
-### `lock` waits unless you tell it not to
-
-```
-:lock 5 no.wait
-Set task lock 5
-:lock 5 no.wait
-Task lock already owned by this process
-```
-
-**Without `no.wait` it waits for ever.** It prints *Waiting for task lock to
-become available* once, then retries every two seconds until it gets it — right
-for a job that must run, wrong for anything unattended. **`no.wait` turns the
-wait into a refusal** (*Task lock is already in use*), which a script can act on.
-
-### `clear.locks` gives back your own, and only your own
-
-```
-:clear.locks 5
-Released task lock 5
-:clear.locks
-All task locks released
-```
-
-**With no number it releases all 64 this session holds**, and says *all* whether
-it held any or not.
-
-| | |
-|---|---|
-| *Released task lock n* | it was yours and it is now free |
-| *Task lock n is held by another process* | **`clear.locks` will not take it** |
-| *Task lock n is not held by any process* | it was already free |
-| *Task lock number must be in range 0 to 63* | from `clear.locks 99` |
-
-## Forcing a lock open: `unlock`
-
-```
-unlock file n {user n} record.id {record.id …}
-unlock file n {user n} all
-unlock file n {user n} filelock
-unlock tasklock n {n …}
-```
-
-**This is the only verb that takes somebody else's lock, and it needs `admin`:**
-
-```
-:unlock
-Command requires administrator privileges
-```
-
-**It names a file by number, not by name** — the `File` column of `list.readu`.
-That is deliberate: the lock is on a file the computer has open, which may not
-be in your VOC at all.
-
-| | |
-|---|---|
-| **`file`** *n* | the file, by the number `list.readu` printed |
-| **`user`** *n* | restrict to one session's locks |
-| **`all`** | every record lock matching, rather than named ids |
-| **`filelock`** | the file lock, which cannot be combined with record ids |
-| **`tasklock`** *n* | force a task lock, including one held by another process |
-
-**A file number or a user number is compulsory** — *Either a file number or a
-user number must be specified* — so there is no `unlock` that means
-*everything on the computer*.
-
-> **Unlocking is not free and SD cannot make it so.** A lock is a promise its
-> holder is relying on. Forcing one open while its owner is alive lets two
-> sessions write the same record and tells neither. **Establish that the holder
-> is dead first** — `pstat` on the user number, `listu` for *(logout pending)* —
-> and prefer clearing the session to clearing the lock.
-
-### `unlock tasklock` is the only way back from a killed holder
-
-**Task locks are released when a session ends normally.** They are not part of
-any file, so nothing has to be written back.
-
-> **`sd-solo -cleanup` does not give them back, and that is a defect.** It releases
-> a dead session's record locks and file locks and leaves its task locks held,
-> by a user number nothing is behind, until SD itself is restarted.
-> `list.locks` shows the number with an owner and `clear.locks` refuses it
-> because it is not yours. **`unlock tasklock` *n*, after `admin`,** is the way
-> out — that is what the forced form is for.
-
 ## Who took which lock, and where: `lock.tracer`
 
 `list.readu` shows what is locked *now*. When the question is who took a lock, in
@@ -313,8 +222,8 @@ folder). `on` empties that file first, so a log is one switching-on's worth. The
 report lists the lines, oldest first, with the **date and time**, the **user
 number**, the **action**, the **program** that was running and the **line number**
 in it, the **file** and the **record id**. `user n` shows one session's lines;
-`lptr` prints them and `no.page` stops the pause at the end of a page. A session
-without `admin` is told *lock tracing is for the administrator*.
+`lptr` prints them and `no.page` stops the pause at the end of a page. An ordinary
+session is told *lock tracing is for the administrator*.
 
 | action | means |
 |---|---|
@@ -344,97 +253,33 @@ inhibit.login off       allow them again
 inhibit.login           say which it is, and who set it
 ```
 
-For maintenance that needs SD quiet. A new session that starts while it is on —
-the command prompt, an ssh sign-in, an API connection — is told *SD is not
-accepting new sessions: logins have been inhibited by* name *(inhibit.login). Try
-again later.* **Sessions already running are not touched**, and neither are the
-phantoms the session that set it starts. The refusals, and the `on` and `off`
-themselves, are on the audit trail (`login refused ... reason=logins are
-inhibited (inhibit.login)`).
+For maintenance that needs the system quiet. **Needs `admin`.** A person or
+program that tries to sign in while it is on — at the keyboard, over ssh or
+through the API — is refused with *SD is not accepting new sessions: logins have
+been inhibited by* name *(inhibit.login). Try again later.* **Sessions already
+running are not touched**, and neither are the phantoms the session that set it
+starts. The refusals, and `inhibit.login on` and `off` themselves, are on the
+audit trail.
 
-**On Solo no new session can switch it off, because no new session is an
-administrator**: `admin` is typed after sign-in, and the sign-in is what is
-refused. So **switch it off from the session that set it**, or end that session.
-The inhibit lapses by itself when the session that set it is gone, because the
-record names a user number *and* a process id and a process that is not there
-holds nothing. `inhibit.login on` while another live session holds it is refused
+**On Solo the session that set it is the only one that can switch it off, and
+nobody new gets in, you included.** On the multiuser SD Core the administrator's
+own new session is let in; on Solo the administrator is a state of a session (you
+type `admin` after signing on), so at the door no new session is one. That cannot
+lock you out: **if the session that set it ends or is killed, the inhibit is
+ignored from then on** — the record names a user number *and* a process id, and a
+process that is not there holds nothing — and the next `inhibit.login on`
+replaces it. `inhibit.login on` while another live session holds it is refused
 (*Logins are already inhibited by* name*. Switch it off first (inhibit.login
 off)*).
 
-The record is the file `login.inhibit` in `%USERPROFILE%\SDCoreSolo\sdsys`. **It
-is not the hold that `backup.account` and `restore.account` take**, which keeps
-every new session out for as long as they run and lapses the same way when the
-session that took it is killed.
+The record is the file `login.inhibit` in the SD system directory
+(`%USERPROFILE%\SDCoreSolo\sdsys`). **It is not the same thing as the hold that
+`backup.account` and `restore.account` take**, which keeps *everybody* out, the
+setter's new sessions included, while they run.
 
-## The paragraph every session runs first: `MASTER.LOGIN`
+## Continued in
 
-A VOC record named `MASTER.LOGIN` in the SDSYS account (the `voc` file in
-`%USERPROFILE%\SDCoreSolo\sdsys`), if it is a paragraph (its first line is `PA`),
-is run **once by every new session, before the account's own `LOGIN`
-paragraph**: an interactive session, a phantom and an API session, which runs it
-when it first enters an account. There is none as delivered, so nothing runs by
-default, and the account's own `LOGIN` paragraph is the ordinary place for what
-a session should do when it starts; a session shows what it is by `@tty`
-(`apisrvr` for the API). It runs in the account, **under the account's own
-switches**: it can do no more there than the account can.
-
-## Sessions and locks on one screen: `tool.sessions`
-
-```
-tool.sessions
-```
-
-**A full-screen page for the administrator**: type `admin` first; without it the page is
-refused before it reads anything. It needs a window of 140 columns by 43 lines. The top list
-is every session: user number, Windows process number (`Pid`), when it signed on, its kind
-(user, phantom, API or SDNet), the login user, the account it is in, where it came
-from, and whether it is yours (a star) or a logout is pending. The lower list is every lock:
-the user, the file number and path, the type (`FX` and `SX` lock a whole file, `RU` is read
-and update, `RL` is read, `WAIT` is a session waiting for a lock), the record id, since when,
-and whether a session with that user number is still signed on. Under the sessions the page
-says whether logins are inhibited and by whom, and under the locks it gives the lock limit,
-the number held now and the most there have been. **Both lists are read again every three
-seconds, with no key pressed, and on F5, and a refresh keeps the cursor on the same user or
-the same lock, not on the same row number.** A box under the lists explains the row under the
-cursor in plain sentences and shows the exact command its key would run.
-
-| Key | What it does |
-|---|---|
-| arrows, Page Up, Page Down, Home, End, a click | move in the list that has the focus |
-| Tab | change to the other list |
-| L (sessions) | `logout` the selected session; the user number is typed again to confirm. For a session whose process is gone the entry is cleared and its locks are released |
-| U (locks) | `unlock` the selected lock; the holder is not told |
-| I | `inhibit.login on` when logins are allowed, `off` when they are inhibited |
-| F5 | read again |
-| F1, ?, a click on the [?] | explain the page |
-| Ctrl-Q | leave |
-
-**The page changes nothing by itself.** Each of the three keys builds one command from values
-the page has read and checked, shows it in a box with what it does, and runs it only when you
-answer Run; Cancel is what Enter chooses. Those three commands are the only ones the page can
-run. **`logout` and `unlock` write no audit line of their own, so the page writes one for
-every command it ran** (`tool run app=tool.sessions command=... status=...`), as well as the
-line that says it was started (`tool start app=tool.sessions`); `inhibit.login` writes its
-own as well.
-
-What each key refuses, in words, before any box opens: `L` on the session the page runs in
-(leave it with Ctrl-Q); `U` on a `WAIT` row, which is a session waiting for a lock and not a
-lock; `U` on a record id with a character the page will not put in a command (only lower-case
-letters, digits, dot, dash and underscore go through) or an id that is one of the words
-`unlock` reads as a keyword (`all`, `file`, `user`, `filelock`, `tasklock`) — release those at
-the prompt with `unlock`. The lock table keeps record ids in upper case and shows them so; the
-page sends the id in lower case, which the verb folds.
-
-**`logout` ends a session by signalling its process**, so work that session has not saved is
-lost; the box says so before you answer Run. **While `inhibit.login` is on, only this session
-and the phantoms it starts can sign in, and if this session is lost the hold lapses** — the
-page's box says that too.
-
-**Not on the page:** a message to a user, `logout all`, and `unlock tasklock`.
-
-## Who needs `admin`
-
-| | |
-|---|---|
-| `tool.sessions`, `listu`, `list.readu`, `list.locks`, `lock`, `clear.locks`, `unlock`, `logout all`, `lock.tracer`, `inhibit.login` | `admin` first |
-| `logout`, `logout n`; from a PowerShell window `sd-solo -u`, `sd-solo -k`, `sd-solo -cleanup` | nothing |
+[Task Locks and the Sessions
+Screen](06a1-task-locks-and-forcing-a-lock-open.html) — task locks, forcing a
+lock open with unlock, the sessions and locks screen, and the paragraph every
+session runs first

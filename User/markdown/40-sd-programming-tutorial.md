@@ -6,8 +6,8 @@ page covers one subject and every statement on it. Here we put them
 together into programs that do something, and each program builds on
 the one before.
 
-**Every program on this page compiles and runs on SD Core for Windows
-W1.0-0.** The output shown is what SD printed. If you type the program
+**Every program on this page compiles and runs on SD Core Solo for Windows.**
+The output shown is what SD printed. If you type the program
 in, compile it and run it, you will see the same thing.
 
 The reference pages are linked at the end of each section. Read them
@@ -73,7 +73,7 @@ own source uses.
 
 > **`program` is optional.** A source record with no declaration is a
 > program. But every program on this page has one, because naming the
-> program is how you know what it is when it is catalogued and called
+> program is how you know what it is when it is cataloged and called
 > from another program.
 
 ## 2. Variables and input

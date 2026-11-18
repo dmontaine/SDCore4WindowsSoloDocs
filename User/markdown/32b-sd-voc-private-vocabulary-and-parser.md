@@ -10,8 +10,9 @@ command, and `$voc.parser` once, when the session signs on.
 SD folds case, so a command may be typed in either case. Commands are shown
 here in lower case. In the tables, *italics* mark something you supply.
 
-> The examples use the names `zzpv`, `zzhello` and the like. What differs on
-> Solo is who may write the two records, and that is the last section.
+> The names `zzpv`, `zzhello` and the like are only examples. What differs on
+> Solo from the multi-user product is who may write the two records, and that is
+> the last section.
 
 ## Where a command is looked for
 
@@ -102,7 +103,7 @@ ran the private record, not the program.
   then reported as not in the VOC. That is what happens when field 1 is not
   `X` (a record of type `F` was tried), when field 2 is empty, when the name
   is in no VOC record, and when the name leads to a place the account may not
-  open (an `F` record naming `/cygdrive/c/Windows`, in an account without the OS access
+  open (an `F` record naming `C:/Windows`, in an account without the OS access
   switch, `set.os.access os on`).
 * **The file is opened as any file name is,** under the same rules: a name
   in the account's VOC (here `zzpv`, which `create.file` put there).
@@ -206,13 +207,15 @@ program's `write` or `delete` to it, `copy` into it, `.s` and `.d` with a name;
 see page 32a). Without it the change is refused with *The VOC can only be
 changed after admin*. Reading is never stopped. Solo has no `voc-on`, `bp-on` or
 shared account to give anyone a narrower right: there is `admin` or there is not.
+
 What `admin` covers is the **VOC**, and only that:
 
 * **The private vocabulary's file is not covered.** The test looks at the name of
   the file being written, and a file called `zzpv` is an ordinary data file. Once
   the VOC points at it, a session that can write the file can add commands to it
   and replace commands in it, without `admin`. It still cannot touch the VOC's own
-  records, so it cannot replace a VOC command.* **A handler is a cataloged program.** Cataloging to the private or local
+  records, so it cannot replace a VOC command.
+* **A handler is a cataloged program.** Cataloging to the private or local
   catalog needs no `admin` on Solo, so `admin` alone is what switches a
   handler on.
 * **Neither record is in a stock VOC.** Nothing SD ships writes them.

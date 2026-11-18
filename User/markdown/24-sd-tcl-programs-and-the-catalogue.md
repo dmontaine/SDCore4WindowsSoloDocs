@@ -8,7 +8,7 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-The listings use a two-line program in an account's `bp` file.
+> **The listings on this page** use a two-line program in an account's `bp` file.
 
 ## Compiling
 
@@ -37,17 +37,17 @@ not the presence of output.**
 `@system.return.code` is the number of programs compiled, and negative on a
 fatal error.
 
-**`basic ... no.catalog` compiles and catalogs nothing.** A `$catalog` line in
-the source or in a file it includes, or a `CATALOG` line in the `$BASIC.OPTIONS`
-record, makes the compile catalog the program as well; with `no.catalog` none
-of them is acted on, and the compile says so
-(`zzprog compiled; its catalog directive was not run (no.catalog)`).
-
 **The object code goes into `bp.out`**, a separate file beside `bp`, one record
 per program. **Its name is lower case even when the source record is not** —
 a source record `ZZPROG` compiles to an object record `zzprog`. That is this
 port's naming, and it is worth knowing before you go looking for the object by
 the name you typed.
+
+**`basic ... no.catalog` compiles and catalogs nothing.** A `$catalog` line in
+the source or in a file it includes, or a `CATALOG` line in the `$BASIC.OPTIONS`
+record, makes the compile catalog the program as well; with `no.catalog` none
+of them is acted on, and the compile says so
+(`zzprog compiled; its catalog directive was not run (no.catalog)`).
 
 ## Running without cataloging
 

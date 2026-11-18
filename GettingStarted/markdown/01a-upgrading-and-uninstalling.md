@@ -8,8 +8,8 @@ This page continues [Installing](01-installation.html).
 **Run the new installer while the old release is installed.** It recognizes
 the installation and upgrades it. It asks no passwords and no API or ssh
 choices — and it keeps them all. It never adds, changes or removes the global
-password. **It asks one question: *Shell and OS access*.** Before this release
-the shell and OS access were always on; now they are off unless the administrator
+password. **It asks one question: *Shell and OS access*.** A Solo from before 2.0-0
+had its shell and OS access always on; now they are off unless the administrator
 turns them on, so an upgrade asks which you want to keep, with both boxes
 unticked (see [Installation](01-installation.html)). Unticked, nothing is turned
 on and nothing already turned on is turned off. A silent upgrade shows no page
@@ -122,5 +122,5 @@ elevated prompt.
 
 ## Continued in
 
-[Differences from multiuser SD Core for Windows W1.1-1](01b-differences-from-multiuser-w1-1-1.html)
+[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)
 — what Solo leaves out, adds, and does differently.
