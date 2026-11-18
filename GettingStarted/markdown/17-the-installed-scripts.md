@@ -180,7 +180,7 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard
 
 | | |
 |---|---|
-| `-List` | who is locked and when each lock ends, and who has wrong passwords counted; needs no elevation. Ends `SOLO SSH GUARD LOCKED <n>` |
+| `-List` | who is locked and when each lock ends, and who has wrong passwords counted; and what record of the event log the guard has read up to (or `NEVER READ`); needs no elevation. Ends `SOLO SSH GUARD LOCKED <n>` |
 | `-Unlock ADDRESS`, `-Unlock all` | lets one address, or every address, back in and takes its firewall rule away; **needs an elevated PowerShell**. Ends `SOLO SSH GUARD UNLOCKED <n>`. Anything it refuses prints `ERROR=<text>` and exits `1` |
 | `-Serve` | what the task runs; you do not run it |
 
@@ -189,7 +189,12 @@ administrators-only folder `C:\ProgramData\SDCoreSolo\ssh` and the SYSTEM task r
 nothing a user can edit runs as SYSTEM; `-List` and `-Unlock` read the same folder whichever copy you run.
 **The script owns its rules**, `SD-Solo-SSH-Guard-<address>`, one per locked address, and removes each
 when the ten minutes are up; it never touches `SD-Solo-SSH-In-TCP` or Windows' own ssh rule for port 22.
-It is set up wherever Solo's ssh is set up and removed with it. What it counts, and what it cannot
+**It reads the Windows event log, not a file:** Solo's ssh server logs to **OpenSSH/Operational**
+(Event Viewer: Applications and Services Logs, OpenSSH, Operational) at level VERBOSE, and the guard
+counts a line only when Windows' own OpenSSH server process wrote it and only after that process has
+logged a connection arriving on port 4251, so failures at the computer's own ssh server on port 22 are
+not counted. Solo's lines there can be read by any signed-in user. The installer fails if the guard has
+not read the event log once and seen Solo's ssh server start. It is set up wherever Solo's ssh is set up and removed with it. What it counts, and what it cannot
 stop, is on [ssh access](08-ssh-access.html).
 
 ## See also

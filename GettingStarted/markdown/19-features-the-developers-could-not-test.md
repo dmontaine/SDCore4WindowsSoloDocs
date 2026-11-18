@@ -214,12 +214,15 @@ password; and connect to port 22 as an SD Core user.
 **Known.** Three wrong passwords from one address in ten minutes lock that address for ten minutes: the
 rules (a wrong password counts, a key does not, a sign-in forgets the failures, the window and the end of a
 lock are honored, the address is read from the end of the log line) were run by a test on recorded ssh
-log lines, without the firewall and without a real ssh server.
+log lines, without the firewall and without a real ssh server. A first version that read a log file was
+run on an installed system and never saw a line, because Windows' OpenSSH holds that file so that no other
+program can read it; the guard now reads the Windows event log instead.
 
-**Not known.** **The lock-out has not been run on an installed system.** No ssh server logged to the
-file and no Windows Firewall rule was measured. Nobody has seen: the exact prefix the Windows ssh server
-puts before each line of its log; that the server's per-connection processes write to the same file; the
-**SD Core Solo SSH Guard** task starting at boot and running; that the block rule refuses a **new**
+**Not known.** **The event-log route has not been run on an installed system.** No Windows Firewall rule
+was measured. Nobody has seen: Solo's ssh server write "Connection from ... port 4251" to the
+**OpenSSH/Operational** event log at level VERBOSE (the computer's own ssh server, at a lower level, does
+not write that line); that the same per-connection process writes the wrong-password lines that the guard
+counts; the **SD Core Solo SSH Guard** task starting at boot and running; that the block rule refuses a **new**
 connection from the address; that ending the process which holds the connection ends only that
 connection; or that `-List` and `-Unlock` report what the task did. **A lock on this computer's own
 address (`127.0.0.1`) ends the connection but cannot refuse the next one**, because Windows Firewall does
