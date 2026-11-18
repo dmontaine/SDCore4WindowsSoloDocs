@@ -3,16 +3,15 @@ Subtitle: A tool for turning compiled program files between big-endian and littl
 
 `sdconv` was written to move SD files between computers that store numbers in
 opposite byte orders. SD Core Solo for Windows runs on little-endian machines
-(x86-64). Nothing on this page can say whether a result would run on a
-big-endian machine, because there is none to run it on.
+(x86-64), and so does SD Core Solo for Linux, so a conversion between the two
+is never needed. Whether a converted file would run on a big-endian machine is
+not something this page can say.
 
 > **Read this first: `sdconv` does not convert hashed files.** Given one it says
 > so, changes nothing and exits 1. It converts **compiled program files** only,
 > and only the header of each. This SD cannot open a big-endian hashed file, so
 > a converted file would be of no use here. Windows and Linux are both
 > little-endian.
-
-Solo's banner reads `SDCONV WS2.0-0`.
 
 ## The short version
 
@@ -28,8 +27,7 @@ Solo's banner reads `SDCONV WS2.0-0`.
   in the right order has its modified time changed by `sdconv -L`.
 * **A hashed file is refused: a message, the file untouched, exit status 1.**
 * **A path that is neither a hashed file nor a program object is skipped with no
-  message and the exit status is 0**, including a path that does not exist, a
-  folder, and a file it cannot write.
+  message and the exit status is 0**, including a path that does not exist.
 
 ## Where it is and who can run it
 
@@ -53,7 +51,7 @@ sdconv {options} pathname ...
 |---|---|
 | `-B` | Convert to big-endian. |
 | `-L` | Convert to little-endian. |
-| `-D` | Debug. It is accepted, is not listed in the usage text, and **does nothing** for a program file: the progress it would print belongs to the hashed-file routine that is not called. It prints no extra output. |
+| `-D` | Debug. It is accepted, is not listed in the usage text, and **does nothing** for a program file: the progress it would print belongs to the hashed-file routine that is not called. |
 | (neither `-B` nor `-L`) | Convert to the byte order of the machine it is run on, which here is little-endian, so the same as `-L`. |
 
 Options may be joined in one word (`-BD`) and are not case sensitive. If both

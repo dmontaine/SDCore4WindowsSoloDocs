@@ -29,6 +29,7 @@ a whole `SDCoreSolo` folder can be moved.
 
 ```
 [sd]
+SCREENTHEME=paper
 GRPSIZE=4
 NUMUSERS=20
 SORTMEM=4096
@@ -36,7 +37,6 @@ ERRLOG=50
 APIPORT=4249
 SH=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NoLogo
 SH1=C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command
-SCREENTHEME=paper
 ```
 
 **`APIPORT` is active only if the API was chosen at installation.** A computer
@@ -81,6 +81,8 @@ CLEANUP   300 seconds
 CMDSTACK  99
 DEADLOCK  0
 DHCACHE   10
+DUMPDIR   
+ERRLOG    50 kb
 ...
 YEARBASE  1930
 ```
@@ -89,10 +91,10 @@ YEARBASE  1930
 
 SD accepts **59** parameters. The verb prints all of them except `APILOCAL`,
 `BACKUPDIR`, `NETDIRS` and `SDSYS`, and `DEBUG`, `FDS` and `PHANTOMS` only when
-they are set.
+they are set; it also prints `TIMEZONE`, which is not a file parameter.
 
-`NETDIRS` is the one to know about. It decides what an API session, and a
-session held to its account by the `os` switch, may reach outside its own
+`NETDIRS` is the one to know about. It decides what a session held to its
+account by the `os` switch, the API's included, may reach outside its own
 account (see [The parameters](16c-the-parameters.html#netdirs-directories-outside-the-account)).
 The verb will not tell you what it is set to, and `config('NETDIRS')` does not
 read it. Read it from the file.
@@ -104,9 +106,11 @@ The `config()` function reads one parameter from a program, and needs no
 group.size = config('GRPSIZE')
 ```
 
-**56 parameters are readable this way.** The three that are not are `BACKUPDIR`,
-`NETDIRS` and `SDSYS`. The name is truncated to sixteen characters before it is matched,
-which is longer than any parameter name, so that only shows up if you pass
+**57 parameters are readable this way** (the 59 that `sd.conf` accepts, less the
+three that are not, and `TIMEZONE`, which is not a file parameter). The three
+that are not are `BACKUPDIR`, `NETDIRS` and `SDSYS`. A name of more than sixteen
+characters is not found (the function answers an empty string and `status()` is
+not 0); no parameter name is that long, so that only shows up if you pass
 something which is not a parameter.
 
 Two further forms exist. `config lptr` reports the settings of the default
@@ -120,7 +124,7 @@ parameters it is the only one. Fourteen tuning parameters can also be changed
 from SD itself, with `set.config` or the `E` key of `tool.config` (see
 [Changing a Parameter from SD](16b-changing-a-parameter-from-sd.html)).
 
-**Some parameters can also be changed for the current session** (after `admin`):
+**29 settings can also be changed for the current session** (after `admin`):
 
 ```
 config sortmem 8192
@@ -130,11 +134,11 @@ That writes to the session's own copy of the settings, taken from shared memory
 when the session started. It does not reach `sd.conf`, it does not affect any
 other session, and it is gone when the session ends.
 
-The parameters that can be changed this way are `DHCACHE`, `DUMPDIR`, `FLTDIFF`,
-`FSYNC`, `GRPSIZE`, `INTPREC`, `LPTRHIGH`, `LPTRWIDE`, `MAXCALL`, `MAXRLOCK`,
-`MUSTLOCK`, `NETREPLY`, `NETWAIT`, `OBJECTS`, `OBJMEM`, `PWDELAY`, `RECCACHE`,
-`SAFEDIR`, `SDCLIENT`, `SH`, `SH1`, `SORTMEM`, `SORTMRG`, `SORTWORK`, `SPOOLER`,
-`TEMPDIR`, `TERMINFO` and `YEARBASE`.
+The 29 are `DHCACHE`, `DUMPDIR`, `FLTDIFF`, `FSYNC`, `GRPSIZE`, `INTPREC`,
+`LPTRHIGH`, `LPTRWIDE`, `MAXCALL`, `MAXRLOCK`, `MUSTLOCK`, `NETREPLY`, `NETWAIT`,
+`OBJECTS`, `OBJMEM`, `PWDELAY`, `RECCACHE`, `SAFEDIR`, `SDCLIENT`, `SH`, `SH1`,
+`SORTMEM`, `SORTMRG`, `SORTWORK`, `SPOOLER`, `TEMPDIR`, `TERMINFO`, `TIMEZONE` and
+`YEARBASE`.
 
 Everything else takes effect only when SD is next started (`sd-solo -stop`, then
 `sd-solo -start`). That includes every limit which sizes the shared memory
@@ -169,30 +173,31 @@ acts on it:
 
 | Takes effect | Meaning |
 |---|---|
-| `restart` | it takes effect when SD is next started (`sd-solo -stop`, then `sd-solo -start`); every parameter the page can change is this, because a Solo session never reads `sd.conf` itself |
-| `now` | a program reads `sd.conf` each time it uses the parameter (`BACKUPDIR`), so a change needs no restart and no new session |
+| `restart` | the parameter takes effect when SD is next started: SD reads the file once, when it starts, and a session takes its settings from shared memory (every parameter but `BACKUPDIR`) |
+| `now` | a program reads `sd.conf` each time it uses the parameter (`BACKUPDIR`), so a change needs no restart |
 
 | Status | Meaning |
 |---|---|
 | `live` | something acts on it |
 | `file` | read from `sd.conf` by a program each time it is used, not by the kernel (`BACKUPDIR`) |
-| `inert` | accepted, and nothing on Windows acts on it (none at present) |
 | `unknown` | a name in the file that SD does not know |
 
-A row marked `*` is one where the file and the running SD disagree. **A name in the file
+A row marked `*` is one where the file and the running SD disagree. The box at the foot says for that
+parameter that SD keeps the old value until it is restarted. **A name in the file
 that SD does not know is listed at the end as `unknown`, and the top of the page names it**: SD does
 not start with it (the section *A name SD does not recognize stops it starting* above). `D` shows only
 the rows where the file and SD disagree, and `S` only the parameters the file sets. The last column,
 `Change`, says `e` for a parameter the page can change (press `E`) and `by hand` for every other.
 
-`SDSYS`, `BACKUPDIR` and `NETDIRS` cannot be read with the `config()` function; the page says `(not readable)`
+`SDSYS`, `BACKUPDIR` and `NETDIRS` cannot be read with the `config()` function (a name longer than sixteen characters, or one the function does not have); the page says `(not readable)`
 for what SD is running with and shows the file's value. `DEBUG` is not compared: the function reports
 it in another form than the file writes it.
 
 **B, the backup directory**: the directory saved with `set.backup.directory` and whether it is there;
 **R, the report**: the operating system part of `settings.report`, made when the view is opened and
 on F5. It holds no key and no password hash. `F5` reads the file, the backup directory and the report
-again; `E` changes the parameter under the cursor, or says why it cannot be changed here; `F1`
+again, and while the report is made the status line says "Reading the settings (a few seconds)...", and
+while `set.config` runs a change it says "Making the change (a few seconds)..."; `E` changes the parameter under the cursor, or says why it cannot be changed here; `F1`
 explains the page; `Ctrl-Q` leaves. Opening the page writes the audit line
 `tool start app=tool.config`; a change writes the line of `set.config` (below), and nothing else the
 page does is written.

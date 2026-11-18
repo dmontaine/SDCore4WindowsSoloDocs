@@ -5,7 +5,7 @@ Subtitle: sduser, the account password, the kept copy, and the administrator and
 
 **SD Core Solo for Windows has one SD account, and it is always called
 `sduser`** — on every computer, whatever your Windows user is called. The
-installer makes it, in `%USERPROFILE%\SDCoreSolo\user_accounts\sduser`. `WHO`,
+installer makes it, in `%USERPROFILE%\SDCoreSolo\user_accounts\sduser`. `who`,
 `@LOGNAME` and the audit trail all say `sduser`, and so does the user name an
 API client signs in with.
 

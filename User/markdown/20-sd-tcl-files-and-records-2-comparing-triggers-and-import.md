@@ -1,87 +1,66 @@
 Title: SD TCL - Files and Records: Comparing, Triggers and Importing
-Subtitle: Comparing files, copying operating system files, triggers, and moving data in and out.
+Subtitle: Comparing files, copying operating system files, triggers, file.stat, and moving data in and out.
 
 This page continues [SD TCL - Files and
 Records](20-sd-tcl-files-and-records.html).
 
-### Comparing two files: `compare.files`
+## Comparing two files
 
 ```
 compare.files {dict} file1 {dict} file2 {detail}
 ```
 
-Compares the records of two files (a dictionary is named with `dict` in front of
-its file, so a file and its dictionary can be compared with each other or with
-another) and
-counts them in four groups: only in the first, only in the second, in both but
-different, and the same.
+Counts what two files hold: the records **only in the first**, **only in the
+second**, **in both but different**, and **the same**. `detail` lists the ids of
+the first three groups, indented three spaces under their count. A dictionary
+is named with `dict` in front of its file, so a file and its dictionary can be
+compared with each other or with another.
 
 ```
-compare.files T1 T2
+compare.files stock stock.new detail
 ```
 
 ```
-Records only in T1: 1
-Records only in T2: 1
-Records in both that differ: 0
-Records that are the same: 1
-```
-
-`detail` lists the record ids of the first three groups under their counts:
-
-```
-Records only in T1: 1
-   COUNT
-Records only in T2: 1
-   SORT
-Records in both that differ: 0
-Records that are the same: 1
+Records only in stock: 1
+   1004
+Records only in stock.new: 1
+   1006
+Records in both that differ: 1
+   1002
+Records that are the same: 3
 ```
 
 **`@system.return.code` is 0 when the two files hold the same records and 1 when
-they do not**, so a paragraph can test it. With one file name the verb answers
-*Two file names required*, and a file that will not open stops it (*Cannot open*
-the name). The records of a data collection file are compared as their JSON text,
-so two equal collections count as the same.
+they do not**, so a paragraph can test it. Two names are required (*Two file names
+required*), and a file that will not open stops it (*Cannot open* the name). The
+records of a data collection file are compared as their JSON text, so two equal
+collections count as the same.
 
-### Taking the carriage returns out: `fixdir`
+## Taking the carriage returns out of directory file items
 
 ```
 fixdir file {id ...}
 ```
 
-For a directory file whose records arrived with Windows line ends. **It removes
-every carriage return from each record it is given**; a record with none is not
-written again. With no record ids every record of the file is done.
+An item of a **directory file** has a carriage return at the end of each line when
+it was written with CR LF line ends, which a program that expects LF only (a tool
+from another system, say) does not want. `fixdir` removes every carriage return from the items
+named; with no ids it does every item of the file.
 
 ```
-fixdir BP crtest
+fixdir notes
 ```
 
 ```
-1 record(s) fixed in BP
+1 record(s) fixed in notes
 ```
 
-A second run of the same command says `0 record(s) fixed in BP`. A file that is
-not a directory file is refused (*T3 is not a directory file*), a file that will
-not open stops it (*Cannot open*), and a file name is required. The global
-catalog's directories (`gcat` and `global.bp.out`) and `solo.policy` are
+An item with no carriage return is **not rewritten**, so a second run says
+*0 record(s) fixed in notes*. The file must be a directory file (*is not a
+directory file*), and it must open (*Cannot open*). A file name is required.
+The global catalog's directories (`gcat` and `global.bp.out`) and `solo.policy` are
 refused as they are for `ed` and `copy`: only a session signed in with the global
 password may change them.
-## Seeing what is actually in a record
-
-```
-ct {dict} file.name {record.name... | *} {options}
-dump {dict} file.name {record.name... | *} {options}
-```
-
-Both are the same program. `ct` is a field-by-field listing; `dump` reports the
-same data in binary. Options: `hex` for hexadecimal, `binary` for a full-width
-report that is not field-based, `no.query` to skip the prompt when a select list
-is in use, and `lptr` {*n*} to send it to a print unit.
-
-**Every account has both `ct` and `dump`** — they run the same code, reached
-by two separate VOC records rather than one.
 
 ## Copying an operating system file
 
@@ -149,25 +128,27 @@ Modes: PRE.WRITE, PRE.DELETE, POST.WRITE, POST.DELETE, READ, PRE.CLEAR, POST.CLE
 ```
 
 ```
-list.triggers {file.name ...} {lptr {n}}
+list.triggers {file ...} {lptr {n}}
 ```
 
-`set.trigger` with no option tells you about one file; `list.triggers` does it
-for all of them. It looks at the data part and the dictionary of every file your
-VOC points at with an `F` entry, or only at the files you name, and lists each
-one that has a trigger function with the function's name and the modes it is on
-for:
+**`list.triggers` says the same for every file of the account at once**: the file,
+its trigger function and the modes it is set for, with a count at the end. It looks
+at the data part and the dictionary of every file the account's VOC points to; with
+names after it, only those files.
+
+```
+list.triggers
+```
 
 ```
 File                 Trigger function     Modes
 -------------------  -------------------  ------------------------------
-t3                   p9                   PRE.WRITE, POST.WRITE
-
-1 file(s) with a trigger function
+stock.new            zztrig               PRE.WRITE, PRE.DELETE
+stock                zztrig               PRE.WRITE, PRE.DELETE, POST.WRITE, POST.DELETE, READ, PRE.CLEAR, POST.CLEAR
+2 file(s) with a trigger function
 ```
 
-With nothing to report the list is empty and the last line says `0 file(s) with
-a trigger function`.
+With nothing to report the list is empty and the last line says `0 file(s) with a trigger function`.
 
 ### A trigger on a directory file
 
@@ -194,6 +175,36 @@ not call it**, so a query report sent to a file, or a compile listing, never doe
 trigger takes effect when the file is next opened**, not for a program that has it open already (`set.trigger` itself needs the
 file to itself, as it does for a hashed file). If the header names a function that is not cataloged, the first operation that
 needs it stops with *Trigger function 'name' not loaded for the file*.
+
+## Sizes and who is busy: `file.stat` and `fstat.user`
+
+```
+file.stat {dict} {file ...} {lptr {n}} {no.page}
+fstat.user {top} {user n} {lptr {unit}} {no.page}
+```
+
+**`file.stat`** prints one line for each file of **the current account**: the type
+(`DYN`, `DIR` or `COL`), the current and minimum modulus, the group size, the number
+of records, the bytes in the primary and overflow subfiles and their total, and `Y` or
+`N` for indexes (`AK`), trigger (`TR`), statistics (`ST`), case-insensitive ids (`NC`),
+`NO.RESIZE` (`NR`), encryption (`EN`), replication (`RP`) and journalling (`JN`).
+A directory file shows its type and record count only. With no names it takes the files
+on an active select list (list 0) or, if there is none, every file the VOC points at with
+an `F` entry; `dict` reports the dictionaries instead. The report needs **122 columns**.
+`EN`, `RP` and `JN` are always `N`: SD has no file encryption, replication or journalling.
+**openQM can also report on other accounts (`file.stat account.list`, `file.stat all`);
+SD does not**: the report reads each file, and a Solo computer has one account.
+
+**`fstat.user`** reports file activity by session: how many records each has read,
+written and deleted since it started — the counts the system keeps in `fstat global`,
+kept for each session as well. Sessions come in user number order, or with **`top`** in
+descending order of reads + writes + deletes, which shows where a slow system is busy.
+**`user n`** shows all the counts of one session: opens, reads, writes, deletes, clears,
+selects, index reads, writes and deletes, splits and merges. **An administrator (after
+`admin`) sees every session; anyone else sees the sessions of their own login name**, because the file
+activity of other people is theirs to see only through an administrator. openQM's verb
+repeats the report every two seconds and takes `t`, `i`, `d` and `u` at the keyboard; this
+one shows it once — run it again for another look.
 
 ## Moving data in and out: `import.csv`, `import.json`, `import.xml` and `convert.data`
 

@@ -256,8 +256,8 @@ Many equal keys, or keys that arrive already in order, do not
 make a sort slow: the keys of a run are collected and sorted once, so 100,000 equal
 keys take a fraction of a second. A sort with
 `srt$unique`, `srt$compound` or `srt$strict`, or with a right justified key that
-holds numbers and text together, is sorted as before and is not faster. Lowering
-`SORTMEM` is no longer a way to speed up a sort of equal keys.
+holds numbers and text together, is not faster. Lowering
+`SORTMEM` is not a way to speed up a sort of equal keys.
 
 **The values of *flags*.** `srt$left` 0, `srt$right` 1, `srt$compound` 2,
 `srt$right.float` 3 and `srt$strict` 4 choose how two keys are compared, the
@@ -335,6 +335,21 @@ way in; with it off, the bytes pass through unchanged.
 
 **It has no effect on a dynamic file**, where records are stored in SD's own
 format.
+
+## A matrix as a dynamic array: `matstr`
+
+```
+matstr(matrix)
+```
+
+Gives a two-dimensional matrix as one dynamic array: **each row becomes a field and each
+column a value** within it. It works the same on a matrix passed into a subroutine.
+
+```
+dim m(2, 2)
+m(1, 1) = 'p' ; m(1, 2) = 'q' ; m(2, 1) = 'r' ; m(2, 2) = 's'
+s = matstr(m)        ;* 'p' : @vm : 'q' : @fm : 'r' : @vm : 's'
+```
 
 ## What is not here
 

@@ -1,11 +1,11 @@
-Title: Known limits
+Title: Known Limits
 Subtitle: Parts of SD Core Solo for Windows whose behavior depends on your environment, and what to check before an application relies on them.
 
 Nothing on this page is known to be broken. Each entry is a place where what
 happens depends on conditions SD cannot establish for itself: the load on your
-computer, the network between two computers, the version of Windows, the program
-you run beside SD. Treat the page as a list of things to try on your own system
-before an application depends on them.
+machine, the network between two servers, the program you run beside SD.
+Treat the page as a list of things to try on your own system before an
+application depends on them.
 
 ## How to read an entry
 
@@ -123,9 +123,12 @@ that address for ten minutes. A wrong password counts, a key does not, a sign-in
 forgets the failures, and the address is read from the end of the log line. The
 guard reads Solo's ssh server's lines in the Windows event log
 (**OpenSSH/Operational**, level VERBOSE) and blocks the address with a Windows
-Firewall rule. **A lock on this computer's own address (`127.0.0.1`) ends the
-connection but cannot refuse the next one**, because Windows Firewall does not
-filter loopback. A guess spread over many addresses is not stopped.
+Firewall rule. **A lock covers the addresses of other computers.** A lock on
+this computer's own address (`127.0.0.1`, `::1`) ends the connection but cannot
+refuse the next one, because Windows Firewall does not filter this computer's own
+address; wrong passwords from this computer are held only by the ssh server's own
+limits, `MaxAuthTries 6` and `LoginGraceTime 30`, and `-List` marks such a lock
+*(this computer: not stopped by the firewall)*. A guess spread over many addresses is not stopped.
 
 **Check before relying on it.** Install with ssh on and the firewall rule open,
 give three wrong passwords at `ssh -p 4251` from a second computer, and see the
@@ -133,6 +136,37 @@ third end the connection, the next connection be refused, `-List` name the addre
 and its end time, `-Unlock` let it in again, and the lock lift by itself after ten
 minutes. Then try a correct password and a key that the server does not know.
 See [ssh access](08-ssh-access.html).
+
+## The API
+
+### The server's ssh key and the pinned certificate
+
+**What to expect.** On a managed computer the server's key is installed,
+repeated, listed, removed, capped at four and refused for the account password;
+shell syntax in a key is not run; the installed key reaches `sd-solo` through
+Solo's own `sshd` with the global password. The client library remembers a
+server's certificate, accepts the same one again, and refuses a replaced one
+before any login byte is sent; the remedy in its message works. See
+[Managed mode](15-managed-mode.html).
+
+**Check before relying on it.** The address a client connects from, the route
+between two computers and the SD Core server itself are conditions of
+your own site. Have a second computer sign in with the global password, ask for
+its key to be installed, and then connect over ssh with that key; reinstall the
+managed computer and confirm the client is refused until its pin is removed.
+
+## Sessions
+
+### `sd-solo` started from inside a running session
+
+**What to expect.** A shell that SD starts with `sh` or `OS.EXECUTE` is marked as
+SD's own, and `sd-solo` run inside it refuses to start: *SD is already running in
+this session - type exit to return to it.* That is a guard and not a boundary: the
+mark is a variable of the shell, and the user can remove it there. See
+[Operating system access](06b-operating-system-access.html).
+
+**Check before relying on it.** Do not build a procedure on the guard. A shell
+that you start yourself outside SD is not marked.
 
 ## Scheduled tasks
 
@@ -146,6 +180,33 @@ it, so it may not open.
 
 **Check before relying on it.** Create such a task and see whether the command
 runs. See [Scheduled jobs](04-scheduled-jobs.html).
+
+### An administrator's scheduled job
+
+**What to expect.** The run Task Scheduler makes of a job from `set.job`, with no
+stored password, is recognized as [Scheduled jobs](04-scheduled-jobs.html)
+describes, and the next and last run that `set.job` shows come from Task
+Scheduler.
+
+**Check before relying on it.** Turn jobs on with `set.jobs.access on`, then
+`set.job add test daily 02:30 my.report` and `set.job run test`; read the audit
+trail for the `run.job start` and `run.job end` lines, then `set.job delete test`.
+Check that the uninstaller removes the jobs.
+
+## Account backup and restore
+
+### `backup.account`, `restore.account` and `set.backup.directory`
+
+**What to expect.** The folder prompt remembers its answer, a backup writes a zip
+whose counts match the account's, a second backup uses the remembered folder, and
+a restore takes a bare file name. SD writes `BACKUPDIR` in `sd.conf`. A restore is
+put aside and swapped in when SD is next started, and the account you had is kept
+beside it in `.sdrestore.previous`. See
+[Backup and restore](06c-backup-and-restore.html).
+
+**Check before relying on it.** On a test install, back up the account, change it,
+restore it by bare file name, restart SD with `sd-solo -restart`, and check that the
+changes are gone and that `sdrestore.log` ends with `SOLO-RESTORE APPLIED`.
 
 ## Locking and contention
 
@@ -162,7 +223,8 @@ the waiters wait.
 
 **What to expect.** Two local sessions compete correctly: record, update and
 file locks are reported against the right holder, a waiting read is released
-when the holder lets go, and a task lock refuses a second taker.
+when the holder lets go, and a task lock refuses a second taker. The API's own
+session-confinement gate is described in [API access](09-api-access.html).
 
 **Check before relying on it.** If an application mixes terminal sessions and API
 clients on the same records, try an API client and a terminal session competing

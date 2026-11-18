@@ -15,7 +15,7 @@ SD folds case, so a query may be typed in either case. Commands and keywords are
 shown here in lower case. In the tables, *italics* mark something you supply and
 **bold** marks a word typed as it stands; braces mark an optional part.
 
-> **The file queried in the listings on this page is `voc`**, because it is the one file
+> The file queried in the listings is `voc`, because it is the one file
 > every account has and it is interesting enough to ask real questions of.
 
 ## The shape of a query
@@ -32,14 +32,17 @@ count voc
 ```
 
 ```
-418 record(s) counted
+447 record(s) counted
 ```
 
-**That number is particular to the account it was run in.** Every account has
-a `voc`, and no two need hold the same records — local additions differ. The
-counts on this page came from the multiuser product's `SDSYS` account, whose
-VOC is larger to begin with; on Solo the shipped VOC holds 420 records, so
-your counts will differ.
+**That number is particular to the account** — 447 is what a new Solo
+account counts after its first sessions: the 440 records SD ships for an
+account, and the account's own entries (`bp`, `examples.bp` and their `.out`
+files, `$hold`, `$savedlists` and `$command.stack`). The `voc` of your account
+starts as the shipped set and local additions differ. **The other counts on
+this page are those of the multiuser product's `SDSYS` account**, so a
+query over the VOC may give a different answer on Solo; the queries
+themselves, and what they show about the language, are unchanged.
 
 ## The verbs
 
@@ -82,7 +85,7 @@ spellings in a row return identical counts on the same data.
 | | |
 |---|---|
 | equal | `=` · `eq` |
-| not equal | `ne` · `not` |
+| not equal | `<>` · `ne` · `not` |
 | less than | `<` · `lt` |
 | less or equal | `<=` · `le` |
 | greater than | `>` · `gt` |
@@ -93,10 +96,10 @@ spellings in a row return identical counts on the same data.
 | is in a list | `in` |
 | is not in a list | `not.in` |
 
-Both spellings of *not equal* (`ne` and `<>`) returned **331** on the same query, and
+All three spellings of *not equal* returned **331** on the same query, and
 `<` and `lt` both returned **381**. (The words `before`, `after`, `equal`,
-`greater`, `less`, `matches`, `matching`, `not.matching` and `spoken` were removed in 2.0-0:
-in a query they are taken as record ids.)
+`greater`, `less`, `matches`, `matching`, `not.matching` and `spoken` are not
+operators: in a query they are taken as record ids.)
 
 ### Joining clauses
 

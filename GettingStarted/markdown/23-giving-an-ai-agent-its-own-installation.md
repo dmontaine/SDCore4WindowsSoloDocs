@@ -43,4 +43,4 @@ There are no scopes inside the account: the agent can read, change and delete ev
 [Operating system access](06b-operating-system-access.html) ·
 [Security](12-security.html) ·
 [The MCP door](25-the-mcp-door.html) ·
-and, in the User documentation, the page *SD and AI Agents*.
+and, in the User set, the page *SD and AI Agents*.

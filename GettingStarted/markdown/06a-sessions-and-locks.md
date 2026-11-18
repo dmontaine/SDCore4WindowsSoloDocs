@@ -133,14 +133,14 @@ list.readu {user.no} {detail} {wait} {no.page} {lptr {n}}
 There are no active file, read or update locks held by any user
 ```
 
-That answer is about **every session**, not only yours. With locks held:
+That answer is about the **whole system**, not about you. With locks held:
 
 ```
 User File Path........................... Type Id..............................
   23    1 /cygdrive/c/Users/you/SDCoreSol RU   R1
-          o/user_accounts/sduser/ZZLK31A
+          o/user_accounts/sduser/zzlk31a
   23    1 /cygdrive/c/Users/you/SDCoreSol RL   R2
-          o/user_accounts/sduser/ZZLK31A
+          o/user_accounts/sduser/zzlk31a
 ```
 
 | | |
@@ -165,7 +165,7 @@ A file lock has no id:
 ```
 User File Path........................... Type Id..............................
   23    1 /cygdrive/c/Users/you/SDCoreSol FX
-          o/user_accounts/sduser/ZZLK31A
+          o/user_accounts/sduser/zzlk31a
 ```
 
 **The path is the POSIX one and that is not a display fault.** SD holds file

@@ -101,10 +101,13 @@ this line is worth reading when screen handling misbehaves.
 list.term.types {lptr {n}}
 ```
 
-Lists the terminal types for which SD has a terminfo definition: the names of
-the entries under `terminfo` in the SD system directory, which is what the type
-you give `term` is looked up in. They come out in columns, and the last line
-counts them (an excerpt):
+Lists the terminal types SD has a definition for — the names of the entries under
+`terminfo` in the SD directory, which is what the type in `term` and in the `TERM`
+setting is looked up in — and how many there are. `lptr` sends it to a print unit.
+
+```
+list.term.types
+```
 
 ```
 ansi            ansi-generic    dec-vt100       dec-vt220       dec-vt330       dec-vt340
@@ -114,8 +117,8 @@ xterm
 37 terminal type(s)
 ```
 
-`lptr` sends the list to a print unit. The list is cut short here, and the count
-depends on the release. **A type that is not on it has no definition of its own**, and SD
+(The list is cut short here: it is 37 names in rows of six, and the count depends
+on the release.) **A type that is not on it has no definition of its own**, and SD
 substitutes one for it.
 
 ### What a key does: `tool.keys`
@@ -162,6 +165,37 @@ Make the window smaller while it runs and the cursor lock takes the keyboard
 with the message that the window is too small; make it larger again and the
 screen comes back. Ctrl-Q, then `y`, leaves from the lock. If the input ends (a
 piped session) the program ends.
+
+### What this account may do: `tool.gates`
+
+```
+tool.gates
+```
+
+A full-screen page, for anyone, that answers "why can I not do that?" — it shows every
+**gate** the system has, the switches that are turned on or off for the account (`sh`,
+`os`, `net`, `ai`, `xfer` and `jobs`), each **ON** or **off for this session**. It needs a
+window of at least **140 columns by 43 lines**. (After `admin` the same page also shows
+what the register says and turns a gate on or off; for any other session it only shows.)
+
+The row under the cursor is explained in plain words: what ON lets you do, what you can
+still do with it off, whether it reaches beyond SD, as it is delivered, when a change
+reaches you, and the command (`set.os.access`, `set.net.access`, `set.ai gate`,
+`set.xfer.access` or `set.jobs.access`) that gives the gate or withdraws it (every gate
+reaches beyond SD, so turning one on asks you to type its name first). Up and Down, PgUp,
+PgDn, Home and End move; **F5** asks the system again; **F1**, `?` or a click on the `[?]`
+explains the page; **Ctrl-Q** leaves.
+
+* **A session that has not typed `admin` sees the page and can change nothing.** It asks
+  the system what the session may do; it writes no file, runs no command and leaves no
+  audit line. After `admin`, **Enter** (or the space bar) runs the gate's own verb, after
+  a box answered Run, and the page leaves the one line that says it was started.
+* **It reports what the session holds, not what the register says now.** `sh`, `os` and
+  `net` were loaded when you signed on: after one is changed, sign off and on again to see
+  it. The AI's gate is the helper's own setting, looked at at every request, and `xfer` and
+  `jobs` are read each time they are used, so a change to one of those three shows at
+  once (F5 reads again).
+* **Every gate starts off.** There is no key that turns everything on.
 
 ## The wire: `pterm`
 

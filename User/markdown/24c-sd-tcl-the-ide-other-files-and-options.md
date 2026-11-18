@@ -70,7 +70,7 @@ the operating system access first and says a refusal in the form, which stays op
 | from | what is made, and what the tab does |
 |---|---|
 | New | an **empty** file, opened in a tab of its own |
-| Save as, the first save of an untitled buffer | the file, holding the tab's text. **The tab becomes the file**: the record it had is as it was on the disk and its lock is given back; the file is locked while the tab is open, as any file of the operating system is |
+| Save as, the first save of an untitled buffer | the file, holding the tab's text. **The tab becomes the file**: the record it had is as it was on the disk, its lock is given back and its recovery copy is dropped; the file is locked while the tab is open, as any file of the operating system is |
 | Write a copy, Export the selection | the file, holding the text (or the selection). No tab is made and no lock is kept |
 
 - **The file is made before anything else changes.** When it cannot be made, the tab, the record and its lock

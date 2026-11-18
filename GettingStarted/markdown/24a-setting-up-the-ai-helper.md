@@ -11,7 +11,7 @@ tool.ai
 
 An administrator-only full-screen page (140 columns by 43 lines at least), and a tile on the home screen (*Data, network and AI*, **AI**). It has two boxes.
 
-**AI provider** lists Anthropic, OpenAI, Google and DeepSeek, then Custom, one to a row. A check box marks the provider in use; none marked means the AI is off. The four named providers come with their address and a default model filled in (the Model column says `(default)` beside one you have not changed); you supply the key, and S (setup) sets the key and the model together. **Custom** is the fifth choice, where you fill in everything yourself: a name, an `https://` address, the request layout (`anthropic` or `openai`), the authentication (`bearer` or `x-api-key`), a version header (or none) and the name of the field that limits the length of an answer. Below the list, the row under the cursor is shown in full, with the file of certificate authorities and the limits.
+**Provider** lists Anthropic, OpenAI, Google and DeepSeek, then Custom, one to a row. A check box marks the provider in use; none marked means the AI is off. The four named providers come with their address and a default model filled in (the Model column says `(default)` beside one you have not changed); you supply the key, and S (setup) sets the key and the model together. **Custom** is the fifth choice, where you fill in everything yourself: a name, an `https://` address, the request layout (`anthropic` or `openai`), the authentication (`bearer` or `x-api-key`), a version header (or none) and the name of the field that limits the length of an answer. Below the list, the row under the cursor is shown in full, with the file of certificate authorities and the limits.
 
 **May this account use the AI?** is the one row for your account, with the state of the gate.
 
@@ -25,7 +25,7 @@ An administrator-only full-screen page (140 columns by 43 lines at least), and a
 | A | the file of certificate authorities (you type `ca` to confirm) | |
 | L | change a limit | |
 | T | the standing text, in a box with an editor | the same |
-| F6, Shift-F6, Left, Right | change box (F6 goes on to the AI line when the AI is on) | change box |
+| F6, Shift-F6, Left, Right | change box (F6 goes on to the AI line when the AI is on for this account) | change box |
 | F1, `?` or a click on `[?]` | explain the box | explain the box |
 | F5 | read the machine again | read the machine again |
 | Ctrl-Q | leave | leave |
@@ -35,7 +35,7 @@ An administrator-only full-screen page (140 columns by 43 lines at least), and a
 **The setup dialog (S).** It looks the same every time, whatever is already set:
 
 - **Key**, a password field. What you type or paste is shown as `*`. When a key is already set the field shows a row of twelve stars, which keeps it; replace them to give a new key.
-- **Model**, a list of the provider's own model names, with the one in use chosen. With no key yet the list says the key comes first: enter the key and press Tab, and the list is filled from the provider with that key. A model in use that the list does not hold is pointed out, and when it differs from a listed one only in capitals the listed one is chosen for you.
+- **Model**, a list of the provider's own model names, with the one in use chosen. With no key yet the list says the key comes first: enter the key and press Tab, and the list is filled from the provider with that key. A model in use that the list does not hold is pointed out, and when it differs from a listed one only in capitals (`Deepseek-V4-Pro` for `deepseek-v4-pro`) the listed one is chosen for you.
 - **Other name**, only for a model the list does not hold, such as on a Custom server that gives no list. A name typed here is still checked against the list when there is one.
 - **Save** sets what you chose; **Cancel** or Esc changes nothing more (a key already handed over by Tab stays set, and the page says so).
 
@@ -74,7 +74,7 @@ The limits, and what they are as delivered:
 | `timeout` | 30 | seconds to wait for the provider (at most 300) |
 | `bytes-request` | 65536 | the most that may be sent in one request |
 | `bytes-reply` | 65536 | the most that may come back |
-| `max-tokens` | 1024 | the longest answer asked for, at the prompt (`ai`) and on every page: raise it for longer answers, lower it for shorter ones (a provider may refuse a figure above its model's own limit) |
+| `max-tokens` | 1024 | the longest answer, at the prompt and on every page: raise it for longer answers (the helper never asks a provider for more) |
 
 ## The standing text
 

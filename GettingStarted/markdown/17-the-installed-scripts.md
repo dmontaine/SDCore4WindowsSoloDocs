@@ -16,8 +16,6 @@ the installer or by SD.
 *Italics* mark something you supply, **bold** a word typed as it stands, and
 braces an optional part.
 
-## What is here and what is not
-
 **Sixteen scripts ship.**
 
 | | |
@@ -107,7 +105,7 @@ relax the policy.** SD has no way around it, deliberately: a program that could
 defeat Group Policy would be a worse thing to have installed than an
 inconvenience.
 
-## The exit codes are a convention
+## Exit codes
 
 The scripts that exit with a code print what they did and then use the same
 three-value convention:
@@ -182,7 +180,7 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard
 
 | | |
 |---|---|
-| `-List` | who is locked and when each lock ends, and who has wrong passwords counted; and what record of the event log the guard has read up to (or `NEVER READ`); needs no elevation. Ends `SOLO SSH GUARD LOCKED <n>` |
+| `-List` | who is locked and when each lock ends, and who has wrong passwords counted; and what record of the event log the guard has read up to (or `NEVER READ`); needs no elevation; a lock on this computer's own address is marked *(this computer: not stopped by the firewall)*. Ends `SOLO SSH GUARD LOCKED <n>` |
 | `-Unlock ADDRESS`, `-Unlock all` | lets one address, or every address, back in and takes its firewall rule away; **needs an elevated PowerShell**. Ends `SOLO SSH GUARD UNLOCKED <n>`. Anything it refuses prints `ERROR=<text>` and exits `1` |
 | `-Serve` | what the task runs; you do not run it |
 

@@ -39,15 +39,14 @@ cli = open.socket('127.0.0.1', 45123, 0)
 inc = accept.socket.connection(srv, 2000)
 ```
 
-Flags `0` is TCP, stream. `0x00010000` selects UDP and `0x00020000` ICMP.
-
 The optional fourth argument of `open.socket` is a **connect timeout in
 seconds**. When it runs out the call returns 0 with `status()` **7005**, as any
 failed connect does; zero, a negative number or no argument means no limit of
 SD's own (the system's connect timeout applies). On a socket opened with the TLS
-flag it also bounds the TLS handshake. Before this release the fourth argument was
-an unused place for a security context and had to be zero. It is not used with the
+flag it also bounds the TLS handshake. It is not used with the
 non-blocking flag.
+
+Flags `0` is TCP, stream. `0x00010000` selects UDP and `0x00020000` ICMP.
 
 **Both fail by returning zero, not by taking an `else` branch** — they are
 functions, and there is no `then`/`else` on them. Test with
@@ -176,6 +175,20 @@ and `socket.info(s, 6)` then reads `0`.
 
 Key **9**, `SKT$INFO.EVENTS`, is what `select.socket()` watches for (next
 section); the value is 0 to 7, anything else is refused.
+
+Key **10**, `SKT$INFO.TRACE`, writes a log of everything sent and received on the socket to the
+file whose pathname is the value; a null value (or closing the socket) ends it, and an existing
+file is overwritten. Each entry is `SEND n bytes` or `RECV n bytes` and the data sixteen bytes to a
+line, in hexadecimal and as characters (a full stop for a byte that is not printable). On a TLS
+socket the log holds the data before it is encrypted and after it is decrypted, so it can hold
+passwords. **The log is made with a protected access list that names only the Windows user the
+session runs as, SYSTEM and the Administrators group** (full control for each; nothing is
+inherited from the folder), set before a byte is written; **an existing file at the path is given
+that list before it is emptied**, and if that cannot be done nothing is traced. **A link, a junction
+or a folder at the path is refused** (the last name is not followed), and **the pathname is held to
+the OS access switch**: an account without it (`set.os.access os on`) may trace only into its own
+directory. A refusal returns 0 from `set.socket.mode` with nothing written, and so does a path that
+cannot be made. SD's own key number; the openQM manual names the key without one.
 
 ## Waiting on several sockets: `select.socket()`
 

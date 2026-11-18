@@ -93,45 +93,36 @@ normally.
 
 ### Two things about error-log trimming
 
-**`ERRLOG` now applies to these lines too.** The background daemon used to
-append without ever trimming — it only wrote at start-up and on failure, so it
-never grew. Now that it writes per connection, it discards the oldest part of
-the log on reaching the `ERRLOG` size in `sd.conf`. **If you have set `ERRLOG`
+**`ERRLOG` applies to these lines too.** The background daemon writes an entry
+per connection, and discards the oldest part of the log on reaching the
+`ERRLOG` size in `sd.conf`. **If you have set `ERRLOG`
 unusually large, consider what an entry per connection adds to it.**
 
 **After the log is trimmed, its first line may have no timestamp.** An entry
 is two lines — a timestamped header and the message indented below it — and
 trimming restarts the file at a **line**, not at an entry, so the first message
 can be left without its header. **This is not damage** and no entry after it is
-affected. SD has always trimmed this way; it is only visible now because the log
-turns over more often.
+affected.
 
 ## Line endings
 
-Both halves are fixed, and they were fixed separately.
+Reading and writing follow separate rules.
 
 ### Reading — files edited in Notepad or saved from Excel
 
 Directory files exist so you can edit their records with an ordinary Windows
-editor, and Windows editors end each line with CR+LF. **SD only ever looked for
-the LF, so it kept the CR — and put it on the end of the data.**
+editor, and Windows editors end each line with CR+LF. **SD takes the CR+LF
+pair as the end of a line**, so the CR is not left on the end of the data: a
+CSV saved by Excel reads cleanly in its last column, and `READCSV`, `READSEQ`
+and reading a directory file record all behave the same way.
 
-You would have seen it as an invisible extra character at the end of every
-line: comparisons failing for no visible reason, a name that would not match, a
-trailing space that was not a space.
-
-**Reading a CSV saved by Excel is the clearest case.** The last column of
-every row picked up the stray character, because a comma ended the other
-columns and the line ending only ever touched the last one. `READCSV`,
-`READSEQ` and reading a directory file record are all corrected.
-
-**A CR on its own is still data** and is left exactly as it is. Only the CR+LF
+**A CR on its own is data** and is left exactly as it is. Only the CR+LF
 pair that ends a line is treated as a line ending, so this cannot alter data
 that happens to contain a CR.
 
 ### Writing
 
-Anything SD writes that an ordinary Windows program can open now ends its lines
+Anything SD writes that an ordinary Windows program can open ends its lines
 with CR+LF: records in a directory file, `WRITESEQ` and `WRITECSV` output,
 command output captured with `COMO`, printer output sent to a file, and the
 error log.
@@ -142,24 +133,22 @@ asks for CR+LF.**
 **Dynamic files are unaffected** — they are stored in SD's own format and are
 not readable by other programs.
 
-**Existing files are left alone**, so a file can contain both endings. SD
-reads either, so this is untidy rather than a problem.
+**A file can contain both endings**, because SD does not rewrite what is
+already there. SD reads either, so this is untidy rather than a problem.
 
 ## The terminal
 
-**The default terminal type is now `WINDOWS`.** `TERM` on its own should say
+**The default terminal type is `windows`.** `term` on its own should say
 `Device : windows`.
 
 **The arrow keys work in cmd, PowerShell and Windows Terminal.** A terminal has
 two spellings for an arrow key: in its ordinary state it sends `ESC [ D` for
 Left, and the other spelling `ESC O D` only after the application asks it to
-switch — **which SD never does.** The `vt100` definition lists only the second
-spelling, so it would listen for a key no Windows console ever sends; that is why
-the default is `WINDOWS`.
-
-The shipped `WINDOWS` definition is an exact copy of `LINUX`, which had this
-right all along — its name describes an operating system, but what matters is
-the byte protocol.
+switch — **which SD never does.** The shipped `windows` definition lists the
+first spelling, the one cmd, PowerShell and Windows Terminal send; it is an exact
+copy of `linux`, because what matters is the byte protocol, not the name of an
+operating system. The `vt100` definition lists only the second spelling, so it
+would listen for a key no Windows console ever sends.
 
 **An account keeps the terminal setting in its VOC** until that VOC is updated;
 an upgrade runs `update.accounts` for you, and you can run it yourself. Until
@@ -180,7 +169,7 @@ a definition that is not there.
 ### The page is 140 × 43, not 80 × 24
 
 **SD's default terminal size is 140 columns by 43 lines**. **A console window narrower than that
-makes wide reports look wrapped or truncated**, which reads as a formatting bug
+makes ordinary reports look wrapped or truncated**, which reads as a formatting bug
 and is not one. SD's own full-screen programs (`sed`, `ced`, `ide`, the home
 screen) want at least 140 columns by 43 lines and refuse a smaller window.
 
@@ -207,13 +196,11 @@ phantom or a piped script.
 
 ## Paths
 
-**A Windows path typed at the command prompt is no longer cut off at the first
-backslash.** Typing `C:\Data\Sales` was read as just `C:`, with the rest
-treated as a second, separate thing. A command that is given a folder was the
-most likely to show it — the work went to the wrong place, or the command failed
-for a reason that made no sense from what you had typed.
+**A Windows path typed at the command prompt is read whole.** `C:\Data\Sales`
+is one path, so a command that is given a folder, such as `backup.account to
+C:\Data\Backups`, puts the work there.
 
-Forward slashes always worked and still do. **Both are now read the same way.**
+Forward slashes work too. **Both are read the same way.**
 
 ## PowerShell execution policy — leave it alone
 
@@ -252,5 +239,5 @@ scripts](17-the-installed-scripts.html) has the detail.**
 
 **On Solo every session asks for the account password**, and an account with none
 set cannot be signed in to at all — the installer always sets one, or, on a
-computer installed from a control file, the first `sd-solo` does. See
+computer installed from a control file, the first console session does. See
 [The account and its passwords](05-account-types.html).

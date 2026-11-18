@@ -42,7 +42,8 @@ term
 
 **If `term` says something else and your arrow keys do not work**, run
 `term windows` for this session and see
-[Other hardening](13-hardening.html#the-terminal).
+[Other hardening](13-hardening.html#the-terminal). An account keeps the
+terminal setting in its VOC until **`update.accounts`** updates it.
 
 **`term` also reports the page size, and SD's default is 140 × 43 — not
 80 × 24.** **A console window narrower than that makes ordinary reports look
@@ -94,7 +95,8 @@ count customers
 ```
 
 **Commands are lower case now**, and so are the VOC records behind them. Typing
-`LIST` still works — SD tries what you typed, then lower case, then upper. See [Lower case](11-lower-case.html).
+`LIST` still works — SD converts it. See
+[Lower case](11-lower-case.html).
 
 **THIS IS THE POINT AT WHICH MOST THINGS SHOULD FEEL LIKE OpenQM.** If
 anything in ordinary data work behaves differently and is not described in this

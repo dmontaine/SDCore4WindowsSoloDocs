@@ -20,11 +20,11 @@ clear.locks {n}
 No task locks reserved by any user
 ```
 
-and with lock 5 held by user 16, `*` marking your own session:
+and with lock 5 held by user 29, `*` marking your own session:
 
 ```
 :list.locks
- 0:       1:       2:       3:       4:       5: 16*   6:       7:
+ 0:       1:       2:       3:       4:       5: 29*   6:       7:
  8:       9:      10:      11:      12:      13:      14:      15:
 16:      17:      18:      19:      20:      21:      22:      23:
 ```
@@ -108,11 +108,11 @@ user number must be specified* — so there is no `unlock` that means
 any file, so nothing has to be written back.
 
 > **`sd-solo -cleanup` does not give them back, and that is a defect.** It releases
-> a dead session's record locks and file locks and leaves its task locks held,
-> by a user number nothing is behind, until SD itself is restarted.
-> `list.locks` shows the number with an owner and `clear.locks` refuses it
-> because it is not yours. **`unlock tasklock` *n*, after `admin`,** is the way
-> out — that is what the forced form is for.
+> a dead session's record locks and file locks and leaves its task locks held, by
+> a user number nothing is behind, until SD itself is restarted. `list.locks`
+> shows the number with an owner and `clear.locks` refuses it because it is not
+> yours. **`unlock tasklock` *n*, after `admin`, is the way out** — that is what
+> the forced form is for.
 
 ## Sessions and locks on one screen: `tool.sessions`
 
@@ -120,9 +120,9 @@ any file, so nothing has to be written back.
 tool.sessions
 ```
 
-**A full-screen page for the administrator**: type `admin` first; without it the page is
+**A full-screen page for the administrator** — type `admin` first; without it the page is
 refused before it reads anything. It needs a window of 140 columns by 43 lines. The top list
-is every session: user number, Windows process number (`Pid`), when it signed on, its kind
+is every session — user number, Windows process number (`Pid`), when it signed on, its kind
 (user, phantom, API or SDNet), the login user, the account it is in, where it came
 from, and whether it is yours (a star) or a logout is pending. The lower list is every lock:
 the user, the file number and path, the type (`FX` and `SX` lock a whole file, `RU` is read
@@ -170,14 +170,13 @@ page's box says that too.
 
 ## The paragraph every session runs first: `MASTER.LOGIN`
 
-A VOC record named `MASTER.LOGIN` in the SDSYS account (the `voc` file in
-`%USERPROFILE%\SDCoreSolo\sdsys`), if it is a paragraph (its first line is `PA`),
-is run **once by every new session, before the account's own `LOGIN`
-paragraph**: an interactive session, a phantom and an API session, which runs it
-when it first enters an account. There is none as delivered, so nothing runs by
-default, and the account's own `LOGIN` paragraph is the ordinary place for what
-a session should do when it starts; a session shows what it is by `@tty`
-(`apisrvr` for the API). It runs in the account, **under the account's own
+A record named `MASTER.LOGIN` in the VOC of the SD system folder
+(`%USERPROFILE%\SDCoreSolo\sdsys\voc`, not the account's own VOC), if it is a
+paragraph (its first line is `PA`), is run **once by every new session, before
+the account's own `LOGIN` paragraph**: an interactive session, a phantom and an
+API session. There is none as delivered, so nothing runs by default, and the
+account's own `LOGIN` paragraph is the ordinary place for what a session should
+do when it starts; a session shows what it is by `@tty`. It runs in the account, **under the account's own
 switches**: it can do no more there than the account can.
 
 ## Who needs `admin`

@@ -129,54 +129,12 @@ show it.
 39 sduser
 ```
 
-**There is no `logto` in SD Core Solo** (it was removed in WS1.1-3). There is
+**There is no `logto` in SD Core Solo.** There is
 one account, `sduser`, so there is nowhere to switch to, and SDSYS is never
 entered on a Solo computer: the administrator commands are in your own account
 behind `admin`. Typed anyway, `logto` answers like any word that is not a
-verb, *logto is not in your VOC*.
+verb, *LOGTO is not in your VOC*.
 
-## Logging every command: `command.logging`
-
-```
-command.logging {on | off}
-```
-
-`on` starts a log of every command this session runs; `off` stops it. With
-neither word the verb says whether logging is on and, if it is, where the log is:
-
-```
-Command logging is off
-```
-
-```
-Command logging is on: <account directory>/clog.19.log
-```
-
-(*account directory* stands for the account's directory, and the 19 is the user
-number of that session.) **The log is named `clog.`*user number*`.log` and is kept
-in the account directory.** SD does not put it in a shared temporary directory,
-because another user could make a file of that name first. Each session adds to
-it and nothing empties it.
-
-Each line has five fields separated by tabs: the time as a number of seconds
-since 1 Jan 1970, the user number, the login name, where the command came from,
-and the command:
-
-```
-1792566633	19	sduser	User	WHO
-```
-
-| Origin | The command came from |
-|---|---|
-| `User` | the prompt |
-| `Cmd` | the command line `sd` was started with |
-| `PA` | a line of a paragraph |
-| `Exec` | `execute`, `chain` or a menu |
-
-The `on` that starts the log is not in it; every command after it is, and the
-`off` that ends it is the last line. A word after `on` or `off`, or any word but
-those two, is refused with *Unexpected token*, and if the log cannot be made
-(*The command log could not be started*) nothing is logged.
 ## What is not here
 
 **There is no online help and `help` is not a verb.** The command processor

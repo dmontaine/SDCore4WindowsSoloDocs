@@ -150,7 +150,7 @@ weakens. The row, the preview and the proposals are the same.
 ## Not yet
 
 An AI line in the IDE, with proposals as edits, is built (see [Programs and the
-catalog](24-sd-tcl-programs-and-the-catalogue.html)), and so are the AI in [SED](27a-sd-tcl-sed.html),
+catalog](24e-sd-tcl-the-ide-ai-and-the-window.html)), and so are the AI in [SED](27a-sd-tcl-sed.html),
 [CED](27b-sd-tcl-ced.html) and [the debugger](17-sd-basic-debugging.html). The AI line is also on
 every page of the toolkit (see [Asking the AI](29b-sd-tcl-asking-the-ai.html)).
 

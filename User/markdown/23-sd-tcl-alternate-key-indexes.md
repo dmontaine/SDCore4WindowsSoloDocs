@@ -8,7 +8,7 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **The listings on this page** use a six-record file whose field 1 holds five `V` and one
+> The listings use a six-record file whose field 1 holds five `V` and one
 > `K`.
 
 ## Create it, then build it
@@ -44,7 +44,7 @@ create.index zzak f1
 ```
 
 ```
-Added index for F1
+Added index for f1
 ```
 
 That reports success, and the index it made matches no records at all. The
@@ -58,7 +58,7 @@ list.index zzak f1
 Alternate key indices for file zzak
 Number of indices = 1
 Index name...... En Type Nulls S/M Fmt Field/Expression
-F1                N  D    Yes   S   L  1
+f1                N  D    Yes   S   L  1
 ```
 
 **The `En` column is the one to read. `N` means the index is not enabled** —
@@ -66,7 +66,7 @@ it exists, it is listed, and it will not find anything. After `build.index` the
 same line reads `Y`:
 
 ```
-F1                Y  D    Yes   S   L  1
+f1                Y  D    Yes   S   L  1
 ```
 
 **So `list.index` is the check**, and *"the index is there"* is not the same
@@ -88,7 +88,7 @@ session** fails this way every time, because `create.index` leaves the file
 open. From a fresh session it succeeds:
 
 ```
-Building index 'F1'...
+Building index 'f1'...
 6 records processed
 Populating index...
 ```
@@ -104,12 +104,13 @@ Run `build.index` before anything else has the file open.
 ### When an index should be built again
 
 `build.index` throws the index away and makes it again from the records, so it is
-also the repair for an index that no longer says what the file says. Do it for a
-**large index from which many records were deleted** before this release
+also the repair for an index that no longer says what the file says. Do it for an
+index that was built on WS1.1-3 (it followed an upper-case copy of the record id)
+and for a **large index from which many records were deleted** before this release
 (three levels, some tens of thousands of different values): deleting the last
 value of a block could take a whole branch out of the index, so a lookup missed
 records that were still in the file and values of deleted records stayed listed.
-The data was never touched. `rebuild.all.indices` does it for every file of the
+The data was never touched. `rebuild.all.indices` does it for every file of an
 account. An index that gives the right answers needs nothing.
 
 ## Asking what a file has
@@ -122,8 +123,8 @@ list.index zzak f1 f2
 Alternate key indices for file zzak
 Number of indices = 2
 Index name...... En Type Nulls S/M Fmt Field/Expression
-F1                Y  D    Yes   S   L  1
-F2                Y  D    Yes   S   L  2
+f1                Y  D    Yes   S   L  1
+f2                Y  D    Yes   S   L  2
 ```
 
 | column | |
@@ -154,13 +155,16 @@ values and the most records any one value has.
 Analysis of the indices of file zzak
 
 Index name...... Indexed values  Most records for one value
-CITY                          4                           5
+city                          4                           5
 ```
 
 With an index name the totals follow (index entries, key values, least, average
 and most records for a value) and how the values spread over the number of
 records they point at; `detail` lists every value with its count, as
-`list.index ... detail` does. The index name is taken in any case.
+`list.index ... detail` does. The index name is taken in any case. `lptr` sends
+the report to a print unit and `no.page` shows it without pausing at each page.
+An index name that is not there is *Unrecognized index name (NOSUCH)*, and no
+file name at all is *File name required*.
 
 **openQM's `statistics` also shows the index's node settings and a
 distribution of node sizes. SD does not read its indices at that level from
@@ -266,13 +270,14 @@ not kept up as records are written, and the query processor does not use it. It 
 a large load, or a batch run that would change most of the records, where keeping
 three indexes live costs far more than building them afterwards. **`build.index`
 builds it again and switches it on.** Until then its data are out of date, and
-`list.index` shows it with `N` in the `En` column. A query on the field still answers,
-from the records.
+`list.index` shows it with `N` in the `En` column. A query on the field still
+answers, from the records. `selectindex` reads the index as it is, so on a disabled
+index it may be out of date. Without an index name `disable.index` answers
+*Index name:* and does nothing; a name that is not there is *Unrecognized index name
+(NOSUCH)* and a file that is not there is *File not found*.
 
 **Like `delete.index` it needs the file to itself.** Another session that had the file
-open would go on using, and keeping up, an index this one had switched off. (openQM
-removed that need in 2.10-4; doing so here would mean telling every open copy of the
-file, which SD does not do.)
+open would go on using, and keeping up, an index this one had switched off.
 
 ## Removing an index
 
@@ -281,24 +286,24 @@ delete.index zzak all
 ```
 
 ```
-Deleted index F1
-Deleted index F2
+Deleted index f1
+Deleted index f2
 ```
 
 `all` removes every index on the file. Naming them individually works too, and
-**in either case**: `delete.index zzak f1`, `delete.index zzak F1` and
-`delete.index zzak f1 f2` all do what they say (the answer gives the name as the
-index holds it, whichever case you typed).
+**in either case**: index names are held in lower case, `list.index` prints them
+that way, and `delete.index zzak f1`, `delete.index zzak F1` and
+`delete.index zzak f1 f2` all do what they say (the answer is
+*Deleted index f1*, in lower case, whichever case you typed).
 
 Deleting the file removes its indexes with it.
 
 ## Who has these verbs
 
-**Every account has all of them now** — `create.index`, `build.index`,
+**Every account has all of them** — `create.index`, `build.index`,
 `delete.index`, `disable.index`, `list.index`, `analyse.index`,
-`selectindex` and `rebuild.all.indices`.
-An index changes how a query runs, not how data is written, so there was never a
-reason to withhold them even under the old model.
+`selectindex` and `rebuild.all.indices`. An index changes how a query runs, not
+how data is written.
 
 ## See also
 

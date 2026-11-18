@@ -47,7 +47,8 @@ computer has a new certificate: remove its line and connect again. **Removing th
 line is the remedy**, and only if you know why the certificate changed. **A store
 the client cannot read or write refuses the connection** rather than connecting
 unchecked. This is done in the client library, so it applies to every program that
-uses `SDConnect`. **The very first connection is trusted**, as with ssh.
+uses `SDConnect`. **The very first connection is trusted**, as with ssh: someone in
+the middle at that moment would be remembered instead of the computer.
 
 **A managed computer's server can ask this computer to install its ssh key** over
 the API, once it has signed in with the global password: see
@@ -72,7 +73,8 @@ been chosen at the keyboard, only the global password is accepted.
 
 **`SDConnectLocal` is disabled.** It sends no password, which Solo does not
 allow. A client that calls it gets, at once, *SDConnectLocal is not available in
-SD Core Solo for Windows - connect with SDConnect and the account password*.
+SD Core Solo for Windows - connect with SDConnect and the account password*. Use
+`SDConnect` to this computer's own address instead (`127.0.0.1`).
 Use `SDConnect` to this computer's own address instead.
 
 ## The port
@@ -241,6 +243,8 @@ client that is already signed in. The pointers SD itself puts in the VOC (`sysco
 a client of request 29 has no use for them. A pointer that opened before and leads out
 of an account whose `os` switch is off stops opening: turn the switch on if that was
 intended. Solo has no SDSYS exemption, because SDSYS is never a target of the request.
+**The `NETFILES` bit alone is not the gate**: without the `os` switch a VOC file in a
+folder outside the account is not opened.
 ## Client libraries
 
 | | |

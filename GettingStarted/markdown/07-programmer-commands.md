@@ -29,10 +29,9 @@ foot of this page. The full-screen editors need nothing extra.
 > `_` or `$`, and `delete.catalog` of a global entry, are refused whoever asks and
 > whether or not `admin` is unlocked: *The global catalog holds the SD Core
 > server's programs from global.bp.out and is changed only by
-> sync.global.catalog*. On a managed computer the global catalog is the SD Core
-> for Linux server's — see [Managed mode](15-managed-mode.html). Private
-> and local cataloging work as they always did: catalog your own programs with
-> `catalog ... local`.
+> sync.global.catalog*. On a managed computer the global catalog is the SD Core for Linux server's
+> — see [Managed mode](15-managed-mode.html). Private and local cataloging
+> work as they always did: catalog your own programs with `catalog ... local`.
 
 ## Edit and debug
 
@@ -89,7 +88,7 @@ other file is treated as plain text, which is correct for a VOC entry or a
 data record.
 
 > **The word lists are generated from the compiler.** They come out of
-> `BCOMP`'s own tables — **218 statements, 37 reserved words and 176
+> `bcomp`'s own tables — **242 statements, 42 reserved words and 235
 > intrinsic functions** — so the highlighting cannot drift from the
 > language. **If a name you expect is not colored, that is worth
 > reporting**: it means the two have come apart, which is exactly what
@@ -172,6 +171,7 @@ reporting** with the terminal you connected from.
 need no operating-system permission and no editor installed; they need a terminal
 window of at least 140 columns by 43 lines (the debugger and the home screen use
 the same frame).
+
 The removed full-screen editors are a different matter: `update.record` and
 `modify` are gone and are not coming back. See
 [Not in SD Core](14-not-in-sd-core.html).

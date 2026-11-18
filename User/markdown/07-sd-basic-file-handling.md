@@ -149,12 +149,11 @@ under the counter's next value, **1** in a file that has never used it, and `id.
 is given that id (as text). An update lock on the new id is taken for the write and
 released before the next statement, or with `writeu` **kept**. In a transaction the id is
 taken at the `write`, not at the `commit`, so a transaction that does not commit leaves a gap.
-**A directory file is refused** (*WRITE ... CREATING.SEQKEY needs a hashed file*, message 12353;
-status 3005 under `on error`) and `id.variable` is left as it was. `fileinfo(file, 1031)` is
-the id of the last record written this way (0 if none), and `configure.file` *file* `next` *n*
-sets the next id (`next query` shows it).
+**A directory file is refused** (*WRITE … CREATING.SEQKEY needs a hashed file*; status 3005 under
+`on error`) and `id.variable` is left as it was. `fileinfo(file, 1031)` is the id of the last record written this way
+(0 if none), and `configure.file` *file* `next` *n* sets the next id (`next query` shows it).
 
-**An id that already names a record is skipped.** Before it uses an id, `write ... creating.seqkey`
+**An id that already names a record is skipped.** Before it uses an id, `write … creating.seqkey`
 looks in the file: if a record is already there (written by a copy, by a load, or by a program that
 chose its own numbers) it takes the next id instead, so that record is never overwritten. **This is
 SD's behavior, not openQM's** - openQM does not look, and its manual tells the programmer to write
@@ -164,9 +163,11 @@ already committed to the file are looked at; an id this process took earlier is 
 *file* `next 1` starts them again. A file made by `copy` starts its own counter at 1, even when
 records with numeric ids were copied in; the skipping is what protects them. The counter is changed in
 the file header at once, so a power failure can leave it one behind the records; setting it with
-`configure.file ... next` puts that right. The client library
-has it as `SDWriteSeqKey` and `SDWriteuSeqKey`. On a file reached through an `N` pointer to another SD
-server the write goes to that server, which decides whether to allow it ([SDNet - Administering a Remote File](42a-sd-sdnet-administration.html)).
+`configure.file … next` puts that right. The client library
+has it as `SDWriteSeqKey` and `SDWriteuSeqKey` ([SD Client API: Select Lists to Error Handling](37-sd-client-api-2-select-lists-and-the-rest.html)).
+On a file reached through an `N` pointer to another SD server the write goes to that
+server, which decides whether to allow it
+([SDNet - Administering a Remote File](42a-sd-sdnet-administration.html)).
 
 ### `fcontrol`: the counter, a test for an id, the minimum modulus
 
@@ -174,13 +175,13 @@ server the write goes to that server, which decides whether to allow it ([SDNet 
 result = fcontrol(file.variable, action {, qualifier})
 ```
 
-`fcontrol` has openQM 4's action numbers, and the tokens `FC$...` are in `keys.h`. An ordinary
+`fcontrol` has openQM 4's action numbers, and the tokens `FC$…` are in `keys.h`. An ordinary
 program may use it; it changes only the file it is given.
 
 | action | token | what it does |
 |---|---|---|
 | 1 | `FC$SYNC` | forced writes of a hashed file: the qualifier 1 turns them on, 0 off, -1 only asks. The result is the state before the call. See *Forced writes* below |
-| 2 | `FC$SET.SEQ.KEY` | the qualifier *n* (1 or more) becomes the next id `write ... creating.seqkey` gives out; returns 1 |
+| 2 | `FC$SET.SEQ.KEY` | the qualifier *n* (1 or more) becomes the next id `write … creating.seqkey` gives out; returns 1 |
 | 3 | `FC$GET.SEQ.KEY` | takes the next id and moves the counter on, so a program can reserve an id without writing a record; the null string if the file is not hashed |
 | 4 | `FC$CRLF` | the line terminator mode of a directory file or a sequential file: the qualifier 0 to 3 sets it, -1 only asks. The result is the mode before the call. See *Line terminators* below |
 | 5 | | does the user have access to the field position in the qualifier? Always 1: SD has no field level encryption |
@@ -191,11 +192,13 @@ Actions 2, 3 and 7 are refused on a file opened `readonly`: `status()` is 3018 a
 (null for 3), and the counter is not touched. On a file that is not hashed `status()` is 3005; a
 qualifier under 1 sets `status()` to 1. `FC$CRLF` on a hashed file gives 0 with `status()` 3004 (*not a directory
 file*: a hashed file has no line terminators); a mode outside 0 to 3 gives the mode the file is in and sets
-`status()` to 1, changing nothing. Any action number SD does not know stops the program with *the action is not one SD
-knows* (message 12360). `FC$SYNC` works on a hashed file only (`status()` is 3005 on any other). The
-qualifier may be left out where the action does not use it. The internal programs' own function is called `fcontrol.int` and is not available to
-ordinary programs. On a file reached through an `N` pointer to another SD server the call goes to
-that server, which decides whether to allow it ([SDNet - Administering a Remote File](42a-sd-sdnet-administration.html)).
+`status()` to 1, changing nothing. Any action number SD does not know stops the program with *the action is not one SD knows*.
+`FC$SYNC` works on a hashed file only (`status()` is 3005 on any other). The qualifier may be left out where the action does not use it. The
+internal programs' own function is called `fcontrol.int` and is not available to
+ordinary programs. On a file reached through an `N` pointer to another SD
+server the call goes to that server: the test for an id (action 6) needs only
+read access there, and every other action needs what that server asks for, as
+the server decides ([SDNet - Administering a Remote File](42a-sd-sdnet-administration.html)).
 
 ### Line terminators: `fcontrol` `FC$CRLF` and the letters `L C B X`
 

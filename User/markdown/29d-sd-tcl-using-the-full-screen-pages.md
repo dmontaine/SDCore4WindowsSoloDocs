@@ -6,6 +6,8 @@ Every full-screen page of SD - the home screen, the development tools (`tool.fil
 is built the same way and answers the same keys. Learn them once here; each page's own help (F1) adds only what is
 particular to that page. What the pages are *for* is on their own pages: [The Home Screen](29a-sd-tcl-the-home-screen.html),
 [The Development Tools](29c-sd-tcl-the-development-tools.html), [Asking the AI](29b-sd-tcl-asking-the-ai.html).
+To build a page of your own that works the same way, see the separate *SD Text User Interface - Programmer's Guide*
+set of this documentation.
 
 ## The window
 
@@ -53,9 +55,9 @@ reverse video.
 the screen again there too; the IDE, SED and the debugger run a program with **F9**. **Everything a page can do is
 also on its menus**: a key is a short way to a menu entry, never the only way. The exceptions:
 
-- **The debugger**, in the full screen, has F1, F2, F5, Ctrl-L, Ctrl-T, Ctrl-K and Ctrl-Q as above; **Ctrl-Q stops
+- **The debugger** has F1, F2, F5, Ctrl-L, Ctrl-T, Ctrl-K and Ctrl-Q as above; **Ctrl-Q stops
   the program** being debugged, as F3 does, and Abort is on its Run menu. Its function keys F3 to F9 are its own (stop,
-  the program's screen, step, run). In line mode, which has no menu bar, F2 is still Abort.
+  the program's screen, step, run).
 - **SP.VIEW** answers F1, F5, Ctrl-L, Ctrl-T, Ctrl-K and Ctrl-Q as above, and its own letters (shown on its key row);
   it has no *Find an action*.
 - **`!CED()`**, the record editor a program calls, has no menu bar: **F2 opens the AI** there when the AI

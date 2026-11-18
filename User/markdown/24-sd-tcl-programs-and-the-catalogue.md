@@ -8,7 +8,7 @@ SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
 marks a word typed as it stands; braces mark an optional part.
 
-> **The listings on this page** use a two-line program in an account's `bp` file.
+> The listings use a two-line program in an account's `bp` file.
 
 ## Compiling
 
@@ -37,17 +37,17 @@ not the presence of output.**
 `@system.return.code` is the number of programs compiled, and negative on a
 fatal error.
 
-**The object code goes into `bp.out`**, a separate file beside `bp`, one record
-per program. **Its name is lower case even when the source record is not** —
-a source record `ZZPROG` compiles to an object record `zzprog`. That is this
-port's naming, and it is worth knowing before you go looking for the object by
-the name you typed.
-
 **`basic ... no.catalog` compiles and catalogs nothing.** A `$catalog` line in
 the source or in a file it includes, or a `CATALOG` line in the `$BASIC.OPTIONS`
 record, makes the compile catalog the program as well; with `no.catalog` none
 of them is acted on, and the compile says so
 (`zzprog compiled; its catalog directive was not run (no.catalog)`).
+
+**The object code goes into `bp.out`**, a separate file beside `bp`, one record
+per program. **Its name is lower case even when the source record is not** —
+a source record `ZZPROG` compiles to an object record `zzprog`. That is this
+port's naming, and it is worth knowing before you go looking for the object by
+the name you typed.
 
 ## Running without cataloging
 
@@ -80,7 +80,7 @@ zzprog hello
 ```
 
 ```
-ZZPROG added to private catalogue
+ZZPROG added to private catalog
 ZZPROG OK
 ```
 
@@ -105,8 +105,9 @@ the name of a VOC verb.
 refused with *"The global catalog holds the SD Core server's programs from
 global.bp.out and is changed only by sync.global.catalog"*. **The same refusal
 applies to an implicit global catalog** — one chosen by a `!`, `_` or `$`
-prefix on the call name rather than by the `global` keyword — so the prefix is not a way round it. On a managed computer the global catalog is the SD Core
-for Linux server's, and only it can change it — see *Managed mode* in the
+prefix on the call name rather than by the `global` keyword — so the prefix is
+not a way round it. On a managed computer the global catalog is the SD Core
+for Windows server's, and only it can change it — see *Managed mode* in the
 GettingStarted set. Catalog your own programs `private` or `local`.
 
 Private and local cataloging need none of this and work in a programmer's own
@@ -124,8 +125,8 @@ map {all} {lptr {n}} {file {name}}
 ```
 
 ```
-System catalogue map at 23:12:07 on 26 Aug 2026                    Page 1
-  Catalogue name..................  Compiled.  Time....  ...Obj  ..Xref  ..Size
+System catalog map at 23:12:07 on 26 Aug 2026                    Page 1
+  Catalog name....................  Compiled.  Time....  ...Obj  ..Xref  ..Size
   ZZPROG                            26 Aug 26  23:12:07     189       6     195
                                                                 Total:      195
 ```
@@ -134,7 +135,7 @@ System catalogue map at 23:12:07 on 26 Aug 2026                    Page 1
 `Size` is the total. An empty one says so:
 
 ```
-Catalogue is empty
+Catalog is empty
 ```
 
 ```
@@ -142,24 +143,18 @@ delete.catalog name... {global | local}
 ```
 
 ```
-ZZPROG deleted from the private catalogue
+ZZPROG deleted from the private catalog
 ```
-
-> **`map` also takes a `file` option**, which writes the map to a file instead
-> of the screen. **It asks before overwriting** — *"File xx will be cleared and
-> overwritten. Continue (Y/N)?"* — so it is not usable from a script driving SD
-> down a pipe.
 
 ### Removing a local entry and its object code: `decatalog`
 
 ```
-decatalog {file.name} name ...
+decatalog {file} name ...
 ```
 
-`delete.catalog` *name* `local` removes the VOC pointer that `catalog ... local`
-made, and **leaves the object file where it was**. `decatalog` removes the
-pointer **and the object code it points to**. The file name, which other systems
-need, is accepted and ignored: the pointer holds the pathname of the object code.
+**`delete.catalog ... local` removes only the VOC entry**, and leaves the object
+code it pointed to lying in the account's object directory. **`decatalog` removes
+both** — the local catalog entry and the compiled program it names:
 
 ```
 catalog bp zzdocprog local
@@ -167,15 +162,22 @@ decatalog zzdocprog
 ```
 
 ```
-zzdocprog added to local catalogue
-zzdocprog deleted from the local catalogue
+zzdocprog added to local catalog
+zzdocprog deleted from the local catalog
 ```
 
-A name that is not a local entry is *zzdocprog is not in the local catalog* (the
-name as you typed it), and the rest are still done; an object file that cannot be
-deleted is reported as *Cannot delete the object code* and the entry is gone all
-the same. No name at all is *Catalog name required*. It acts on the local catalog
-only; the private and the global catalog are `delete.catalog`'s.
+Several names may be given. A name that is not in the local catalog is said so
+(*zzdocprog is not in the local catalog*) and the rest are still done; an object
+file that cannot be deleted is reported as *Cannot delete the object code* and
+the entry is gone all the same. A file name in front of the program name is
+accepted and ignored, because the entry already holds the object's pathname.
+`decatalog` works on **local** entries only — a private or global catalog entry
+is removed with `delete.catalog`.
+
+> **`map` also takes a `file` option**, which writes the map to a file instead
+> of the screen. **It asks before overwriting** — *"File xx will be cleared and
+> overwritten. Continue (Y/N)?"* — so it is not usable from a script driving SD
+> down a pipe.
 
 ## Continued in
 

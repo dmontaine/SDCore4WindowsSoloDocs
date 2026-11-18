@@ -91,8 +91,8 @@ in an elevated prompt) and consider a page file that is cleared at shutdown.
    *Device encryption*, or Control Panel, *BitLocker Drive Encryption*). With a
    TPM, the drive unlocks at start-up without a prompt; a start-up PIN as well
    (group policy *Require additional authentication at startup*) stops a stolen
-   computer from unlocking itself.
-2. **Keep the recovery key away from the computer.** Without it, a drive that
+   machine from unlocking itself.
+2. **Keep the recovery key away from the machine.** Without it, a drive that
    will not unlock is lost, and SD's data with it.
 3. If the folder or the backups are on another drive, turn BitLocker on for
    that drive as well and let it unlock automatically with the system drive.
@@ -106,21 +106,9 @@ Turn it on before the data exists where you can. Encrypting a drive that
 already holds data does encrypt it, but copies of the old blocks that the file
 system has freed may stay readable until they are overwritten.
 
-## What SD's own encryption covers, and what it does not
-
-BitLocker, the layer described here, protects the **drive**, and SD is not aware of
-it. The two other layers on the [encryption page](18-encryption.html) protect
-**fields**: `sdencrypt()` and the `XE` conversion keep a value encrypted in the
-file itself, so that a copy of the file, taken from a running computer, still
-holds ciphertext for that field. They do not hide the record id, the other
-fields, which values are empty or how long a value is, and the key is the
-application's to keep. Use BitLocker for the whole folder, and SD's own
-encryption for the few fields that must stay unreadable to someone who can read
-the files.
-
 ## What this does not cover
 
-- **A running computer.** Once the drive is unlocked, everything is plain text to
+- **A running machine.** Once the drive is unlocked, everything is plain text to
   anyone signed in as you, and to an administrator.
 - **Copies you make.** A record exported to a file, a report printed to a file,
   or a file copied off the computer is outside the encrypted drive once it leaves it.

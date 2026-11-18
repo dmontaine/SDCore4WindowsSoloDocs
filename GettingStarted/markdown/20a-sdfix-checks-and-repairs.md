@@ -14,15 +14,15 @@ repair is done without asking; under `-Q` each is offered with `Fix?`.
 | `Invalid group size (n bytes)` | the header's group size is not a multiple of 1,024 or is out of range | none; the check stops |
 | `Large record size is invalid (n)` | the size above which a record goes to its own blocks is outside the group | resets it to the group size less the block header |
 | `Invalid split and/or merge loads (a, b)` | split load is not above merge load | writes the defaults SD gives a new file, split 80 and merge 50, and says `Corrected by resetting to defaults (80, 50)` |
-| `AKn subfile found but not expected` | an index file the header does not list | deletes the file and says `Corrected by deleting affected AK index subfile` only if it went; otherwise `The AK index subfile could not be deleted` |
-| `AKn subfile not found` | the header lists an index whose file is gone | removes the index from the header: `Corrected by removing reference to missing AK index subfile`. **The file then has no index of that name.** Create and build it again |
-| `Cannot read AKn subfile header`, `AKn subfile has incorrect magic number` | a damaged index file | deletes the file and removes the index from the header: `Corrected by deleting affected AK index subfile`, `AK must be recreated and rebuilt`. An index file that cannot be read at all (an empty one, say) is reported once, as `Cannot read AKn subfile header`, and repaired once, but the check that follows it also reports nodes it cannot find |
+| `AKn subfile found but not expected` | an index file the header does not list | deletes the file (an index in the file's own folder or in a relocated index folder), and says `Corrected by deleting affected AK index subfile` only if it went; otherwise `The AK index subfile could not be deleted` |
+| `AKn subfile not found` | the header lists an index whose file is gone | removes the index from the header. **The file then has no index of that name.** Create and build it again |
+| `Cannot read AKn subfile header`, `AKn subfile has incorrect magic number` | a damaged index file (the magic number) | deletes the file and removes the index from the header (if the file could not be deleted it says so and still removes the index from the header). An index file that cannot be read at all (an empty one, say) is reported once, as `Cannot read AKn subfile header`, and repaired once. Create and build it again |
 | `Active group n found after released group(s)!` | a used group follows groups marked as released | writes empty groups over the released ones |
 | `Group n has incorrect block type (t)` | | sets the type to data |
-| `Record 'id' mis-hashed into group n. Should be in group m` | the record's id does not hash to the group it is in | queues the group for dump and rebuild (below). Only `-F` queues; `-Q` reports only. At most 50 are reported: `Further hash errors will not be reported` |
+| `Record 'id' mis-hashed into group n. Should be in group m` | the record's id does not hash to the group it is in | queues the group for dump and rebuild (below). Only `-F` queues; `-Q` reports only. At most 50 are reported |
 | `Error in large record. Group g, ... Record cannot be recovered.` | the chain of a large record is broken | **deletes the record**; its header is cut out of the group |
 | `Apparent modulus a differs from recorded modulus b` | the groups actually in use do not match the header | sets the header's modulus to the number of groups in use |
-| `Incorrect mod_value (a), expected b` | | sets it: `Corrected by setting to 256` |
+| `Incorrect mod_value (a), expected b` | | sets it |
 | `Minimum modulus is invalid (n)` | | sets it to 1 |
 | `Load error: Actual a, file header b` | the bytes in use differ from the header's count | updates the header |
 | `Record count error: Actual a, file header (adjusted) b`, `Header record count has not been set` | | updates the header |
@@ -47,12 +47,6 @@ When `-F` has queued groups, the check ends with a question that **is asked
 even under `-F`**:
 
 ```
-Further hash errors will not be reported
-Incorrect mod_value (1), expected 256
-   Corrected by setting to 256
-Checking free chain...
-Checking for unreferenced blocks...
-608 overflow blocks allocated, 496 on free chain
 Dump and rebuild groups with mis-hashed records? Y
 Creating temporary file
 Data copied to temporary file

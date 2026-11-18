@@ -27,11 +27,7 @@ that carries these marks, and the angle-bracket forms (`a<f,v>`), `ins` and
 
 SD Core Solo for Windows is built from upstream `sdb64`, a MultiValue database
 with elements found in the main SD version and in ScarletDME. ScarletDME was
-a fork of the original GPL release of OpenQM 2.6.6. **Solo is the personal
-edition of SD Core for Windows**: one Windows user, one computer, one account,
-and none of the multi-user machinery. The GettingStarted set has a page,
-*Differences from SD Core for Windows W2.0-0*, that says exactly what
-differs.
+a fork of the original GPL release of OpenQM 2.6.6.
 
 **That lineage matters when you go looking for documentation.** Not all
 the features of the *commercial* OpenQM 2.6.6 were in the GPL release,

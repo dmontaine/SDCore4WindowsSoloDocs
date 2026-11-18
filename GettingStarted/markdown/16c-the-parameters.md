@@ -86,7 +86,7 @@ is a door, and the limits are added by hand.
 | `BACKUPDIR` | unset | The folder `backup.account` and `restore.account` use. Set by `set.backup.directory`, not by hand - see [Backing up and restoring the account](06c-backup-and-restore.html) |
 | `NETDIRS` | unset | Directories outside its own account that an API session, or a session held to its account by the `os` switch, may open, separated by semicolons because a Windows path contains a colon. See *`NETDIRS`: directories outside the account*, below |
 | `APILOCAL` | 0 | 1 makes the API listener (`APIPORT`) listen on 127.0.0.1 only, so only this computer can reach it; 0 or no line, every address. `remote.api local` writes it and `remote.api open` takes it away. `config('APILOCAL')` reads it; the `config` verb does not print it |
-| `SDCLIENT` | 0 | Restricts what an API session may do. Non-zero disables file access outright (no file can be opened, so no dictionary can be evaluated either), refuses `SDIConv`, `SDOConv`, `SDIConvs` and `SDOConvs` a conversion code that reads a file (`T` with a file) or calls a program (`U`), and refuses `SDOpenSeq`, `SDExecute`, `SDTrans` and `SDRTrans`; `2` additionally refuses any subroutine not compiled as callable from a client |
+| `SDCLIENT` | 0 | Restricts what an API session may do. Non-zero disables file access outright (no file can be opened, so no dictionary can be evaluated either), refuses `SDIConv`, `SDOConv`, `SDIConvs` and `SDOConvs` a conversion code that reads a file (`T` with a file) or calls a program (`U`), and refuses `SDOpenSeq`, `SDExecute`, `SDTrans` and `SDRTrans`; `2` additionally refuses any subroutine not compiled as callable from a client (a subroutine whose name begins with `$` must be so compiled at every setting, `0` included) |
 
 Unset is the strict value for `NETDIRS`. With nothing there, an API session can
 open files in the account it is standing in and nothing else. It never grants
@@ -193,32 +193,28 @@ and `sh` is refused** (`set.os.access sh on`).
 
 | Parameter | Default | Effect |
 |---|---|---|
-| `SCREENTHEME` | unset (`mono`); `paper` in the shipped `sd.conf` | The color theme that a program using the `SCREEN` statement gets when it does not choose one: `paper`, `night`, `mono`, `classic` or `blue`. `paper` is black and dark blue text on light gray, with the menu bar and menus the other way round; `night` is white and yellow text on black; `mono` uses only reverse video, underline and bold and reads on any terminal. The shipped `sd.conf` says `SCREENTHEME=paper`, so the toolkit pages, the IDE, SED and the debugger show paper on a color terminal on a fresh install. A terminal with no color (vt100, a phantom, a pipe) is `mono` whatever the line says, and so is a name that is not a theme, without an error. A program that asks for a theme gets that one, and reads the value with `config('SCREENTHEME')`. **Your own choice wins**: Ctrl-T or View > Theme on any full-screen program keeps the theme chosen, and every full-screen program starts in it from then on; `SCREENTHEME` is what you see until you have chosen |
+| `SCREENTHEME` | unset (`mono`); `paper` in the shipped `sd.conf` | The color theme that a program using the `SCREEN` statement gets when it does not choose one: `paper`, `night`, `mono`, `classic` or `blue`. `paper` is black and dark blue text on light gray, with the menu bar and menus the other way round (light gray on black); `night` is white and yellow text on black, its menus black on light gray; `mono` uses only reverse video, underline and bold and reads on any terminal. The shipped `sd.conf` says `SCREENTHEME=paper`, so the toolkit pages, the IDE, SED and the debugger show paper on a color terminal on a fresh install. A terminal with no color (vt100, a phantom, a pipe) is `mono` whatever the line says, and so is a name that is not a theme, without an error. A program that asks for a theme gets that one, and reads the value with `config('SCREENTHEME')`. **Your own choice wins**: Ctrl-T or View > Theme on any full-screen program keeps the theme chosen, and every full-screen program starts in it from then on; `SCREENTHEME` is what you see until you have chosen |
 
 ## Parameters that were removed
 
-Until 2.0-0 seven parameters were parsed and did nothing (`JNLMODE`, `JNLDIR`,
+Thirteen parameters of older releases do not exist. Seven did nothing (`JNLMODE`, `JNLDIR`,
 `CREATUSR`, `CODEPAGE`, `EXCLREM`, `RINGWAIT`, `TXCHAR`), and six more imitated
-another product or chose between ways of working that SD no longer has
-(`APILOGIN`, `FILERULE`, `FIXUSERS`, `GDI`, `INVCASE`, `PORTMAP`). All thirteen
-are gone; see [A name SD does not recognize stops it starting](16-configuration.html#a-name-sd-does-not-recognize-stops-it-starting)
+another product or chose between ways of working that SD does not have
+(`APILOGIN`, `FILERULE`, `FIXUSERS`, `GDI`, `INVCASE`, `PORTMAP`). See [A name SD does not recognize stops it starting](16-configuration.html#a-name-sd-does-not-recognize-stops-it-starting)
 for what happens to a kept `sd.conf` that still names one. The `PATH:` form
 of a file name went with `FILERULE`: write an F-pointer instead.
 
 `NETFILES` is a live parameter. A `server;file` VOC reference is refused
-whatever it holds, and the value is parsed, stored, shown by `config` and
-readable with `config('NETFILES')`. **One thing
-still reads it:** the API server's request 29, "open an SDNet file", which
-opens the file that a VOC entry of the named account names, for a client that
-has signed in. It is refused unless bit 2 of `NETFILES` is set. The delivered
-value is 0, so as delivered the request is refused; leave it at 0 unless an API
-client needs it. With bit 2 set the request is still refused unless the
-account's NET gate is on (`set.net.access on`, an administrator command, off as
-delivered), and under `SDCLIENT`; a pointer in the account's VOC that leads out
-of the account is refused too, unless the account has the `os` switch on. When
-it opens the file, the connection's containment applies: only the account the
-session stands in, the shared `SDSYS` entries (read only) and the directories
-named in `NETDIRS`. The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
+whatever it holds, but **bit 2 (`NETFILES=2`) opens API request 29**, which opens
+an `account;file` file for a client that has signed in. It is 0 as delivered. With
+it set, the request is still refused unless the account's NET gate is on
+(`set.net.access on`, an administrator command, off as delivered), and under
+`SDCLIENT`; see [API access](09-api-access.html). A pointer in the account's VOC
+that leads out of the account is refused too, unless the account has the `os`
+switch on. Setting `NETFILES=2` is therefore not enough to open such a file: turn
+the NET gate on only knowing what it allows. When it opens the file, the
+connection's containment applies: only the account the session stands in, the
+shared `SDSYS` entries (read only) and the directories named in `NETDIRS`. The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
 type `N`) does not read `NETFILES`; see the SDNet page of the User set.
 
 There is no license parameter and no license verb. SD Core Solo for Windows is

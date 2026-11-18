@@ -1,5 +1,5 @@
 Title: Upgrading and uninstalling
-Subtitle: Installing a new release over an existing one, and taking SD off the computer.
+Subtitle: Replacing an existing installation, and taking SD off the machine.
 
 This page continues [Installing](01-installation.html).
 
@@ -93,6 +93,12 @@ your saved data and configuration into this new install?* (Yes is the default):
 | **Yes** | copies the account's files into the new account and puts back everything else Keep kept — the passwords, the audit trail (the kept lines first, then the new installation's), the TLS key, your ssh key file, the SDNet logins, your VOC changes, your scheduled jobs (each given its task again by the installer's administrator step) and where sessions start — then tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
 | **No** | starts clean |
 
+**For an installation nobody sits at**, the control file's `reload-data=yes` or `no`
+answers the question; left blank, the installer asks, or reloads when the file
+answers everything else too. Where nothing was kept it does nothing, so one control
+file can serve many computers (see [Installing many
+computers](01c-installing-many-computers.html)).
+
 **Either way the old folder is moved aside, never deleted:** it becomes
 `%USERPROFILE%\SDCoreSolo.kept-<date and time>`, and stays until you delete it.
 
@@ -122,6 +128,12 @@ Solo SSH** in Task Scheduler, end the `sshd.exe` that is listening on port 4251,
 delete the folder `C:\ProgramData\SDCoreSolo`, and delete the rules
 `SD-Solo-API-In-TCP` and `SD-Solo-SSH-In-TCP` in `wf.msc`, by hand, from an
 elevated prompt.
+
+## Moving the account to another computer
+
+Moving the account is a backup on one computer, a copy of one file, and a restore
+on the other: see [Backing up and restoring the
+account](06c-backup-and-restore.html).
 
 ## Continued in
 

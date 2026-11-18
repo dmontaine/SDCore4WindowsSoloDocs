@@ -8,7 +8,7 @@ This page continues [SD Basic - Debugging](17-sd-basic-debugging.html).
 **On a terminal that can address a cell and clear itself, the debugger takes the
 whole screen.** Its test is that the session is a real terminal (SD can read its
 window size) and that the terminal definition has `cup` and `clear`: `windows` (the default), xterm,
-vt100, vt102, vt220, ansi, and the terminals that behave like
+`linux`, vt100, vt102, vt220, ansi, and the terminals that behave like
 them. `dumb` and `unknown` have no `cup` and stay line by line. Then:
 
 - the top row is the **title bar**: the program and the line about to run at
@@ -17,10 +17,10 @@ them. `dumb` and `unknown` have no `cup` and stay line by line. Then:
 - below it is the **source**. Each row has a two-cell **gutter** — `>` marks the
   line about to run and `*` a line with a breakpoint (a breakpoint wins when the
   line about to run has one) — then the line number and the text. The line about
-  to run is highlighted from end to end. In the `paper`, `night` and `blue`
-  themes the text is colored as SD BASIC: comments, strings, constants and the
-  statements. In the plain `classic` theme, which the debugger uses when neither
-  you nor the site has chosen one, the source has no syntax color;
+  to run is highlighted from end to end. When the site's theme is `paper`, as
+  delivered (or `night` or `blue`), the text is colored as SD BASIC: comments, strings,
+  constants and the statements. In the plain `classic` theme, which the debugger
+  uses when the site names none, the source has no syntax color;
 - to the right of the source, from column 93, is the **Autos** pane: the
   variables the line about to run uses come first, in the order the line names
   them; then those of the line the debugger last stopped at, when it is a line of
@@ -50,10 +50,10 @@ them. `dumb` and `unknown` have no `cup` and stay line by line. Then:
   name to narrow the list, Enter to do it, Esc to close it. **Abort has no key on this screen**:
   it is on the Run menu and in the F2 list. In line mode (a terminal too small or with no
   cursor addressing), which has no menu bar, F2 still aborts.
-- **The keys every page has**: **F9 runs** (it was F5), **F5** and
+- **The keys every page has**: **F9 runs**, **F5** and
   **Ctrl-L** draw the screen again, **Ctrl-T** takes the next color theme and keeps it for
   you, **Ctrl-K** lists the keys. On the command line, delete to the end of the line and swap
-  two characters, which were Ctrl-K and Ctrl-T, are **Alt-K** and **Alt-T** (or Esc, then K or T).
+  two characters are **Alt-K** and **Alt-T** (or Esc, then K or T).
   See [Using the Full-Screen Pages](29d-sd-tcl-using-the-full-screen-pages.html).
 
 **The full-screen display is laid out for 140 columns by 43 lines or more**
@@ -81,16 +81,15 @@ screen is): when you let the program run, the debugger gives the terminal back
 and the program's output is on its own screen, and it is on the alternate
 screen again at the next stop. The colors are the screen library's: if the
 program asked for no theme, the debugger uses the theme you chose with Ctrl-T,
-else the site's theme (`SCREENTHEME` in `sd.conf`, which the installer leaves
-at `paper`) while it is up, and the
-`classic` one when neither names one; and whatever the program asked for
+else the site's theme (`SCREENTHEME` in `sd.conf`, which the installer sets to
+`paper`) while it is up, and the `classic` one when neither names one; and whatever the program asked for
 otherwise. When the debugger lets the program go, the program's theme is given
 back, whether or not the window was resized or `window` *n* was typed on the way.
 
 **What the program's own screen becomes depends on the terminal.** A terminal
 with an alternate screen (`smcup` and `rmcup`: xterm and its kin) keeps the
 program's screen aside, and gives it back untouched when the debugger lets go.
-A terminal without one (`windows`, vt100, vt220, ansi) has only the one
+A terminal without one (`windows`, `linux`, vt100, vt220, ansi) has only the one
 screen, so the debugger clears it when it comes up and clears it again when it
 lets go. A program that owns the screen library's screen (it ran `SCREEN OPEN`)
 gets everything the library knows drawn again: its forms, its cursor, its theme.
@@ -116,7 +115,7 @@ be fed down a pipe.
 
 `@tty` reads empty in a piped session, and the debugger works there anyway.
 
-(SD does not support AccuTerm.)
+(The full-screen display does not use AccuTerm, which SD does not support.)
 
 ## Asking the AI
 

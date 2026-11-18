@@ -54,16 +54,16 @@ error — rather than falling back to somewhere less private.
 each, with the date, time and user:
 
 ```
-2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login password account=SDUSER via=global
-2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login account=SDUSER
+2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login password account=sduser via=global
+2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login account=sduser
 2026-09-29 00:15:34 user=sduser uid=105 pid=1043 global password set
 ```
 
 Every word before the first `=` is lower case, the event names included. What
 follows an `=` is data and keeps its case: the account name, a `reason=` text,
-and what a caller typed in `command=`. Lines written by an earlier release are
-upper case (`LOGIN REFUSED`) and are not rewritten, so search a long-lived file
-without regard to case.
+and what a caller typed in `command=`. A file written by an older version may hold
+upper case lines, which are not rewritten, so match without regard to case when you
+search a long-lived file.
 
 | Recorded | |
 |---|---|
@@ -76,6 +76,20 @@ without regard to case.
 **The refusals are the interesting half.** An `admin refused`, a
 `login refused` or an `api refused` is somebody trying something that did not
 work.
+
+**The audit trail has a second copy.** Every record SD writes to the audit file is
+also sent to the Windows Application event log: the source is `sd-audit`, the
+level Information and the event id 1, and the event is stamped with the Windows
+user of the session that made the record. The audit file is in your Solo folder and
+belongs to you, so a program you run could change it; the event log copy gives you
+a second place to look, read with the tools you already use for Windows (Event
+Viewer, under *Windows Logs*, *Application*, or `Get-WinEvent` in PowerShell). A
+line in the audit file with no matching event is one to look at. **The copy is a
+convenience, not a protected record**: any program on the computer can write events
+under the source name `sd-audit`, and an administrator can clear the log, so a line
+there proves nothing by itself. If the event log cannot be reached, SD carries on
+and the file is still written. The installer registers the source on a first
+install and on an upgrade.
 
 **Nothing is ever discarded.** At 1 MB the file is **renamed with the date and
 time and a new one started**. Removing the old ones is your decision; SD will
@@ -129,6 +143,7 @@ writes `tool start app=tool.audit`, and X writes the one export line; both are o
 
 **SD has no file-level access control of its own** on the keyboard and ssh
 paths: a session opens files as you, so Windows' permissions on your profile
-are the only boundary. The one place a path gate exists is the API, where a
-session is confined to the account it stands in — see
-[API access](09-api-access.html).
+are the only boundary. The one place a path gate does exist is the account's `os`
+switch, which holds a session, the API's included, to the account it stands in
+while it is off, as delivered — see
+[API access](09-api-access.html#a-session-is-held-to-its-own-account).

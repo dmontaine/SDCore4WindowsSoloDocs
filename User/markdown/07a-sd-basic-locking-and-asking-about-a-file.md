@@ -123,9 +123,7 @@ sequential.
 > `/cygdrive/c/Users/...`, not `C:\Users\...`. **Handing that
 > string to a Windows program does not work** — Windows reads it as a
 > drive-relative path and either fails silently or reports that the parent
-> directory does not exist. This is not a theoretical caution: it is what
-> stopped the full-screen editors working the first time they were built for
-> this port.
+> directory does not exist.
 >
 > **And the conversion function is not available to an ordinary program.**
 > The kernel can convert such a path, and `kernel()` is an internal-only
@@ -140,8 +138,11 @@ sequential.
 > present and `1` again after `clearfile`. To count records, `select` the file
 > and read `selectinfo(list, 3)`, or count in a `readnext` loop.
 
-`dir(pathname)` lists an operating-system directory as a dynamic array — name,
-size and modification time per entry.
+`dir(pathname)` lists an operating-system directory as a dynamic array - one field
+per entry, with the name, `F` or `D` and the size in bytes as its values. **An entry
+is `F` only when it is a plain file and `D` only when it is a directory** (a link is
+judged by what it leads to): a socket, a device or a pipe is
+left out.
 
 ## Reaching another file's data
 
@@ -164,7 +165,7 @@ cannot be opened at all**, which takes the same action:
 | **c** | return the record id itself |
 | **n** | return the record id itself |
 
-A file that would not open prints the message only with **v**.
+(A file that would not open prints the message only with **v**.)
 
 A *field* of `0` returns the record id.
 

@@ -45,6 +45,20 @@ the key it installed (below) — and then gives SD the global password when
 two passwords: SD tries the account password first and the global password
 second, which is why the two must differ.
 
+**A session signed in with the global password is a server session.** It has
+the administrator commands unlocked from the start, and it is the only kind of
+session that may use the commands below — the administrator password does not
+open them.
+
+**A server session can change every password on the computer** — the account
+password with `set.password`, the administrator password with `set.password
+admin`, and the global password with `set.password global`, which nothing else
+may use. See [The account and its passwords](05-account-types.html).
+
+**On a computer installed from a control file, the server can sign in before
+the user has chosen an account password.** Until the user does, at that
+computer's keyboard, the global password is the only one accepted.
+
 ## The server's ssh key
 
 **The server cannot know which Windows user this computer's SD belongs to,** and
@@ -91,20 +105,6 @@ server's line for it has to be removed (the message names the file) before the
 server can connect again. The very first connection is trusted. See
 [API access](09-api-access.html).
 
-**A session signed in with the global password is a server session.** It has
-the administrator commands unlocked from the start, and it is the only kind of
-session that may use the commands below — the administrator password does not
-open them.
-
-**A server session can change every password on the computer** — the account
-password with `set.password`, the administrator password with `set.password
-admin`, and the global password with `set.password global`, which nothing else
-may use. See [The account and its passwords](05-account-types.html).
-
-**On a computer installed from a control file, the server can sign in before
-the user has chosen an account password.** Until the user does, at that
-computer's keyboard, the global password is the only one accepted.
-
 ## The server's programs: `global.bp.out`
 
 **The global catalog of a managed computer holds the server's programs.**
@@ -122,7 +122,8 @@ catalog is found first.
 `sync.global.catalog`:
 
 ```
-:copy from bp.out to global.bp.out myprog overwriting
+:copy from bp.out to global.bp.out myprog
+1 record(s) copied.
 :sync.global.catalog
 cataloged myprog
 sync global catalog done 1 cataloged 0 removed 0 refused
@@ -164,7 +165,7 @@ is kept.
 | | |
 |---|---|
 | *The global catalog can only be changed by the SD Core server* | `sync.global.catalog`, or writing `global.bp.out`, `gcat` or the deny list, from a session that did not sign in with the global password — `admin` included |
-| *The global catalog holds the SD Core server's programs from global.bp.out and is changed only by sync.global.catalog* | `CATALOG ... GLOBAL`, a `CATALOG` name beginning `!`, `_` or `$`, or `DELETE.CATALOG` of a global entry — from any session |
+| *The global catalog holds the SD Core server's programs from global.bp.out and is changed only by sync.global.catalog* | `catalog ... global`, a `catalog` name beginning `!`, `_` or `$`, or `delete.catalog` of a global entry — from any session |
 
 **A user's own program cannot write to them either.** A BASIC program that
 opens `global.bp.out` and `WRITE`s to it is refused by SD itself, with
@@ -196,10 +197,11 @@ deny.verbs 2: sh,copy
 ```
 
 **A command is denied under every name that runs it.** Some names that look
-different share one program: `EDIT` and `MICRO` both run SD's editor program,
+different share one program: `edit` and `micro` both run SD's editor program,
 so denying one denies the other, and the answer says what else was taken
-(`deny.verbs also denies, as the same command: ...`). (Before 2.0-0, `!` was a
-second name of `SH` and was denied with it; it was removed.) For example:
+(`deny.verbs also denies, as the same command: ...`). **The case a record spells
+its program in does not matter:** a verb whose VOC record runs the same program
+as a listed verb is denied too, however the program's name is written. For example:
 
 ```
 :deny.verbs add sh

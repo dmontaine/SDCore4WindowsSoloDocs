@@ -75,8 +75,8 @@ at once.
 ## After an unclean shutdown
 
 If SD is stopped abruptly — the power goes, or the process is killed — it
-leaves its shared memory behind, and **on Windows that survives a restart.**
-Nothing from before a restart can still be using it, so SD discards it at the
+leaves a shared memory segment behind. **On Windows that survives a reboot.**
+Nothing from before a restart can still be using that segment, so SD discards it at the
 next start and starts normally, printing:
 
 ```

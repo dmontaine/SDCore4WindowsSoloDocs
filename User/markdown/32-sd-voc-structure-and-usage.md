@@ -36,7 +36,7 @@ load-bearing and the remaining thirty are not.**
 | `X` | text | miscellaneous data — not a command |
 | `D` | descriptor | a data descriptor, which is what dictionary records are |
 
-**`PQ` is a valid type and is refused.** PROC is not part of this port. A record of type `PQ` is reported as *"PROC is not
+**`PQ` is a valid type and is refused.** PROC is not supported in SD. A record of type `PQ` is reported as *"PROC is not
 supported"* rather than being dispatched, because the record itself is
 valid PROC and it is the interpreter that is gone.
 
@@ -66,13 +66,10 @@ is yours. The account and grant commands are not in it — see *Differences from
 SD Core for Windows W2.0-0* in the GettingStarted set. (SDSYS's own VOC,
 which nobody signs in to, is built from the larger `voc_template`.)
 
-> **`edit` used to be exactly this kind of trap** — a record present in the
-> VOC whose old type field read `Verb - Full screen editor` rather than `V`,
-> so it looked callable and refused at dispatch with *"Full screen editor is
-> no longer supported."* **That is history, not current behavior**: `edit`
-> is a real `V` record now, and works. The lesson
-> stands even though the example does not: **being in the VOC is not
-> evidence a command works** — check the type field, not just the name.
+> **Being in the VOC is not evidence a command works.** A record whose type
+> field does not read `V` (a record whose type field read `Verb - Full screen
+> editor`, say) looks callable and is refused at dispatch. `edit` is a real `V`
+> record and works. Check the type field, not just the name.
 
 ## The F record — a file
 
@@ -263,7 +260,7 @@ in the command instead.
 002  26
 ```
 
-This is a keyword record. Field 2 is the keyword number the query
+This is `ne`, the not-equal keyword. Field 2 is the keyword number the query
 processor uses. Keywords are not commands in their own right; they are
 the words the query processor — `LIST`, `SELECT`, `SORT` and the rest —
 recognizes inside a command line. `all` is `K` with number 5; `and` is `K`.

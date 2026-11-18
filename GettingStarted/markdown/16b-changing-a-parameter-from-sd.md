@@ -84,14 +84,14 @@ what existing programs compute. Change them by hand. The page shows the same sen
 | `INTPREC` | Changes the results of arithmetic in programs that already exist. |
 | `MAXIDLEN` | Structural: the longest record id of the whole system, which reaches every file and program. |
 | `MUSTLOCK` | Makes a write fail unless the record is locked first, which can stop programs that exist. |
-| `NETDIRS` | A door: it widens what an API session may reach beyond its own account. |
+| `NETDIRS` | A door: it widens what a session without the `os` switch, and an API session, may reach beyond the account's own folder. |
 | `NETFILES` | A door: bit 2 gates API request 29, a remote open of an account. |
 | `NUMFILES` | Sizes the open file table in shared memory; SD checks no range. |
 | `NUMUSERS` | Sizes the user table, which bounds who can sign on; SD checks no range. |
 | `OBJECTS` | Limits the programs a session keeps in memory; SD checks no range. |
 | `OBJMEM` | Limits the memory those programs may take; SD checks no range. |
 | `PDUMP` | Flag bits that say when a process dump is written; a dump can hold what a session had in memory. |
-| `PHANTOMS` | Must agree with `USERPOOL`: a wrong combination stops SD from starting. |
+| `PHANTOMS` | Must agree with USERPOOL: a wrong combination stops SD from starting. |
 | `PWDELAY` | A security throttle: the pause after a failed network sign-on; 0 removes it. |
 | `SAFEDIR` | Changes how SD replaces the files of a directory file, by writing a new one and renaming it. |
 | `SCREENTHEME` | Text that SD acts on; SD checks no value. |
@@ -104,7 +104,7 @@ what existing programs compute. Change them by hand. The page shows the same sen
 | `SPOOLER` | Text that names a printer; check the printer's exact name in Windows first. |
 | `TEMPDIR` | A directory: temporary files are written there. |
 | `TERMINFO` | A directory: terminal definitions are read from there. |
-| `USERPOOL` | The highest user number: `PHANTOMS` is checked against it; a mistake stops SD. |
+| `USERPOOL` | The highest user number: PHANTOMS is checked against it; a mistake stops SD. |
 | `USRDIR` | A directory: accounts are found there. |
 | `XFER` | A door: 1 opens file transfer over ssh when the account's switch is on. |
 | `XFERFILE` | A transfer limit: raising it lets one file fill more of the disk. |

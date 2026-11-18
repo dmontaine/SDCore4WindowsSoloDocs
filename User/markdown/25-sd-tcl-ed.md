@@ -13,7 +13,7 @@ BASIC and runs inside SD, so it needs no operating-system permission either;
 hand the record to a full-screen Windows program, so they are behind the `os`
 switch. Use one of those when you are sitting at a terminal and want to see the
 whole record at once. A record that is a data collection has an editor of its
-own, [ced](27b-sd-tcl-ced.html), also reached from the IDE (F12) or by `call !ced`.
+own, [the collection editor](27b-sd-tcl-ced.html), [ced](27b-sd-tcl-ced.html), also reached from the IDE (F12) or by `call !ced`.
 
 SD folds case, so a command may be typed in either case. Commands are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**
@@ -21,7 +21,7 @@ marks a word typed as it stands; braces mark an optional part. **`ed`'s own
 commands are shown in upper case**, which is how `ed`'s `HELP` prints them; it
 folds case too.
 
-> **The listings on this page** use a scratch record in an account's `bp` file.
+> The listings use a scratch record in an account's `bp` file.
 
 ## Starting it
 
@@ -50,7 +50,7 @@ bp zzed
 ```
 
 **`creating.seqkey` in the place of a record name** edits a new record under the
-file's next sequential id, the counter that `write ... creating.seqkey` uses:
+file's next sequential id, the counter that `write … creating.seqkey` uses:
 `ed bp creating.seqkey`. The id is taken when the edit begins and shown like any
 record id, so a record that is never filed leaves a gap in the sequence, and an id
 that a record already holds is skipped. A file that is not a hashed file, such as a

@@ -13,6 +13,13 @@ Password:                            <- SD's account password
 :
 ```
 
+**Your password is not sent in clear text.** ssh agrees a key exchange and a cipher with the
+server first, and the password travels inside that encrypted channel; the server receives it
+decrypted, as any ssh server does. **The first time you connect, ssh shows the server's host key
+fingerprint: check it** against `C:\ProgramData\SDCoreSolo\ssh\ssh_host_ed25519_key.pub`
+(`ssh-keygen -l -f` on that file), because that is what stops someone posing as your computer.
+The API is different: it uses SCRAM, where the server never receives the password at all.
+
 **There is no key to set up first.** A key is an optional extra (below), never
 the only way in. The port is fixed: it is not a setting.
 
@@ -44,8 +51,16 @@ PasswordAuthentication yes
 PubkeyAuthentication yes
 AllowUsers you
 DisableForwarding yes
+MaxAuthTries 6
+LoginGraceTime 30
 ForceCommand "C:\Users\you\SDCoreSolo\usr\bin\sd-solo.exe"
 ```
+
+`MaxAuthTries 6` and `LoginGraceTime 30` are written out, not left to the
+server's defaults: they are the limits on wrong passwords tried from this
+computer itself, which the lock-out cannot stop (see [the
+lock-out](#the-lock-out-three-wrong-passwords-lock-the-address)). Every key a
+client offers that the server does not know counts as one of the six tries.
 
 **Why the server runs as SYSTEM.** A server run as an ordinary user can check
 your Windows password but then cannot start your session: Windows refuses with
@@ -77,21 +92,16 @@ it does. The other choice it asks is who may reach the port (below).
 
 **Anyone who can reach the port can try passwords for your Windows account, and
 Windows can then lock you out of it.** Wrong passwords count against the
-account like wrong passwords at the sign-in screen. On the computer this was
-developed on, the policy locks an account after 10 wrong tries within 10
-minutes (`net accounts` shows yours), and that includes you. **Solo therefore has a
+account like wrong passwords at the sign-in screen: if the computer has an
+account lock-out policy (`net accounts` shows it), repeated wrong tries lock the
+account, and that includes you. **Solo therefore has a
 lock-out of its own** ([below](#the-lock-out-three-wrong-passwords-lock-the-address)),
 which cuts an address off after three wrong passwords, before that count is reached from one
-address. So **use `local` unless other computers need to reach SD**, and use a long
+address. **That lock covers the addresses of other computers only**: wrong passwords tried from this
+computer itself are held only by the ssh server's own limits, because Windows Firewall does not filter
+this computer's own address (see the lock-out below). So **use `local` unless other computers need to reach SD**, and use a long
 Windows password. (Windows OpenSSH
 on port 22 has the same property, and no lock-out of Solo's.)
-
-**The password is not sent in the clear.** ssh encrypts the connection before
-it asks for the password, so it crosses the network inside the encrypted
-channel; the server receives it decrypted, as any ssh server does. **Check the
-host key the first time you connect**: ssh shows its fingerprint and asks. It
-is the one in `C:\ProgramData\SDCoreSolo\ssh\ssh_host_ed25519_key.pub`, and
-`ssh-keygen -l -f` prints it.
 
 **A Windows account with no password cannot sign in over ssh**, because Windows
 refuses a network sign-in for a blank password by default. Give the account a
@@ -205,7 +215,9 @@ rule's remote address rather than disabling it, so the rule reads correctly in
 ## The lock-out: three wrong passwords lock the address
 
 **Three wrong Windows passwords from one address within ten minutes lock that address for ten minutes.**
-The connection that made the third wrong try is ended at once, and the lock lifts by itself.
+The connection that made the third wrong try is ended at once, and the lock lifts by itself. **This is
+for the addresses of other computers**: a lock on this computer's own address is recorded and listed,
+but the firewall does not stop it (see the end of this section).
 
 | | |
 |---|---|
@@ -213,16 +225,22 @@ The connection that made the third wrong try is ended at once, and the lock lift
 | **Only a wrong password counts** | not a key the server does not know: an ssh client that offers several keys is not punished for it |
 | **A sign-in forgets the failures** | a sign-in from the address clears its count |
 | **Who is locked** | `powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-sshguard.ps1" -List` lists the addresses, any that have wrong passwords counted and each lock's end time, from an ordinary prompt. `-Unlock ADDRESS` lets one address back in and `-Unlock all` every address; **`-Unlock` needs an elevated PowerShell**. `-List` ends `SOLO SSH GUARD LOCKED <n>` and `-Unlock` ends `SOLO SSH GUARD UNLOCKED <n>` |
-| **How** | a scheduled task, **SD Core Solo SSH Guard**, runs as SYSTEM from Windows start (and again up to three times a minute apart if it stops) and reads Solo's ssh server's lines in the Windows event log, **OpenSSH/Operational** (Event Viewer: Applications and Services Logs, OpenSSH, Operational), where Solo's ssh server logs at level VERBOSE; those lines can be read by any signed-in user. A connection counts as Solo's only after the ssh server has logged that it arrived on port 4251, so wrong passwords at the computer's own ssh server on port 22 are not counted, and only a line written by Windows' own OpenSSH server process is counted (a line another program writes is dropped). A locked address gets a Windows Firewall block rule on port 4251, **`SD-Solo-SSH-Guard-<address>`**, for ten minutes, and the rule goes when the time is up. The address is read from the end of the log line, where the ssh server puts the peer's address, never from the user name a client types. The guard's own log is `sshguard.log` in `C:\ProgramData\SDCoreSolo\ssh`, and its state is `guard.state`: anyone may read them, only an administrator may change them. `-List` also says what record of the event log the guard has read up to, or **NEVER READ** if it has read none; the installer fails if the guard has not read the event log once and seen Solo's ssh server start |
+| **How** | a scheduled task, **SD Core Solo SSH Guard**, runs as SYSTEM from Windows start (and again up to three times a minute apart if it stops) and reads Solo's ssh server's lines in the Windows event log, **OpenSSH/Operational** (Event Viewer: Applications and Services Logs, OpenSSH, Operational), where Solo's ssh server logs at level VERBOSE; those lines can be read by any signed-in user. A connection counts as Solo's only after the ssh server has logged that it arrived on port 4251, so wrong passwords at the computer's own ssh server on port 22 are not counted, and only a line written by Windows' own OpenSSH server process is counted (a line another program writes is dropped). A locked address of another computer gets a Windows Firewall block rule on port 4251, **`SD-Solo-SSH-Guard-<address>`**, for ten minutes, and the rule goes when the time is up; the firewall cannot enforce a lock on this computer's own address (below). The address is read from the end of the log line, where the ssh server puts the peer's address, never from the user name a client types. The guard's own log is `sshguard.log` in `C:\ProgramData\SDCoreSolo\ssh`, and its state is `guard.state`: anyone may read them, only an administrator may change them. `-List` also says what record of the event log the guard has read up to, or **NEVER READ** if it has read none; the installer fails if the guard has not read the event log once and seen Solo's ssh server start |
 | **Where it is set up** | wherever Solo's ssh server is set up: the installer, an upgrade and `remote.ssh local` or `open`. It runs the copy in the administrators-only folder, never the one in your own folder. Turning ssh off or uninstalling takes the task and every lock-out rule away |
 
-**What it does not stop:** a guess spread over **many addresses** (each gets its three), and connections
+**What it does not stop:** wrong passwords tried **from this computer** (below), a guess spread over **many addresses** (each gets its three), and connections
 already open when the lock engages: each of them is cut at its
 next wrong password, so each gets one more guess. On a network where everyone shares one address (behind one NAT), they share the lock.
 
-**A lock on this computer's own address cannot be enforced.** Windows Firewall does not filter loopback
-traffic, so after three wrong passwords from `127.0.0.1` the connection is ended, but the rule cannot refuse
-the next one. Someone at the computer is not kept out by it.
+**On Windows a lock covers the addresses of other computers, not this one.** A lock cuts an
+address off with a Windows Firewall rule, and Windows Firewall does not filter this computer's own
+address (`127.0.0.1` and `::1`). After three wrong passwords from this computer the connection is
+ended, but the lock cannot refuse the next one: **wrong passwords tried from this computer are not
+stopped by a lock.** They are held only by the ssh server's own limits, `MaxAuthTries 6` (six
+tries on one connection) and `LoginGraceTime 30` (thirty seconds to sign in), which are in the
+server's configuration (above). `-List` marks such a lock **(this computer: not stopped by the
+firewall)**. Someone at the computer is not kept out by the lock; what keeps them out is the
+Windows password.
 
 ## What an ssh session is
 

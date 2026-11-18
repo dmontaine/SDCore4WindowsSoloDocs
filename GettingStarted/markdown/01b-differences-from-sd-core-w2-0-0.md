@@ -10,7 +10,7 @@ is for a reader who knows the multiuser product. The User set applies to both.
 
 | SD Core for Windows W2.0-0 | Solo |
 |---|---|
-| many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `WHO` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
+| many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `who` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
 | SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in to it; the administrator commands run from your own account |
 | `create.account`, `delete.account`, `modify.account`, `grant`, `revoke`, `list.grants`, `modify.password`, `logto` | **gone.** Solo has one account, so `logto` had nowhere to go (removed in WS1.1-3; typing it answers `logto is not in your VOC`) |
 | Windows groups `sdusers`, `sdssh`, `sdapi`, `sdsshonly`; the `os.users` and `batch.jobs` permit lists; console and Remote Desktop denied to SD accounts | **gone.** There is one Windows user, and it is yours. The shell and OS access are the exception to "yours to use": two switches, `sh` and `os`, off as delivered, turned on by the administrator with `set.os.access` (see [Operating system access](06b-operating-system-access.html)) |
@@ -31,10 +31,10 @@ See [The account and its passwords](05-account-types.html).
 | SD Core for Windows W2.0-0 | Solo |
 |---|---|
 | the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `admin` first** — including eight that had no check of their own because only SDSYS had them: `config`, `listu`, `list.locks`, `list.readu`, `lock`, `clear.locks`, `set.date`, `clean.account` |
-| editing the VOC directly is any account's own business | `ED VOC`, a program's `WRITE` or `DELETE` to the VOC, `COPY` into it, and saving or deleting a sentence with `.S` and `.D` **need `admin`**. What SD writes to the VOC as a side effect — `CREATE.FILE`'s entry, the command stack — does not |
-| an administrator can `CATALOG ... GLOBAL` | **nobody changes the global catalog**, `admin` or not. On a managed computer it holds the SD Core for Linux server's programs. See [Other hardening](13-hardening.html) |
+| editing the VOC directly is any account's own business | `ed voc`, a program's `write` or `delete` to the VOC, `copy` into it, and saving or deleting a sentence with `.s` and `.d` **need `admin`**. What SD writes to the VOC as a side effect — `create.file`'s entry, the command stack — does not |
+| an administrator can `catalog ... global` | **nobody changes the global catalog**, `admin` or not. On a managed computer it holds the SD Core for Linux server's programs. See [Other hardening](13-hardening.html) |
 | `ssh.server`, `remote.ssh`, `remote.api` | **`ssh.server` is gone.** The API and ssh are chosen when installing, and `remote.ssh` and `remote.api`, each `off`, `local` or `open` (after `admin`), change them afterwards. See [ssh access](08-ssh-access.html) and [API access](09-api-access.html) |
-| `APPEND.SD.PATH` changes the system PATH | it changes **your** PATH, and needs no elevation |
+| `append.sd.path` changes the system PATH | it changes **your** PATH, and needs no elevation |
 
 See [Administrator commands](06-administrator-commands.html).
 
@@ -79,6 +79,6 @@ See [Installing](01-installation.html) and [Running SD](03-running-sd.html).
 - **A client that signs in with a Windows user name**, or with the old
   cleartext login, or through `SDConnectLocal`.
 - **Anything that writes the global catalog.** Catalog programs locally
-  (`CATALOG ... LOCAL`) instead.
+  (`catalog ... local`) instead.
 - **Anything that expects `C:\Program Files\SD` or `C:\ProgramData\SD`.** Use
   `%USERPROFILE%\SDCoreSolo`.

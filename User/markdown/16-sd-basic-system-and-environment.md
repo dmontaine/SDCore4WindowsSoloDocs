@@ -50,7 +50,7 @@ system(key)
 | `1010` | platform name | `Windows` |
 | `1012` | SD version | `WS2.0-0` |
 | `1013` / `1014` | user limit, without / with the phantom pool | `20` / `20` |
-| `1015` | computer name | `Gitorli` (example) |
+| `1015` | computer name | `myhost` (example) |
 | `1017` | port number of a tcp connection | `0` |
 | `1028` | system id | `1028` |
 
@@ -75,9 +75,7 @@ is in the POSIX form.
 
 **A `/cygdrive/` path handed to a Windows program does not work.** Windows
 reads it as drive-relative and either fails silently or complains that the
-parent directory does not exist. This is not theoretical: it is what stopped
-the full-screen editors working the first time they were built for this port.
-There is a conversion function in the kernel and **an ordinary program cannot
+parent directory does not exist. There is a conversion function in the kernel and **an ordinary program cannot
 call it** — see "What is not here". **Take the path from configuration rather
 than from `system()` if a Windows program is going to see it.**
 
@@ -221,12 +219,12 @@ does not exist, and a caller cannot tell the two apart:
 
 **Keep every `config()` name to eight characters and upper case.**
 
-Neither call aborts the caller: a name that is too long comes back empty with
-a status, the same as a name that does not exist.
-
 `config('TIMEZONE')` is the zone the epoch functions convert in (see
 [SD Basic - Data Conversion](06-sd-basic-data-conversion.html)); `config('USPLIT')`
 is `1` when the administrator has turned on the split of user numbers.
+
+Neither call aborts the caller: a name that is too long comes back empty with
+a status, the same as a name that does not exist.
 
 ## SYSMSG()
 

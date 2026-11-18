@@ -8,6 +8,10 @@ check boxes, lists and buttons, shows a menu bar, and takes clicks of the mouse.
 It needs no extra package and no change to the rest of the program: it is one
 statement word followed by a verb.
 
+This page is the reference for the statement. A guide to building a whole
+full-screen page with it and SD's own `!tk` routines, with worked examples, is the
+separate *SD Text User Interface - Programmer's Guide* set of this documentation.
+
 > **On Windows.** The default terminal type, `windows`, has the color capabilities the themes need but no `smcup`, so no
 > alternate screen; an `xterm`-compatible terminal (SD can be reached through ssh from one) has that too.
 

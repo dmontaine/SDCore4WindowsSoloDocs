@@ -21,7 +21,7 @@ OpenQM documents are not authoritative here.
 additions, changes and deletions — of features, of structure, of security and
 of commands. **These pages cover those changes.**
 
-If you have used OpenQM, or SD on Linux, much of SD Core will still be
+If you have used OpenQM, or upstream `sdb64`, much of SD Core will still be
 familiar: the same data model, the same query processor, the same BASIC. If you
 are bringing programs over from another MultiValue database, start with
 [Migrating to SD](26-migrating-to-sd.html).
@@ -63,7 +63,7 @@ that no page runs longer than a reader will scroll.
 | **00** | Start here | this page — what the set is and what it leaves out |
 | **00a** | [Copyright and license](00a-copyright-and-licence.html) | The copyright and the license for this set, in full and in one place |
 | **01** | [Installing](01-installation.html) | What the installer asks, what it puts where, and the control file for installing many computers |
-| **01a** | [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) | Installing a new release over an existing one, and taking SD off the computer |
+| **01a** | [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) | Installing a new release over an existing one, and taking SD off the machine |
 | **01b** | [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html) | What Solo leaves out, adds and does differently |
 | **01c** | [Installing many computers](01c-installing-many-computers.html) | The control file, what the installer checks when it finishes, when a step fails, and changing any of it afterwards |
 | **02** | **[Your first thirty minutes](02-first-run.html)** | **Start here if you just want it working** |
@@ -126,8 +126,8 @@ they work for the rest of that session. See
 `sdsys` sign-in and no groups to join. The account and grant commands are gone.
 See [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
 
-**4. Commands and names are lower case.** Typing in upper case still works —
-the lookup tries what you typed, then lower, then upper. See
+**4. Commands and names are lower case, completely.** Typing in upper case
+still works — SD converts it — but nothing can exist in two casings. See
 [Lower case](11-lower-case.html).
 
 **5. An ssh session lands inside SD, and the API login is SCRAM.** ssh to this

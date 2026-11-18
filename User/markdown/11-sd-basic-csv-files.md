@@ -194,8 +194,7 @@ and `dparse.csv` are not affected.
 
 > **A file whose separator is a semicolon is still called CSV by the program
 > that produced it.** Look at a line before assuming the separator, and take it
-> from configuration rather than hard-coding it — the same export from the same
-> system can change separator when the machine's settings change.
+> from configuration rather than hard-coding it.
 
 ## A whole CSV text: `csvparse()`, `csvbuild()` and `csvopen()`
 

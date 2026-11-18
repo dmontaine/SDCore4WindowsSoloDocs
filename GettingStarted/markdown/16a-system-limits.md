@@ -1,8 +1,6 @@
 Title: System limits
 Subtitle: The sizes, counts and depths compiled into SD Core Solo for Windows, and which of them a site can change.
 
-> The figures are those of SD Core Solo for Windows itself.
-
 Two kinds of number appear on this page and they behave differently.
 
 A **compiled limit** is fixed in the build. Changing it means rebuilding SD, and
@@ -12,6 +10,8 @@ A **configured limit** is a value in `sd.conf` with a default. A site can raise 
 lower it, within a range the compiled limits set. Those are covered in full on
 [Configuration](16-configuration.html); this page gives the number in force and
 says which parameter controls it.
+
+> The figures are those of SD Core Solo for Windows itself.
 
 ## Data
 
@@ -47,7 +47,7 @@ a long path to it leaves less room for the paths SD builds inside it.
 
 **A sort that outgrows `SORTMEM` is written to work files, and an item or a key may be of any
 length SD can hold.** The lengths in a work file are 32 bits, so an item or a key of 32 KB or
-more is handled correctly when a sort spills to disk.
+more is sorted correctly when a sort spills to disk.
 
 **A split of a dynamic file stops before it changes the file when the disk cannot take it.** A
 dynamic file grows by splitting its groups. The split writes the new, empty group first and only
@@ -55,7 +55,7 @@ then advances the file's modulus; it does nothing if that write cannot be made, 
 system holds less than 1 MB, and writes a line to the log, so a full disk cannot leave the
 modulus advanced with no group behind it.
 **A split that fails after the new group has begun to be used still cannot be undone**: it logs
-the failure and writes the file's header, and the file needs a file check (`sdfix`).
+the failure and writes the file's header, and the file needs a file check (`sdfix`, described in [sdfix, the File Check Tool](20-sdfix.html)).
 
 ## Sessions and locks
 
@@ -117,8 +117,6 @@ to it.
 
 **These are record counts, not verb counts** — a VOC record may be a verb, a
 keyword, a file pointer, a sentence or a paragraph, and only some are verbs.
-The account and grant commands are not among them; see
-[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
 The verb subset specifically is counted on the SD TCL syntax card in the User set.
 
 ## Configuration
@@ -128,10 +126,16 @@ The verb subset specifically is counted on the SD TCL syntax card in the User se
 | Parameters accepted in `sd.conf` | **59** |
 | Parameters the `config` verb displays | **56** |
 | Parameters readable with `config()` | **57** |
-| Parameters settable for the current session | **28** |
+| Parameters settable for the current session | **29** |
 
-The verb displays `DEBUG`, `FDS` and `PHANTOMS` only when they are set, and
-`TIMEZONE`, which is not a file parameter. The parameters removed in 2.0-0, and
-what happens to a kept `sd.conf` that still names one, are on
-[Configuration](16-configuration.html). `NETFILES` is live: its bit 2 opens API
-request 29, behind the NET gate (see the same page).
+The three parameters the verb does not display and `config()` cannot read are
+`BACKUPDIR`, `NETDIRS` and `SDSYS`; the verb does not display `APILOCAL` either,
+and `config()` reads it. The verb displays `DEBUG`, `FDS` and `PHANTOMS` only
+when they are set, and `TIMEZONE`, which is not a file parameter; `config()` reads
+it and a session can set it, and it is counted among the 29. No parameter is
+accepted and ignored: a line naming a name SD does not have (such as `APILOGIN`,
+`CODEPAGE`, `CREATUSR`, `EXCLREM`, `FILERULE`, `FIXUSERS`, `GDI`, `INVCASE`,
+`JNLDIR`, `JNLMODE`, `PORTMAP`, `RINGWAIT` or `TXCHAR`) stops SD from starting;
+[Configuration](16-configuration.html) says how the installer takes them out of
+a kept `sd.conf`. `NETFILES` is live: its bit 2 opens API request 29, behind the
+NET gate (see the same page).

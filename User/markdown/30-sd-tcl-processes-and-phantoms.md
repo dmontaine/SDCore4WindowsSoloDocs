@@ -129,7 +129,11 @@ never started.
 | *Phantom processes cannot be started within a transaction* | inside `begin transaction` |
 | *Failed to create phantom process* | the operating system would not create the process |
 
-**A phantom that is created and then cannot start** (the operating system would not run SD for it) has no terminal to say so. It writes one line to the error log, `phantom: cannot start a phantom from` *path* `-` *reason*, and ends; it does not go on as a second copy of your session.
+**A phantom that is created and then cannot run SD's program ends without a word on your
+terminal**, and `phantom` returns as it always did. The reason is written to SD's error
+log as a line beginning `phantom: cannot start a phantom from` and the path of `sd-solo`,
+then the reason; a path too long to start from is a line beginning `phantom: cannot start
+a phantom - the path of`.
 
 > **A phantom cannot be started from a scripted session, and this is the one
 > to know.** When SD is fed commands down a pipe, the phantom child inherits
@@ -186,29 +190,6 @@ process's last command and location, so a long-running program or a phantom can 
 it is doing — `@pstat = 'Posting batch ' : n` — without a terminal to say it on. It is the
 program's own text and is not cleared for it.
 
-### A phantom that ends with its parent: `phantom group`
-
-```
-phantom group command
-```
-
-A phantom started with the word `group` is **grouped with the process that started it**:
-when that process ends — it logs out, or is logged out — SD logs the grouped phantoms
-out too, where an ordinary phantom would go on until its command finished. It is for a helper that has no purpose without you. `listu` shows a
-grouped phantom with a **`G`** after its parent's number, and `system(1073)` in the
-parent gives the user numbers of the phantoms grouped with it, field mark delimited
-(`system(1058)` gives all its child phantoms, grouped or not, and `system(1052)` counts
-them). A phantom that has not yet finished starting when its parent ends is still
-logged out.
-
-### `@pstat`: what `pstat` shows about the program
-
-`@pstat` is an `@` variable a program **may assign to**. Whatever text it holds when
-another session runs `pstat` (or `pstat user n`) is printed as an extra line under the
-process's last command and location, so a long-running program or a phantom can say what
-it is doing — `@pstat = 'Posting batch ' : n` — without a terminal to say it on. It is the
-program's own text and is not cleared for it.
-
 ### What a phantom does not inherit
 
 **A phantom is a new SD process, not a branch of yours.** It is started with
@@ -216,7 +197,8 @@ program's own text and is not cleared for it.
 holds in memory reaches it** — no `@`-variables, no unnamed common, no open
 files, no active select list. **The command string is the only thing passed**,
 through a record in SD's `$IPC` file. The session's option settings do not go
-with it: a phantom starts with every option off.
+with it: a phantom starts with every option off. (There is no `option inherit`.)
+
 **The records are sealed.** `$IPC` is a file every SD user's process can write, so a
 phantom does not believe what it finds there. `phantom` makes a secret for each
 phantom (24 random bytes) before it creates anything, gives it to the new process in
@@ -227,7 +209,7 @@ command, the `DATA` queue and the log file name in the record. The new process m
 the seal again from what it read and **runs, stacks and sets nothing unless the two
 are the same**. A phantom whose records do not check ends at once, says so in its
 `como` log and to its parent (*Phantom n : start-up records missing or not from the
-process that started it, nothing was run*), and writes `phantom refused phantom=n` to
+process that started it, nothing was run*), and writes a `phantom refused` line to
 the audit trail. If the secret cannot be made, no process is started.
 
 **The phantom debugger does not use `$IPC`.** `pdebug` and the phantom it debugs
@@ -265,31 +247,29 @@ User  Started            Command
 not `listu` — a phantom somebody else started does not appear. The register it
 reads is keyed by the parent's user number.
 
-## Which phantoms are running: `list.phantoms`
+## Every phantom that is running: `list.phantoms`
 
 ```
-list.phantoms {user username}
+list.phantoms
+list.phantoms user name
 ```
 
-`listu` limited to the phantom processes, with their user number, process id,
-user name, login time and account:
+Lists the phantoms, **and no other session**: a header, then a line for each
+with its user number, its operating system process id, the login name it runs
+as, the time it started and the account it is in (the phantom starts in its
+parent's account). `user` *name* shows only that user's (the name is case
+sensitive). **The account is shown for the administrator and for your own
+phantoms, and left blank for anyone else's**, as `listu` does. **openQM's
+`pool` word is refused** (*SD has no pools of phantom processes*), and `user`
+without a name is *User name required after USER*.
 
 ```
   User  Pid          Username                          Login time    Account
     26  87576        sduser                            21 Oct 00:11  sduser
 ```
 
-`user` *username* shows the phantoms of one user name (the name is case
-sensitive; one nobody has gives the heading and no rows). **As in `listu` the
-account is shown for the administrator and for your own phantoms, and left blank
-for anyone else's.** `list.phantoms pool` is refused (*SD has no pools of phantom
-processes*), `user` with no name is *User name required after USER*, and any
-other word is *Unexpected token*.
-
-**A phantom is listed only once it has signed on.** `phantom` reports the user
-number it has given the new process at once, and a `list.phantoms` typed in the
-same second showed the heading and nothing under it; the row was there a moment
-later.
+A phantom is listed only once it has signed on: `phantom` reports the user number it has given the new
+process at once, and a `list.phantoms` typed in the same second may show the heading and nothing under it.
 
 ## Telling a phantom what to do: `child()` and `signal()`
 

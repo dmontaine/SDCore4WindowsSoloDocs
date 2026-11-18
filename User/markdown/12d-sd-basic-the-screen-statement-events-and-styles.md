@@ -116,8 +116,8 @@ but `mono` have the **syntax colors** (the colors that `screen memo ... syntax` 
 color for the language use). **A program that never asks gets `mono`**, unless
 you have chosen a theme with Ctrl-T on one of SD's own pages (SD keeps that choice, and
 `screen open` starts in it) or the administrator has set `SCREENTHEME=` in `sd.conf` to
-the theme the site wants (with neither it stays `mono`, and a terminal with no color is
-`mono` whatever the line says); a
+the theme the site wants (the shipped `sd.conf` says `SCREENTHEME=paper`; with neither it stays
+`mono`, and a terminal with no color is `mono` whatever the line says); a
 program that asks for a theme gets the one it asked for.
 `screen theme` gives `else` for a name that is not a theme, on a terminal that cannot
 show color and in a phantom, and leaves the theme as it was; `returning` holds the name

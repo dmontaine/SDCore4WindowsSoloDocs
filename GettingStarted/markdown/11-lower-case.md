@@ -1,9 +1,9 @@
 Title: Lower case
-Subtitle: Commands, file names, record ids and account names are lower case now — and nothing you type has to change.
+Subtitle: Commands, file names, record ids and the account's name are lower case now — and nothing you type has to change.
 
-**Everything that can be lower case is lower case.** SD used to be
-inconsistent about it: BASIC source is free-form and usually written lower case,
-while file names, field names and account names were forced up.
+**Everything that can be lower case is lower case, completely — no name
+exists in two casings.** BASIC source is free-form and usually written lower
+case; file names, field names and the account's name are lower case as well.
 
 **What you type does not change.** `LIST`, `list` and `List` all run the same
 verb, and so does every keyword — `with`, `by`, `no.page` and the rest.
@@ -22,7 +22,7 @@ name that exists in **no** case is still reported as not found.
 This order is used everywhere: the parser, the query processor, `run`,
 the `login` paragraph lookup, and `set.file`'s default `qfile` pointer.
 
-## What is spelled in lower case now
+## What is spelled in lower case, and that is the whole of it
 
 | | |
 |---|---|
@@ -52,12 +52,11 @@ no `no.case` or `case` word to give it): SD writes records preserving the
 casing given by whatever performs the write, and reads locate records
 regardless of casing.
 
-## One correction worth reading
+## One lookup order everywhere
 
-**`list` and `ct` used to disagree about the same name.** `list voc $hold`
-answered *"'$HOLD' not found"* on the very record `ct voc $hold` had just shown
-you. `list`, `sort`, `select` and the rest of the query language now use the
-same as-typed → lower → upper order as everything else.
+**`list` and `ct` find a name the same way.** `list voc $hold` finds the record
+`ct voc $hold` shows. `list`, `sort`, `select` and the rest of the query language
+use the same as-typed → lower → upper order as everything else.
 
 ## The account name
 

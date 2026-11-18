@@ -57,12 +57,17 @@ from then on, in this account and in later sessions.
 the IDE copies the text of every changed record after a second without typing, before it hands the screen to a
 program, and when the session ends. **The copies are in your own Windows profile**, in
 `AppData\Local\.local\state\sd\recovery\sduser` (the profile Windows records for your user, never the
-`USERPROFILE` or `LOCALAPPDATA` variable), readable only by you and **outside the account, so `backup.account`
-never contains them**. The copy is deleted when
+`USERPROFILE` or `LOCALAPPDATA` variable), readable only by you, SYSTEM and the Administrators and **outside the
+account, so `backup.account` never contains them**. They are made only when that folder and every folder below it
+is a real folder (no junction or link) that nobody else can change, and every folder above it can be neither
+deleted nor renamed by anyone else: a profile that does not pass gets no copies. A session that runs as a service
+account (LocalSystem, LocalService, NetworkService) has no profile and gets none. The copy is deleted when
 you save, close or quit normally. If the window closes, the connection drops or the IDE is aborted, the next
 time you open that record the IDE asks whether to **use the copy**, **delete it**, or **not open the record**
 (which keeps it); a text typed in an untitled buffer is offered in a new tab. The record itself is not changed
-until you save. Turning the recovery copy off does not delete copies that exist. `sed` keeps none.
+until you save. A copy that the first version left in the directory `$recovery` of your account is still offered:
+with the recovery copy on it is moved to your profile, with it off it stays where it is until you answer. Turning
+the recovery copy off does not delete copies that exist. `sed` keeps none.
 
 **What it does not do:** it has no replace across records, no project files and no completion; it
 edits collection-file records only as JSON text or fields; and an operating-system file is a plain text file in one piece (no NUL, no byte from 248 to 255, 2 MB at

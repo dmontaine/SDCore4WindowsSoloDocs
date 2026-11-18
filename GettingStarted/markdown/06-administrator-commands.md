@@ -44,23 +44,23 @@ password is never displayed, stored or logged.
 | `update.accounts` | refresh the account's VOC |
 | `list.voc.removed`, `restore.voc` | the VOC records SD no longer ships, and putting back one the update removed — [`update.accounts`](#updateaccounts) below |
 | `set.os.access` | show, or turn on and off, the shell and OS access switches — [Operating system access](06b-operating-system-access.html) |
-| `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`) — [API access](09-api-access.html) |
-| `set.xfer.access` | show, or turn on and off, file transfer over Solo's ssh (`receive` and `send`, with `XFER=1` in `sd.conf`); off as delivered — [Security](12-security.html), and for the person *Moving Files In and Out* in the User documentation |
 | `remote.ssh`, `remote.api`, `tool.remote` | show, or change, whether Solo's ssh server and the API are off, local or open — [ssh access](08-ssh-access.html), [API access](09-api-access.html) |
+| `backup.account`, `restore.account`, `set.backup.directory`, `tool.backups`, `settings.report` | [Backing up and restoring the account](06c-backup-and-restore.html) |
+| `set.recovery` | show, or turn on and off, the IDE's recovery copy of text you have not saved |
+| `append.sd.path` | put SD on your PATH, or take it off |
+| `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`) — [API access](09-api-access.html) |
+| `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
+| `set.xfer.access` | show, or turn on and off, file transfer over Solo's ssh (`receive` and `send`, with `XFER=1` in `sd.conf`); off as delivered — [Security](12-security.html), and for the person *Moving Files In and Out* in the User documentation |
 | `set.start.default`, `set.tile`, `set.pins`, `tool.menus` | where a session starts, which tiles the home screen has, whether the account may add its own — [The home screen's settings](#the-home-screens-settings) below |
 | `set.viewer`, `tool.viewers`, `docs.install`, `load.help` | the readers `pdf` may start, the documents it shows, the context help — [Showing a document with pdf](06b1-showing-a-document-with-pdf.html) |
 | `set.ai`, `tool.ai` | whether the AI may be used (`set.ai gate on`; off as delivered), its provider, model and key, and the page that does it — [Setting up the AI helper](24a-setting-up-the-ai-helper.html) |
 | `set.jobs.access` | show, or turn on and off, SD's scheduled jobs (`set.job`, `run.job`, `tool.jobs`); off as delivered, and off refuses every job at its next run — [Scheduled jobs](04-scheduled-jobs.html) |
-| `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
 | `tool.gates` | all six gates on one page (sh, os, net, ai, file transfer and scheduled jobs), and the page that changes them (any session sees it; Enter changes a gate after `admin`) — [Operating system access](06b-operating-system-access.html) |
 | `tool.sessions` | who is signed on, what is locked, and `logout`, `unlock` and `inhibit.login` on one screen — [Task locks and the sessions screen](06a1-task-locks-and-forcing-a-lock-open.html) |
-| `backup.account`, `restore.account`, `set.backup.directory`, `tool.backups`, `settings.report` | [Backing up and restoring the account](06c-backup-and-restore.html) |
-| `set.recovery` | show, or turn on and off, the IDE's recovery copy of text you have not saved |
-| `append.sd.path` | put SD on your PATH, or take it off |
 | `listu`, `logout all` | [Sessions and locks](06a-sessions-and-locks.html) |
 | `list.readu` | [Sessions and locks](06a-sessions-and-locks.html) |
 | `list.locks`, `lock`, `clear.locks`, `unlock` | [Task locks and the sessions screen](06a1-task-locks-and-forcing-a-lock-open.html) |
-| anything on the deny list | a deny list is set by the control file or by the server — [Managed mode](15-managed-mode.html) |
+| anything on the deny list | the list is set at installation (the control file's `deny-verbs=`, with or without managed mode) and changed only by a session signed in with the global password — [Managed mode](15-managed-mode.html) |
 
 **Refused without `admin`, with *The VOC can only be changed after admin*:**
 editing the VOC directly — `ed voc`, a program's `write` or `delete` to the
@@ -75,7 +75,8 @@ the commands that are the SD Core for Linux server's — see
 
 **`logout` on its own needs nothing** — it ends your own session, like
 `quit` — **and nor does `logout` *n***, because every session on a Solo
-computer runs as `sduser`. **`sh` needs no `admin`, but it needs its
+computer runs as `sduser`, **or `sd-solo -k`**, because it is a switch on the
+program, not a command in a session. **`sh` needs no `admin`, but it needs its
 switch**: it is refused (*is not permitted to use the operating system shell*)
 until the administrator has turned `sh` on with `set.os.access`; see [Operating
 system access](06b-operating-system-access.html). **Nor does
@@ -150,47 +151,29 @@ missing and leaving your own VOC records alone. An upgrade runs it for you,
 so you will not normally type it. With one account, `all` and no keyword do
 the same thing.
 
-**The copy only adds and changes.** A record you removed stays removed. To keep
+**It takes away only what is on SD's deletion list.** When a release stops
+shipping a VOC record (a verb or keyword that was withdrawn), the record is on the
+list in `sdsys\voc_removed`, and the update removes it from your VOC **only if it is
+still exactly the record SD shipped**, after saving a copy in `voc_removed.saved`
+in the system folder, and writes an audit line. A record you changed, or one of
+your own of the same name, is kept. A record you removed stays removed. To keep
 your own version of one of SD's records, put `[locked]` in field 1 **after the
 type code** — `V[locked]`, `PA[locked]` — and it is left alone. **A verb is
 updated anyway**, because a locked verb would go on naming a program this
 release replaced; you are told which ones.
-
-**What it takes away: the deletion list.** A record SD has **stopped shipping**
-would stay in every account that already had it, so SD ships a second thing
-next to the VOC records: a list of the records a release has withdrawn. After
-the copy, `update.accounts` removes a listed record from the account's VOC,
-**but only when it is the record SD shipped.** Each removal is checked, saved,
-reported and audited:
-
-- **It must be the shipped record** (its type and, for a keyword, its number). A
-  record of your own with the same name is **kept**, and the update says so
-  (12906).
-- **A record marked `[locked]` is kept** (12907), except a verb, which is
-  removed all the same (12908).
-- **A copy is saved first**, in `sdsys\voc_removed.saved` under the account's
-  name, the record's id, the date and the time. If it cannot be saved the
-  record is not removed (12909).
-- **It is reported** (`3 VOC record(s) removed, because SD no longer ships them:
-  margin stats supp`, 12905) and one line goes to the audit trail.
-
-The list can be read, and every removal undone (`admin` first):
 
 ```
 list.voc.removed {sduser}
 restore.voc sduser {id}
 ```
 
-`list.voc.removed` prints the records SD no longer ships, with the release each
-went in and what to write instead; given `sduser` it also says what the next
-update would do there (removed, kept because it is not the shipped record,
-kept because it is locked, or absent) and **changes nothing**. `restore.voc`
-puts back the newest saved copy of a record, as it was, and never overwrites a
-record of that name that is there now (12923); `all` puts back every record of
-the account that has a saved copy. The next `update.accounts` removes a
-restored record again, because the list has the last word, so give a record you
-want to keep a name SD does not ship. The saved copies stay when you keep your
-data at an uninstall.
+After `admin`. **`list.voc.removed`** lists the records SD no longer ships, with what
+to type instead; given the account, it says what the next `update.accounts` would do
+there, and changes nothing. **`restore.voc`** puts back the newest saved copy of a
+removed record (or of all of them), never over a record the account holds, and audits
+what it puts back. The next `update.accounts` removes a restored record again,
+because the list has the last word, so give a record you want to keep a name SD
+does not ship.
 
 If the VOC cannot be written, the update says so for the account and leaves it
 as it was, instead of stopping with an error.
@@ -204,8 +187,12 @@ marked `[locked]`. The file is a directory file: one record per file, the record
 id as the file name, the VOC record as its contents. There is no file until you
 make one, and nothing is created for you. It is applied when the VOC is built at
 install and at every `update.accounts`, which an upgrade runs, and **an upgrade
-leaves the file where it is.** An uninstall that keeps your data keeps it too (see
-[Upgrading and uninstalling](01a-upgrading-and-uninstalling.html)). To see it work,
+leaves the file where it is.** An uninstall that keeps your data keeps it too, with
+the saved copies of removed VOC records (`voc_removed.saved`), beside the
+`.sdcore-kept` stamp (see [Upgrading and
+uninstalling](01a-upgrading-and-uninstalling.html)); a new install that reloads the
+saved data puts the file back before it refreshes the VOC, so your records are
+applied again at once. To see it work,
 put a record in the file and run `update.accounts`; then `ct voc` the id.
 
 ### `append.sd.path`

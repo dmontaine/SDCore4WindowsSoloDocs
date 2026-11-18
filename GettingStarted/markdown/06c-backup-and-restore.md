@@ -3,107 +3,102 @@ Subtitle: Writing your account to a zip file, putting it back, remembering the b
 
 This page continues [Administrator commands](06-administrator-commands.html).
 
-## Backing up: `backup.account`
+## `backup.account` and `restore.account`
 
 ```
-backup.account {to folder}
+backup.account {to directory}
+restore.account archive
 ```
 
-Writes the account to **one zip file** in the folder, named after the computer,
-the account and the time, for example `SD-ace-sduser-20261001-144419.zip`.
-
-**There is one account, so no name is needed.** With none, the command fills in the
-name `sduser`. `backup.account sduser` and `backup.account all` are accepted too.
-
-* **Without `TO`** the remembered folder is used. **With `TO`** the folder is used
-  for that one backup only; nothing is remembered.
-* The zip holds the account's files and what is needed to make the account
-  again: its type, routes and description.
-* **No password is in it.** The system's settings are not backed up; use
-  `settings.report` for them.
-* **The account is counted before it is packed** and the counts are written in the
-  zip. If what was written differs from what was counted, the zip is deleted and
-  the verb says by how much. A backup that reports success has been checked
-  against the account.
+There is one account, so **neither command needs a name**: with none, they fill
+in the account's name, `sduser`, exactly as if you had typed it (`all`, and the
+name, are still accepted). After `admin`, `backup.account` writes
+**one zip file**, named for the computer, the account and the time (for example
+`SD-office-sduser-20261001-144419.zip`), holding the account's files and a
+plain-text description of it. `restore.account archive` puts the account back, on
+this computer or another one. **A backup from another person's SD Core Solo
+replaces this account's data**, so it says what will be replaced and asks first
+(the default answer is no; `no.query` skips the question). A backup made here
+restores on SD Core Solo for Linux, and the other way round.
 
 ```
 :backup.account
 sduser: 4 files, 78848 bytes, 6 directories
 ```
 
-**There is no globally cataloged program in a Solo backup**, and the zip says
-the product is `windows-solo`.
+**Every backup is checked as it is made**, and one that does not match the
+account is deleted rather than kept: the account is counted before it is packed,
+the counts are written in the zip, and if what was written differs the zip is
+deleted and the verb says by how much. A backup or restore starts only when no
+other session is logged in, and no one can log in — at the terminal, over ssh or
+through the API — until it has finished. **A backup never overwrites a file:** if
+the name is taken, SD says so and writes nothing. **An archive that lies is
+refused with nothing changed** — counts that disagree with the manifest, an
+entry path with `..` in it or an absolute path, no manifest or two of them, or a
+backup of another product (a Solo backup restores only into a Solo).
 
-## Restoring: `restore.account`
+**A restore of the account you are using cannot happen while SD is running.**
+`restore.account` checks the archive, prepares it, and says so; **nothing has
+changed until SD is restarted**, with `sd-solo -restart`. When SD starts it swaps
+the restored account in, before any session exists. The account as it was is kept
+beside it, in `.sdrestore.previous`, so a restore can be undone by hand, and
+every step is written to `sdrestore.log` in `%USERPROFILE%\SDCoreSolo`; it ends
+with `SOLO-RESTORE APPLIED` when the swap worked. **The audit trail** gets a line
+when the restore has put the copy aside, `restore.account account=sduser
+archive=<backup file name>`, naming the file and not its folder; the swap itself
+is in `sdrestore.log`, not in the audit trail. A VOC entry that holds the
+account's old path is rewritten to the new one; a pointer to somewhere outside the
+account is listed, not followed.
 
-```
-restore.account zipfile {no.query}
-restore.account latest {no.query}
-```
+**It does not:** carry a password; back up SD's own system files or the
+settings; follow a junction or other reparse point in the account (any it finds
+are named and left out); or restore a Solo backup onto SD Core for Windows.
 
-**With no account name the command fills in `sduser`**, as `backup.account` does. A
-name (`sduser`) and `ALL` are accepted too.
+**`restore.account latest` restores the most recent backup without your
+naming it.** `latest` stands where the archive name goes: SD looks in the
+folder saved by `set.backup.directory`, picks **the newest backup made on this
+computer that really holds your account**, prints which one it chose, and
+restores from it exactly as if you had typed its name. SD decides by *looking
+inside*: a backup is called `SD-<computer>-sduser-<yyyymmdd-hhmmss>.zip`, or the
+same with `all`, but a backup made with `all` names no account, so SD opens each
+backup the name might fit and reads its list of accounts (nothing is unpacked).
 
-* **A bare file name** is looked for in the remembered folder. A name that
-  includes a folder is used as given.
-* **`latest` takes the place of the file name** and chooses the newest backup in
-  the remembered folder that was made **on this computer** and **holds** the
-  account. It finds the computer and the time from the file name, then opens each
-  candidate and reads its record of the accounts it holds (nothing is unpacked), so
-  a backup renamed by hand may not be found. It says which file it chose before it
-  asks. If a newer backup made on this computer does not hold the account, or
-  cannot be read, it says so and names both files. If no backup holds the account
-  it says so and changes nothing. The zip is still checked against its own counts,
-  below, before anything changes.
-* **The zip is checked against its own counts before anything is changed.** The
-  product (a Solo backup restores only into a Solo), the number of accounts, and
-  the account's files, bytes and directories must match what was unpacked. Any
-  difference stops the restore with nothing changed.
-* **It says what will be replaced, and asks once.** The default answer is no.
-  `no.query` skips the question.
-* A VOC entry that holds the account's old path is rewritten to the new one. A
-  pointer to somewhere outside the account is listed, not followed.
+**If a newer backup made on this computer does not hold your account** — or
+cannot be read — SD says so before it asks you to go ahead, and names both
+files. You can still answer `n`. If **no** backup holds it, SD says so and
+changes nothing. Whichever backup is picked is still checked against its own
+contents in full before anything is changed, and one made on another computer is
+never picked. `no.query` skips the questions, as with a named archive.
 
-**The restore does not happen while you are in the account.** The account being
-restored is your own, so the restored copy is put aside and SD says it is waiting.
-**Nothing has changed until SD is restarted:**
+**`latest` only considers backups SD named itself**, `SD-<computer>-sduser-<yyyymmdd-hhmmss>.zip`
+or the same with `all`. A backup you have renamed is never picked: restore it by
+giving its name (`restore.account myfile.zip`). A bare name is looked for in the
+saved folder; a name with a folder in it is used as given.
 
-```
-sd-solo -restart
-```
-
-When SD starts it swaps the restored account in, before any session exists. The
-account you had is **kept**, in a folder beside it named `.sdrestore.previous`, so
-a restore can be undone by hand. What happened is written to `sdrestore.log` in
-`%USERPROFILE%\SDCoreSolo`; it ends with `SOLO-RESTORE APPLIED` when the swap
-worked. **The audit trail** gets a line when the restore has put the copy aside,
-`restore.account account=sduser archive=<backup file name>`, naming the file and
-not its folder; the swap itself is in `sdrestore.log`, not in the audit trail.
-
-**Restoring needs SD to be the only session.** Nobody else may be signed in while
-a backup or restore runs, and new sign-ins are refused until it finishes.
-
-## The backup folder: `set.backup.directory`
+## `set.backup.directory`
 
 ```
-set.backup.directory folder
+set.backup.directory directory
 set.backup.directory
 ```
 
-With a folder, the verb makes it if it does not exist, proves SD can write in
-it, and remembers it in `sd.conf` as `BACKUPDIR=`. With no folder it shows the one
-that is remembered and changes nothing.
+After `admin`, saves the folder that `backup.account` writes to and
+`restore.account` reads from, so it need not be typed each time. **It creates the
+folder if it is not there**, checks that you can write to it, and keeps it in
+`sd.conf` (`BACKUPDIR=`), where it takes effect at once — no restart. On its own
+it shows the saved folder and changes nothing.
 
-**The folder must be a full path**, such as `C:\Backups` or `P:\backups`. A path
-that depends on the current folder is refused.
+With a folder saved, `backup.account` no longer needs `to`; with none saved it
+asks for one and saves the answer exactly as this verb would. `restore.account`
+does the same for an archive named without a folder (`restore.account` with
+`no.query` has nobody to ask and refuses instead). `to directory`, or an archive
+name that carries a folder, still works and changes nothing that is saved.
 
-**You do not have to run it first.** If no folder is remembered, `backup.account`
-and `restore.account` ask for one and remember the answer exactly as this verb
-would. `restore.account` with `no.query` has nobody to ask and refuses instead.
-
-**An older SD Core Solo will not start on an `sd.conf` that carries a `BACKUPDIR`
-line.** SD stops at start-up on any key it does not know. Remove the line before
-going back to an older release.
+**The folder must be a full path**, such as `C:\Backups` or `P:\backups`; a
+path that depends on the current folder is refused. **An older SD Core Solo will
+not start on an `sd.conf` that carries a `BACKUPDIR` line**, because SD stops at
+start-up on any key it does not know: take the line out before going back to an
+older release.
 
 ## Backups and restores on one screen: `tool.backups`
 
@@ -113,12 +108,14 @@ tool.backups
 
 A full-screen page for the administrator (`admin` first; a window of 140 columns by 43 lines or
 more). The top box names the saved backup folder, says how many archives it holds, and says
-**whether another session is signed in**: `backup.account` and `restore.account` both run only when
-every other session has logged out, so the page lists the other sessions and **shows no box for a
-command while any is there**. The list is the archives of the folder (the files
-`SD-host-...-yyyymmdd-hhmmss.zip`), newest first: when each was made, its size, and how many accounts
-it holds. The box at the foot shows the manifest of the one under the cursor, read without unpacking
-anything.
+**whether another session is signed on**: `backup.account` and `restore.account` both run only when
+every other session has logged out, so the page lists the other sessions (the same check the verbs
+make) and **shows no box for a command while any is there**. The list is the archives of the
+folder (the files `SD-host-...-yyyymmdd-hhmmss.zip`), newest first: when each was made (from its
+name), its size, how many accounts it holds and for which product (from its manifest). The box at
+the foot shows the manifest of the one under the cursor, read without unpacking anything: the
+product, the SD version, the host and the date, and the account with its files, bytes and
+directories.
 
 | Key | Runs |
 |---|---|
@@ -133,19 +130,23 @@ administrator again and write their own audit lines. **A restore replaces the ac
 its box says so and wants the word `restore` typed (in either case). The verb's own question
 (Enter is No) cannot be answered through a page, so the page gives `no.query` after its box has
 asked; it does not give it any other way. An archive that holds an account other than `sduser` is
-refused by the page, which names it. As at the prompt, the restore is prepared now and the swap
+refused by the page, which names it. As at the prompt, the restore of the account you are using is prepared and
 happens the next time SD starts. Where a command cannot be done, the verb says why and the page
 shows its last line on the status line. `F5` reads the folder, the archives and the sessions again,
 `F1` explains the page and `Ctrl-Q` leaves. Opening the page writes the audit line `tool start app=tool.backups`.
 
-## What the system looks like: `settings.report`
+## `settings.report`
 
 ```
-settings.report {folder}
+settings.report {directory}
 ```
 
-Writes a text report of the system's settings for you to keep. **Nothing reads it
-back**: it is a record for you, not something that can be restored.
+Writes, or shows, a **plain-text record** of the settings — `sd.conf`, the
+policy, the mode, the API and ssh, the service — to keep for reference. Nothing
+reads it back, and it never contains a password or a private key. Its `[mode]` section says
+whether the computer is managed; when the register of passwords cannot be opened it says so
+(*unknown (the credential register could not be read, status N)*) rather than claiming
+*not managed*.
 
 ## See also
 

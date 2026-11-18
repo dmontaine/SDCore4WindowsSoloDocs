@@ -8,8 +8,6 @@ damaged (after a crash, a full disk, a restore from a bad copy), or to give a
 file back disk space it no longer needs. It has no effect on a file that is
 sound.
 
-Solo's banner reads `SDFIX WS2.0-0`.
-
 ## The short version
 
 ```
@@ -75,7 +73,7 @@ files found matching given name(s)*.
 | `-R` | Recover disk space: shrink the primary subfile and rewrite the overflow subfile with the free blocks squeezed out. **Not combinable with `-F` or `-Q`**: `-r cannot be combined with -f or -q: run the fix first, then -r on its own`, status 1, and the file is not touched. Add `-C` or `-Z` to make it check first. |
 | `-Z` | Clear the dead space at the end of each group (implies `-C`). **Writes to the file.** |
 | `-B` | No progress bar. Use it when you log or redirect, since the bar is drawn with carriage returns. |
-| `-V` | Verbose. Changes the output of `-R` only (a line for every block it moves); it does nothing to a check. Not listed in the usage text. |
+| `-V` | Verbose. Changes the output of `-R` only; it does nothing to a check. Not listed in the usage text. |
 | `-L` | Log everything the program prints, except the banner, to `sdfix.log` in the current folder. |
 | `-Lname` | The same, to the file `name`. The rest of the word is the name, so put `-L` last in a joined word (`-BLcheck.log`). An existing log is overwritten. |
 | `-I` | Interactive mode. Refused unless the configuration file sets `DEBUG` with bit 2 on. Not listed in the usage text. See below. |
@@ -86,14 +84,15 @@ The usage text printed for a bad option names only `-F`, `-L`, `-Q`, `-R` and
 **Exit status.** The program's status is 0 if every pathname could be processed
 and **1 if any of them could not**: it was not a hashed file, was open in SD,
 could not be opened, had a path too long for its index subfile names, or its
-overflow subfile had a wrong magic number (a missing file followed by a
-good one ends 1, and the good one is still checked). Finding and even fixing
+overflow subfile had a wrong magic number (the status is that of every
+pathname, so a refused file followed by a good one still ends 1). Finding and even fixing
 errors gives 0. Each file also prints a line ` SDFIX processed:  name   Status: n`.
 
 **A path of 252 characters or more is refused**: `The path is too long:
 the name of the last index subfile does not fit in 255 characters`, `Status: 1`,
 and nothing more is read. The check looks for index subfiles under all 32
 possible names, and with a path this long the names of AK 8 and up do not fit.
+The same applies to the relocated index folder, if the header names one.
 (Windows itself will not make a folder of that length without long paths
 enabled; your SD folder is nowhere near it.)
 
@@ -109,7 +108,7 @@ carries on with the check without waiting for any further answer. At the *Press
 return* pause the end of input means "stop paging". The *Dump and rebuild*
 question uses the same routine. To answer the questions from a
 script, pipe the answers, one character each: `'Y' | sdfix -B -Q file` repairs a
-file and `'N' | sdfix -B -Q file` does not (PowerShell; the line end it adds
+file and `'N' | sdfix -B -Q file` does not (in PowerShell; the line end it adds
 does no harm). PowerShell has no `<`: for "input that ends" use `$null |
 sdfix ...` or `cmd /c "sdfix ... < NUL"`. If the output is long enough to page,
 start the answers with `s`.
@@ -135,8 +134,8 @@ carriage returns) after *Checking data groups...*. A file that has indexes adds
 
 ## Fixing errors
 
-A scratch file was damaged so that its minimum modulus and its header record
-count were wrong. A check reports them and changes nothing:
+Suppose a file's minimum modulus and its header record
+count are wrong. A check reports them and changes nothing:
 
 ```
 Minimum modulus is invalid (1645215744)
@@ -175,7 +174,7 @@ Overflow subfile contracted to 231424 bytes
 
 Afterwards `%0` was 432,128 bytes and `%1` 231,424, and a check was clean. The
 file was put back in an account and read through SD: `count` found the 305 records
-and a `select` found the five long ones.
+and a `select` found the five long ones. `-V` adds a line for every block it moves.
 
 **`-R` rewrites the file in place and is the most dangerous option.**
 
@@ -221,13 +220,4 @@ sdfix -B -F -Lfix-20261119.log $env:USERPROFILE\SDCoreSolo\user_accounts\sduser\
 ```
 
 The log has everything but the banner and the progress bar, and the lines
-` SDFIX processed:  name   Status: n`. `-Lfix-demo.log` makes that file in
-the current folder.
-
-## See also
-
-[sdfix: what it checks and repairs](20a-sdfix-checks-and-repairs.html) is the
-second half of this page. [sdidx](21-sdidx.html) moves a file's indexes.
-[sdconv](22-sdconv.html) converts compiled programs between byte orders.
-[Backing up and restoring the account](06c-backup-and-restore.html) is the way to
-have the copy this page keeps asking for.
+` SDFIX processed:  name   Status: n`.

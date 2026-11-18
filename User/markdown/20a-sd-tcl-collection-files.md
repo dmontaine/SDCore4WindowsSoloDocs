@@ -217,7 +217,7 @@ and `/c{path}` shows one element: see [SD Basic - Debugging](17-sd-basic-debuggi
 ## What does not work
 
 `readv` and `writev` of a field number have no meaning on a collection file, and `matread` is refused. **`analyze.file` does not
-say that a file holds collections**, and `micro` is not for a collection record: use `ced`, the `ide` (F12) or `ed`.
+say that a file holds collections**. Edit a collection record with `ced`, the `ide` (F12) or `ed`.
 
 ## See also
 

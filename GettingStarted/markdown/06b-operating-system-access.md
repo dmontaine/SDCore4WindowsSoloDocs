@@ -158,54 +158,71 @@ account's own directory, at your own Windows permissions:
 hello-from-the-shell
 ```
 
-**Never type `sh` with nothing after it in a script.** The configured shell
-for the bare form is interactive — `config` reports it as
+**A bare `sh`, with nothing after it, starts an interactive shell** (Windows
+PowerShell; the filter below is for a typed command). `exit` brings you back
+to the SD prompt. It needs the `sh` switch like any other `sh`: an account
+without it is refused first, with "<name> is not permitted to use the operating
+system shell".
+
+**Never type `sh` with nothing after it in a script.** The configured shell for the
+bare form is interactive (`SH` in `config`: `powershell.exe -NoProfile -NoLogo`), so a
+bare `sh` in a piped session, a phantom or a scheduled job hands control to a shell
+with nobody at the keyboard and **waits for ever**. The `SH1` form, which is what
+`sh command` uses, is `-NonInteractive`.
+
+## The shell you get is Windows PowerShell 5.1
+
+Not `pwsh`, and the difference bites:
+
+**`&&` and `||` do not exist in that PowerShell**, and SD refuses a command that
+holds one before PowerShell sees it (see the next section). Nor do the ternary,
+null-coalescing or null-conditional operators. Chain with `;` in a script, and
+test with `if ($?) { … }`. Each `sh` is a new shell, but **the working directory
+persists between them**.
+
+## One rule about the shape of the command, for everybody
+
+**The verb refuses a command that contains `;`, `|`, `&`, `$`, a backquote,
+`<`, `>` or a newline**, before anything runs:
 
 ```
-SH        C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NoLogo
-SH1       C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -NonInteractive -Command
-```
-
-so a bare `sh` in a piped session, a phantom or a scheduled job hands control to
-a shell with nobody at the keyboard and **waits for ever**. The `SH1` form,
-which is what `sh command` uses, is `-NonInteractive`.
-
-## A filter on the command
-
-**No session gets a pipe, a redirect or a chain at the prompt.** `sh` refuses a
-command that holds `;`, `|`, `&`, `$`, a backquote, `<`, `>` or a line break, for
-everyone, the administrator included and switch or no switch, with `Error 2
-executing operating system command`. The filter stops a one-line command being
-turned into two. For more than one step, write a script and run the script:
-`sh powershell -File .\nightly.ps1`.
-
-```
+:sh echo hi; dir
+Error 2 executing operating system command
 :sh echo alpha-beta | findstr alpha
 Error 2 executing operating system command
 :sh echo gamma > zzsh.txt
 Error 2 executing operating system command
 ```
 
-**That is a sanitizer, not a permission.** It stops a one-line command being
-turned into two by accident — a record id or a variable pasted into it — and it
-is applied the same way to everyone. A plain command with arguments is fine:
-`sh Get-ChildItem -Name`. **A bare `sh`, with nothing after it, starts an
-interactive shell** (the filter is for a typed command); `exit` brings you back
-to the SD prompt. It needs the `sh` switch like any other `sh`.
+That is a sanitizer on what a one-line command may look like — a safety
+measure against an accidental injection, not a permission — and it applies to
+everyone, the administrator included, whether or not the switch is on. So **no
+pipe, no redirection, no chaining and no variable expansion is available from
+the prompt.** What an account that has the switch can do about that is the
+obvious thing: write the work into a script file and run the script
+(`sh powershell -File nightly.ps1`, or `sh nightly.cmd`). The script's own
+contents are not filtered. This is why turning `sh` on is a decision to give a
+person a shell on the computer, not a decision to give them a restricted one.
 
-## The shell you get is Windows PowerShell 5.1
-
-Not `pwsh`, and the difference bites: inside a script, **`&&` and `||` do not exist**, nor do the ternary,
-null-coalescing or null-conditional operators. Chain with `;`, and test with
-`if ($?) { … }`.
-
-Each `sh` is a new shell, but **the working directory persists between them**:
+## SD refuses to nest
 
 ```
-:sh Set-Content zzsh.txt gamma
-:sh Get-Content zzsh.txt
-gamma
+:sh sd-solo
+SD is already running in this session - type EXIT to return to it.
 ```
+
+The child shell is marked, and SD checks the mark:
+
+```
+:sh Get-ChildItem Env:SD_SESSION
+Name                           Value
+----                           -----
+SD_SESSION                     1
+```
+
+**That is worth knowing when writing a script for `sh` to run** — anything it
+invokes inherits `SD_SESSION`, so a script that starts SD as part of its work
+will be refused, wherever it is called from.
 
 ## `OS.EXECUTE` is not filtered
 

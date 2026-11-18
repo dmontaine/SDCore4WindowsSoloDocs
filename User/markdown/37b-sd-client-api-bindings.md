@@ -116,6 +116,6 @@ A PHP string is already a string of bytes, so the marks pass through unchanged. 
 
 ## Continued in
 
-[SD BASIC - Python Integration](37a-sd-basic-python-integration.html) — the
+[Embedded Python](37a-sd-basic-python-integration.html) — the
 other direction: a BASIC program reaching out to Python, rather than a
 program outside SD reaching in.

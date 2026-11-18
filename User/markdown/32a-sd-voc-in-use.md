@@ -102,8 +102,10 @@ Removes the record. **`.d` *name* at the command prompt asks first**;
 `.s` writes stack lines *s* to *e* into the VOC as *name* — a sentence
 when the range is one line, a paragraph when it is more. `.r` loads a
 sentence or paragraph from the VOC into the stack. **The record type
-follows from what you saved** rather than from anything you say. A new name is stored in
-lower case; saving over an existing record keeps its name.
+follows from what you saved** rather than from anything you say. **A new record is saved
+under the name in lower case**, however you typed it. A name already in the VOC is found
+in any case and you are asked "Overwrite VOC record ...?" as before; if you say yes the
+record keeps the name it has.
 
 ### Listing the VOC by type
 
@@ -205,9 +207,9 @@ wrote.
 **The `M` (menu) record type is removed.** A VOC record of that type is no
 longer dispatched; the home screen (`home`, or `menu`) is the menu system.
 
-**`EDIT` runs.** It was once exactly the kind of VOC entry described
-above — present but undispatchable, its type field reading
-`Verb - Full screen editor` rather than `V`. It is a real `V` record now, a working full-screen editor. See [SD
+**`EDIT` runs.** It is a real `V` record, a full-screen editor (Microsoft Edit,
+behind the `os` switch), not an undispatchable entry of the kind described
+above. See [SD
 VOC - Structure and Usage](32-sd-voc-structure-and-usage.html#what-the-shipped-voc-holds).
 
 ## See also

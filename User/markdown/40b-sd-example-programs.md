@@ -8,12 +8,10 @@ compiled. Nothing has to be copied or set up to try one: at the prompt, type
 run examples.bp cs01.hello
 ```
 
-The installer puts the file into the account on a new installation, a reload of kept data and an
-upgrade, so an installation made before the file existed gains it when it is upgraded, and every
-upgrade refreshes the programs SD ships. A program of your own that you add to `examples.bp`
-under another name is kept. Solo has no edit gates, so you may change a shipped program in place,
-but **an upgrade puts the shipped programs back**, so to change one for good, copy it to your own
-`bp` file first:
+The installer puts the file into the account, and an upgrade refreshes the programs SD ships.
+A program of your own that you add to `examples.bp` under another name is kept. Solo has no
+edit gates, so you may change a shipped program in place, but **an upgrade puts the shipped
+programs back**, so to change one for good, copy it to your own `bp` file first:
 
 ```
 copy from examples.bp to bp cs06.fizzbuzz
@@ -21,11 +19,9 @@ basic bp cs06.fizzbuzz
 run bp cs06.fizzbuzz
 ```
 
-`list examples.bp` names them all; `ct examples.bp cs10.recursion` shows one.
-
-There are no commands to load or remove the programs. If the installer could not put them into
-the account, its report says so in a WARNING line; installing again over the installation (an
-upgrade) tries again.
+`list examples.bp` names them all; `ct examples.bp cs10.recursion` shows one. There is no
+command to load or remove the programs: the installer puts them in and an upgrade refreshes them.
+If they were not put into the account, installing again over the installation (an upgrade) puts them in.
 
 ## A first course in programming
 

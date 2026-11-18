@@ -13,8 +13,6 @@ You can relocate an index at creation from SD: `create.index` *file* *field*
 `pathname` *path*. `sdidx` is for everything after that, and for the case where
 SD is not running.
 
-Solo's banner reads `SDIDX WS2.0-0`.
-
 ## The short version
 
 ```
@@ -25,16 +23,18 @@ sdidx -q $env:USERPROFILE\SDCoreSolo\user_accounts\sduser\orders      # where ar
   (`Copy-Item -Recurse` in PowerShell). `-m` deletes the old index files
   afterwards and `-d` deletes indexes. Neither can be undone.
 * **Give full paths, for the data file and for the index folder.** Either
-  slash will do. A relative index path given to `-m` or `-p` is made absolute
-  from the current folder before it is stored, as `C:\...`. A path longer than 255 characters, which the
-  file header cannot hold, is refused: `Path is too long (the limit
-  is 255 characters)`, status 1.
+  slash will do. The data path is resolved for you. A relative index path given
+  to `-m` or `-p` is made absolute from the current folder before it is used and
+  stored, as `C:\...` (SD's own current folder is somewhere else, so a relative
+  path would not be found). Other `..` parts are kept as typed. A path longer
+  than 255 characters, which the file header cannot hold, is refused: `Path is
+  too long (the limit is 255 characters)`, status 1.
 * **Close the file in every session first.** The program refuses if the file is
   open within the running SD: see below. **It refuses nothing if SD is not
   running**, because it has nothing to ask.
-* If `-m` or `-d` cannot delete an old index file it says so and exits 1; it
-  does not say "moved" or "deleted" over a file that is still there. **Check the
-  result with `-q` after `-m` or `-p`.**
+* **Check the result with `-q` after `-m` or `-p`.** If `-m` or `-d` cannot
+  delete an old index file it says so and exits 1; it does not say "moved" or
+  "deleted" over a file that is still there.
 
 ## Where it is and who can run it
 
@@ -105,6 +105,13 @@ file to the new place; writes the new path into the data header; **then deletes
 the old index files.** If it stops before the header is written, the copy at the
 target is left behind and the file is as before.
 
+**If the target folder cannot be made, it says so and changes nothing.** It
+prints `Cannot create directory` *akpath*`:` and the reason on standard output,
+and ends with status 1. The reason is the operating system's, or *a file of that
+name exists* when a component of the path is a file. *akpath* in the message is
+the whole path as you typed it, not the component that failed, and the indexes
+and the header are where they were.
+
 * **With no `akpath`, it moves the indexes back** into the data file's own
   folder and clears the path in the header.
 * **Only the index files are deleted from the old place**: the `%2`,
@@ -118,12 +125,7 @@ target is left behind and the file is as before.
   deleted`, and exits 1. The move itself is complete: the header names the new
   place.
 * It needs room for a second copy of the indexes while it moves them.
-* **If the target folder cannot be made, it says so and changes nothing.** It
-  prints `Cannot create directory` *akpath*`:` and the reason on standard
-  output, and ends with status 1. The reason is the operating system's, or *a file
-  of that name exists* when a component of the path is a file. *akpath* in the
-  message is the whole path as you typed it, not the component that failed, and
-  the indexes and the header are where they were.
+
 ### `-p`, point
 
 `-p` writes the path into the header and moves nothing. Use it when you have
@@ -136,7 +138,9 @@ is out of date.
   2 [2]*.
 * **On success it says what `-q` would now say**: `Index directory is
   C:\sdi_demo\byhand`, or `Indices are not relocated` when `akpath` is omitted.
-  A failure to write the header is reported and exits 1.
+  A failure to write the header is reported and exits 1. SD's own account
+  restore does not rely on this line: it runs `-q` itself and checks that it
+  names the path.
 * Omit `akpath` to say "the indexes are in the data file's folder".
 * It does not know about your account folder. It will point a file at any folder
   you can write, inside `user_accounts\sduser` or not.

@@ -33,14 +33,13 @@ where the passphrase lives before it writes the application.
 
 | Layer | What it is | Protects against | Does not protect against |
 |---|---|---|---|
-| The disk | encryption of the volume the SD folder is on, by the operating system (BitLocker, or the file system's own encryption). SD is unchanged | a stolen or discarded disk; a backup copied off the machine | anyone signed in to the running system; an administrator; a mounted volume |
+| The disk | encryption of the volume the SD folder is on, by the operating system (BitLocker, or the file system's own encryption). SD is unchanged. It has a page of its own in this set ([Encrypting the data SD keeps on disk](18a-data-at-rest.html)) | a stolen or discarded disk; a backup copied off the machine | anyone signed in to the running system; an administrator; a mounted volume |
 | The program | `sdkey()` and `sdencrypt()` in an application | a copy of the SD files, a backup, a person with file access but not the key | the program itself, its variables, anyone who holds the key |
 | The conversion | `XE` in a dictionary item, with the key held in a ring in the process | the same, and the field reads decrypted for a session that holds the key | the same, and an administrator or a debugger on that process |
 
 None of them hides the record id, the other fields, which values are empty or
 how long a value is. The second and third are the application's; the first is
-the machine's. How to put SD's folder on an encrypted drive is on
-[Encrypting the data SD keeps on disk](18a-data-at-rest.html).
+the machine's.
 
 ## What was removed
 
@@ -50,9 +49,8 @@ the machine's. How to put SD's folder on an encrypted drive is on
 | `encrypt()` and `decrypt()` | Removed and replaced by `sdencrypt()` and `sddecrypt()`. The old names do not compile |
 | `SD_EUID_SET` and `SD_EUID_RESTORE` | Removed. They were the Linux setuid model, which has no meaning on Windows. Keys 102 and 103 are left unused, so an old program that calls one gets the answer any unknown key gets |
 
-**The Python half of SDEXT is not on this list.** It was removed along with
-the embedded interpreter, then rebuilt as a separate helper process,
-`sdpy.exe`, rather than restored as a library inside `sd-solo.exe` — the two cannot
+**The Python half of SDEXT is not on this list.** It is a separate helper
+process, `sdpy.exe`, not a library inside `sd-solo.exe` — the two cannot
 safely share a process (`long` is a different width on each side of the MSYS2
 boundary). `SDPYFUNC.H` and its twenty-one `PY_*` functions are documented in
 full in the User set's *SD BASIC - Python Integration* chapter. A session may
@@ -84,6 +82,14 @@ application derives the key once per run.
 **10207** the passphrase is empty or over 65,536 bytes, **10204** a key of the
 wrong length (a passphrase passed straight in as the key is this), **10201** a
 wrong key or a damaged value.
+
+### A passphrase is not a key
+
+`sdencrypt('The quick brown fox', 'secretkey', 202)` returns nothing and sets
+`status()` to **10204**: a passphrase is not a key. The way to turn a passphrase
+into a key these functions accept is the function above that does it
+(`sdkey()`); `sdext()`'s `SD_KEYFROMPW` is internal-only, so an ordinary program
+cannot call it.
 
 ## The XE conversion and the key ring
 
@@ -122,11 +128,16 @@ is encrypted with a fresh nonce), `total` adds cipher text, an index holds ciphe
 text and no plaintext reaches the disk, and `copy` moves the stored value. The
 User page lists each.
 
-**`encrypt.key` applies no strength rule to the passphrase.** The rule for SD
-passwords is not applied, because this is not an SD password: nothing is stored
-or compared. The tighter alternative, applying that rule or a minimum length, is
-a decision for the owner. A site that wants one can write it into the
-application that asks for the passphrase.
+**`encrypt.key set` refuses a passphrase of fewer than 12 characters** (message
+12999) and sets no key: it says `The passphrase has fewer than 12 characters. No
+key was set.` The check comes after the two typings are compared, so two
+different short ones are still reported as different. The rule for SD passwords
+is not applied, because this is not an SD password: nothing is stored or
+compared, and the length is the only test. `sdkey()` itself has no minimum: a
+program that calls it directly may pass a shorter passphrase (it must not be
+empty), and a site that wants a stricter or a looser rule can write it into the
+application that asks for the passphrase. A long phrase of words is a better
+passphrase than eight characters of every kind.
 
 ## The SDEXT interface
 
@@ -144,17 +155,16 @@ internal function table, so an ordinary account does not merely get refused —
 it gets a misleading error. An unknown function is read as a matrix reference,
 so the complaint is about a `dim` statement the program does not contain,
 reported at the last line rather than at the call. That behavior is covered by
-*SD Basic - Restricted Commands* in the User set.
-
-`$internal` needs both halves: the compiler tests for internal mode **and** for
-the administrator flag. Internal mode alone is not safe, because internal programs are the only ones that may set the
+*SD Basic - Restricted Commands* in the User set. `$internal` needs both halves:
+the compiler tests for internal mode **and** for the administrator flag. Internal
+mode alone is not enough, because only an internal program may set the
 administrator flag. On Solo the door that setup steps use, `sd-solo -internal`,
 admits a session only on a one-shot marker file the installer writes — see
 [Security](12-security.html#the-installers-own-door).
 
 ### The keys
 
-Fifteen are implemented. Every binary value is base64, because the interface
+Every binary value is base64, because the interface
 carries NUL-terminated strings and a raw 32-byte digest would contain a mark
 character about one time in nine. The argument buffers are zeroed when a call
 ends.
@@ -215,5 +225,5 @@ sign-in.
 
 `SD_ENCODEHX` (201) and `SD_ENCODE64` (202) are defined alongside the SDEXT
 keys and are easily mistaken for them. They are not keys and `sdext()` does not
-implement them — passing either as a key returns a key error. They are the
+implement them: passing either as a key returns a key error. They are the
 third argument to `sdencrypt()` and `sddecrypt()`.
