@@ -80,8 +80,9 @@ your own that sends 49 to install a key must send 72.
   lands in the file is one line: `restrict`, the key and the tag
   `sdcoresolo-managed`, in Solo's own key file,
   `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`: see [ssh access](08-ssh-access.html).
-- **At most four server keys are kept.** A refusal says why in one of five ways:
-  the request is unknown, the key or fingerprint is not valid, four keys are
+- **At most four server keys are kept.** A fifth is refused (*The ssh key request
+  was refused: four Solo ssh keys are already installed*). A refusal says why in
+  one of five ways: the request is unknown, the key or fingerprint is not valid, four keys are
   already installed, ssh is not set up on this Solo, or it could not be carried
   out. **Your own ssh keys are
   never added to, listed, counted or removed.**

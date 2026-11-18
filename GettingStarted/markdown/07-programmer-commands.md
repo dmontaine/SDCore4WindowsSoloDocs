@@ -69,6 +69,12 @@ Either verb writes the record to a working copy, opens the editor on it,
 reads it back, and asks whether to save. For a `bp` record it then offers
 the compile and the catalog.
 
+**Both run outside SD, so they need the `os` switch**, which is off as
+delivered (without it the verb says it is not available to the account; the
+administrator turns it on with `set.os.access os on`, and `ed`, the line
+editor, needs nothing of the kind). See
+[Operating system access](06b-operating-system-access.html).
+
 **Both are terminal editors**, so both work over ssh as well as at the
 keyboard. **A session with no terminal is refused** — an API session or a
 piped script has nowhere to draw a full screen, and is told so.

@@ -42,7 +42,8 @@ backup of another product (a Solo backup restores only into a Solo).
 `restore.account` checks the archive, prepares it, and says so; **nothing has
 changed until SD is restarted**, with `sd-solo -restart`. When SD starts it swaps
 the restored account in, before any session exists. The account as it was is kept
-beside it, in `.sdrestore.previous`, so a restore can be undone by hand, and
+beside it, in `.sdrestore.previous`, until the next restore, so a restore can
+be undone by hand, and
 every step is written to `sdrestore.log` in `%USERPROFILE%\SDCoreSolo`; it ends
 with `SOLO-RESTORE APPLIED` when the swap worked. **The audit trail** gets a line
 when the restore has put the copy aside, `restore.account account=sduser
