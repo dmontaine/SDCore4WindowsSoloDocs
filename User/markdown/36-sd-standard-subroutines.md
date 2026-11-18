@@ -1,8 +1,8 @@
 Title: SD Standard Subroutines
 Subtitle: The cataloged names beginning with !, which of them an application may use, and how each is called.
 
-**This release ships 177 cataloged routines whose names begin with `!`**.
-The figure grows as features are added, so read it as approximate. Twenty-two are the
+**SD ships 178 cataloged routines whose names begin with `!`** — counted from
+the `$catalog` lines of its programs. The figure grows as features are added, so read it as approximate. Twenty-two are the
 embedded Python interface (`!PY_CREATEDICT` and the rest — see
 [Embedded Python](37a-sd-basic-python-integration.html); this page does not
 repeat them) and forty-nine, all named `!SCREEN_...`, are the routines behind
@@ -164,7 +164,7 @@ that has not unlocked `admin`, and some change the state of the computer.
 ## What is not here
 
 Documentation for other MultiValue systems describes `!`-prefixed routines SD
-Core for Windows does not have. Three a reader may come looking for:
+does not have. Three a reader may come looking for:
 
 | | |
 |---|---|

@@ -116,20 +116,21 @@ start the answers with `s`.
 ## A check, with nothing wrong
 
 ```
-> sdfix -B C:\sdi_demo\plain
+> sdfix C:\sdi_demo\plain
 [ SDFIX WS2.0-0   Copyright, Ladybridge Systems, 2007.  All rights reserved. ]
 
 Processing C:\sdi_demo\plain
 Checking file header...
 Checking data groups...
+*************************-------------------------| 1/2**************************************************| 2/2
 Checking free chain...
 Checking for unreferenced blocks...
 0 overflow blocks allocated, 0 on free chain
  SDFIX processed:  C:\sdi_demo\plain   Status: 0
 ```
 
-Without `-B` a row of asterisks, the progress bar, is redrawn on one line (with
-carriage returns) after *Checking data groups...*. A file that has indexes adds
+The row of asterisks is the progress bar: it is redrawn on one line and appears
+like this when the output is captured. A file that has indexes adds
 *Checking AK 0*, *Checking AK free chain* and *Checking I-type chain*.
 
 ## Fixing errors
@@ -138,14 +139,14 @@ Suppose a file's minimum modulus and its header record
 count are wrong. A check reports them and changes nothing:
 
 ```
-Minimum modulus is invalid (1645215744)
+Minimum modulus is invalid (1660944384)
 Record count error: Actual 000000000040, file header (adjusted) 000117440511
 ```
 
 With `-Q`, answering `n` and then `y`:
 
 ```
-Minimum modulus is invalid (1645215744)
+Minimum modulus is invalid (1660944384)
 Fix? N
 Record count error: Actual 000000000040, file header (adjusted) 000117440511
 Fix? Y
@@ -153,8 +154,8 @@ Fix? Y
 ```
 
 The first error is still there on the next run; the second is gone. `-F` does
-the same for every error, with no questions. Which
-errors can be fixed, and how, is on the next page, [sdfix: what it checks and
+the same for every error, with no questions (`Corrected by resetting to 1`). Which
+errors can be fixed, and how, is on the next page of this set, [sdfix: what it checks and
 repairs](20a-sdfix-checks-and-repairs.html). That page also covers the
 dump-and-rebuild of mis-hashed groups, interactive mode, and what the tool will
 not do.
@@ -162,19 +163,19 @@ not do.
 ## Recovering space with `-R`
 
 A file that once held 3,000 records and now holds 305 keeps all the disk it
-grew to: `%0` was 2,668,544 bytes and `%1` 1,247,232.
+grew to: `%0` was 428,032 bytes and `%1` 223,232.
 
 ```
 > sdfix -B -R C:\sdi_demo\big
 Processing C:\sdi_demo\big
 Recovering space
-Overflow subfile contracted to 231424 bytes
+Overflow subfile contracted to 32768 bytes
  SDFIX processed:  C:\sdi_demo\big   Status: 0
 ```
 
-Afterwards `%0` was 432,128 bytes and `%1` 231,424, and a check was clean. The
-file was put back in an account and read through SD: `count` found the 305 records
-and a `select` found the five long ones. `-V` adds a line for every block it moves.
+Afterwards `%0` was 69,632 bytes and `%1` 32,768. The 305 records were read back
+through SD and all were present and the right length (the five long records
+among them). `-V` adds a line for every block it moves.
 
 **`-R` rewrites the file in place and is the most dangerous option.**
 
@@ -199,7 +200,7 @@ works the same without it.
 ```
 > sdfix -B -Z C:\sdi_demo\big-z
 ...
-Dead space cleared in 7 block(s)
+Dead space cleared in 18 block(s)
 ...
 > sdfix -B -Z C:\sdi_demo\big-z
 Dead space cleared in 0 block(s)
@@ -207,8 +208,7 @@ Dead space cleared in 0 block(s)
 
 It walks the groups in the primary subfile and the overflow blocks chained from
 them. It does **not** clear free overflow blocks (those on the free chain), and
-it does not visit the blocks that hold a large record's data (source, not
-provoked). Unlike a plain check it **writes**, so back up and close the file
+it does not visit the blocks that hold a large record's data. Unlike a plain check it **writes**, so back up and close the file
 first, as for `-F`.
 
 ## Writing it down

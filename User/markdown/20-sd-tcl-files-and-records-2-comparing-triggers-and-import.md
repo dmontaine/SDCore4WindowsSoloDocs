@@ -267,13 +267,13 @@ dictionary), so nothing more is asked.
 
 ## Who has these verbs
 
-**Every account has all of them now** — there is no longer a withheld set.
+**Every account has all of them** — none is withheld.
 `ct`, `list.files`, `set.file`, `analyze.file`, `clear.file`,
-`cname`, `compare.files`, `configure.file`, `convert.data`, `copy`,
-`create.file`, `delete`, `delete.file`, `dump`, `file.stat`, `find.file`,
-`fixdir`, `fstat`, `fstat.user`, `hsm`, `import.csv`, `import.json`,
-`import.xml`, `list.triggers`, `oscopy`, `set.trigger`
-are all in every account's VOC. (`set.mode` is not provided.)
+`cname`, `configure.file`, `compare.files`, `copy`, `create.file`,
+`delete`, `delete.file`, `dump`, `file.stat`, `fixdir`, `find.file`, `fstat`,
+`fstat.user`, `hsm`, `import.csv`, `import.json`, `import.xml`, `convert.data`,
+`list.triggers`, `oscopy`, `set.trigger` are all in every
+account's VOC. (`set.mode` is not provided.)
 
 ## What is not here
 

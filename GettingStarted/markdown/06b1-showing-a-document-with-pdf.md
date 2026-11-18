@@ -80,11 +80,13 @@ slash. F1, `?` or a click on a `[?]` explains each box.
 ### Where the documents come from: `docs.install`
 
 The PDFs are generated from the documentation and are not part of the source tree.
-**A release package carries them**, in a folder `pdf` beside the installer, and **the
-installer puts them in the `pdf` directory with `docs.install`**. It also copies the
-release's changes document from beside it (`sd-core-solo-for-windows-<version>-changes.pdf`,
-`.html` and `.md`). An installer run without them says so in its report, and the install
-goes on. At any other time, or for documents of your own, the administrator runs:
+**A release package carries them**, in a folder `pdf` beside the installer (one PDF
+for each chapter of the User and Getting Started documents, the documents the help pages
+name), and **the installer puts them in the `pdf` directory by running `docs.install` on
+that folder**. It checks each document afterwards and says in its report how many
+arrived. An installer run without a package (the installer alone, with no `pdf` folder
+beside it) finds no folder and says so, and the install goes on. At any other time, or
+for documents of your own, the administrator runs:
 
 ```
 docs.install C:/path/to/the/pdf/files
@@ -96,6 +98,15 @@ letters, digits and `. _ -`, ends in `.pdf` and does not begin with a dot, and t
 begins with `%PDF-`; anything else is skipped and named. A document already there is
 replaced. `pdf` alone lists what is installed. `docs.install` is an administrator command
 (`admin` first).
+
+**The changes document comes with the installer.** A release package holds, beside the
+installer, the document that lists what changed in the release as
+`sd-core-solo-for-windows-<version>-changes.pdf`, `.html` and `.md`. The installer copies
+each of those three into the same `pdf` directory, so the PDF opens with `pdf` and the
+HTML and Markdown copies are there beside it. A file is copied only if it is a regular
+file (not a link) with a plain lower case name of the same shape; a file of that kind
+whose name has a capital or another character is left, with a note that says so. An
+installer that was not run from a package finds nothing and says so; the install goes on.
 
 ### The context help: `load.help`
 

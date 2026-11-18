@@ -115,7 +115,10 @@ ticking one.
 
 **An upgrade does not show this page.** It keeps the switches the installation
 has (off, unless an earlier `set.os.access` turned one on), so it neither shuts
-what the administrator opened nor opens what was shut. A silent installation,
+what the administrator opened nor opens what was shut. **`/OSACCESS=none|sh|os|both`**
+on the installer's command line answers the question without the page, on a new
+installation and on an upgrade; on an upgrade it turns on what it names and turns
+nothing off. A silent installation,
 which shows no page, turns nothing on. On a new installation the installer
 writes the answer with `set.os.access`, reads both switches back, and says what
 they are in `install-summary.log`.

@@ -65,9 +65,7 @@ account (LocalSystem, LocalService, NetworkService) has no profile and gets none
 you save, close or quit normally. If the window closes, the connection drops or the IDE is aborted, the next
 time you open that record the IDE asks whether to **use the copy**, **delete it**, or **not open the record**
 (which keeps it); a text typed in an untitled buffer is offered in a new tab. The record itself is not changed
-until you save. A copy that the first version left in the directory `$recovery` of your account is still offered:
-with the recovery copy on it is moved to your profile, with it off it stays where it is until you answer. Turning
-the recovery copy off does not delete copies that exist. `sed` keeps none.
+until you save. Turning the recovery copy off does not delete copies that exist. `sed` keeps none.
 
 **What it does not do:** it has no replace across records, no project files and no completion; it
 edits collection-file records only as JSON text or fields; and an operating-system file is a plain text file in one piece (no NUL, no byte from 248 to 255, 2 MB at

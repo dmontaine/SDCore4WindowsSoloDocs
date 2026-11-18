@@ -19,7 +19,11 @@ that is off as delivered.** The administrator turns a switch on with
 directory (by `OPENSEQ`, `OPENPATH`, `DIR()` and the other routes), the Python
 helper and a VOC pointer to a file outside the account. **The administrator
 needs no switch**: after `admin` a session passes both. The installer asks about
-both, on a new install and on an upgrade, and the default is no.
+both on a new installation, and the default is no; an upgrade keeps the switches
+the installation has.
+
+**A session with no terminal is refused for the editors regardless** — an API
+session or a piped script has nowhere to draw a full screen for an editor.
 
 **When they are on, they run as your Windows user, on an ordinary token.**
 Nothing in SD then stands between a session and the computer beyond what Windows
@@ -54,9 +58,8 @@ error — rather than falling back to somewhere less private.
 each, with the date, time and user:
 
 ```
-2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login password account=sduser via=global
-2026-09-29 00:15:33 user=sduser uid=105 pid=1043 login account=sduser
-2026-09-29 00:15:34 user=sduser uid=105 pid=1043 global password set
+2026-09-30 02:56:31 user=sduser uid=105 pid=1043 login password account=sduser via=stored
+2026-09-30 02:56:31 user=sduser uid=105 pid=1043 login account=sduser
 ```
 
 Every word before the first `=` is lower case, the event names included. What
@@ -91,9 +94,9 @@ there proves nothing by itself. If the event log cannot be reached, SD carries o
 and the file is still written. The installer registers the source on a first
 install and on an upgrade.
 
-**Nothing is ever discarded.** At 1 MB the file is **renamed with the date and
-time and a new one started**. Removing the old ones is your decision; SD will
-not, and they accumulate.
+**Nothing is ever discarded.** When SD starts and the file is 1 MB or more, it is
+**renamed with the date and time and a new one started**. Removing the old ones
+is your decision; SD will not, and they accumulate.
 
 **This is not the error log and does not behave like it.** `sdsys\errlog`
 throws away its oldest half when it fills, and holds diagnostics, not a record

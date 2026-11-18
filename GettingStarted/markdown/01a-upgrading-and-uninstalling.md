@@ -34,9 +34,31 @@ release that installed them. So an upgrade also, for you:
   shipping - but only a record that is still exactly what SD shipped, after
   saving a copy (`restore.voc` puts it back); a record you keep your own
   version of, marked `[locked]`, is left alone;
+- takes the `sd.conf` parameters SD no longer has out of your kept `sd.conf` (SD
+  would refuse to start on one), and says which it removed;
+- converts your account's files to case-insensitive record ids (below);
 - merges and recompiles SD's own dictionaries;
 - catalogs the server's programs in `global.bp.out` again, on a managed
   computer, because the global catalog is one of the files replaced.
+
+**Your files are converted to case-insensitive record ids for you.** Every file
+`create.file` makes treats ids as one whatever the case (see
+[Lower case](11-lower-case.html)), and an upgrade keeps your existing files, which
+were built case sensitive. After the account's VOC is brought up to the release, the
+upgrade reads each file the account's VOC names, **and converts it only if no two of
+its ids differ only by case**, so a conversion cannot lose a record. A file is **left
+exactly as it was** and named in `nocase-upgrade.log` in the Solo folder when:
+
+- it holds two ids that differ only by case (rename or delete one of each pair, then
+  run `configure.file` *name* `no.case` on it);
+- it has alternate key indexes (convert it by hand with `configure.file`);
+- it lies under SDSYS (SDSYS's own files are made new by the install; convert one
+  yourself with `configure.file` *name* `no.case` if you need to);
+- it could not be read or rebuilt.
+
+A walk that did not finish is reported as a failure; what was not converted keeps
+working, and ids are still found typed in any case. When some files were left, the
+install report says **WARNING** and names the log.
 
 Each step reports in `%USERPROFILE%\SDCoreSolo\install-summary.log`, ending
 with a verdict. The startup task is registered again. So is the ssh task
@@ -130,9 +152,24 @@ elevated prompt.
 
 ## Moving the account to another computer
 
-Moving the account is a backup on one computer, a copy of one file, and a restore
-on the other: see [Backing up and restoring the
-account](06c-backup-and-restore.html).
+Moving the account is a backup on one computer, a copy of one file, and a restore on the other.
+There is no verb that does it in one go; the two verbs are described under
+[Administrator commands](06-administrator-commands.html) and in
+[Backing up and restoring the account](06c-backup-and-restore.html).
+
+1. On the old computer, after `admin`: `backup.account`. It writes one zip file to the saved
+   backup directory and says its name.
+2. Copy that file to the new computer (a USB stick, a network share, anything that copies a file).
+3. On the new computer, install SD Core Solo for Windows, sign in, type `admin`, and run
+   `restore.account` with the file's full path. It says what will be replaced and asks first.
+4. **The restore happens the next time SD starts** (`sd-solo -restart`, or stop SD and start
+   it), because it replaces the account you are using.
+
+**What does not come across:** a password (the new computer keeps the passwords it was installed
+with), SD's own system files and settings (`sd.conf`, the global catalog, the ssh and API choices),
+and links in the account. **The backup is an ordinary, unencrypted zip** of every file in
+the account: keep it where only you can read it, and delete it when the move is done. A Solo backup
+restores only to Solo (on Linux or on Windows), never onto the multi-user SD Core.
 
 ## Continued in
 

@@ -188,9 +188,9 @@ copy as text.
 
 ## The examples
 
-Each example is a complete program. Put it in the `bp` file of your account, compile
-it with `basic bp name` and run it with `run bp name` in SD's own window of 140 by 43; the
-screens shown are what that window showed.
+Each example is a complete program. Each was put in the `bp` file of an ordinary
+account, compiled with `basic bp name` and run with `run bp name` on a terminal of
+140 by 43; the screens shown are what that terminal showed.
 
 **All five are already in your account**, compiled, in the file `examples.bp`: `run
 examples.bp hello` runs the first. To change one, copy it to your own `bp` first (`copy from

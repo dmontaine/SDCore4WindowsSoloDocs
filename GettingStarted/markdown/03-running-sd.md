@@ -91,7 +91,7 @@ SD did not shut down cleanly.
 **Starting `sd-solo` from inside `sh`** is refused. The shell that `sh` and
 `os.execute` start is marked as SD's own (the environment variable `SD_SESSION`
 is set in it), and `sd-solo` typed there answers "SD is already running in this
-session - type EXIT to return to it." in every form of the command. It keeps a
+session - type exit to return to it." in every form of the command. It keeps a
 second session from being nested inside the first; it is not a wall, because the
 mark is an environment variable of that shell. A script that `sh` runs and that
 starts SD is refused the same way, wherever it is called from.
@@ -134,9 +134,11 @@ matches**, what happens depends on where the input comes from:
 account, `sduser`, and every session lands in it. `sd-solo -asdsys` is refused,
 saying that the SDSYS account is not entered in SD Core Solo for Windows.
 
-**`sd-solo -u` and `sd-solo -k` need no `admin`.** They are switches on the program,
-outside any SD session, and like `-start` and `-stop` they are the business
-of the user who owns SD. Inside a session, the same jobs are `LISTU` and
+**`sd-solo -u`, `sd-solo -k` and `sd-solo -cleanup` need no `admin`.** They are switches on the program,
+outside any SD session, and like `-start` and `-stop` they are the business of
+the user who owns SD, who is the only user: Solo has no `sdsys` user and no
+second user whose sessions they could show or remove. `-cleanup` clears the entries
+of sessions whose process has gone from the user table. Inside a session, the same jobs are `LISTU` and
 `LOGOUT`, which do need `admin` — see [Sessions and locks](06a-sessions-and-locks.html).
 
 ## Where things are

@@ -61,40 +61,39 @@ computer's keyboard, the global password is the only one accepted.
 
 ## The server's ssh key
 
-**The server cannot know which Windows user this computer's SD belongs to,** and
-ssh needs that name. So over the API, a server session can install the server's
-ssh public key in Solo's own key file, `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`,
-and is told the user name and the port in reply. From then on the server can
-sign in over ssh, on that port, with its key instead of the Windows password.
-The key is an extra: it does not switch the password off. **It is API request
-72** (it was 49 before 2.0-0; 49 now asks the server's revision, as in SD Core),
-so a program of your own that sends 49 to install a key must send 72.
+**The server installs its own ssh key.** The server knows only this computer's
+address and the name `sduser` — not the Windows user name that ssh needs. So after
+it signs in over the API, it asks this computer to install the server's public
+key, and the computer answers with the Windows user name as ssh matches it, its
+host name, the key's fingerprint (`SHA256:...`), `ADDED` or `PRESENT`, the
+fingerprint of Solo's own ssh server's host key and the port to connect to
+(4251). From then on the server can sign in over ssh, on that port, with that
+key instead of the Windows password; the key is an extra and does not switch
+the password off. The same request lists (`LIST`) and removes (`REMOVE`, answered
+`REMOVED` or `ABSENT`) the server's keys. **It is API request 72** (it was 49
+before 2.0-0; 49 now asks the server's revision, as in SD Core), so a program of
+your own that sends 49 to install a key must send 72.
 
-| Request | What it does |
-|---|---|
-| **ADD** | puts the key in `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`. The reply carries your Windows user name as ssh matches it, this computer's name, the key's fingerprint (`SHA256:...`), `ADDED` or `PRESENT`, the fingerprint of Solo's own ssh server key, so the server can check it is talking to the right computer — empty when that is not known — and the port, `4251` |
-| **REMOVE** | takes the key with that fingerprint out; the reply is `REMOVED` or `ABSENT` and the number of the server's keys left |
-| **LIST** | the fingerprints of the server's keys, one per field |
-
-**Only a server session may ask.** A session signed in with the account
-password is refused with *"Only the SD Core server may manage ssh keys"*, and
-nothing changes. A computer with no global password has no server, so nothing
-can ask.
-
-**What lands in the file is one line:** `restrict`, the key, and the tag
-`sdcoresolo-managed`. The key can start SD and nothing else — it gives no shell
-and no port forwarding. **At most four** of these lines are kept, and **your
-own keys in the file are never added to, listed or removed.** A refusal says
-why in one of four ways: the key or fingerprint is not valid, four keys are
-already installed, the request is unknown, or it could not be carried out. Every
-use is written to the audit trail, and a successful one carries the key's
-fingerprint and the address the request came from.
-
-**It needs Solo's own ssh server**, which needs the OpenSSH package's
-`sshd.exe` — see [ssh access](08-ssh-access.html). Without it the request is
-refused. A computer installed before 2.0-0 is moved to the new
-arrangement by an upgrade: the key already added is moved into Solo's key file,
-and the server reaches the computer on port 4251 from then on, not 22.
+- **Only a session signed in with the global password may ask.** The account
+  password and `admin` are refused with *Only the SD Core server may manage ssh
+  keys*, and nothing changes.
+- **The key can start `sd-solo` and nothing else** — no shell, no forwarding. What
+  lands in the file is one line: `restrict`, the key and the tag
+  `sdcoresolo-managed`, in Solo's own key file,
+  `%USERPROFILE%\SDCoreSolo\ssh\authorized_keys`: see [ssh access](08-ssh-access.html).
+- **At most four server keys are kept.** A refusal says why in one of four ways:
+  the key or fingerprint is not valid, four keys are already installed, the
+  request is unknown, or it could not be carried out. **Your own ssh keys are
+  never added to, listed, counted or removed.**
+- **Every use is in the audit trail**, with the key's fingerprint and the address
+  it came from, never the key itself.
+- **It does nothing on a computer with no global password**: there is no server,
+  so nothing can ask.
+- **It needs Solo's own ssh server**, which needs the OpenSSH package's
+  `sshd.exe` — see [ssh access](08-ssh-access.html). Without it the request is
+  refused. A computer installed before 2.0-0 is moved to the new arrangement by
+  an upgrade: the key already added is moved into Solo's key file, and the
+  server reaches the computer on port 4251 from then on, not 22.
 
 **The server's certificate is pinned.** The first time the server's client
 library connects to this computer's address and port, it remembers the

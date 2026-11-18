@@ -64,14 +64,11 @@ has to be replaced by hand.
 If an application cannot log in after an upgrade, check the date of the client
 DLL beside its executable before anything else.
 
-## The library must match the release
+## The library must speak SCRAM
 
-**The cleartext API login is gone.** A client that still sends a password in
+**There is no cleartext API login.** A client that sends a password in
 clear is refused with *"Cleartext login is no longer supported; this server
-requires SCRAM authentication"*, and one that predates SCRAM is refused
-outright. **Use a client library from this release or later** — and confirm
-which build you are actually loading, because a stale 32-bit client is the
-usual culprit.
+requires SCRAM authentication"*. Use the client library that comes with SD.
 
 ## Connecting
 

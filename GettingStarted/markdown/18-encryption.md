@@ -151,8 +151,8 @@ rtnval = sdext(arg, isargmv, key)
 whether `arg` holds several values rather than one.
 
 **It cannot be called from an application.** `sdext` is in the compiler's
-internal function table, so an ordinary account does not merely get refused —
-it gets a misleading error. An unknown function is read as a matrix reference,
+internal function table, so an ordinary account does not merely get refused.
+It gets a misleading error. An unknown function is read as a matrix reference,
 so the complaint is about a `dim` statement the program does not contain,
 reported at the last line rather than at the call. That behavior is covered by
 *SD Basic - Restricted Commands* in the User set. `$internal` needs both halves:
@@ -206,7 +206,9 @@ wiped after use.
 
 ### What uses it
 
-The programs that call `sdext()` are the credential and login ones —
+Every shipped program that calls `sdext()` is an internal program, which runs only
+from the global catalog and cannot be compiled by an ordinary account. They are
+the credential and login ones —
 `apisrvr`, `cred_set`, `cred_verify`, `login`, `sd_get_salt`, `sd_key_from_pw`,
 `sdclient` and `solo_store_pw` (which keeps and reads back the account password
 for `sd-solo <command>`) — the programs for scheduled jobs, phantoms, the remote door and network

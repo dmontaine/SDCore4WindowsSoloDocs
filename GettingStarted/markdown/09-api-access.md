@@ -75,7 +75,6 @@ been chosen at the keyboard, only the global password is accepted.
 allow. A client that calls it gets, at once, *SDConnectLocal is not available in
 SD Core Solo for Windows - connect with SDConnect and the account password*. Use
 `SDConnect` to this computer's own address instead (`127.0.0.1`).
-Use `SDConnect` to this computer's own address instead.
 
 ## The port
 
@@ -252,8 +251,9 @@ folder outside the account is not opened.
 | 64-bit | `sdclilib.dll`, in `%USERPROFILE%\SDCoreSolo\usr\clients\client64` |
 | 32-bit | in `...\usr\clients\client32` |
 
-**Use a client library from this release or later.** One that predates SCRAM
-is refused. See [Client distribution](10-client-distribution.html).
+**Both must speak SCRAM.** A client library that sends the password in clear
+is refused by the server — check which one your application is actually
+loading. See [Client distribution](10-client-distribution.html).
 
 **Programs using the `!sdclient` class** — SD BASIC reaching another SD over
 the API — speak the same login, from this release at both ends.

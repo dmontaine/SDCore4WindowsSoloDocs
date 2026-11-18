@@ -155,7 +155,7 @@ has no name for.** SD understands the usual keys of every terminal in both
 cursor-key modes (the arrows, Home, End, Insert, Delete, Page Up and Down,
 Shift-Tab, F1 to F12, and the Ctrl, Shift and Alt forms of them such as
 `ctrl-left` and `ctrl-pgup`), then adds those of the terminfo entry for the type
-in force. A control sequence it has no name for is ignored whole: it is no longer
+in force. A control sequence it has no name for is ignored whole: it is not
 typed into your text. A byte of 128 or more is never a key. Press **Ctrl-R**,
 then press the key again: the bytes it sent are shown, which is what a terminfo
 entry needs. An Alt-letter shows as `alt-x` on a terminal that sends Alt+x as Esc

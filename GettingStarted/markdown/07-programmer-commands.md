@@ -40,7 +40,7 @@ foot of this page. The full-screen editors need nothing extra.
 | **`ed`** | the line editor. Needs nothing installed |
 | **`edit`** | a **full-screen** editor — opens the record in Microsoft Edit |
 | **`micro`** | a **full-screen** editor — opens the record in micro |
-| **`sed`** | a **full-screen** editor that runs **inside** SD: drop-down menus that show the keys, color for the language, split windows and macros. Needs a window of 140 columns by 43 lines, and no operating-system permission |
+| **`sed`** | a **full-screen** editor that runs inside SD, with drop-down menus and color for SD BASIC and five other languages |
 | **`ced`** | a full-screen editor for a record that is a **data collection** (JSON), one level at a time with the type of every element shown |
 | **`ide`** | a full-screen workbench: the files and records, the program and its compile messages on one screen |
 | **`debug`** | the BASIC debugger |
@@ -83,16 +83,19 @@ verbs:
 | **`edit`** | plain text |
 
 **It applies to a `bp` record and to nothing else.** SD names the working
-copy so that micro can recognize the language — a record edited out of any
+copy so the editor can recognize the language — a record edited out of any
 other file is treated as plain text, which is correct for a VOC entry or a
 data record.
 
 > **The word lists are generated from the compiler.** They come out of
-> `bcomp`'s own tables — **242 statements, 42 reserved words and 235
-> intrinsic functions** — so the highlighting cannot drift from the
-> language. **If a name you expect is not colored, that is worth
-> reporting**: it means the two have come apart, which is exactly what
-> generating them was meant to prevent.
+> the compiler's own tables of statements, reserved words and intrinsic
+> functions, so the highlighting follows the language. **If a name you
+> expect is not colored, that is worth reporting.**
+
+**`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
+need no operating-system permission and no editor installed; they need a terminal
+window of at least 140 columns by 43 lines (the debugger and the home screen use
+the same frame).
 
 **`ed` is unaffected and is still there.**
 
@@ -166,11 +169,6 @@ than reading it through a pipe.
 
 **If an editor misbehaves over ssh and not at the console, that is worth
 reporting** with the terminal you connected from.
-
-**`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
-need no operating-system permission and no editor installed; they need a terminal
-window of at least 140 columns by 43 lines (the debugger and the home screen use
-the same frame).
 
 The removed full-screen editors are a different matter: `update.record` and
 `modify` are gone and are not coming back. See

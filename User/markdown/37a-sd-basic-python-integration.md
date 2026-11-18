@@ -18,9 +18,7 @@ status = PY_CREATEDICT('mydict')
 
 All twenty-one are `$internal`-compiled and ship already cataloged, so no
 account needs to compile or catalog anything to use them - only the
-declarations and a call. `$include sdpyfunc.h` declares all of them at once;
-none of them is a TCL verb, so there is no way to call Python from a command
-prompt, only from a compiled BASIC program.
+declarations and a call. `$include sdpyfunc.h` declares all of them at once.
 Failure is always `status()`, not the returned value: several of
 these functions return an empty string on both "genuinely empty" and
 "failed," so `status()` is what tells them apart. **Every one of the
@@ -65,10 +63,6 @@ session:
 | `-12041` | this session may not use the operating system, so it may not have Python either |
 | `-12042` | SD could not determine the permission at all - one line is written to the error log saying which. (The permission is the account's `os` switch, read at account entry.) |
 | `-12040` | the session **is** permitted, but the helper itself could not be started or has died - typically no usable Python on the machine |
-
-The switch is **off as delivered**: a session sees the first row once the
-administrator has turned it on, and `-12041` until then. `-12042` remains in the
-list because the check is still made.
 
 ## Interpreter lifecycle
 
@@ -239,5 +233,18 @@ Four example programs are installed in the SDSYS account's `bp` file:
 | `PY_JSON` | Python's `json` module on a file you name (its full path): the file is loaded, then walked object by object with `PY_OBJTYPE`, `PY_OBJLEN` and `PY_DICTGETKEYS`, and every key and value is printed, indented by nesting |
 | `PY_TERM` | a minimal prompt that runs the Python you type: lines are collected and `!` runs them, `??` shows them, `?` gives help and `quit` ends; the up and down arrows recall earlier lines |
 
-Copy one into your own account's `bp` to compile and run it. Like any use
-of Python, it needs the account's `os` switch.
+Copy one into your own account's `bp` to compile and run it. Like any use of
+Python, it needs the account's `os` switch. A short sequence of the same kind of
+calls:
+
+```
+$include sdpyfunc.h
+st = PY_INITIALIZE()
+if st # 0 then stop
+st = PY_RUNSTRING('countdown = {"3": "Three", "2": "Two", "1": "One"}')
+st = PY_CREATEDICT('my_dict')
+st = PY_DICTVALSETS('my_dict', 'k1', 'first value')
+crt PY_DICTVALGETS('my_dict', 'k1')    ;* first value
+crt PY_OBJLEN('countdown')             ;* 3
+keys = PY_DICTGETKEYS('countdown')     ;* the keys, separated by @fm
+```

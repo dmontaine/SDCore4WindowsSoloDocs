@@ -12,12 +12,12 @@ ai "text that ends with a question mark?"
 
 ```
 :ai what does the SELECT verb do
-This will be sent to anthropic (model claude-...), 1887 bytes; the provider sees all of it:
+This will be sent to anthropic (model claude-...), 1983 bytes; the provider sees all of it:
 what does the SELECT verb do
 Send it? (y/N)
 ```
 
-You see the provider, the model and the size of all that will be sent, then **your text**. SD's own text - the standing text set up with the helper and one fixed sentence that asks for a short plain answer - is sent before it and counted in the size, but not shown; that is why the size is larger than your question. The 1887 bytes above are the shipped standing text, the fixed sentence and this 28-character question; a different standing text changes the figure. Nothing is sent unless you answer `y` or `yes`. Anything else - Enter alone, `n`, a typing error, an input that has ended - sends nothing, so a program cannot make `ai` send by feeding it an answer.
+You see the provider, the model and the size of all that will be sent, then **your text**. SD's own text - the standing text set up with the helper and one fixed sentence that asks for a short plain answer - is sent before it and counted in the size, but not shown; that is why the size is larger than your question. The 1983 bytes above are the shipped standing text, the fixed sentence and this 28-character question; a different standing text changes the figure. Nothing is sent unless you answer `y` or `yes`. Anything else - Enter alone, `n`, a typing error, an input that has ended - sends nothing, so a program cannot make `ai` send by feeding it an answer.
 
 The answer is printed as plain text, wrapped to your window, followed by the tokens used:
 

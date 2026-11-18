@@ -146,8 +146,6 @@ delete.catalog name... {global | local}
 ZZPROG deleted from the private catalog
 ```
 
-### Removing a local entry and its object code: `decatalog`
-
 ```
 decatalog {file} name ...
 ```

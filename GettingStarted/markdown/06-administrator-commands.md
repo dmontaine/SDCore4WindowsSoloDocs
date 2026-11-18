@@ -44,9 +44,9 @@ password is never displayed, stored or logged.
 | `update.accounts` | refresh the account's VOC |
 | `list.voc.removed`, `restore.voc` | the VOC records SD no longer ships, and putting back one the update removed — [`update.accounts`](#updateaccounts) below |
 | `set.os.access` | show, or turn on and off, the shell and OS access switches — [Operating system access](06b-operating-system-access.html) |
-| `remote.ssh`, `remote.api`, `tool.remote` | show, or change, whether Solo's ssh server and the API are off, local or open — [ssh access](08-ssh-access.html), [API access](09-api-access.html) |
+| `remote.ssh`, `remote.api`, `tool.remote` | whether Solo's ssh server and the API are off, local or open — [ssh access](08-ssh-access.html), [API access](09-api-access.html) |
 | `backup.account`, `restore.account`, `set.backup.directory`, `tool.backups`, `settings.report` | [Backing up and restoring the account](06c-backup-and-restore.html) |
-| `set.recovery` | show, or turn on and off, the IDE's recovery copy of text you have not saved |
+| `set.recovery` | the IDE's recovery copy of text you have not saved |
 | `append.sd.path` | put SD on your PATH, or take it off |
 | `set.net.access` | show, or turn on and off, the NET gate (API request 29, with `NETFILES=2`) — [API access](09-api-access.html) |
 | `set.server`, `delete.server`, `list.servers` | the servers SDNet may reach — the SDNet page of the User set |
@@ -207,22 +207,11 @@ append.sd.path off         take it off
 installer puts SD on your PATH every time it runs, so `off` lasts until the
 next install or upgrade. A window already open keeps the PATH it started with.
 
-### `set.recovery`
+### Backing up and restoring
 
-```
-set.recovery {on | off}
-```
-
-**`set.recovery on`** has the IDE keep a recovery copy of text you have not
-saved, readable only by you, in `AppData\Local\.local\state\sd\recovery\sduser`
-of your Windows profile (the profile Windows records for your user, never the
-`USERPROFILE` or `LOCALAPPDATA` variable). When the record is opened again after
-a lost session, the IDE offers the copy back: use it, delete it, or do not open
-the record (which keeps it). The record itself is not changed until you save.
-The copies are outside the account, so `backup.account` never contains them. It
-is **off as delivered**; `set.recovery off` stops new copies (the ones that exist
-are kept until answered), and without a word the verb says which it is. It takes
-effect at once and writes the audit trail, in lower case.
+`backup.account`, `restore.account`, `set.backup.directory`, `tool.backups`
+and `settings.report` are on [Backing up and restoring the
+account](06c-backup-and-restore.html).
 
 ## The home screen's settings
 
@@ -246,19 +235,43 @@ menu confines nobody: the Terminal tile is there unless you turn it off.
 
 **`set.tile sduser tile off`** takes a tile off the page, and `on` puts it back
 (every tile is on as delivered; the ids are `editor`, `ide`, `terminal`, `keys`
-and `signout`, and the development tiles `files`, `voc`, `dict`, `query`, `bulk`,
-`catalog`, `test` and `recent`; `set.tile` alone says what is off). **Sign out
-cannot be turned off.** With **Terminal** off and a start in the home screen, the
-account is never given the prompt: when the screen ends it signs the person out.
-That is a wall only for the prompt the screen gives; the editor and IDE tiles run
-the account's own programs, so turn those off as well, and a shell still needs
-`set.os.access sh on`. **`set.pins on`** lets the account add programs of its own
-to its home screen (**off as delivered**; `set.pins off` takes it back). A program
-of its own runs the command the person could type at the prompt, so it adds no
-access.
+and `signout`, the seven development tiles `files`, `voc`, `dict`, `query`,
+`bulk`, `catalog` and `test`, and `recent`, which is not a tile but the Recent
+group). `set.tile` alone says what is off. **Sign out cannot be turned off.** With
+**Terminal** off and a start in the home screen, the account is never given the
+prompt: when the screen ends it signs the person out. That is a wall only for the
+prompt the screen gives; the editor and IDE tiles run the account's own programs,
+so keep the account to the screen by turning those off as well, and a shell still
+needs `set.os.access sh on`.
 
-**`tool.menus`** is the same settings as a page. **It writes nothing itself**:
-Enter on a row shows the command it would run with its effect in a box answered
-Run or Cancel (Cancel is what Enter chooses). The three verbs write the audit
-trail, in lower case. The tile ids and the person's side are in *SD TCL - The Home
-Screen* in the User documentation.
+**`set.pins on`** lets the account add programs of its own to its home screen (a
+group *My programs* and the `my.menu` verb); the permission is **off as
+delivered**, `set.pins off` takes it back (the person's list stays in their file),
+and without a word the verb says which it is. A program of the account's own runs
+the command the person could type at the prompt, so it adds no access: the
+switches and the gates apply as they do there.
+
+```
+set.recovery {on | off}
+```
+
+**`set.recovery on`** has the IDE keep a recovery copy of text you have not saved,
+readable only by you, in `AppData\Local\.local\state\sd\recovery\sduser` of your
+Windows profile (the profile Windows records for your user, never the
+`USERPROFILE` or `LOCALAPPDATA` variable), and offer it back when the record is
+opened again after a lost session (*SD TCL - Programs and the Catalog* describes
+it). The record itself is not changed until you save. The copies are outside the
+account, so `backup.account` never contains them. It is **off as delivered**;
+`set.recovery off` stops new copies (the ones that exist are kept until answered),
+and without a word the verb says which it is. It takes effect at once.
+
+**`tool.menus`** is the same settings as a page: the *Accounts* box and the *Menu*
+box (where the account starts, whether it may add its own programs, and a line for
+each tile), with a `[?]` on each row (F1, `?` or a click) that explains it. **It
+writes nothing itself**: Enter on a row shows the command it would run
+(`set.tile sduser editor off`) with its effect in a box answered Run or Cancel
+(Cancel is what Enter chooses), and the line under the page is the verb's own
+answer. A change reaches the person at their next sign-on, or F5 in the home
+screen. The three verbs write the audit trail, in lower case; the page only runs
+them. The tile ids and the person's side are in *SD TCL - The Home Screen* in the
+User documentation.

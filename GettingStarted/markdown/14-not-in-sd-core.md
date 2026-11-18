@@ -5,9 +5,10 @@ This page exists so you do not spend time hunting for something that is not
 there. **It names what is gone and what to use in its place; it does not
 document the removed features themselves.**
 
-Everything here was in OpenQM, in ScarletDME, or in upstream `sdb64`, and is not
-in SD Core Solo for Windows. **What the multiuser SD Core for Windows has and Solo
-does not — accounts, groups, `SDSYS`, the Windows service — is on
+Everything here was in OpenQM, in ScarletDME, or in upstream `sdb64`, or in the
+multiuser SD Core for Windows this release was made from, and is not in SD Core
+Solo for Windows. **What the multiuser SD Core for Windows has and Solo does not —
+accounts, groups, `SDSYS`, the Windows service — is on
 [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)**,
 not here.
 
@@ -23,6 +24,9 @@ not here.
 | `grant`, `revoke`, `list.grants` | nothing: there is one Windows user and no groups to join |
 | `modify.password`, `logto` | **`set.password`** — your own account password with no `admin`, `set.password admin` after `admin`, `set.password global` from the server; SDSYS is never entered, so `logto` has nowhere to go |
 | the Windows groups `sdusers`, `sdssh`, `sdapi` and `sdsshonly`, `sdsys` as a user, the `os.users` and `batch.jobs` permit lists | none of them. SD runs as you, on an ordinary token; a scheduled job may run any command — see [Scheduled jobs](04-scheduled-jobs.html) |
+| `ssh`/`api`/`both`/`none` route keywords, `sh-on`/`sh-off`/`os-on`/`os-off` | gone earlier, with the `os.users` permit list they set |
+| the account tiers (Standard, Programmer, Administrator) | gone earlier: one VOC for everybody |
+| Group accounts, suspending an account | there is nobody to suspend |
 
 The rest of what Solo leaves out, adds and does differently is on
 [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
@@ -128,8 +132,8 @@ account](06c-backup-and-restore.html) — at the file level, with SD stopped
 ## Language and locale
 
 **SD Core Solo is English only.** `set.language` and `load.language` do not exist.
-`NLS` does: it shows and sets the currency symbol and the thousands and decimal
-separators.
+`nls` is still there: it shows and sets the currency symbol and the thousands and
+decimal separators, which is all it ever did.
 
 ## Embedded Python
 

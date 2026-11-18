@@ -52,7 +52,7 @@ more is sorted correctly when a sort spills to disk.
 **A split of a dynamic file stops before it changes the file when the disk cannot take it.** A
 dynamic file grows by splitting its groups. The split writes the new, empty group first and only
 then advances the file's modulus; it does nothing if that write cannot be made, or if the file
-system holds less than 1 MB, and writes a line to the log, so a full disk cannot leave the
+system holds less than 1 MB, and writes a line to the log, so a full disk does not leave the
 modulus advanced with no group behind it.
 **A split that fails after the new group has begun to be used still cannot be undone**: it logs
 the failure and writes the file's header, and the file needs a file check (`sdfix`, described in [sdfix, the File Check Tool](20-sdfix.html)).
@@ -113,11 +113,13 @@ to it.
 | | VOC records |
 |---|---|
 | Your account (`newvoc`) | **440** |
-| SDSYS (`voc_template`) | **449** |
+| SDSYS (`voc_template`) | **445** |
 
 **These are record counts, not verb counts** — a VOC record may be a verb, a
 keyword, a file pointer, a sentence or a paragraph, and only some are verbs.
-The verb subset specifically is counted on the SD TCL syntax card in the User set.
+Counted directly from the shipped directories (`newvoc`/`voc_template`), matching
+what `count voc` reports in a freshly created account. The verb subset
+specifically is counted on the SD TCL syntax card in the User set.
 
 ## Configuration
 

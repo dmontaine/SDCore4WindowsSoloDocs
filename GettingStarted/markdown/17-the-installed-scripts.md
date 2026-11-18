@@ -71,7 +71,7 @@ other script.
 
 **One thing it does not cover.** The `sh` verb opens an ordinary PowerShell
 prompt for you, and that prompt gets **no** such switch — it runs under
-whatever policy your computer sets. That is deliberate: SD lifts the
+whatever policy your machine sets. That is deliberate: SD lifts the
 restriction for the scripts it installed itself, and never for a shell you
 type into. **The scripts you run by hand from the list below are in the same
 position**: you start them from a prompt of your own, so they need

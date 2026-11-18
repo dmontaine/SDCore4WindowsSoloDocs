@@ -107,8 +107,8 @@ user number must be specified* — so there is no `unlock` that means
 **Task locks are released when a session ends normally.** They are not part of
 any file, so nothing has to be written back.
 
-> **`sd-solo -cleanup` does not give them back, and that is a defect.** It releases
-> a dead session's record locks and file locks and leaves its task locks held, by
+> **`sd-solo -cleanup` does not give them back, and that is a defect.** It releases a
+> dead session's record locks and file locks and leaves its task locks held, by
 > a user number nothing is behind, until SD itself is restarted. `list.locks`
 > shows the number with an owner and `clear.locks` refuses it because it is not
 > yours. **`unlock tasklock` *n*, after `admin`, is the way out** — that is what
@@ -123,7 +123,7 @@ tool.sessions
 **A full-screen page for the administrator** — type `admin` first; without it the page is
 refused before it reads anything. It needs a window of 140 columns by 43 lines. The top list
 is every session — user number, Windows process number (`Pid`), when it signed on, its kind
-(user, phantom, API or SDNet), the login user, the account it is in, where it came
+(user, phantom, API or SDNet), the login user (always `sduser` here), the account it is in, where it came
 from, and whether it is yours (a star) or a logout is pending. The lower list is every lock:
 the user, the file number and path, the type (`FX` and `SX` lock a whole file, `RU` is read
 and update, `RL` is read, `WAIT` is a session waiting for a lock), the record id, since when,
@@ -137,10 +137,11 @@ cursor in plain sentences and shows the exact command its key would run.
 | Key | What it does |
 |---|---|
 | arrows, Page Up, Page Down, Home, End, a click | move in the list that has the focus |
-| Tab | change to the other list |
+| F6, Shift-F6 | change to the other list (and to the AI line, when the AI is on for the account) |
 | L (sessions) | `logout` the selected session; the user number is typed again to confirm. For a session whose process is gone the entry is cleared and its locks are released |
 | U (locks) | `unlock` the selected lock; the holder is not told |
 | I | `inhibit.login on` when logins are allowed, `off` when they are inhibited |
+| / | go to the next row of the list that has the focus that holds a text you type (a user number, a name, a record id; any case; round to the top) |
 | F5 | read again |
 | F1, ?, a click on the [?] | explain the page |
 | Ctrl-Q | leave |

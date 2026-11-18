@@ -137,8 +137,8 @@ and the error number for a file that will not open.
 The dictionary of the VOC also has the items **`trigger`**, **`encryption`**
 and **`replication`**, so `list voc with type = "F" and with trigger` lists the
 files that have a trigger function. SD has neither encryption nor replication,
-so `with encryption` and `with replication` select nothing and `with no` selects
-every file.
+so `with encryption` and `with replication` select nothing, and `with no encryption`
+and `with no replication` select every file.
 
 ### count — count the records
 
@@ -162,8 +162,8 @@ entry actually contains without an editor.
 ## The VOC and the account
 
 The installer copies the account's VOC from `newvoc` in the system directory —
-**440 records**, counted in this release. (SDSYS's own VOC, which nobody
-signs in to, is built from `voc_template` instead — **449 records**, the same verbs plus a few
+**440 records**. (SDSYS's own VOC, which nobody
+signs in to, is built from `voc_template` instead — **445 records**, the same verbs plus a few
 system file pointers.) `update.accounts`, which needs
 `admin`, and an upgrade, add to the account's VOC whatever a new release ships;
 neither takes anything away.
@@ -172,7 +172,7 @@ neither takes anything away.
 `set.date`, `clean.account`, `list.readu`, `list.locks`, `lock`, `unlock`,
 `listu`, `update.accounts`, `remote.ssh`, `remote.api` and the rest — and each one refuses with *Command
 requires administrator privileges* until `admin`. There is no `create.account`,
-`delete.account`, `modify.account`, `grant`, `revoke` or `list.grants` anywhere:
+`delete.account` or `modify.account` anywhere:
 an unknown name is simply not recognized. See *Administrator commands* in the
 GettingStarted set.
 

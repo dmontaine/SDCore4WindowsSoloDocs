@@ -33,8 +33,9 @@ for the same verbs and were removed in 2.0-0.)
 > sent down one at all.** In a piped session the input stream *is* the script,
 > so discarding unread input discards the commands that have not run yet —
 > including the `off` that would have ended the session. **A run that did this
-> hung, was killed, and left a session in the user table that had to be cleared
-> with `sd-solo -cleanup`.** Both verbs are for a person at a terminal.
+> hung, was killed, and left a session in the user table that only
+> `sd-solo -cleanup` could clear.** Both verbs are for a person at a
+> terminal.
 
 ## The inactivity timer
 

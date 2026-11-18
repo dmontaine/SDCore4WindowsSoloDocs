@@ -1,7 +1,8 @@
 Title: Operating System Access
 Subtitle: The two switches, sh and os, that decide whether SD can reach the operating system: off as delivered, turned on by the administrator.
 
-`sh` runs a Windows command from the SD prompt (the shorter name `!` was removed in 2.0-0). `OS.EXECUTE` is the way from a program, and a program can also
+`sh` runs a Windows command from the SD prompt. (The `!` form, a shorter name for
+the same verb, does not exist: write `sh command`.) `OS.EXECUTE` is the way from a program, and a program can also
 reach the operating system by naming a file or directory outside the account.
 **All of it is off as delivered**, and the administrator turns it on, in two
 independent switches, with `set.os.access`.
@@ -186,8 +187,6 @@ persists between them**.
 `<`, `>` or a newline**, before anything runs:
 
 ```
-:sh echo hi; dir
-Error 2 executing operating system command
 :sh echo alpha-beta | findstr alpha
 Error 2 executing operating system command
 :sh echo gamma > zzsh.txt
@@ -196,9 +195,8 @@ Error 2 executing operating system command
 
 That is a sanitizer on what a one-line command may look like — a safety
 measure against an accidental injection, not a permission — and it applies to
-everyone, the administrator included, whether or not the switch is on. So **no
-pipe, no redirection, no chaining and no variable expansion is available from
-the prompt.** What an account that has the switch can do about that is the
+everyone, the administrator included. **No pipe, no redirection, no chaining
+and no variable expansion is available from the prompt.** What an account that has the switch can do about that is the
 obvious thing: write the work into a script file and run the script
 (`sh powershell -File nightly.ps1`, or `sh nightly.cmd`). The script's own
 contents are not filtered. This is why turning `sh` on is a decision to give a
@@ -208,7 +206,7 @@ person a shell on the computer, not a decision to give them a restricted one.
 
 ```
 :sh sd-solo
-SD is already running in this session - type EXIT to return to it.
+SD is already running in this session - type exit to return to it.
 ```
 
 The child shell is marked, and SD checks the mark:

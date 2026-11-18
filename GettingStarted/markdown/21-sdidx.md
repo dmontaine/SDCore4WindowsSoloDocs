@@ -167,7 +167,7 @@ the indexes back you create them and build them again with `create.index` and
   program prints `End of input` and `Indices not deleted` and exits 1.
 * With indexes in the data file's own folder there is no question. It deletes
   the files and clears the map. If a file cannot be deleted it says so, clears
-  the map anyway, and exits 1 with `The indices are removed from the file, but
+  the map anyway (the indexes are gone from the file's point of view), and exits 1 with `The indices are removed from the file, but
   some index files could not be deleted`.
 
 ## The check that SD does not have the file open

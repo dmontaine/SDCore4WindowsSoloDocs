@@ -145,12 +145,14 @@ DOCS = [
  ('User', '29b-sd-tcl-asking-the-ai.md', """
    ai
  """),
- ('GettingStarted', '24a-setting-up-the-ai-helper.md', """
-   set.ai tool.ai
+ # 16 Nov 26: the development tools' verbs were on no page of this map (tclmap said NO PAGE for 21); each is given the page that explains it.
+ ('User', '29c-sd-tcl-the-development-tools.md', """
+   tool.bulk tool.catalog tool.dict tool.files tool.query tool.test tool.voc
  """),
- # 11 Nov 26 S.211: the MCP door
- ('GettingStarted', '25-the-mcp-door.md', """
-   mcp.call set.mcp
+ # 15 Nov 26, the Solo carry of SD Core's S.242: receive and send are explained on the User page for the transfer.
+ # The switch set.xfer.access is on the administrator's commands page, which names it bare; the User page only ever writes "set.xfer.access on".
+ ('User', '29e-sd-tcl-moving-files-in-and-out.md', """
+   receive send
  """),
  ('User', '30-sd-tcl-processes-and-phantoms.md', """
    pdebug pdump phantom pstat status
@@ -163,16 +165,8 @@ DOCS = [
  # not in Solo.  Each surviving verb is assigned
  # where the rewritten page explains it - including admin, set.password,
  # deny.verbs and sync.global.catalog, which Solo added.
- ('GettingStarted', '05-account-types.md', """
-   set.password
- """),
  ('GettingStarted', '06-administrator-commands.md', """
    append.sd.path clean.account config set.date set.start.default set.tile tool.menus update.accounts
- """),
- # 17 Nov 26: the scheduled jobs verbs (SOLO 74) are explained on page 04; run.job and set.jobs.access
- # stand where Linux Solo's map puts them (run.job with the administrator's own verbs, below).
- ('GettingStarted', '04-scheduled-jobs.md', """
-   set.job tool.jobs
  """),
  # 17 Nov 26 (four-version audit, page-length split): backup and restore moved to 06c
  ('GettingStarted', '06c-backup-and-restore.md', """
@@ -185,36 +179,35 @@ DOCS = [
    clear.locks list.locks lock tool.sessions unlock
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
-   sh set.os.access tool.gates
+   sh
  """),
  ('GettingStarted', '06b1-showing-a-document-with-pdf.md', """
-   docs.install load.help set.viewer tool.viewers
+   docs.install load.help
  """),
- # 15 Nov 26, the Solo carry of SD Core's S.242: receive and send are explained on the User page for the transfer.  16 Nov 26 (found by Windows):
- # the switch set.xfer.access is on the administrator's commands page, which names it bare; the User page only ever writes "set.xfer.access on".
- ('User', '29e-sd-tcl-moving-files-in-and-out.md', """
-   receive send
+ # 23 Oct 26 Solo carry 15: the administrator's AI helper page
+ ('GettingStarted', '24a-setting-up-the-ai-helper.md', """
+   set.ai tool.ai
  """),
- ('GettingStarted', '06-administrator-commands.md', """
-   admin run.job set.pins set.recovery set.xfer.access
+ ('GettingStarted', '08-ssh-access.md', """
+   remote.ssh tool.remote
  """),
- # 20 Oct 26 Solo carry 8: set.net.access (the NET gate of API request 29) is explained on the API page.
  ('GettingStarted', '09-api-access.md', """
-   set.net.access
- """),
- ('GettingStarted', '04-scheduled-jobs.md', """
-   set.jobs.access
- """),
- # 20 Oct 26 Solo carry 7: encrypt.key is explained with the key ring on the programmer's page for encryption.
- ('User', '06a-sd-basic-encryption.md', """
-   encrypt.key
+   remote.api
  """),
  # 20 Oct 26 Solo carry 9: the SDNet client's five verbs are explained on the programmer's page for files on another SD server.
  ('User', '42-sd-sdnet.md', """
    set.server delete.server list.servers set.netlogin delete.netlogin
  """),
- ('GettingStarted', '15-managed-mode.md', """
-   deny.verbs sync.global.catalog
+ ('GettingStarted', '12a-security-and-the-operating-system.md', """
+   tool.audit
+ """),
+ # 17 Nov 26: the scheduled jobs verbs (SOLO 74) are explained on page 04; run.job and set.jobs.access
+ # stand where Linux Solo's map puts them (run.job with the administrator's own verbs, below).
+ ('GettingStarted', '04-scheduled-jobs.md', """
+   set.job tool.jobs
+ """),
+ ('GettingStarted', '16-configuration.md', """
+   tool.config
  """),
  # 21 Oct 26: the 27 verbs that Solo's first sync from SD Core (LSOLO 52) carried
  # without a page.  Each is written from sdsys/gpl.bp/<program>, its messages and a
@@ -244,31 +237,48 @@ DOCS = [
  ('User', '30-sd-tcl-processes-and-phantoms.md', """
    list.phantoms
  """),
- # 16 Nov 26: the verbs that were on no page of this map (tclmap said NO PAGE for 21), each given the page that explains it; every one of them
- # was already named there.  copy.listp, set.queue, sp.assign and ! are removed verbs (voc_removed) and left the map the same day.
- ('User', '29c-sd-tcl-the-development-tools.md', """
-   tool.bulk tool.catalog tool.dict tool.files tool.query tool.test tool.voc
+ # 20 Oct 26 Solo carry 7: encrypt.key is explained with the key ring on the programmer's page for encryption.
+ ('User', '06a-sd-basic-encryption.md', """
+   encrypt.key
+ """),
+ # 16 Nov 26: copy.listp, set.queue, sp.assign and ! are removed verbs (voc_removed) and left the map.
+ ('GettingStarted', '06a-sessions-and-locks.md', """
+   inhibit.login lock.tracer
  """),
  ('GettingStarted', '06-administrator-commands.md', """
    list.voc.removed restore.voc
  """),
- ('GettingStarted', '06a-sessions-and-locks.md', """
-   inhibit.login lock.tracer
- """),
- ('GettingStarted', '08-ssh-access.md', """
-   remote.ssh tool.remote
- """),
- ('GettingStarted', '09-api-access.md', """
-   remote.api
- """),
- ('GettingStarted', '12a-security-and-the-operating-system.md', """
-   tool.audit
- """),
- ('GettingStarted', '16-configuration.md', """
-   tool.config
- """),
  ('GettingStarted', '16b-changing-a-parameter-from-sd.md', """
    set.config
+ """),
+ # What only Solo has.  admin, set.password, deny.verbs and sync.global.catalog
+ # are Solo's own; the gates, the viewer, the transfer switch, the NET switch,
+ # the jobs switch and the MCP door are carried from SD Core's set.
+ ('GettingStarted', '06-administrator-commands.md', """
+   admin run.job set.pins set.recovery set.xfer.access
+ """),
+ ('GettingStarted', '05-account-types.md', """
+   set.password
+ """),
+ ('GettingStarted', '06b-operating-system-access.md', """
+   set.os.access tool.gates
+ """),
+ ('GettingStarted', '06b1-showing-a-document-with-pdf.md', """
+   set.viewer tool.viewers
+ """),
+ # 20 Oct 26 Solo carry 8: set.net.access (the NET gate of API request 29) is explained on the API page.
+ ('GettingStarted', '09-api-access.md', """
+   set.net.access
+ """),
+ ('GettingStarted', '04-scheduled-jobs.md', """
+   set.jobs.access
+ """),
+ ('GettingStarted', '15-managed-mode.md', """
+   deny.verbs sync.global.catalog
+ """),
+ # 11 Nov 26 S.211: the MCP door
+ ('GettingStarted', '25-the-mcp-door.md', """
+   mcp.call set.mcp
  """),
 ]
 
@@ -296,7 +306,6 @@ SPLITS = {
     ('User', '17-sd-basic-debugging.md'): ['17a-sd-basic-debugging-full-screen-and-ai.md'],
     ('User', '20-sd-tcl-files-and-records.md'): [
         '20-sd-tcl-files-and-records-2-comparing-triggers-and-import.md'],
-    ('User', '21-sd-tcl-query-processor.md'): ['21a-sd-tcl-query-processor-headings-and-output.md'],
     ('User', '24-sd-tcl-programs-and-the-catalogue.md'): [
         '24a-sd-tcl-find-program-dictionaries-and-the-ide.md', '24b-sd-tcl-the-ide-keys.md',
         '24c-sd-tcl-the-ide-other-files-and-options.md',

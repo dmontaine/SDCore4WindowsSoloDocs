@@ -152,6 +152,7 @@ are `call` (a subroutine), `open`, `read` (including `readu`, `readv` and
 `matread`), `write`, `delete`, `openseq`, `readseq`, `writeseq`, `execute` (the
 first 32 characters of the command) and `object` (a call of a class module's
 object). Name some after `on` to log only those; none means all of them.
+
 The names the display shows (files, subroutines, commands, programs) are made safe to print in the same way: a
 control character, `del`, a byte from 128 to 159 or a mark character is shown as `?`.
 
@@ -189,28 +190,16 @@ The limit is the `NUMFILES` configuration parameter. **The peak is what matters
 when you are sizing it** — the current figure moves constantly and tells you
 almost nothing.
 
-### What one file is: `find.file`
-
 ```
 find.file {dict} file
 ```
 
-Opens the file the way any program would and says what it is. It is for the
-file that is not behaving as you expect.
-
-```
-Dynamic hashed file, group size 2, modulus 1
-Pathname: <the full path of the file>
-File uses case insensitive record ids
-File has indices
-```
-
-(The real listing gives the full path of the file.) The lines after the pathname appear only when they are true: case insensitive record ids, indices, a trigger,
-read only. A directory file is reported as one. A file that cannot be opened is
-not described; the reason is given instead (*NOSUCH is not defined in your
-VOC*, for a name the VOC does not have, and *Invalid file name* when there is no
-name at all). **Because it opens the file as a program would, it can reach only
-what your VOC and the operating system access switch allow.**
+A summary of one file, opened the way any program would open it: its type
+(*Dynamic hashed file, group size 1, modulus 3*, or *Directory file*), its
+pathname, and a line for each of these that is true of it — *File uses case
+insensitive record ids*, *File has indices*, *File has trigger* name, *File is
+read only*. A name that is not in the VOC, or a file that will not open, is said
+so. Unlike `analyze.file` it does not walk the file.
 
 ## Reaching a file in another account
 
@@ -274,9 +263,8 @@ wrong.
 name you type and the name on disk stay together. **The new name is stored in lower
 case**, in the VOC and as the file's directory, whatever case you typed: `cname old to NEW`
 leaves the file as `new`. A new name that is already in the VOC in any case, or that differs
-from the old name only in case, is refused with "... is already defined in your VOC", so no
-file ever has two spellings and the file's only VOC entry is never lost. A file that already
-has an upper-case name is not renamed by this.
+from the old name only in case, is refused with "... is already defined in your VOC".
+A file that already has an upper-case name is not renamed by this.
 
 ## Seeing what is actually in a record
 

@@ -113,7 +113,7 @@ On a newly created dynamic file:
 
 **Key `1021` is the openQM `FL$WHO`, and the caller is left out** unless it has the file
 open through more than one file variable. Code
-that wants text for a message asks `1100`, and SD's own "cannot gain exclusive access"
+that wants text for a message asks `1100`, as SD's own "cannot gain exclusive access"
 messages do. Compile with `$include keys.h`, so that the names carry whatever number they have.
 
 File types: `1` SH, **`3` DH — an ordinary dynamic file**, `4` directory, `5`

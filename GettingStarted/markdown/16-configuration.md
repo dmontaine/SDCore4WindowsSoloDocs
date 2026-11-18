@@ -55,13 +55,13 @@ anything. **An upgrade keeps your `sd.conf`** — see
 An unrecognized parameter is not ignored. The parser abandons the file with
 `Unrecognized configuration parameter`, and SD does not start.
 
-**The parameters SD no longer has are removed from a kept `sd.conf` for you.**
-In 2.0-0 thirteen names went, because they did nothing or imitated another
-product: `APILOGIN`, `CODEPAGE`, `CREATUSR`, `EXCLREM`, `FILERULE`, `FIXUSERS`,
-`GDI`, `INVCASE`, `JNLDIR`, `JNLMODE`, `PORTMAP`, `RINGWAIT` and `TXCHAR`. A line
-naming one would now stop SD, so an upgrade, and a new install that reloads a kept
-`sd.conf`, take each such line out first and log which. A configuration file you
-copy in by hand from an older installation needs the same done to it.
+That is why a name SD does not have has to be taken out of the file. These
+thirteen names are not parameters of SD: `APILOGIN`, `CODEPAGE`, `CREATUSR`,
+`EXCLREM`, `FILERULE`, `FIXUSERS`, `GDI`, `INVCASE`, `JNLDIR`, `JNLMODE`,
+`PORTMAP`, `RINGWAIT` and `TXCHAR`. The installer removes those lines from a
+`sd.conf` it keeps (an upgrade, or a reinstall that keeps the configuration), and
+says which it removed. A file copied in by hand from an older installation must have
+them taken out before SD will start.
 
 Range failures behave the same way. `GRPSIZE`, `INTPREC`, `LPTRHIGH`,
 `LPTRWIDE`, `MAXCALL`, `RECCACHE`, `SORTMRG` and `MAXIDLEN` are bounds-checked
@@ -87,8 +87,6 @@ ERRLOG    50 kb
 YEARBASE  1930
 ```
 
-**`config` pages its output** — press Return for more, or `Q`.
-
 SD accepts **59** parameters. The verb prints all of them except `APILOCAL`,
 `BACKUPDIR`, `NETDIRS` and `SDSYS`, and `DEBUG`, `FDS` and `PHANTOMS` only when
 they are set; it also prints `TIMEZONE`, which is not a file parameter.
@@ -98,6 +96,8 @@ account by the `os` switch, the API's included, may reach outside its own
 account (see [The parameters](16c-the-parameters.html#netdirs-directories-outside-the-account)).
 The verb will not tell you what it is set to, and `config('NETDIRS')` does not
 read it. Read it from the file.
+
+**`config` pages its output** — press Return for more, or `Q`.
 
 The `config()` function reads one parameter from a program, and needs no
 `admin`:
@@ -142,14 +142,15 @@ The 29 are `DHCACHE`, `DUMPDIR`, `FLTDIFF`, `FSYNC`, `GRPSIZE`, `INTPREC`,
 
 Everything else takes effect only when SD is next started (`sd-solo -stop`, then
 `sd-solo -start`). That includes every limit which sizes the shared memory
-segment and every setting the API listener reads.
+segment.
 
 **In Solo every change to `sd.conf` waits for the next start.** SD reads the file
 once, when it starts, and keeps the settings in shared memory; a new session copies
 them from there and does not read the file itself. (The multiuser SD Core has each
 session read `sd.conf` when it starts, so there an edit reaches the sessions
-started after it.) So `tool.config` says `restart` for every parameter it can
-change, and `set.config` says so after each change.
+started after it.) So `tool.config` shows every parameter as `restart`, and
+`set.config` says the change takes effect when SD is next stopped and started: stop
+SD and start it again before you count on the new value.
 
 ## The parameters on one screen: `tool.config`
 
@@ -194,7 +195,7 @@ for what SD is running with and shows the file's value. `DEBUG` is not compared:
 it in another form than the file writes it.
 
 **B, the backup directory**: the directory saved with `set.backup.directory` and whether it is there;
-**R, the report**: the operating system part of `settings.report`, made when the view is opened and
+**R, the report**: the operating system part of `settings.report` (the mode, the API and ssh, and the service), made when the view is opened and
 on F5. It holds no key and no password hash. `F5` reads the file, the backup directory and the report
 again, and while the report is made the status line says "Reading the settings (a few seconds)...", and
 while `set.config` runs a change it says "Making the change (a few seconds)..."; `E` changes the parameter under the cursor, or says why it cannot be changed here; `F1`

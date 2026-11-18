@@ -153,7 +153,7 @@ catalog is enough** — nothing here needs an elevated session:
 Compiling bp zzcls
 0 error(s)
 :catalog bp zzcls
-ZZCLS added to private catalogue
+ZZCLS added to private catalog
 ```
 
 ## Objects

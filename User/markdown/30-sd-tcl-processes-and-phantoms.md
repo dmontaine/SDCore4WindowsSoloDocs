@@ -141,11 +141,11 @@ a phantom - the path of`.
 > has exited — and the only way out is to kill the process, which leaves an
 > entry in the user table that needs `sd-solo -cleanup` to clear.
 > **`phantom` is for a person at a prompt, or for a program, and not for a
-> piped script.** The listings above are quoted from the verb's own message
-> texts for that reason.
+> piped script.**
 
 **A phantom is not a scheduled job.** It runs once, now. Recurring work is a
-Windows scheduled task that starts SD, and that is a different subject.
+Windows scheduled task that starts SD, and that is a different
+subject, covered under *Scheduled jobs* in the **Getting Started** set.
 
 ### A phantom that ends with its parent: `phantom group`
 
@@ -349,8 +349,7 @@ debugger on.
 > **Do not send `pdebug` down a pipe.** It polls the keyboard while it waits,
 > and in a piped session the input stream is the script, so it consumes the
 > commands that have not run yet. Together with the phantom it starts, that is
-> two ways for one verb to hang a scripted session. **It is described here from
-> source for exactly that reason.**
+> two ways for one verb to hang a scripted session.
 
 The debugger itself — the commands it takes once it is attached — is in
 [SD Basic - Debugging](17-sd-basic-debugging.html).
@@ -400,13 +399,6 @@ With exactly one profile it opens that one without asking, and
 `profiler display user 28` names one. There are four levels, and you go down by
 typing the number of a line and up with `b`; `q` leaves:
 
-| Level | Shows |
-|---|---|
-| 1 | the types of event, with a count of each |
-| 2 | what the events of that type were on: a file, a subroutine, a command |
-| 3 | the programs that did them |
-| 4 | the lines of the program, with the count at each |
-
 ```
 Event types
    1         29  READ
@@ -418,6 +410,13 @@ READ events, by name
 Line number to open, B to go back, Q to quit:?
 ```
 
+| Level | Shows |
+|---|---|
+| 1 | the types of event, with a count of each |
+| 2 | what the events of that type were on: a file, a subroutine, a command |
+| 3 | the programs that did them |
+| 4 | the lines of the program, with the count at each |
+
 A program with no line table (an I-type) has none to show at level 4 (*No line
 numbers were recorded for this program*), and a profile that filled up says how
 many events it did not log. A profile that is not there is *There is no profile
@@ -425,6 +424,7 @@ for user 1 - use profiler on, run the programs, then profiler off*. **Another
 user's process can be profiled by the administrator only**, because a profile
 holds the files that user's programs open and the commands they execute
 (*Only the administrator can profile another user's process*).
+
 ## Who has these verbs
 
 **Every account has `status`, `phantom`, `pstat`, `pdebug`, `pdump`,
