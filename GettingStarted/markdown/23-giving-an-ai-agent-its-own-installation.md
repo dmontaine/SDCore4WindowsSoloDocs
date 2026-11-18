@@ -15,7 +15,7 @@ SD Core Solo for Windows has **one account**, `sduser`, and its two OS switches 
 
 ## Two shapes
 
-The full recipe is `sdb_ai\sd64\agent-pack\recipe\agent-account.md` in the SD Core Solo for Windows source, with a template for the project's `CLAUDE.md` and a Claude Code skill that carries the SD knowledge (see the page *SD and AI Agents* in the User documentation). None of it is installed with the product: take it from the source of the version you run.
+The full recipe is `sdb_ai\sd64\agent-pack\recipe\agent-account.md` in the SD Core Solo for Windows source, with a template for the project's `CLAUDE.md` and a Claude Code skill that carries the SD knowledge (see the page *SD and AI Agents* in the User documentation). The installer puts only the guide and the knowledge pack of the installed version under `%USERPROFILE%\SDCoreSolo\sdsys\agent-pack`; the recipe, the template and the skill are not installed with the product: take them from the source of the version you run.
 
 **Shape 1: the agent is a client of your installation, with both switches off.** It gets the account and nothing outside it: it cannot run a Windows command, read or write a file outside the account's folder, or change the VOC. It can read, change and delete everything the account holds, **including your production data**, so use it only where the agent may touch that data.
 

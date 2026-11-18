@@ -147,7 +147,7 @@ DOCS = [
  """),
  # 16 Nov 26: the development tools' verbs were on no page of this map (tclmap said NO PAGE for 21); each is given the page that explains it.
  ('User', '29c-sd-tcl-the-development-tools.md', """
-   tool.bulk tool.catalog tool.dict tool.files tool.query tool.test tool.voc
+   tool.files tool.voc tool.dict tool.query tool.bulk tool.catalog tool.test
  """),
  # 15 Nov 26, the Solo carry of SD Core's S.242: receive and send are explained on the User page for the transfer.
  # The switch set.xfer.access is on the administrator's commands page, which names it bare; the User page only ever writes "set.xfer.access on".

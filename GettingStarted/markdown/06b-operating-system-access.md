@@ -12,7 +12,7 @@ independent switches, with `set.os.access`.
 | Switch | What it lets the account do |
 |---|---|
 | **`sh`** | the `sh` verb |
-| **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `OPENTEMP`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the pathname of a socket trace log (`SET.SOCKET.MODE` with `SKT$INFO.TRACE`) outside it; the Python helper; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
+| **`os`** | `OS.EXECUTE`; `OPENSEQ`, `OPENPATH`, `DIR()`, `DELETESEQ`, `OPENTEMP`, `DIGEST` of a file and the file-system keys of `OSPATH()` on a path **outside the account's own directory**; a print unit's pathname (`SETPTR ... AS PATHNAME`, `SETPU`, a CSV report's `TO` pathname) outside it; the pathname of a socket trace log (`set.socket.mode` with `skt$info.trace`) outside it; the embedded Python; the screen editors `edit` and `micro`; and a VOC pointer to a file outside the account |
 
 **Both are off as delivered on a new install unless you said yes when the
 installer asked; an upgrade keeps the switches the installation has.** The account's own directory is never asked
@@ -152,7 +152,7 @@ sh command
 ```
 
 With `sh` on, everything after the verb is the command. It runs in the
-account's own directory, at your own Windows permissions:
+account's own folder, at the account's own Windows permissions:
 
 ```
 :sh echo hello-from-the-shell
@@ -209,7 +209,9 @@ person a shell on the computer, not a decision to give them a restricted one.
 SD is already running in this session - type exit to return to it.
 ```
 
-The child shell is marked, and SD checks the mark:
+A shell that SD starts, with `sh` or with `OS.EXECUTE`, is marked, and `sd-solo` checks the mark before it
+reads anything else, so every form of the command is refused inside it (`sd-solo -status` and `sd-solo --version`
+too):
 
 ```
 :sh Get-ChildItem Env:SD_SESSION
@@ -218,9 +220,11 @@ Name                           Value
 SD_SESSION                     1
 ```
 
-**That is worth knowing when writing a script for `sh` to run** — anything it
-invokes inherits `SD_SESSION`, so a script that starts SD as part of its work
-will be refused, wherever it is called from.
+**That is worth knowing when writing a script for `sh` to run**: anything it
+starts inherits `SD_SESSION`, so a script that starts SD as part of its work is
+refused, wherever it is called from. It is a guard and not a boundary: the mark
+is a variable of the shell, and a person with a shell can remove it there. A
+shell you start yourself outside SD is not marked.
 
 ## `OS.EXECUTE` is not filtered
 

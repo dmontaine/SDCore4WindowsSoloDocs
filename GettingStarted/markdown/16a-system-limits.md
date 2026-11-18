@@ -39,6 +39,7 @@ require major file-format changes.
 | Group size for a dynamic file | **4 KB** by default, maximum **8** | `GRPSIZE` |
 | Open files across all sessions | **80** | `NUMFILES` |
 | Maximum pathname length | **255** | compiled |
+| Path of a program named to `RUN` | **255** characters | compiled |
 | Sort keys in one query | **32** | compiled |
 
 Group size is expressed in 1 KB units, so the compiled maximum of 8 is 8 KB.
@@ -46,15 +47,14 @@ Group size is expressed in 1 KB units, so the compiled maximum of 8 is 8 KB.
 a long path to it leaves less room for the paths SD builds inside it.
 
 **A sort that outgrows `SORTMEM` is written to work files, and an item or a key may be of any
-length SD can hold.** The lengths in a work file are 32 bits, so an item or a key of 32 KB or
+length SD can hold**. The lengths in a work file are 32 bits, so an item or a key of 32 KB or
 more is sorted correctly when a sort spills to disk.
 
-**A split of a dynamic file stops before it changes the file when the disk cannot take it.** A
+**A split of a dynamic file stops before it changes the file when the disk cannot take it**. A
 dynamic file grows by splitting its groups. The split writes the new, empty group first and only
 then advances the file's modulus; it does nothing if that write cannot be made, or if the file
-system holds less than 1 MB, and writes a line to the log, so a full disk does not leave the
-modulus advanced with no group behind it.
-**A split that fails after the new group has begun to be used still cannot be undone**: it logs
+system holds less than 1 MB, and writes a line to the log, so a full disk cannot leave the
+modulus advanced with no group behind it. **A split that fails after the new group has begun to be used still cannot be undone**: it logs
 the failure and writes the file's header, and the file needs a file check (`sdfix`, described in [sdfix, the File Check Tool](20-sdfix.html)).
 
 ## Sessions and locks
@@ -79,7 +79,6 @@ session, phantom and API connection is one of the 20.**
 | Matrix dimensions | **two** | compiled |
 | Compiled programs held in memory | no limit by default | `OBJECTS` |
 | Memory those programs may occupy | no limit by default | `OBJMEM`, in KB |
-| Path of a program named to `RUN` | **255** characters | compiled |
 
 ## Select lists
 
@@ -117,9 +116,9 @@ to it.
 
 **These are record counts, not verb counts** — a VOC record may be a verb, a
 keyword, a file pointer, a sentence or a paragraph, and only some are verbs.
-Counted directly from the shipped directories (`newvoc`/`voc_template`), matching
-what `count voc` reports in a freshly created account. The verb subset
-specifically is counted on the SD TCL syntax card in the User set.
+A working account also holds the
+records you and SD add, such as the account's own files like `bp`. The
+verb subset specifically is counted on the SD TCL syntax card in the User set.
 
 ## Configuration
 
@@ -139,5 +138,5 @@ accepted and ignored: a line naming a name SD does not have (such as `APILOGIN`,
 `CODEPAGE`, `CREATUSR`, `EXCLREM`, `FILERULE`, `FIXUSERS`, `GDI`, `INVCASE`,
 `JNLDIR`, `JNLMODE`, `PORTMAP`, `RINGWAIT` or `TXCHAR`) stops SD from starting;
 [Configuration](16-configuration.html) says how the installer takes them out of
-a kept `sd.conf`. `NETFILES` is live: its bit 2 opens API request 29, behind the
-NET gate (see the same page).
+a kept `sd.conf`. `NETFILES` is not inert, because bit 2 gates API request 29, and
+[Configuration - The Parameters](16c-the-parameters.html) says so.

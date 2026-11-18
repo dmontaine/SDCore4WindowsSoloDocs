@@ -58,8 +58,7 @@ Temporary file deleted
 In this example the header's mod value was 1, so half the records hashed
 to the wrong group. The check reports 20 records, the `-F` run sets the mod value
 back to 2 and rebuilds the group, and a second check is clean. All 40 records
-were still there. Under `-Q` the same file is reported and, with the
-answer `n` to `Fix?`, left alone.
+were still there.
 
 * The temporary file is `~SDFix.n` (n is the numeric user id the runtime gives
   your Windows account: `~SDFix.197610` there, 43,008 bytes) **in the folder you
@@ -86,13 +85,13 @@ nothing. To use it without changing `%USERPROFILE%\SDCoreSolo\sd.conf`,
 copy that file, add the line to the copy, and point `SD_CONFIG` at the copy for
 that one run (the file is read when the program starts).
 
-The prompt shows the selected subfile (`0?`). Commands (`?` lists them):
-`check`, `fix` (a check with `-F`'s unconditional repairs); `Gn` display group
-*n*, `ga` all groups; `h` the header, with the file offset of each field in hex;
-`Lid` the hash value, group and address of a record id; `Sn` select a subfile (0
-primary, 1 overflow, 2 onward indexes); `n` and `p` next and previous window; a
-number shows the window at that address; `rebuild n` dump and rebuild group *n*;
-`recover`; `z` the file's statistics counters; `q`.
+The prompt shows the selected subfile (`0?`). Commands: `check`, `fix`
+(a check with `-F`'s unconditional repairs); `Gn` display group *n*, `ga` all
+groups; `h` the header, with the file offset of each field in hex; `Lid` the
+hash value, group and address of a record id; `Sn` select a subfile (0 primary,
+1 overflow, 2 onward indexes); `n` and `p` next and previous window; a number
+shows the window at that decimal address; `rebuild n` dump and rebuild group *n*;
+`recover`; `z` the file's statistics counters; `?`; `q`.
 
 * **Addresses it prints with an `x` in front are decimal.** `Header size 2048
   (x0800)` is the hex form; `Group 1 (x000000002048)` is 2,048 in decimal. The
@@ -107,12 +106,12 @@ number shows the window at that address; `rebuild n` dump and rebuild group *n*;
   length`, and any character that is not a hex digit is `Format error in W
   command`. The address must be hex digits followed at once by `=` (spaces before
   it are allowed): `W1G0=41`, `W10xyz=41` and `W10 =41` are format errors and
-  write nothing.
+  write nothing. The address and the value are read as hex digits, as written.
+* `h` shows `Next seq id`, the counter used by `write ... creating.seqkey`, and
+  warns if it is negative.
 * **If its input ends or fails, interactive mode ends**: `End of input`
   and `Status: 0` when it ended, `Input error [n]` and `Status: 1` when reading
   failed.
-* `h` shows `Next seq id`, the counter used by `write ... creating.seqkey`, and
-  warns if it is negative.
 
 ## What it will not do
 

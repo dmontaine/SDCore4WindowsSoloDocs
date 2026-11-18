@@ -214,7 +214,8 @@ that leads out of the account is refused too, unless the account has the `os`
 switch on. Setting `NETFILES=2` is therefore not enough to open such a file: turn
 the NET gate on only knowing what it allows. When it opens the file, the
 connection's containment applies: only the account the session stands in, the
-shared `SDSYS` entries (read only) and the directories named in `NETDIRS`. The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
+shipped system files its VOC names and the directories named in `NETDIRS`.
+The SDNet **client** (`set.server`, `set.netlogin`, a VOC pointer of
 type `N`) does not read `NETFILES`; see the SDNet page of the User set.
 
 There is no license parameter and no license verb. SD Core Solo for Windows is

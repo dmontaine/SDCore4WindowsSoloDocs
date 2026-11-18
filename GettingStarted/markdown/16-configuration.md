@@ -99,8 +99,7 @@ read it. Read it from the file.
 
 **`config` pages its output** — press Return for more, or `Q`.
 
-The `config()` function reads one parameter from a program, and needs no
-`admin`:
+The `config()` function reads one parameter from a program:
 
 ```
 group.size = config('GRPSIZE')

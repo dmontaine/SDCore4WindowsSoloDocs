@@ -156,7 +156,7 @@ Statements, functions, `$mode` words and compiler directives.
 | `no.query` on cataloging | Added | the `basic` command, the `$catalog` directive and the `catalog` line of `$basic.options` take `no.query`, which stops the compiler asking before it removes an older entry <!--s 27 191--> |
 | `oconv()` date `i` | Changed | the `i` code of a `d` conversion (the ISO week number) gives the week; without `yi` beside it, it gave whatever number was left in memory |
 | `open ... non.transactional` | Added | a write through that file variable is not undone by a rollback <!--s 64--> |
-| `open ... sync` | Added | the file's data is written to disk after every write and delete; `fileinfo(f, fl$sync)` says whether it was opened so |
+| `open ... sync` | Added | `open` and `openpath ... sync`, and the `s` letter of a VOC entry: a file's data is written to disk after every write and delete; `fileinfo(f, fl$sync)` tells which, `fcontrol()` switches it |
 | `openseq` | Added | `creating` makes the file at once; `shared` lets several processes append; a block device can be opened <!--s 485 397 112--> |
 | `openseq creating` | Changed | makes a name that is free exclusively: a name taken in the meantime, or a link that leads nowhere, is refused with `status()` 6032 and nothing is made (`shared` refuses a link that leads nowhere the same way, and otherwise still opens or creates); the `openseq file, record` form does the same, and an `openseq` of such a link without `creating` gives a file that cannot be written; the file is made only once the lock on its name is held, so a name another session holds leaves no empty file behind |
 | `open.socket()` | Changed | the fourth argument is the number of seconds to wait for the connection, zero for no limit of SD's own; it was the unused security context <!--s 174--> |
@@ -293,7 +293,7 @@ The kernel, `sd.conf`, and the numbered keys.
 
 | Name | Change | What |
 |---|---|---|
-| sessions on a dropped connection | Changed | a session whose terminal or ssh connection goes away while it is writing the error log or the audit trail no longer waits for itself for ever, which stopped every later login; a session that faults gives back its locks before it logs |
+| sessions on a dropped connection | Changed | a session whose terminal or ssh connection goes away while it is writing the error log or the audit trail no longer waits for itself for ever, which stopped every later login |
 | `-status` | Added | `sd -status` shows the version, start time and process counts <!--s 511--> |
 | `cleanup=n` | Added | seconds between the checks that clear sessions that ended without logging out <!--s 98 g283--> |
 | `config` | Changed | lists the new settings; `config()` reads them |
@@ -309,7 +309,7 @@ The kernel, `sd.conf`, and the numbered keys.
 | `sortmem` | Changed | default 4096 <!--s 535--> |
 | `status` | Changed | file times are in the user's time zone; field 27 is the file pathname <!--s 96 585--> |
 | `system()` keys | Added | 14, 19, 20, 21, 33, 35, 45, 1016, 1036, 1037, 1040, 1045, 1047, 1048, 1049, 1051, 1062, 1065, 1067, 1071, 1073, 1083, 1086, 1088 <!--s 65 66 114 192 225 244 206 294 307 308 326 421 433 586 587 g252 g253 g254 g255 g256 g260 g261 g265 g266 g267 g270 g271 g274 g276--> |
-| `system(1057)` | Changed | fixed: a phantom whose parent's user number was above the number of user table cells was told it had no parent |
+| `system(1057)` | Changed | fixed: a phantom whose parent held a user number above the number of user table cells was told it had no parent; the test is now against the highest user number |
 | terminfo | Changed | `eblink`, `eprot`, `edim`, `erev`, `ebold` capabilities <!--s 47 545--> |
 | the call name | Changed | can be as long as 128 characters (the lower of 128 and `maxidlen`) <!--s 241--> |
 | time zone and `epoch()` | Added | `epoch()`, `mvdate()`, `mvtime()`, `mvdate.time()`, `mvepoch()`; `set.timezone` and `config timezone` <!--s 69 124 g126 g157 g158 g159 g160 g181 g310--> |
@@ -328,8 +328,8 @@ Commands and VOC verbs that every account has, and the command language.
 | catalog name as a command | Changed | a program run by its catalog name takes `lptr`, `no.page` and the like |
 | `catalog` overwrite | Changed | pointing a local catalog entry at a different object file asks first <!--s 490--> |
 | `catalog` prefix | Added | a prefix separate from the call name; `$private.catalog` or `$private.catalogue` <!--s 210 93--> |
-| `ced` | Added | edits a data collection in a full-screen editor, with the keys every page shares; it saves into the VOC only after `admin` |
-| `cname` | Changed | the new name of a renamed file is stored lower case; a name that exists in any case, or differs from the old one only in case, is refused |
+| `ced` | Added | edits a data collection in a full-screen editor, with the keys every page shares |
+| `cname` | Changed | a renamed file's new name is stored in lower case; a name already in the VOC in any case, or one that differs from the old name only in case, is refused |
 | command stack | Changed | `.c-` undoes a `.0`; the stack is kept in the account the user entered <!--s 296 396--> |
 | `command.logging` | Added | a log of every command this session runs, in the account directory, readable by its owner only <!--s 444 g16--> |
 | `como` | Added | `append`, `in file`; `$como` ids pass the same name transform <!--s 8 361 9--> |
@@ -338,6 +338,7 @@ Commands and VOC verbs that every account has, and the command language.
 | `decatalog` | Added | deletes a local catalog entry and its object code <!--s 576--> |
 | `delete` | Changed | a record another user holds locked is reported and skipped <!--s 50--> |
 | `delete.common all except` | Added | deletes every named common block but those listed <!--s 425--> |
+| `delete.file` | Changed | when it stops because the data or dictionary part is open, `@system.return.code` is -3021 (no exclusive access) |
 | `ed` | Changed | `l` with no text as the first command works; marks typed in input; `ev` on a compound `i`-type; line numbers show positions in edit values mode; `spool` closes the printer; external commands; automatic ids <!--s 264 268 320 331 375 446 523 305--> |
 | `fstat` | Changed | wider columns <!--s 55--> |
 | `fstat.user` | Added | file activity of each session <!--s g44--> |
@@ -348,7 +349,7 @@ Commands and VOC verbs that every account has, and the command language.
 | `k` entry in the VOC | Changed | fixed: a `k` entry over a locally cataloged program stopped with "Unable to load" <!--s 263--> |
 | list merges | Changed | `merge.list` finds a key without scanning, so large lists merge in seconds <!--s 414--> |
 | `list.item` | Changed | numbers lines beyond 999 with as many digits as needed <!--s 349--> |
-| `list.readu`, `pstat`, `getlocks()`, `system(1083)` | Changed | another session's text (a lock's record id, file path or user name, a command, a program name, `@pstat`) shows a control character, `del`, bytes 128-159 and a mark character as `?` and cannot send a code to your terminal; the locks and `fileinfo(f, 1039)` are unchanged; `hsm` and `profiler display` show it the same way, and `kernel(K$SHOW.SAFE, text)` gives a program the same rule |
+| `list.readu`, `pstat`, `getlocks()`, `system(1083)` | Changed | another session's text (a lock's record id, file path or user name, a command, a program name, `@pstat`) shows a control character, `del`, bytes 128-159 and a mark character as `?` and cannot send a code to your terminal; the locks and `fileinfo(f, 1039)` are unchanged |
 | `listu`, `who`, `pstat` | Changed | `!listu` too: show the account and the login name; `listu detail`; the blocking user and when a wait began <!--s 12 24 29 38 77 121 289 427 577--> |
 | `map local`, `map no.page` | Added | list the locally cataloged programs; heading once <!--s 153 287--> |
 | `move.list` | Added | the command form of `movelist` <!--s g62--> |
@@ -440,13 +441,13 @@ compiled with until it is compiled again; compiling it again stops with an error
 | `md` | Removed | the Pick name for the VOC (a Q-pointer to `voc`): write `voc` |
 | `$mode execute.clearlist`, `open.fail.zero.fvar`, `pick.readnext` | Removed | added and taken out again in this release: the default select list is not cleared before an `execute` (use `clearselect 0`), the file variable of a failed `open` stays unassigned, and a `readnext` that takes its `else` sets the id variable to the null string. Their mode bits stay reserved |
 | `$mode time.ms` and `$mode default.unass.args` | Removed | write `system(1020) / 1000` for milliseconds; a default argument value needs `var.args` |
-| `$mode` words that imitated other products | Removed | `prclose.default.0` (write `printer close on` *unit*), `unassigned.common` (a common variable starts as zero), `no.case.invert` (give `input` the `nocaseinvert` clause), `optional.then.else` (a `read` takes a `then` or an `else`) are refused now with *Unrecognized mode name*; `conditional.statements`, `implied.stop` (end a program with `stop`) and `exception.save.stack` (write `saving.stack` on the `catch`) were added and removed within 2.0-0, so they never shipped |
+| `$mode` words that imitated other products | Removed | `prclose.default.0` (write `printer close on` *unit*), `unassigned.common` (a common variable starts as zero), `no.case.invert` (give `input` the `nocaseinvert` clause) and `optional.then.else` (a `read` takes a `then` or an `else`) are refused now with *Unrecognized mode name*; `conditional.statements`, `implied.stop` (end a program with `stop`) and `exception.save.stack` (write `saving.stack` on the `catch`) were added and removed within 2.0-0, so they never shipped |
 | `nano` | Removed | the second external editor, with its syntax file and the page about it (the shared parts moved to the `micro` page): write `micro`, `sed` or `ed` |
 | old terminal definitions | Removed | `addsviewpoint`, `viewpoint`, `adds4000`, `viewpoint60`, `vp60`, `vp`, `vpa2`, `vt52`, `hpgeneric`, `hp`, `ibm-pc`, `ibm5051`, `5051`, `glasstty` and `kermit`: use `ansi`, `vt100` or `xterm` (`wyse50` and `wyse60` stay) |
 | `only` and `id.only` before the file name | Removed | `list only customers` is refused: write `list customers id.only` |
 | `open "name,part"` (BASIC) and `file,part` in TCL verbs | Removed | open the part by its own VOC name; a comma is part of the name, so "a,b" is only found if a VOC record is called a,b |
 | `option` words that imitated other products | Removed | `option pick` and 22 words, refused now with *Option name not recognized*: `assoc.unassoc.mv`, `pick.breakpoint`, `pick.breakpoint.u`, `pick.explode`, `pick.grand.total`, `pick.implied.eq`, `pick.null`, `pick.wildcard`, `qualified.display`, `with.implies.or`, `query.no.case`, `query.priority.and`, `ampm.upcase`, `crdb.upcase`, `no.date.wrapping`, `space.mct`, `lock.beep`, `ed.no.query.fd`, `create.file.upcase`, `select.keep.case`, `debug.rebind.keys`, `proc.a`. SD does what it did with them off: write `with city = "Reno"`, use `like` for wildcards, brackets and `or` for the order of tests, `no.case` after an operator for case; times and amounts are `am`, `pm`, `cr`, `db`; a date such as 31 February rolls into the next month; a lock wait is silent; `fd` in `ed` asks first; `create.file` names a file in lower case |
-| `parser$mfile` (`!parser` key 5) | Removed | write `parser$get.token` |
+| `parser$mfile` (`!parser` key 5) | Removed | `parser$get.token` |
 | `procread`, `procwrite`, `@pib`, `@sib`, `@pob`, `@sob` | Removed | leftovers of PROC, which went earlier |
 | `rename` | Removed | second name of `cname`: write `cname`. (`cname` still takes the comma form, `cname old, new`.) |
 | screen save and restore | Removed | `save.screen()` and `restore.screen`: still exist and do nothing the terminal could see |
@@ -529,7 +530,7 @@ to SD's own code. The sections above are the openQM items that were built, with 
 | `tool.sessions` | Added | full-screen page of sessions and locks; logs a session out, releases a lock, stops new logins; every command it runs is written to the audit trail |
 | `tool.viewers` | Added | the administrator's Bypass programs page and home tile: the readers `pdf` may start, and the known readers App Paths names, each allowed or stopped through `set.viewer` after a box answered Run |
 | `update.accounts` deletion list | Changed | after the copy from `newvoc` it removes from the account's VOC the records on SD's deletion list (`sdsys\voc_removed`), but only the record SD shipped (not one of your own, not a `[locked]` one unless it is a verb), after saving a copy, and audits it; before `newvoc.mods` |
-| `update.accounts` in the SDSYS account | Changed | the administrator's own VOC is updated from `voc_template`, not `newvoc`, so a page that is the administrator's own (`tool.gates`) is not written over by the holder's version |
+| `update.accounts` in the SDSYS account | Changed | the administrator's own VOC is updated from `voc_template`, not `newvoc` (no visible change in Solo today: the two sets hold the same `tool.gates`) |
 | VOC descriptions | Changed | `tool.jobs` carries a one-line description in the VOC |
 | `XFER` and the transfer limits | Added | `sd.conf`: `XFER` (0 as delivered; 1 lets the account transfer files once `set.xfer.access` is on), `XFERFILE` (10 MB a file), `XFERSLOT` (100 MB a transfer), `XFERWAIT`, `XFERIDLE`, `XFERMAX` (60 minutes) and `XFERKIND` (the endings taken; blank is any plain text); read when Solo starts |
 
@@ -556,7 +557,7 @@ to SD's own code. The sections above are the openQM items that were built, with 
 | `set.ai` | Added | the administrator chooses the provider, model and key from the prompt, and turns the `ai` gate on or off; `set.ai models` lists the provider's own model names, and a model it does not list is warned about |
 | `set.ai key` | Added | the key typed at the prompt shows one `*` for each character and is never shown itself; if the helper's client fails, `set.ai` says the key was not set and writes no audit line, even when an earlier key is stored |
 | `set.ai limit` | Added | the administrator sets the limits of AI use: requests an hour (20), tokens a day (100000), seconds (30) and bytes each way (65536) for a request, and `max-tokens`, the length of an answer at the prompt and on every page (1024) |
-| `tool.ai` | Added | the administrator's AI choice page and home tile (*Data, network and AI*): Anthropic, OpenAI, Google, DeepSeek or custom, each named one with a default model, with the account's gate; S, one setup dialog: the key in a password field and the model chosen from the provider's own list; the limits and the standing text; every change a `set.ai` sentence behind a box answered Run; Getting Started page 24 |
+| `tool.ai` | Added | the administrator's AI choice page: Anthropic, OpenAI, Google, DeepSeek or custom, each named provider with its address and a default model (a key is all it needs), the account's gate; S, one setup dialog that looks the same every time: the key in a password field (handed to the helper through a file, so it passes through SD) and the model chosen from the provider's own list |
 
 ### API and client library
 
@@ -568,7 +569,7 @@ to SD's own code. The sections above are the openQM items that were built, with 
 | api requests 32 and 33 | Changed | fixed: file lock and unlock acted on the last file opened, not the file named |
 | api request 70, `delete.file` | Changed | fixed: a delete the verb refused (the file open in another session, say) left the file on the disk but the client's file number dead; the number now stays good and the status is the verb's |
 | api server loop | Changed | fixed: a client that hung up before its first request left a server process using 100% of a processor |
-| api server, refused `sdlogto` | Changed | fixed: the session went on naming the refused account, so every later open of a file by its VOC name failed; the session now stays in the account it was in |
+| api server, refused `sdlogto` | Changed | fixed: the session went on naming the refused account, so every later open by VOC name failed; it now stays in the account it was in |
 | client library: `sdchecksum` | Added | a checksum computed on the client |
 | `creating.seqkey` over the API | Added | the server's record-id counter gives the id, over the API (`sdwriteseqkey`, `sdwriteuseqkey`); on Solo, for a session signed in with the global password |
 
@@ -609,7 +610,7 @@ to SD's own code. The sections above are the openQM items that were built, with 
 | JSON merge, patch, path | Added | `jmerge()`, `jpatch()`, `jpath()`: RFC 7396 merge, RFC 6902 patch and JSONPath (RFC 9535) |
 | `jvalidate()` | Added | checks a document against a JSON Schema (draft 2020-12) and gives an array of the faults, each with its path, the keyword and a message; empty means valid |
 | `readjson`, `writejson` | Added | read and write JSON Lines through `openseq` |
-| XML functions | Added | `xparse()`, `xbuild()`, `xpath()`: XML into a collection and back, and a path query <!--s 515--> |
+| XML functions | Added | `xparse()`, `xbuild()`, `xpath()`: XML into a collection and back, and a path query (XPath 1.0); no DTD is read <!--s 515--> |
 
 ### Encryption
 
@@ -626,7 +627,7 @@ Three simple layers, with no vault and nothing on by default.
 
 | Name | Change | What |
 |---|---|---|
-| group size of a new file | Changed | `grpsize` is 4 (KB) in the shipped `sd.conf` and the built-in value when it is absent; it was 2 and 1. 200,000 records had 5 to 11 percent of their groups overflowed at 2 kb and under 2 percent at 4 kb; writes 5 percent faster, reads 5 percent slower |
+| group size of a new file | Changed | `grpsize` is 4 (kb) in the shipped `sd.conf`, and the built-in value when it is absent; it was 2 and 1. 200,000 records had 5 to 11 percent of their groups overflowed at 2 kb and under 2 percent at 4 kb; writes 5 percent faster, reads 5 percent slower |
 | `index` and the record id | Changed | fixed: an index followed an upper-case copy of the id; it now follows the id as the file stores it |
 | index, deleting many records | Changed | fixed: in an index of three levels, removing the last value of a block took its whole branch out of the index (lookups missed records that were there, deleted values stayed listed), and a branch left with one block left its neighbors pointing at a freed block |
 | index on a right justified item | Changed | a new one keeps its keys in one order, the empty key, then numbers by value, then text, so a scan and a lookup agree when the item holds both numbers and text; building it no longer loses ids under keys equal as numbers (1, 01, 001); an existing index keeps its old order until it is made again, and an older SD cannot open a file holding the new kind |
@@ -686,11 +687,11 @@ Three simple layers, with no vault and nothing on by default.
 | text area undo | Changed | `screen memo`: Ctrl-Z gives back exactly what was there; a record holding value, subvalue or text marks came back changed |
 | text from data | Changed | the library never sends a control character to the terminal: one in a record, a record id, a file name or an AI answer is drawn as a reverse letter (ESC as `[`), one cell each; UTF-8 text and line drawing are unchanged |
 | theme roles | Added | six new styles, `warning`, `success`, `readonly`, `busy`, `focus` and `hotkey.sel` (the key letter on the selected entry of a menu), with a look in every theme (bold, underline and reverse only in `mono`), and `error` gets a `mono` look; programs that include `sl.h` need compiling again |
-| themes | Added | `paper` (the delivered one: a new install's `sd.conf` says `SCREENTHEME=paper`), `night`, `mono`, `classic` and `blue`; `screentheme=` in `sd.conf` chooses the default (no line means `mono`); a color theme is refused where the terminal cannot show color |
+| themes | Added | `paper` (black and dark blue on light gray, menus the other way round; the delivered theme: a new install's `sd.conf` says `SCREENTHEME=paper`), `night` (white and yellow on black), `mono`, `classic` and `blue`; `screentheme=` in `sd.conf` chooses the default (no line means `mono`); a color theme is refused where the terminal cannot show color |
 | `!tk` routines | Added | `!tkopen`, `!tkclose`, `!tkkeys`, `!tkframe`, `!tkmenubar`, `!tklayout`, `!tkconfirm`, `!tkform`, `!tkpickrec`, `!tkout`, `!tkwrap` and the header `tkpub.h`: a program of your own builds a full-screen page with the frame, menu bar, F2 finder, key table, confirm box, form and pick list the tools use; it runs with your own rights and gates and runs nothing itself |
 | `!tkconfirm` typed word | Changed | the word a box asks for (`open`, `restore`) is taken in either case, as any command is, and the pages show it in lower case |
 | `!tkform` fields | Changed | every entry opens empty, its starting value shown beside it (`now: ...`) and put in by Ctrl-R, and a field may keep that value when left empty; a field can be a choice of fixed words, which the pages use wherever a fixed set was typed |
-| window size | Changed | SD reads the terminal's window size at the start and when it is resized; `kernel(k$winsize)` answers it; `term w,h` holds until the next resize |
+| window size | Changed | SD reads the terminal's window size at the start and when it is resized; `@crtwide` and `@crthigh` follow it, `kernel(k$winsize)` answers it, and `term w,h` holds until the next resize |
 
 ### SDNet
 
@@ -710,7 +711,7 @@ free checks pass, and it has not been run against another server.
 | remote files, refusal | Changed | the server's own words are shown, not `status 0`; a lost connection is an error <!--s 256--> |
 | remote files, reply checked | Changed | a reply that cannot be true is a lost connection at once |
 | remote files, write | Added | for a server defined `write`: `write`, `delete`, `clearfile`, the locking reads and release |
-| remote lock functions | Added | `recordlocked()`, `getlocks()`, `filelock`, `fileunlock`: work on a remote file; `recordlocked()` is asked of the other server only when its definition says `write`, and a `read` definition stops the program with message 12506 |
+| remote lock functions | Added | `recordlocked()`, `getlocks()`, `filelock`, `fileunlock`: work on a remote file; `recordlocked()` and the file lock need a server defined `write` and a login in its write group |
 | remote `select` | Changed | fixed: a server error stopped the program with an abort |
 | SDNet logins | Added | `set.netlogin`, `delete.netlogin`: a person's login on a server, kept as derived values and never the password |
 | `set.server` | Added | defines a server; `connect` shows its key hash for you to confirm <!--s g84 147--> |
@@ -734,13 +735,13 @@ Fixes that close a way round a gate, and what the gates now ask.
 | deleting a directory tree | Changed | fixed: `delete.file` of a directory file and the other deletes of a whole tree followed a link inside it and deleted what it pointed at; a link is now removed as a link and its target left alone; a path longer than 255 characters fails cleanly |
 | delimited report to a pathname | Changed | `list ... csv to` and `delimiter to` a pathname, and `as` file id, are held to the VOC rule: a report cannot change the VOC without `admin` |
 | global password | Changed | one set after the account password now shares the account's salt, so an SD Core server can sign in over the API under the account's name with it (set it again to give an older one the shared salt); it is no longer accepted under the name SDSYS |
-| internal programs | Changed | fixed: a program a user compiled and cataloged locally ran with internal privilege without `admin`; only the global catalog or an `admin` session keeps it |
+| internal programs | Changed | the internal mark in a program's object code is honored only for an object from the global catalog or for an `admin` session; any other object that carries it is an ordinary program, held to every gate |
 | `kernel(k$internal, n)` | Changed | only a program compiled in internal mode may set internal mode; reading it (`-1`) is unchanged |
 | named common | Changed | fixed: a program that ended while holding objects in named common freed them twice |
 | named common with a `$` or `_` name | Changed | the system's own common blocks: only an internal program may declare or join one; any other program stops with message 12603 |
 | `openseq` that fails | Changed | fixed: a record lock it had taken stayed until SD was restarted; it is now given back |
 | `NETDIRS` | Changed | judged when SD starts: an entry that is not absolute, not an existing directory, a drive root, the root of a network share (`\\server\share` or `//server/share`), or overlaps the Solo folder, the system directory, the directory of `sd.conf`, `USRDIR`, `GRPDIR` or any account is ignored and named in the error log; at most 16; a value over 191 characters is refused by name; compared ignoring case, whole folder names; it now also widens a session held to its account by the `os` switch, asked after the account's own directory; no longer read by `config()` |
-| operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes, except that the VOC's own files are read only there without `admin` or the `os` switch (`openseq` cannot create one, `deleteseq` and a print file are refused) |
+| operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `select.dir`, `oscopy`, `!oscopy`, `!ioscopy`, `opentemp`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname, the embedded Python, the `edit` and `micro` editors and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes, except that the VOC's own files are read only there without `admin` or the `os` switch (`openseq` cannot create one, `deleteseq` and a print file are refused) |
 | paths with `..` | Changed | fixed: a path with a folder that does not exist followed by `..` kept the `..`; it now resolves to the right place |
 | phantom debugger messages | Changed | `pdebug` and the phantom it debugs leave each other their messages in `sd\pdebug` in the `AppData\Local` folder of the user's profile (a private folder, made with access for that user, SYSTEM and Administrators only), not in `$ipc`; message 12953 when the store cannot be set up |
 | phantom start-up records | Changed | a phantom runs the command, `DATA` lines and log file name of its start-up records in `$ipc` only if the process that started it sealed them (HMAC-SHA256 under a secret given only to the new process, in its environment); a record that does not check is refused, audited as `phantom refused` and reported to the parent; the phantom debugger's conversation is not sealed |
@@ -756,6 +757,7 @@ Fixes that close a way round a gate, and what the gates now ask.
 | Name | Change | What |
 |---|---|---|
 | classic console window | Changed | a full-screen page took 3 to 5 seconds to draw in the window Windows PowerShell or cmd opens; SD now writes to the console directly and it draws as quickly as in Windows Terminal |
+| compiled kernel | Changed | built with optimization (`-O2`, with `-fwrapv` and `-fno-strict-aliasing`) where it had none; `_FORTIFY_SOURCE=3` and `-fstack-protector-strong` end a session at a buffer overrun instead of letting it corrupt memory |
 | default terminal | Changed | 140 by 43 |
 | F1 at the prompt | Changed | fixed: names the changelog in the SD Core Solo folder, not in its `sdsys` folder |
 | failed start | Changed | fixed: an `sd.exe` that stopped early ("SD has not been started.") kept an internal lock, and every session started after it hung; the lock is given back |
@@ -794,7 +796,7 @@ Fixes that close a way round a gate, and what the gates now ask.
 | home screen Scheduled jobs tile | Added | after `admin`, the People and access group has a Scheduled jobs tile that opens `tool.jobs` |
 | home screen small window | Changed | a session that starts in the home screen is signed out when the window is too small for it, even with the Terminal tile on (it used to be left at the prompt) |
 | home screen sub-menus | Added | a tile can open a second page of tiles (a tile whose action is `menu:name`) with a Back tile, Esc and the path on the status line; eight deep; the delivered page declares none yet |
-| home screen tiles | Changed | a tile for a `tool.*` page whose command is not in the account's VOC is not shown |
+| home screen tiles | Changed | a tile for a `tool.` page whose verb is not in the account's VOC is not shown |
 | home screen version | Added | the header's date line ends with the product and its version (`SD Core Solo for Windows WS2.0-0`) |
 | `ide` | Added | tree, tabs, compile errors table, find, run, catalog and debug; Ctrl-E zooms the editor to the whole screen, and Go > Edit in SED hands a record to `sed` |
 | `ide` autologout countdown | Added | with `autologout` set, the status line counts down the last 60 seconds before the session is signed out and says whether unsaved changes will be lost; any key stops it; it reads the inactivity clock `autologout` itself uses |
@@ -853,7 +855,7 @@ Fixes that close a way round a gate, and what the gates now ask.
 | theme of your own | Added | Ctrl-T or View > Theme on every full-screen program takes the next color theme and **SD keeps your choice** (the record theme.*login name* of `&menus&` in the account): every page, the IDE, SED, the debugger and SP.VIEW start in it from then on; the site's `SCREENTHEME` is used until you choose |
 | `tool.dict` new item | Changed | N asks the id and hands a new item to the `ide`, which shows the dictionary form and writes the record; before, the page asked seven questions one at a time and wrote the record itself, and it now writes nothing |
 | `tool.dict`, `tool.voc` edit | Changed | E hands the item or the entry to the `ide` (`ide dict file item`, `ide voc name`), with the page's own boxes, where it used `sed` |
-| toolkit pages: '/' finds a row | Added | on a page whose letters are commands, `/` goes to the next row that holds a text you type: `tool.sessions` and `my.menu`; on `tool.audit` it opens the filter, as F does; the find box opens empty, and Up or Ctrl-R brings back the last text |
+| toolkit pages: '/' finds a row | Added | on a page whose letters are commands, `/` goes to the next row that holds a text you type: `tool.sessions`, `tool.jobs` and `my.menu`; on `tool.audit` it opens the filter, as F does; the find box opens empty, and Up or Ctrl-R brings back the last text |
 | toolkit pages: command output | Added | Ctrl-O (View > Output) on every page: the commands this visit ran, what each printed or why it was refused, newest first, in a window over the page (the pages with an output pane keep it) |
 | toolkit pages: confirm box and a held key | Changed | the box a letter opens waits until the key is let go, so holding R can no longer answer the box with its own Run |
 | toolkit pages: every action on a menu | Changed | a key is a short way to a menu entry, never the only way: the few keys that had no entry (Enter on the home screen, the box key on `tool.dict`, `tool.query` and `tool.test`) now have one; `tool.keys` and the dialogs are the exceptions |

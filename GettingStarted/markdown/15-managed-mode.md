@@ -38,10 +38,9 @@ computers](01c-installing-many-computers.html).
 ## How the server signs in
 
 **As `sduser`, with the global password.** Over the API that is the whole of
-it. Over ssh the server first signs in to Solo's ssh server, on port 4251, as
-the Windows user — ssh's own sign-in, with that user's Windows password or with
-the key it installed (below) — and then gives SD the global password when
-`sd-solo` asks. One account name carries
+it. Over ssh, on port 4251, the server first gets past ssh's own sign-in — its key, which
+it installed through the API — and then gives SD the global password when `sd-solo`
+asks. One account name carries
 two passwords: SD tries the account password first and the global password
 second, which is why the two must differ.
 

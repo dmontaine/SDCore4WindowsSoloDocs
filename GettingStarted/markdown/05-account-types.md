@@ -12,7 +12,7 @@ API client signs in with.
 **There is no way to make another account**, and none is needed: every
 session — at the keyboard, over ssh, through the API, or a command from a
 script — lands in `sduser`. SD's own system account, SDSYS, exists but is never
-entered.
+entered: `sd-solo -asdsys` is refused, and the administrator commands are in your own account behind `admin`.
 
 ## Three passwords
 

@@ -46,7 +46,7 @@ collection, and `ide`, a workbench for programs and files.
 
 **SD Core Solo's full-screen editing is `sed`, `edit` and `micro`**; the last two open
 the record in Microsoft Edit and in micro, and need the `os` switch — see
-[Programmer commands](07-programmer-commands.html#editors), which also says
+[Development and file commands](07-programmer-commands.html#editors), which also says
 what each is good for and what they cannot do. The three removed programs above
 are gone as *programs*; the capability is not.
 

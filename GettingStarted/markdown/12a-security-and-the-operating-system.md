@@ -58,8 +58,8 @@ error — rather than falling back to somewhere less private.
 each, with the date, time and user:
 
 ```
-2026-09-30 02:56:31 user=sduser uid=105 pid=1043 login password account=sduser via=stored
-2026-09-30 02:56:31 user=sduser uid=105 pid=1043 login account=sduser
+2026-09-30 02:56:31 user=sduser uid=1 pid=109059 login password account=sduser via=stored
+2026-09-30 02:56:31 user=sduser uid=1 pid=109059 login account=sduser
 ```
 
 Every word before the first `=` is lower case, the event names included. What
@@ -144,9 +144,11 @@ writes `tool start app=tool.audit`, and X writes the one export line; both are o
 
 ## What is still not true
 
-**SD has no file-level access control of its own** on the keyboard and ssh
-paths: a session opens files as you, so Windows' permissions on your profile
-are the only boundary. The one place a path gate does exist is the account's `os`
-switch, which holds a session, the API's included, to the account it stands in
-while it is off, as delivered — see
+**SD's own access control to operating-system files is the account's `os`
+switch, and it is the only one.** While the switch is off, as delivered, SD holds
+every session — at the keyboard, over ssh and over the API alike — to the
+account's own folder when it opens an operating-system file by pathname (plus
+any folder the administrator listed in `NETDIRS`); with the switch on, a
+session is held only by Windows' permissions on your user. What a session may do
+inside the files SD itself opens is whatever Windows lets your user do — see
 [API access](09-api-access.html#a-session-is-held-to-its-own-account).

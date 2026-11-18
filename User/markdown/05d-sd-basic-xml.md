@@ -7,7 +7,7 @@ It covers three functions that turn XML text into a
 text. To write a **query report** as XML, see the `xml` keyword on
 [SD TCL - The Query Processor](21-sd-tcl-query-processor.html); to read a document in the shape
 that report writes into the records of a file, see `import.xml` on
-[SD TCL - Files and Records](20-sd-tcl-files-and-records.html).
+[SD TCL - Files and Records: Comparing, Triggers and Importing](20-sd-tcl-files-and-records-2-comparing-triggers-and-import.html).
 
 SD folds case, so a program may be written in either case. Keywords are shown here
 in lower case. In the tables, *italics* mark something you supply and **bold**

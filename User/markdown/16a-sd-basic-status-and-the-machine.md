@@ -201,7 +201,7 @@ The names are in the `keys.h` header; 6 and 18 have none, so give those as numbe
 looks at or changes the disk (all but 0, 1, 4, 8, 9 and 10) asks the account's OS switch first: while
 it is off (`set.os.access`, off as delivered) a program is held to the account's own folder, and a
 refusal answers false (null for 3 and 18) with `status()` set to a permission error (3035). Deleting
-or making a folder whose path runs through the VOC is refused as a change of the VOC is. An unknown
+or making a folder whose path runs through the VOC is refused as a change of the VOC is, unless the session is the administrator's or the OS switch is on. An unknown
 key answers false with `status()` 1. The qualifier is read and ignored. An internal program's own
 `ospath()`, with its different numbers, is unchanged.
 

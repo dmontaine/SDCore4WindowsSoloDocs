@@ -52,8 +52,8 @@ exactly as it was** and named in `nocase-upgrade.log` in the Solo folder when:
 - it holds two ids that differ only by case (rename or delete one of each pair, then
   run `configure.file` *name* `no.case` on it);
 - it has alternate key indexes (convert it by hand with `configure.file`);
-- it lies under SDSYS (SDSYS's own files are made new by the install; convert one
-  yourself with `configure.file` *name* `no.case` if you need to);
+- it lies under the SD system folder, which the upgrade makes new itself
+  (convert one yourself with `configure.file` *name* `no.case` if you need to);
 - it could not be read or rebuilt.
 
 A walk that did not finish is reported as a failure; what was not converted keeps
@@ -80,6 +80,10 @@ you type `remote.ssh open` in SD, after `admin`, which opens both the listen add
 
 **Python is installed if none is there**, as on a new installation, and PATH
 gets SD's program folder if it lost it.
+
+**Limits.** An upgrade replaces every file it lists, so a system file you edited
+by hand is replaced; edit `sd.conf` (kept) or your account (kept), not SD's own
+files.
 
 ## Uninstalling
 

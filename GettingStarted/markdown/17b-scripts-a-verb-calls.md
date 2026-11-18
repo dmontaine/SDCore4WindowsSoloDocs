@@ -52,7 +52,7 @@ that line, or 1 without it. It exists because `micro` printed a false
 *"Permission denied"* on every save when its configuration folder was read-only;
 **the folder has to be per-user and writable only by its owner**, because
 `micro` loads and runs plug-ins from it. Nothing about it is a setting — see
-[Programmer commands](07-programmer-commands.html#editors).
+[Development and file commands](07-programmer-commands.html#editors).
 
 ### `solo-sshkey.ps1`
 

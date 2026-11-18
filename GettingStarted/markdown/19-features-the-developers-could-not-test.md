@@ -170,6 +170,33 @@ mark is a variable of the shell, and the user can remove it there. See
 **Check before relying on it.** Do not build a procedure on the guard. A shell
 that you start yourself outside SD is not marked.
 
+## Locking and contention
+
+### Semaphores under heavy contention
+
+**What to expect.** A semaphore is used on every record lock, so ordinary use
+exercises it all the time.
+
+**Check before relying on it.** If an application will have many sessions waiting
+for the same lock, try that load on your own machine first and watch how long
+the waiters wait.
+
+### A lock held by a terminal session and wanted by an API connection
+
+**What to expect.** Two local sessions compete correctly, and the API's own
+session-confinement gate is described in [API access](09-api-access.html).
+
+**Check before relying on it.** If an application mixes terminal sessions and API
+clients on the same records, try an API client and a terminal session competing
+for one record.
+
+### Task locks taken twice by the same session
+
+**What to expect.** Taking a task lock you already hold succeeds, and one
+`unlock` releases it however many times you locked it: the test is "unowned or
+mine", and `unlock` clears the slot outright. A program that takes the same lock
+twice and expects to hold it after one `unlock` will be wrong.
+
 ## Scheduled tasks
 
 ### A task that does not store your password
@@ -209,33 +236,6 @@ beside it in `.sdrestore.previous`. See
 **Check before relying on it.** On a test install, back up the account, change it,
 restore it by bare file name, restart SD with `sd-solo -restart`, and check that the
 changes are gone and that `sdrestore.log` ends with `SOLO-RESTORE APPLIED`.
-
-## Locking and contention
-
-### Semaphores under heavy contention
-
-**What to expect.** A semaphore is used on every record lock, so ordinary use
-exercises it all the time.
-
-**Check before relying on it.** If an application will have many sessions waiting
-for the same lock, try that load on your own machine first and watch how long
-the waiters wait.
-
-### A lock held by a terminal session and wanted by an API connection
-
-**What to expect.** Two local sessions compete correctly, and the API's own
-session-confinement gate is described in [API access](09-api-access.html).
-
-**Check before relying on it.** If an application mixes terminal sessions and API
-clients on the same records, try an API client and a terminal session competing
-for one record.
-
-### Task locks taken twice by the same session
-
-**What to expect.** Taking a task lock you already hold succeeds, and one
-`unlock` releases it however many times you locked it: the test is "unowned or
-mine", and `unlock` clears the slot outright. A program that takes the same lock
-twice and expects to hold it after one `unlock` will be wrong.
 
 ## SDNet: remote files between SD servers
 

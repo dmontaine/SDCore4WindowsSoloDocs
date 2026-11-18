@@ -275,3 +275,8 @@ answer. A change reaches the person at their next sign-on, or F5 in the home
 screen. The three verbs write the audit trail, in lower case; the page only runs
 them. The tile ids and the person's side are in *SD TCL - The Home Screen* in the
 User documentation.
+
+## Not here
+
+There are no `create.account`, `delete.account`, `modify.account`,
+`grant`, `revoke` or `list.grants` — see [Not in SD Core](14-not-in-sd-core.html).

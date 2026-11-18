@@ -233,6 +233,7 @@ scripts](17-the-installed-scripts.html) has the detail.**
 |---|---|
 | How it starts | a scheduled task, **SD Core Solo** — see [Running SD](03-running-sd.html). There is no Windows service |
 | After an unclean shutdown | SD starts anyway, rather than refusing because the last stop was abrupt |
+| Nested sessions | SD will not start a second time inside itself — see [Running SD](03-running-sd.html) |
 | `sd-solo <command>` | signs in with the kept copy of the account password, so a script or a scheduled job can use it — see [Running SD](03-running-sd.html) |
 | End of piped input | ends the session — at the command prompt, at `PAUSE` and at the Ctrl-R search |
 
