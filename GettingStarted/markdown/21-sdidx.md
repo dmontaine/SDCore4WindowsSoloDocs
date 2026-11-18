@@ -139,8 +139,9 @@ is out of date.
 * **On success it says what `-q` would now say**: `Index directory is
   C:\sdi_demo\byhand`, or `Indices are not relocated` when `akpath` is omitted.
   A failure to write the header is reported and exits 1. SD's own account
-  restore does not rely on this line: it runs `-q` itself and checks that it
-  names the path.
+  restore does not rely on this line and runs no `sdidx`: it puts the restored
+  account in place at SD's next start (see [Backing up and restoring the
+  account](06c-backup-and-restore.html)).
 * Omit `akpath` to say "the indexes are in the data file's folder".
 * It does not know about your account folder. It will point a file at any folder
   you can write, inside `user_accounts\sduser` or not.

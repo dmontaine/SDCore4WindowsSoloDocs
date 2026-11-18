@@ -46,7 +46,7 @@ term
 terminal setting in its VOC until **`update.accounts`** updates it.
 
 **`term` also reports the page size, and SD's default is 140 × 43 — not
-80 × 24.** **A console window narrower than that makes ordinary reports look
+80 × 24.** **A console window narrower than that makes wide reports look
 wrapped or truncated** and the report is not at fault. SD's own full-screen
 programs (`sed`, `ced`, `ide`, the home screen) want a window of at least 140
 columns by 43 lines, **which is the size SD's own window starts at**: SD always

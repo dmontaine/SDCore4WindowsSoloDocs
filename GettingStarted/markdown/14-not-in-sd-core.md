@@ -55,8 +55,7 @@ terminal has nowhere to draw a full screen).
 
 `modify` is not in SD Core Solo at all.
 
-> **`ed`** was never affected by any full-screen keyboard fault — it reads whole
-> lines and goes through the command-line editor.
+> **`ed`** reads whole lines and goes through the command-line editor.
 
 ## The PROC language
 

@@ -169,7 +169,7 @@ a definition that is not there.
 ### The page is 140 × 43, not 80 × 24
 
 **SD's default terminal size is 140 columns by 43 lines.** **A console window narrower than that
-makes ordinary reports look wrapped or truncated**, which reads as a formatting bug
+makes wide reports look wrapped or truncated**, which reads as a formatting bug
 and is not one. SD's own full-screen programs (`sed`, `ced`, `ide`, the home
 screen) want at least 140 columns by 43 lines and refuse a smaller window.
 
@@ -232,9 +232,9 @@ scripts](17-the-installed-scripts.html) has the detail.**
 | | |
 |---|---|
 | How it starts | a scheduled task, **SD Core Solo** — see [Running SD](03-running-sd.html). There is no Windows service |
-| After an unclean shutdown | SD starts anyway, rather than refusing because the last stop was abrupt |
+| After an unclean shutdown | SD starts anyway, once the daemon's own liveness — not just the segment's presence — is checked. See [Running SD](03-running-sd.html) |
 | Nested sessions | SD will not start a second time inside itself — see [Running SD](03-running-sd.html) |
-| `sd-solo <command>` | signs in with the kept copy of the account password, so a script or a scheduled job can use it — see [Running SD](03-running-sd.html) |
+| `sd-solo <command>` | uses the kept password, and any command may be given — see [Scheduled jobs](04-scheduled-jobs.html) |
 | End of piped input | ends the session — at the command prompt, at `PAUSE` and at the Ctrl-R search |
 
 ## Setting no password

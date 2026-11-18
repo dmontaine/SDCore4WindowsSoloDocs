@@ -85,6 +85,10 @@ gets SD's program folder if it lost it.
 by hand is replaced; edit `sd.conf` (kept) or your account (kept), not SD's own
 files.
 
+**What changed since the previous release**, and what an upgrade might break,
+is in the *Changes* document that comes with the release: every addition,
+change and removal, listed by section.
+
 ## Uninstalling
 
 **Uninstall from Windows Settings, *Apps*, *SD Core Solo for Windows*.** It

@@ -36,7 +36,8 @@ paste, Ctrl-Z and Ctrl-Y undo and redo, Ctrl-F finds forward and Ctrl-B
 backward (Return on the question repeats the last text; **F3 finds the next one and
 Shift-F3 the one before**, as in other text areas) and Ctrl-R replaces a text through the record.
 **Ctrl-W closes the record**; Save as and Write a copy are in the File menu.
-In the text area (the keys are those of `screen memo`; the [screen
+The same keys work in [SED](27a-sd-tcl-sed.html), which is this editor started by
+itself. In the text area (the keys are those of `screen memo`; the [screen
 library](12a-sd-basic-the-screen-statement.html) page has the list) Ctrl-A selects
 everything, Ctrl-D duplicates the line, **Alt-K** cuts the whole line into the
 clipboard (Ctrl-K in a text area elsewhere; in the IDE Ctrl-K is the keys, as on every page), and a word
@@ -45,12 +46,12 @@ Ctrl-E (the zoom), Ctrl-T (the theme) and Ctrl-K (the keys) on to the IDE.
 
 On a UTF-8 terminal (`LC_ALL`, `LC_CTYPE` or `LANG` says UTF-8, or none of them is set, as in a
 Windows console) the frame, menus and scroll bars use line-drawing characters; elsewhere `+ - |`. The colors are
-your own theme if you chose one, else the site's (`SCREENTHEME` in `sd.conf`), as on the toolkit
+your own theme if you chose one, else the site's (`SCREENTHEME` in `sd.conf`, paper as delivered), as on the toolkit
 pages and in the debugger: paper when neither names one or the name is not
 a theme, mono on a terminal with no color. Ctrl-T or View, Theme goes through blue, classic,
 mono, night and paper, skipping those the terminal cannot show, and **SD keeps the
-choice for you**: the IDE, every page, SED and the debugger start in it
-from then on, in this account and in later sessions.
+choice for you**: the IDE (also when started as `sed`), every page and the
+debugger start in it from then on, in this account and in later sessions.
 
 **A recovery copy of text you have not saved**, **if the administrator has turned it on**
 (`set.recovery on`, after `admin`; it is off as delivered, and `set.recovery` alone says whether it is on). Then
@@ -79,8 +80,8 @@ whole. **A window smaller than 140 by 43 when the IDE starts is refused**, in wo
 and nothing is drawn; `ed` is the editor for a small window. The window measured is
 the one on the screen, or the display `term w,h` gave if that is smaller. The last
 three rows are the IDE's foot, the same as the toolkit pages': the status line, a
-border and a row of function keys (the row is cut at the right edge of the window,
-the keys named first staying).
+border and a row of function keys (Esc menu, F1 help, Ctrl-S save and the build
+keys; the row is cut at the right edge of the window, the keys named first staying).
 
 **If the window is made smaller than that while the IDE runs, the IDE locks**,
 whatever the cursor is doing: a warning in reverse video fills the upper left

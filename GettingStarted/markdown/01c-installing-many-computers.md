@@ -13,8 +13,8 @@ only what it gives; its presence does not make a computer managed.
 |---|---|
 | `admin-password=` | the administrator password |
 | `global-password=` | the global password. **Blank or left out means no global password:** the computer is not managed and nothing is asked |
-| `api=` | `off`, `local` (this computer only) or `open` (other computers too) |
-| `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer. `off` with `ssh-public-key-file=` is refused |
+| `api=` | `off`, `local` (this computer only) or `open` (other computers too), port 4249. Blank: the installer asks, and a silent install takes `off`; a managed computer needs `open` |
+| `ssh=` | `off` (no ssh server of Solo's, and the OpenSSH package is not installed), `local` or `open`, port 4251. `local` and `open` install the package from `ssh-server\` when no OpenSSH server is on the computer. Blank: the installer asks, and a silent install takes `local` (`off` where no OpenSSH server is on the computer); a managed computer needs `open`. `off` with `ssh-public-key-file=` is refused |
 | `ssh-public-key-file=` | a public key file on this computer whose owner may ssh straight into `sd-solo`, on port 4251 (turns ssh on, `local`, when `ssh=` is blank); the key goes into Solo's own key file. Optional: ssh also takes the user's Windows account name and password. A key file the installer cannot read is refused |
 | `reload-data=` | `yes` or `no`, where the folder holds data kept by an earlier uninstall: reload it, or start clean (the kept data is moved aside, never deleted). Blank: the installer asks, or reloads when the file answers everything else too. Where nothing is kept it does nothing, so one file can say it for every computer |
 | `os-access=` | `none`, `sh`, `os` or `both`: which of the two switches to turn on (see *Shell and OS access* above). Blank: the installer asks. Used on a new installation only; an upgrade keeps the switches the installation has |

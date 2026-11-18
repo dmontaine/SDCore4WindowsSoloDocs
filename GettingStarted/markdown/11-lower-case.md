@@ -67,9 +67,7 @@ reported as a failure, not a warning. The mechanics are in
 
 **An upgrade also brings your VOC up to the release.** `update.accounts` adds the
 records the release ships and takes out those on SD's deletion list (`list.voc.removed`
-shows them). If your account's VOC holds a record under an older upper-case
-spelling, it adds the lower-case one beside it, so you may hold both. That is
-harmless — they dispatch to the same programs.
+shows them).
 
 ## One lookup order everywhere
 

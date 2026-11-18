@@ -45,7 +45,7 @@ the section at the end says what is Solo's own.
 | The ssh key request | Changed | the API request that lets a managed computer's server install its ssh key was number **49**; it is now **72**, and 49 asks the server for its revision, as in SD Core. A program of your own that sent 49 to install a key must send 72 |
 | The terminal's size | Changed | every session started at the terminal type's 120 by 36; now SD asks the terminal how big it is at the start and when it is resized (`term w,h` still sets it by hand); a session with no terminal to ask (a phantom, a piped script, the API) starts at 140 by 43, as `term default` sets |
 | `when field` with no operator | Changed | kept the null values; now keeps the values that are **not** null |
-| Where a session starts | Changed | a session on a terminal started at the command prompt; now it opens the home screen (`admin`, then `set.start.default terminal`, gives the prompt back) |
+| Where a session starts | Changed | a session on a terminal started at the command prompt; now it opens the home screen, **an upgrade from WS1.1-3 included** (`admin`, then `set.start.default terminal`, gives the prompt back) |
 
 ## Sections
 
@@ -246,7 +246,6 @@ File handling: opening, indexes, triggers, print files, sorting, sequential file
 | `list.triggers` | Added | every trigger subroutine used by the files of an account, dictionaries and directory files included <!--s 74 187 321--> |
 | print unit mode 3 | Changed | takes an update lock on the `$hold` item while it is written <!--s 53--> |
 | `rebuild.all.indices` | Added | rebuilds the indices of every file in the account <!--s 58--> |
-| print and index clear failures | Changed | an index whose clear could not shrink its file reports an error |
 | record id spelling | Changed | writing `R2` over a record held as `r2` replaces it and always keeps the first spelling (a write of a different size took the new one) |
 | `select` of a directory file | Changed | fixed: at the open-file limit it closes the oldest cached file and goes on; a record id holding a byte from 128 to 255 that is not part of a UTF-8 character is returned as it was written <!--s 279--> |
 | `set.file` | Changed | the target may be a `q`-pointer; a `q`-pointer with no file name points at the VOC; a new pointer's VOC id is written in lower case, the default `qfile` and a typed name alike <!--s 32 435--> |
@@ -538,7 +537,7 @@ to SD's own code. The sections above are the openQM items that were built, with 
 
 | Name | Change | What |
 |---|---|---|
-| `agent-pack` | Added | a guide to SD BASIC for AI agents (its examples compiled and run), a generated reference of everything the product has, a Claude Code skill and a recipe for giving an agent a way in, in the source and in the install; User page 41 and Getting Started page 23 |
+| `agent-pack` | Added | a guide to SD BASIC for AI agents (its examples compiled and run), a generated reference of everything the product has, a Claude Code skill and a recipe for giving an agent a way in; the guide and the reference are in the install as well as the source; User page 41 and Getting Started page 23 |
 | `agent-pack` switches | Changed | the guide and the knowledge pack name every switch Solo has (another server's files, file transfer, scheduled jobs, the AI, the MCP door), each off as delivered, and say where the installed guide and pack are |
 | `ai` answers on a page | Changed | the AI line of every page shows the whole answer, in paragraphs, in a box that scrolls (it was cut to one short sentence); the cursor stands after what is typed and stays in the line after Follow up and F6 |
 | `ai` documentation passages | Added | the AI line adds up to four matching sections of the installed User documentation (the Getting Started pages, which hold Solo's administration, only for a session that typed `admin`) to the request; they are sent and counted in the size the preview shows, but not shown, and Cancel is still the default; the `ai` verb adds none |
@@ -589,7 +588,7 @@ to SD's own code. The sections above are the openQM items that were built, with 
 | `tool.dict` | Added | full-screen dictionary of a file (items by type and what they show; make, edit, delete, compile and try an item; the file's indices: make, build, delete, list) |
 | `tool.files` | Added | full-screen list of the account's files (kind, records, modulus, size, indices, trigger, case, dictionary) with make, clear and delete (each the ordinary verb, after a box) and analyze and the index and trigger lists (the terminal is handed to the verb) |
 | `tool.files` | Changed | refuses a VOC keyword (such as `all`) as the name of a file to make, clear, delete or report on |
-| `tool.keys` | Added | full-screen diagnostic for the terminal and the keyboard, for everyone |
+| `tool.keys` | Added | full-screen diagnostic for the terminal and the keyboard, for everyone: the terminal type, window, color and theme, and the name the screen library gives each key pressed, ticked in a grid of the keys seen; Ctrl-R shows the raw bytes; it changes nothing |
 | `tool.query` | Added | full-screen query and report builder: file, columns (break and total), up to six conditions, four sort levels and options make a list / sort / count / sum sentence that is shown, checked, run into a results box (2000 lines), and can be saved to and loaded from the file `&queries&`; every sentence is checked again before it runs |
 | `tool.query` | Changed | before every save and delete it checks that `&queries&` is an ordinary data file in your own account, and deletes only saved queries (`tool.bulk`'s undo file has the same check) |
 | `tool.query` questions | Changed | its seven questions are asked on a form; a refused answer is explained in the form, with the form's explanation, and the form stays open with the text typed |
@@ -640,7 +639,7 @@ Three simple layers, with no vault and nothing on by default.
 
 | Name | Change | What |
 |---|---|---|
-| agent pack | Added | the installer puts the guide and the knowledge pack for AI agents in the installation's `agent-pack` folder, when the download's pack matches the installed release; an absent or other-version pack is a note, never a stop |
+| agent pack | Added | the installer puts the guide and the knowledge pack for AI agents in the `agent-pack` folder under the installation's system directory; nothing in SD reads them, and an upgrade replaces them |
 | changes document | Added | a release package carries it beside the installer as `sd-core-solo-for-windows-<version>-changes.pdf`, `.html` and `.md`, and the installer copies the three into the installation's `pdf` folder |
 | documentation PDFs | Added | the manuals found beside the installer are put in the installation's `pdf` folder through `docs.install`; anything else is left alone |
 | setup file sample | Changed | `sd-solo-setup.conf.sample` documents the `viewer` item the installer reads (a PDF reader for `pdf`, or none) |
@@ -648,7 +647,7 @@ Three simple layers, with no vault and nothing on by default.
 | Shell and OS access page | Added | the installer asks, on a new installation only, with two boxes, both unticked (an upgrade does not show the page and keeps the switches the installation has); the control file's `os-access=` (`none`, `sh`, `os` or `both`) answers it on a new installation; a silent installation, or an unticked page, turns nothing on |
 | source not installed | Changed | the complete source (C, `gpl.bp`, build and installer scripts) is `SDCore4WindowsSolo-source-<version>.zip` beside the installer and is no longer installed |
 | Start Menu entry | Added | the install puts SD Core Solo in your own Start Menu, opening a classic console window; the uninstaller removes it |
-| start question | Added | on a new installation, one unticked box: start new sessions at the command prompt instead of the home screen (`set.start.default terminal`); the control file's `start=` (`menu` or `terminal`) answers it; an upgrade keeps the start the installation has |
+| start question | Added | on a new installation, one unticked box: start new sessions at the command prompt instead of the home screen (`set.start.default terminal`); the control file's `start=` (`menu` or `terminal`) answers it; an upgrade asks nothing and keeps a start the installation has set; an installation from before the home screen has none set, so it opens the home screen |
 | PDF reader page | Added | where a known PDF reader is installed and none is allowed, one unticked box: allow it for the `pdf` command (`set.viewer add pdf <name>`); the control file's `viewer=` answers it; a silent installation allows nothing |
 | API and ssh boxes | Changed | the "other computers" boxes use SD Core for Windows' words: *Let other computers on your network reach it* (the API) and *... connect to this one over ssh (port 4251)*; as delivered the API is still off and ssh answers this computer only |
 | uninstall Keep | Changed | keeps what SD Core keeps with its accounts: the passwords, the audit trail, the TLS key, your ssh key file and the ssh host key, the SDNet logins, `newvoc.mods`, the saved VOC records and where sessions start; the question is asked before anything is removed |
@@ -733,14 +732,14 @@ Fixes that close a way round a gate, and what the gates now ask.
 | commands that change a file you name | Changed | `get.list ... deleting`, `save.list`, `delete.list`, `sort.list`, `copy.list`, `map file`, `format`, `fixdir`, `generate`, `compile.dict data`, `set.trigger`, `reformat ... to`, the `pageseq` clause of a report, `sp.view` (deleting the item shown), `como ... in`, `basic`'s object file, `create.file` on an existing file, `import.csv`, `import.json` and `import.xml` into a VOC, and over the API `write`, `delete` and `clearfile`, each now ask before they change anything and say why when they refuse |
 | control codes in data | Changed | text from data (a record, a lock id a program made, a file name, a command shown by `pstat`) cannot send escape sequences to a terminal: the screen library draws control characters as reverse letters, the kernel's lock list, `getlocks()`, `pstat`, the `profiler` and `hsm` displays show them as `?`; `kernel(k$show.safe, text)` gives a program the kernel's rule |
 | `convert.data` output file | Changed | the output path is held to the VOC rule before anything is read: a path that leads into the account's VOC is refused without `admin` |
-| deleting a directory tree | Changed | fixed: `delete.file` of a directory file and the other deletes of a whole tree followed a link inside it and deleted what it pointed at; a link is now removed as a link and its target left alone; a path longer than 255 characters fails cleanly |
+| deleting a directory tree | Changed | fixed: `delete.file` of a directory file and the other deletes of a whole tree followed a link inside it and deleted what it pointed at; a link is now removed as a link and its target left alone |
 | delimited report to a pathname | Changed | `list ... csv to` and `delimiter to` a pathname, and `as` file id, are held to the VOC rule: a report cannot change the VOC without `admin` |
 | global password | Changed | one set after the account password now shares the account's salt, so an SD Core server can sign in over the API under the account's name with it (set it again to give an older one the shared salt); it is no longer accepted under the name SDSYS |
 | internal programs | Changed | the internal mark in a program's object code is honored only for an object from the global catalog or for an `admin` session; any other object that carries it is an ordinary program, held to every gate |
 | `kernel(k$internal, n)` | Changed | only a program compiled in internal mode may set internal mode; reading it (`-1`) is unchanged |
 | named common | Changed | fixed: a program that ended while holding objects in named common freed them twice |
 | named common with a `$` or `_` name | Changed | the system's own common blocks: only an internal program may declare or join one; any other program stops with message 12603 |
-| `openseq` that fails | Changed | fixed: a record lock it had taken stayed until SD was restarted; it is now given back |
+| `openseq` that fails | Changed | fixed: a record lock it had taken stayed until SD was restarted; it is now given back; an `openseq` that took the else branch for an absent file kept the lock on its name until the file variable was closed, and the shipped programs now close it there |
 | `NETDIRS` | Changed | judged when SD starts: an entry that is not absolute, not an existing directory, a drive root, the root of a network share (`\\server\share` or `//server/share`), or overlaps the Solo folder, the system directory, the directory of `sd.conf`, `USRDIR`, `GRPDIR` or any account is ignored and named in the error log; at most 16; a value over 191 characters is refused by name; compared ignoring case, whole folder names; it now also widens a session held to its account by the `os` switch, asked after the account's own directory; no longer read by `config()` |
 | operating system paths | Changed | `openseq`, `openpath`, `deleteseq`, `dir()`, `select.dir`, `oscopy`, `!oscopy`, `!ioscopy`, `opentemp`, `digest()` of a file, the file-system keys of `ospath()`, a print file named with `setptr ... as pathname` or `setpu`, a CSV report's `to` pathname, the embedded Python, the `edit` and `micro` editors and a VOC pointer to a file outside the account each ask the account's `os` switch; inside the account's own directory nothing changes, except that the VOC's own files are read only there without `admin` or the `os` switch (`openseq` cannot create one, `deleteseq` and a print file are refused) |
 | paths with `..` | Changed | fixed: a path with a folder that does not exist followed by `..` kept the `..`; it now resolves to the right place |
@@ -762,8 +761,9 @@ Fixes that close a way round a gate, and what the gates now ask.
 | default terminal | Changed | 140 by 43 |
 | F1 at the prompt | Changed | fixed: names the changelog in the SD Core Solo folder, not in its `sdsys` folder |
 | failed start | Changed | fixed: an `sd.exe` that stopped early ("SD has not been started.") kept an internal lock, and every session started after it hung; the lock is given back |
-| kernel faults | Changed | fixed: `getlocks()` with a user number nobody holds read outside the user table; a time conversion with negative parts or long hours overran its buffer, and a prefix strip in a conversion copied over itself |
+| kernel faults | Changed | fixed: `getlocks(file, user)` with a user number out of range read outside the user table; a time conversion with negative parts or long hours overran its buffer, and a prefix strip in a conversion copied over itself |
 | message numbers | Changed | the administrator and password messages (12002 to 12020, 12022, 12025 to 12035), the `SDConnectLocal` refusal (12930), the AI gate message (12611) and the `set.pins` messages (12935 to 12937) are now 15891 to 15928 (15923 and 15924 unused), in the same order and with their text unchanged: SD Core for Windows uses those numbers for other messages |
+| print and index clear failures | Changed | an index whose clear could not shrink its file reports an error |
 | `sd-solo -start` | Changed | a script that captures its output through a pipe (`$x = sd-solo -start` in PowerShell) gets it and goes on; the background process kept the pipe and the script waited until `sd-solo -stop`. A phantom gives back a pipe the same way; a file or a terminal is kept |
 | `sd-solo -status` | Changed | fixed an overrun on a server that recorded no start time |
 | `sd-solo -stop` and `sd-solo -restart` | Changed | a session still attached ten seconds after the termination signal is ended with SIGKILL, and the stop says how many; before, it was left running with SD gone under it. A session idle at a terminal or on a pipe leaves by itself |

@@ -69,11 +69,11 @@ clear.locks {n}
 No task locks reserved by any user
 ```
 
-and with lock 5 held by user 29, `*` marking your own session:
+and with lock 5 held by user 16, `*` marking your own session:
 
 ```
 :list.locks
- 0:       1:       2:       3:       4:       5: 29*   6:       7:
+ 0:       1:       2:       3:       4:       5: 16*   6:       7:
  8:       9:      10:      11:      12:      13:      14:      15:
 16:      17:      18:      19:      20:      21:      22:      23:
 ```
@@ -173,7 +173,10 @@ tool.sessions
 refused before it reads anything. It needs a window of 140 columns by 43 lines. The top list
 is every session — user number, Windows process number (`Pid`), when it signed on, its kind
 (user, phantom, API or SDNet), the login user (always `sduser` here), the account it is in, where it came
-from, and whether it is yours (a star) or a logout is pending. The lower list is every lock:
+from, and whether it is yours (a star) or a logout is pending. **Ctrl-O opens an output
+pane** (six rows, between the row box and the foot) that keeps the commands the page ran,
+with what each answered, newest first; Ctrl-PgUp and Ctrl-PgDn scroll it and Esc puts it
+away. It is kept in memory for this run of the page only. The lower list is every lock —
 the user, the file number and path, the type (`FX` and `SX` lock a whole file, `RU` is read
 and update, `RL` is read, `WAIT` is a session waiting for a lock), the record id, since when,
 and whether a session with that user number is still signed on. Under the sessions the page

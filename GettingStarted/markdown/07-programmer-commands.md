@@ -73,6 +73,11 @@ the compile and the catalog.
 keyboard. **A session with no terminal is refused** — an API session or a
 piped script has nowhere to draw a full screen, and is told so.
 
+**`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
+need no operating-system permission and no editor installed; they need a terminal
+window of at least 140 columns by 43 lines (the debugger and the home screen use
+the same frame).
+
 **Only `micro` highlights SD BASIC.** Microsoft Edit has no syntax
 highlighting at all, which is the one real difference between the two
 verbs:
@@ -91,11 +96,6 @@ data record.
 > the compiler's own tables of statements, reserved words and intrinsic
 > functions, so the highlighting follows the language. **If a name you
 > expect is not colored, that is worth reporting.**
-
-**`sed`, `ced` and `ide` run inside SD** and draw the screen themselves, so they
-need no operating-system permission and no editor installed; they need a terminal
-window of at least 140 columns by 43 lines (the debugger and the home screen use
-the same frame).
 
 **`ed` is unaffected and is still there.**
 
