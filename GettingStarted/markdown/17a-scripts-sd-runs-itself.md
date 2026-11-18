@@ -117,9 +117,10 @@ configuration, so editing it by hand does not last.
 
 ### `solo-ssh-firewall.ps1`
 
-**Decides whether other computers may reach port 4251.** It is the one step of
-Solo's ssh that needs an administrator, so it is run from the installer's
-consent prompt, or by you from an elevated PowerShell. See
+**Sets the firewall rule for port 4251**, the second wall: the first is the
+listen address in Solo's ssh configuration, `127.0.0.1` for `local` and `0.0.0.0`
+for `open`, which `solo-sshd.ps1 -Install` writes. It is run from the installer's
+consent prompt or by the doors helper, or by you from an elevated PowerShell. See
 [ssh access](08-ssh-access.html) for the four switches and their exit codes.
 
 ### `solo-api-listener.ps1`

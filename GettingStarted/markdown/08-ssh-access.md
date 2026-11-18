@@ -82,8 +82,8 @@ developed on, the policy locks an account after 10 wrong tries within 10
 minutes (`net accounts` shows yours), and that includes you. **Solo therefore has a
 lock-out of its own** ([below](#the-lock-out-three-wrong-passwords-lock-the-address)),
 which cuts an address off after three wrong passwords, before that count is reached from one
-address. So **leave the firewall rule limited to this computer unless other
-computers need to reach SD**, and use a long Windows password. (Windows OpenSSH
+address. So **use `local` unless other computers need to reach SD**, and use a long
+Windows password. (Windows OpenSSH
 on port 22 has the same property, and no lock-out of Solo's.)
 
 **The password is not sent in the clear.** ssh encrypts the connection before
@@ -154,13 +154,22 @@ administrator has turned it on (`set.os.access sh on`) — see
 
 | | |
 |---|---|
-| **Let other computers on your network connect to this one over ssh (port 4251)** | the installer asks, or `ssh=open` in the control file. Unticked, or `ssh=local`, the firewall rule for port 4251 is limited to `127.0.0.1` — this computer only |
+| **`local`** | the listener is `127.0.0.1:4251`: `ssh -p 4251 you@127.0.0.1` works, nothing else can connect. Unticked, or `ssh=local` in the control file |
+| **`open`** | the listener is `0.0.0.0:4251` (every IPv4 address, none on IPv6), and the firewall rule lets other computers in. The box **Let other computers on your network connect to this one over ssh (port 4251)**, or `ssh=open` |
 | **A managed computer** | needs it open, because the SD Core for Linux server connects from elsewhere. Nothing opens it for you |
+
+**Two walls, not one.** The listen address is the first: for `local` the server answers on
+`127.0.0.1` only, so another computer finds nothing on port 4251 whatever the firewall says. The
+firewall rule for port 4251 is the second: limited to `127.0.0.1` for `local`, any address for
+`open`. The listen address is the `ListenAddress` line of `C:\ProgramData\SDCoreSolo\ssh\sshd_config`.
+**An upgrade keeps what you had**: an ssh server that was open stays open; one from an earlier
+release that answered every address behind a rule for this computer only answers on `127.0.0.1` after it.
 
 **Use `127.0.0.1` rather than `localhost` for a connection from this computer**:
 Windows' ssh client tries the IPv6 address first and does not fall back to
-IPv4. `ssh -p 4251 you@127.0.0.1` works either way the rule is set, because
-Windows does not filter traffic that never leaves the computer.
+IPv4, and Solo's ssh server does not listen on IPv6. `ssh -p 4251 you@127.0.0.1`
+works for `local` and `open`, because Windows does not filter traffic that never
+leaves the computer.
 
 **The rule is Solo's own, named `SD-Solo-SSH-In-TCP`**, and creating it needs an
 administrator: a firewall rule is machine-wide. The uninstaller removes it.
@@ -172,7 +181,8 @@ installed. A change asks for the administrator password again and is made by the
 installer set up, from any session and with no elevated window:
 - off stops Solo's ssh server and keeps its folder and host key;
 - local or open starts it, and sets it up first, as the installer would, if ssh was not chosen when
-  installing.
+  installing;
+- a move between local and open writes the new listen address and restarts Solo's ssh server, then sets the firewall rule to match.
 
 The doors helper's trade is described on the API page (09).
 
@@ -188,7 +198,8 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\solo-ssh-fire
 `-Remove` takes it away and `-Show` reports without changing anything. It exits
 `0` applied, `1` failed, `2` refused (for example, not elevated). It scopes the
 rule's remote address rather than disabling it, so the rule reads correctly in
-`wf.msc`.
+`wf.msc`. **It changes the firewall rule only, the second wall**: with the server listening on
+`127.0.0.1`, `-Open` lets nobody else in. To open ssh, use `remote.ssh open`, which changes both.
 
 ## The lock-out: three wrong passwords lock the address
 

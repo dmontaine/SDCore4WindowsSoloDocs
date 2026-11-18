@@ -106,13 +106,14 @@ port 4251 and check that you land in SD. See [ssh access](08-ssh-access.html).
 **What to expect.** Solo's ssh server runs as SYSTEM, started by a scheduled task
 at Windows start-up before anyone signs in, on port 4251. It checks a Windows
 password, or a key in Solo's key file, and starts the session as you. Whether
-another computer can reach port 4251 depends on the firewall rule and your
-network. SD Core Solo and SD Core can be installed together, each with its own
+another computer can reach port 4251 depends on the listen address (`127.0.0.1`
+for `local`, `0.0.0.0` for `open`), the firewall rule and your network; with
+`local`, a connection to the computer's network address on 4251 is refused. SD Core Solo and SD Core can be installed together, each with its own
 ports; the computer's own ssh server on port 22 lands in SD Core, not in Solo.
 
 **Check before relying on it.** Restart the computer, do not sign in, and connect
 from a second computer with `ssh -p 4251`, typing the Windows password and then
-the SD password. If SD Core is also installed, connect to port 22 as an SD Core
+the SD password. With ssh set to `local`, the same connection must be refused. If SD Core is also installed, connect to port 22 as an SD Core
 user.
 
 ### The ssh lock-out

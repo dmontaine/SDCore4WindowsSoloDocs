@@ -43,7 +43,10 @@ Each step reports in `%USERPROFILE%\SDCoreSolo\install-summary.log`, ending
 with a verdict. The startup task is registered again. So is the ssh task
 (**SD Core Solo SSH**, which starts Solo's own ssh server on port 4251), but
 only where Solo's ssh server is already set up: an upgrade never turns ssh on
-for a computer that chose none. An existing firewall rule is not touched.
+for a computer that chose none. An existing firewall rule is not touched. **Solo's ssh server
+keeps its reach**: one that was open (its rule open to other computers) listens on every IPv4
+address, `0.0.0.0`; any other listens on `127.0.0.1` only from this release on (an earlier
+release listened on every address and left the firewall rule to keep other computers out).
 
 **Upgrading from a release before WS1.1-3 changes how ssh works**, and does it
 without asking: what the earlier release added to Windows' ssh settings is
@@ -52,7 +55,7 @@ moves into Solo's own key file, and ssh to Solo is now on port 4251 instead of
 22. See [ssh access](08-ssh-access.html). **An upgrade does not open the
 firewall rule for 4251 to other computers**, not even on a managed computer
 whose server has to reach it: its port 4251 answers this computer only until
-you run `solo-ssh-firewall.ps1 -Open` from an elevated PowerShell.
+you type `remote.ssh open` in SD, after `admin`, which opens both the listen address and the rule.
 
 **Python is installed if none is there**, as on a new installation, and PATH
 gets SD's program folder if it lost it.

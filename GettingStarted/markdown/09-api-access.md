@@ -148,7 +148,7 @@ more) of four views, chosen with the keys `1` to `4`:
 
 | View | What it shows and does |
 |---|---|
-| `1` doors | what `remote.api` and `remote.ssh` say with no keyword: **the machine's own answer**, read back from `sd.conf` and the firewall rules. `A` changes the API and `S` ssh (`off`, `local` or `open`, from a list that starts on `off`); `open` wants the word `open` typed. After the box the terminal goes to the verb, which asks for the administrator password again |
+| `1` doors | what `remote.api` and `remote.ssh` say with no keyword: **the machine's own answer**, read back from `sd.conf`, Solo's ssh configuration (its listen address) and the firewall rules. `A` changes the API and `S` ssh (`off`, `local` or `open`, from a list that starts on `off`); `open` wants the word `open` typed. After the box the terminal goes to the verb, which asks for the administrator password again |
 | `2` servers | the SDNet servers you have defined. `X` deletes the one under the cursor (`delete.server`); `N` asks every field and gives **the terminal to `set.server`**, whose `connect` step shows the key the server presents and asks whether to trust it |
 | `3` connected | every session now by the door it came through: user number, kind (user, api, sdnet, phantom), login user, account and origin |
 | `4` TLS | this installation's TLS identity as `settings.report` gives it. Never the private key |
