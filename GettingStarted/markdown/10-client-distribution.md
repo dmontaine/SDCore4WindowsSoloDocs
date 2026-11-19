@@ -74,8 +74,8 @@ requires SCRAM authentication"*. Use the client library that comes with SD.
 
 | | |
 |---|---|
-| `SDConnect()` | over the network, to port **4249**, as `sduser` with the account password. It is the only way to connect |
-| `SDConnectLocal()` | **disabled.** It answers *SDConnectLocal is not available in SD Core Solo for Windows - connect with SDConnect and the account password* |
+| `SDConnect()` | over the network, to port **4249** - name it; the library, SD Core's too, takes -1 as SD Core's 4247 - as `sduser` with the account password. It is the only way to connect |
+| `SDConnectLocal()` | **does not work.** It returns false at once, with `SDError()` saying why: it starts the server program beside the DLL, which Solo does not have under that name (Solo's is `sd-solo.exe`) |
 
 **To reach this computer from a program on it, call `SDConnect()` with
 `127.0.0.1`.** The API must be switched on; see [API access](09-api-access.html).

@@ -14,9 +14,15 @@ see *API access* in the GettingStarted set.
 
 ## The library
 
-Four DLLs are installed. They are built from one source: each pair is the same
-code compiled twice under two output names, so the two files are not identical
-on disk but behave identically.
+The client library is written new for SD Core (a clean-room library under the
+Blue Oak Model License 1.0.0), so an application of any licence may link it; it
+is the same library for all four SD Core products. It is delivered as binaries
+in the release package's `clients` folder (`clients\Windows64` and
+`clients\Windows32`), and the installer copies it from there; its source is not
+published. Four DLLs are installed: each pair is the same code under two names,
+so the two files are not identical on disk but behave identically. An installer
+run without the `clients` folder beside it installs no client library; copy the
+files from a release package instead.
 
 | | |
 |---|---|
@@ -27,7 +33,7 @@ The `*clilib` names are what existing applications ask for; the `*client` names
 are for new work. **Renaming one to the other does not work**: an import library
 records the DLL name its symbols come from, so an application built against
 `sdclilib` loads `sdclilib.dll` whatever you call the file on disk. That is why
-both names are built rather than one being a copy of the other.
+both names are delivered rather than one being a copy of the other.
 
 > **The architecture must match the application, not the machine.** A 32-bit
 > application on 64-bit Windows needs the 32-bit DLL. The 32-bit build is a
@@ -76,20 +82,22 @@ the PATH.
 
 | | |
 |---|---|
-| `SDConnect(host, port, user, pass, account)` | over the network, to port **4249**. Use `127.0.0.1` for this computer; `user` is `sduser` |
-| `SDConnectLocal(account)` | **disabled on Solo.** Returns false at once |
+| `SDConnect(host, port, user, pass, account)` | over the network, to port **4249** - **name it**: the library is SD Core's too, and a port of -1 means SD Core's 4247. Use `127.0.0.1` for this computer; `user` is `sduser` |
+| `SDConnectLocal(account)` | **does not work on Solo.** Returns false at once |
 
 > **`SDConnectUDS` (Unix Domain Socket) is not available, on either
 > port.** It sent its credential over the socket in a way that predates
 > SCRAM, and was removed for the same reason the old cleartext API login was.
 
-### Why SDConnectLocal is disabled
+### Why SDConnectLocal does not work
 
 `SDConnectLocal` sends no password, and every SD Core Solo for Windows session
-proves the account password. It now returns false immediately and the error text
-(`SDError()`) reads *SDConnectLocal is not available in SD Core Solo for Windows -
-connect with SDConnect and the account password*. The API has to be on; see
-*API access* in the GettingStarted set.
+proves the account password. The library's `SDConnectLocal` starts the server
+program beside the DLL, which on SD Core is `sd.exe`; Solo's is `sd-solo.exe`, so
+it returns false immediately, with `SDError()` saying why, and no session is
+started. (Were one started, the server would refuse it anyway.) Connect with
+`SDConnect` and the account password; the API has to be on - see *API access* in
+the GettingStarted set.
 
 **The login is SCRAM-SHA-256, inside TLS 1.3.** A client that sends a password in
 clear is refused. The server sets a puzzle only someone who knows the
@@ -121,7 +129,7 @@ account needs, but cannot open, rename, delete or list anything else.
 | Function | Returns | Description |
 |---|---|---|
 | `SDConnect(host, port, user, pass, account)` | Boolean | connect over TCP. A connection that fails returns false and `SDError()` says why; the session number it was given is the current one afterwards, so **select the session you were using with `SDSetSession`** before going on |
-| `SDConnectLocal(account)` | Boolean | **disabled on Solo** — always false |
+| `SDConnectLocal(account)` | Boolean | **does not work on Solo** — always false |
 | `SDConnected()` | Boolean | is a session active |
 | `SDDisconnect()` | none | end the current session |
 | `SDDisconnectAll()` | none | end all sessions |

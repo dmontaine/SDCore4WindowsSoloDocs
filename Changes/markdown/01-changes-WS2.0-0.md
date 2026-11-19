@@ -84,6 +84,8 @@ The server side of the API, the client library and the language headers.
 | api sign-in: audit | Added | the first entry to an account writes `api login user= account=` to the audit trail |
 | `autologout` | Changed | reaches an API session; a client hang found while testing it is fixed |
 | client library headers | Added | C# (`sdclient.cs`) and PHP (`sdclient.php`) beside the six already there; neither has been run against a runtime |
+| client library: C header | Changed | fixed: `syscom\sdclilib.h` declared `SDMarkMapping`, `SDSelectIndex`, `SDSelectLeft`, `SDSelectRight`, `SDSetLeft` and `SDSetRight` with `int` where the library takes 16-bit values |
+| client library: clean room | Changed | the C client library is written new for SD Core (Blue Oak Model License 1.0.0, so a program of any licence may link it), one library for all four products, delivered as binaries in the release package's `clients` folder; the installer copies the four DLLs into `usr\bin` and `usr\clients` from there; the source no longer builds the old GPL library. A program names port 4249 (-1 means SD Core's 4247), and `SDConnectLocal` returns false at once |
 | client library: dictionary | Added | `sdevaluate`, `sdevalconv`, `sdiconv`, `sdoconv`, `sdiconvs`, `sdoconvs` |
 | client library: files | Added | `sdopenseq`, `sdreadseq`, `sdreadblk`, `sdwriteseq`, `sdwriteblk`, `sdseek`, `sdweofseq` |
 | client library: more functions | Added | `sdrevision`, `sdgetvar`, `sdsystem`, `sdindices`, `sdtrans`, `sdrtrans`, `sdtxn` (mode 4 commits a nested transaction non-durably) |
