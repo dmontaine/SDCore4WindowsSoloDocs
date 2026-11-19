@@ -34,8 +34,11 @@ release that installed them. So an upgrade also, for you:
   shipping - but only a record that is still exactly what SD shipped, after
   saving a copy (`restore.voc` puts it back); a record you keep your own
   version of, marked `[locked]`, is left alone;
-- takes the `sd.conf` parameters SD no longer has out of your kept `sd.conf` (SD
-  would refuse to start on one), and says which it removed;
+- deletes the files of the system directory and the install folder that this
+  release stopped shipping (each shipped folder of the system directory is
+  replaced whole, so nothing a release dropped from it stays), and takes the
+  `sd.conf` parameters SD no longer has out of your kept `sd.conf` (SD would
+  refuse to start on one), saying which it removed;
 - converts your account's files to case-insensitive record ids (below);
 - merges and recompiles SD's own dictionaries;
 - catalogs the server's programs in `global.bp.out` again, on a managed

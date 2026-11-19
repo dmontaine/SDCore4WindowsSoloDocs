@@ -766,7 +766,7 @@ Fixes that close a way round a gate, and what the gates now ask.
 | default terminal | Changed | 140 by 43 |
 | F1 at the prompt | Changed | fixed: names the changelog in the SD Core Solo folder, not in its `sdsys` folder |
 | failed start | Changed | fixed: an `sd.exe` that stopped early ("SD has not been started.") kept an internal lock, and every session started after it hung; the lock is given back |
-| index clear failures | Changed | an index whose clear could not shrink its file reports an error |
+| print and index clear failures | Changed | a print job Windows refuses is reported on the terminal (*Print job not sent: Windows refused it for printer ...*), and an index whose clear could not shrink its file reports an error |
 | kernel faults | Changed | fixed: `getlocks(file, user)` with a user number out of range read outside the user table; a time conversion with negative parts or long hours overran its buffer, and a prefix strip in a conversion copied over itself |
 | message numbers | Changed | the administrator and password messages (12002 to 12020, 12022, 12025 to 12035), the `SDConnectLocal` refusal (12930), the AI gate message (12611) and the `set.pins` messages (12935 to 12937) are now 15891 to 15928 (15923 and 15924 unused), in the same order and with their text unchanged: SD Core for Windows uses those numbers for other messages |
 | `sd-solo -start` | Changed | a script that captures its output through a pipe (`$x = sd-solo -start` in PowerShell) gets it and goes on; the background process kept the pipe and the script waited until `sd-solo -stop`. A phantom gives back a pipe the same way; a file or a terminal is kept |
