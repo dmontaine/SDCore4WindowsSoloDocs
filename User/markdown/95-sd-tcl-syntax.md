@@ -9,14 +9,14 @@ have forgotten its arguments, it is here. If you want to know what it
 braces an optional part, and a vertical bar separates alternatives. SD
 folds case, so any of this may be typed in either case.
 
-> This page lists every verb SD ships (**215** of them). The shapes come from the
+> This page lists every verb SD ships (**216** of them). The shapes come from the
 > subject documents, where each verb is described in full.
 
 **The list is the VOC, not an opinion.** It is taken from the
 vocabulary SD installs, so it says what the account actually gets.
 **A verb your account does not have is not refused — the
 name is simply not recognized.** Solo has one account, and it has all
-215 of them; whether a verb needs `admin` is in the GettingStarted set.
+216 of them; whether a verb needs `admin` is in the GettingStarted set.
 
 ## The verbs
 
@@ -182,6 +182,7 @@ name is simply not recognized.** Solo has one account, and it has all
 | **`set.file`** | **`set.file`** *account* *file* *pointer* |
 | **`set.job`** | **`set.job`** \| **`set.job add`** *name* *schedule* *command* \| **`set.job change`** *name* *schedule* *command* \| **`set.job delete`** *name* \| **`set.job run`** *name*  —  your scheduled jobs, each a Task Scheduler task that runs signed in or not (*schedule* is **`every`** 5\\|10\\|15\\|20\\|30 **`minutes`**, **`hourly`**, **`daily`** *hh:mm*, **`weekly`** *day* *hh:mm* or **`monthly`** *1-28* *hh:mm*; **`add`** and **`change`** ask for the account password); without a word, lists them |
 | **`set.jobs.access`** | **`set.jobs.access`** \| **`set.jobs.access on`** \| **`set.jobs.access off`**  —  whether SD's scheduled jobs may be made and run (administrator; off as delivered, and off refuses every job at its next run); without a word, says which |
+| **`set.stored.access`** | **`set.stored.access`** \| **`set.stored.access on`** \| **`set.stored.access off`**  —  whether the kept copy of the account password signs in any one-shot command (administrator; off as delivered, when it signs in only `run.job` and `mcp.call`); without a word, says which |
 | **`set.mcp`** | **`set.mcp`** {**`on`** \| **`off`**}  ·  **`set.mcp write`** **`on`** \| **`off`**  —  whether an AI agent's MCP client may use the account through the MCP launcher, and whether it may also run a sentence (administrator; both off as delivered); without a word, says which |
 | **`set.net.access`** | **`set.net.access`** \| **`set.net.access on`** \| **`set.net.access off`** |
 | **`set.netlogin`** | **`set.netlogin`** *server* |

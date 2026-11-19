@@ -58,7 +58,7 @@ you arrived and what you unlocked*, not about which account you are in.
 | | |
 |---|---|
 | **The passwords** | none is stored. `$cred` holds a verifier for each — the account, the administrator and the global — that cannot be turned back into a password |
-| **The kept copy** | a copy of the account password, encrypted with Windows' own protection for your Windows user, that lets `sd-solo <command>` sign in without typing. **Any program running as you can ask Windows to decrypt it**; it keeps it from other Windows users, not from other programs of yours |
+| **The kept copy** | a copy of the account password, encrypted with Windows' own protection for your Windows user, that lets SD's scheduled jobs (`run.job`) and the MCP door's calls (`mcp.call`) sign in without typing. **Restricted as delivered**: any other `sd-solo <command>` needs the password on its input, until the administrator says `set.stored.access on`. **Any program running as you can ask Windows to decrypt it**; it keeps it from other Windows users, not from other programs of yours |
 
 **Whoever can replace a verifier can set a password they know**, and anyone who
 is your Windows user, or an administrator of the computer, can. That is the

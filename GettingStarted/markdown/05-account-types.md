@@ -39,7 +39,8 @@ would land in an ordinary session.
 | `sd-solo` with its input piped | the first line of the input, one try |
 | ssh | the same as a terminal, after ssh has checked your Windows account name and password |
 | the API | the client library's password, checked by SCRAM — see [API access](09-api-access.html) |
-| `sd-solo <command>` | the kept copy, below — no typing |
+| `sd-solo "run.job <name>"`, `sd-solo "mcp.call <id>"` | the kept copy, below — no typing |
+| any other `sd-solo <command>` | the first line of its input, as when piped; the kept copy only after `set.stored.access on` |
 
 **A wrong one is answered `Wrong password`.** On a managed computer the global
 password is accepted in its place, and that session also has the
@@ -52,13 +53,19 @@ whoever knows it.
 ### The kept copy
 
 **Windows keeps an encrypted copy of the account password for you**, protected
-so that only your Windows user can open it. A command on the `sd-solo` command line
-signs in with it, which is what lets scripts and scheduled jobs use SD — see
-[Scheduled jobs](04-scheduled-jobs.html). The installer writes it, and
-`set.password` updates it.
+so that only your Windows user can open it. As delivered it signs in only SD's own
+scheduled jobs (`run.job`, see [Scheduled jobs](04-scheduled-jobs.html)) and the MCP
+door's calls (`mcp.call`), each of which has its own switch, off as delivered. **Any
+other command on the `sd-solo` command line needs the password on its input**, and
+says so: *The kept password signs in only SD's scheduled jobs and MCP calls*. The
+administrator can let the kept copy sign in any such command again, as earlier
+releases did, with `set.stored.access on`, and restrict it with
+`set.stored.access off`. The installer writes the copy, and `set.password` updates it.
 
 **It proves the account password only.** It never unlocks the administrator
-commands.
+commands. Any program running as your Windows user can ask Windows to open it, so
+the restriction decides what SD accepts the copy for; it does not keep the copy
+from your own programs.
 
 ### Changing it: `set.password`
 

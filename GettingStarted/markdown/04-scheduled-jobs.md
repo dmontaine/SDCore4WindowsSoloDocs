@@ -72,8 +72,9 @@ runs and the user it runs as are fixed by the helper, not by the request.
 The folder `\SD Core Solo Jobs` can be changed only by SYSTEM and
 Administrators.
 
-**How a job signs in while you are signed out.** A one-shot `sd-solo` command
-normally signs in with the copy of your account password Windows keeps for you.
+**How a job signs in while you are signed out.** `run.job` normally signs in
+with the copy of your account password Windows keeps for you (as delivered, only
+`run.job` and the MCP door's `mcp.call` may use it).
 While you are signed out, Windows will not open that copy for a task that has
 no stored password. So `run.job`, and only `run.job` given exactly one job
 name, signs in instead by being your own Windows user: SD checks that the
@@ -82,8 +83,8 @@ process runs as the Windows user who owns SD's password folder
 only a job that is defined, and only while jobs are on.
 
 **What that means for security, in plain words.** It adds no way in. While you
-are signed in, any program of yours can already sign in to SD with the kept
-copy of the password, exactly as a one-shot command does. While you are signed
+are signed in, any program of yours can already ask Windows to open the kept
+copy of the password, and sign in with it. While you are signed
 out, a program can run as you only from a task that an administrator
 registered. What a job runs was fixed by someone who typed the account
 password when the job was made. The limit is the same as for the doors: the
@@ -99,9 +100,13 @@ again with `set.jobs.access on`.
 ## A task of your own
 
 **A task of your own is `sd-solo <command>`, run by Windows Task Scheduler as you.**
-There is no permit list to fill in and no administrator rights to give it: a
-command on the `sd-solo` command line signs in with the copy of the account
-password Windows keeps for you, and runs.
+There is no permit list to fill in and no administrator rights to give it. **As
+delivered it needs the account password on its input** (below): the kept copy of
+the password signs in only SD's own jobs and the MCP door's calls. To run such a
+command on a timer, make it one of SD's jobs with `set.job` (above), pipe the
+password in, or have the administrator say `set.stored.access on`, after which a
+command on the `sd-solo` command line signs in with the kept copy again, as in
+earlier releases.
 
 ## Setting one up
 
@@ -144,9 +149,9 @@ the rights anyway.
 
 ## Supplying the password on the input
 
-**If the kept copy does not open, or no longer matches** — you changed the
-password without `set.password` — a command whose input is piped takes the
-first line of that input as the account password, once:
+**If the kept copy may not be used (as delivered), does not open, or no longer
+matches** — you changed the password without `set.password` — a command whose
+input is piped takes the first line of that input as the account password, once:
 
 ```
 Get-Content C:\jobs\sd-password.txt | sd-solo my.report
@@ -160,6 +165,7 @@ user can read it, or prefer the kept copy.
 | | |
 |---|---|
 | *A command given on the sd command line needs the account password on its input* | the kept copy did not work and the command was run at a terminal, with nothing piped in |
+| *The kept password signs in only SD's scheduled jobs and MCP calls* | the task ran `sd-solo <command>` itself: make it a job with `set.job`, pipe the password in as above, or have the administrator say `set.stored.access on` |
 | *Wrong password* | the piped password was wrong |
 | the task reports success and nothing happened | look in `%USERPROFILE%\SDCoreSolo\sdsys\audit`: a sign-in with the kept copy is recorded as `login password account=sduser via=stored` |
 
