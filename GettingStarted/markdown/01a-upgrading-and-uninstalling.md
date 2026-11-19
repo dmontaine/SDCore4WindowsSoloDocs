@@ -119,7 +119,7 @@ your saved data and configuration into this new install?* (Yes is the default):
 
 | | |
 |---|---|
-| **Yes** | copies the account's files into the new account and puts back everything else Keep kept — the passwords, the audit trail (the kept lines first, then the new installation's), the TLS key, your ssh key file, the SDNet logins, your VOC changes, your scheduled jobs (each given its task again by the installer's administrator step) and where sessions start — then tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
+| **Yes** | copies the account's files into the new account and puts back everything else Keep kept — the passwords, the audit trail (the kept lines first, then the new installation's), the TLS key, your ssh key file, the SDNet logins, your VOC changes, your scheduled jobs (each given its task again by the installer's administrator step; the last page says *Scheduled jobs:* how many were, and how many were NOT) and where sessions start — then tries the saved `sd.conf` and brings the account's commands up to date, as an upgrade does. If SD will not start on the saved `sd.conf` — a line this release no longer knows, `STARTUP=` for one — the default is kept, the installer's summary says so, and your saved copy is left untouched |
 | **No** | starts clean |
 
 **For an installation nobody sits at**, the control file's `reload-data=yes` or `no`
