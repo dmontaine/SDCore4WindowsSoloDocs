@@ -60,7 +60,8 @@ other command on the `sd-solo` command line needs the password on its input**, a
 says so: *The kept password signs in only SD's scheduled jobs and MCP calls*. The
 administrator can let the kept copy sign in any such command again, as earlier
 releases did, with `set.stored.access on`, and restrict it with
-`set.stored.access off`. The installer writes the copy, and `set.password` updates it.
+`set.stored.access off`; `set.stored.access` alone says which it is. The installer
+writes the copy, and `set.password` updates it.
 
 **It proves the account password only.** It never unlocks the administrator
 commands. Any program running as your Windows user can ask Windows to open it, so

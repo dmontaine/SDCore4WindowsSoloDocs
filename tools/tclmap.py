@@ -258,8 +258,9 @@ DOCS = [
  ('GettingStarted', '06-administrator-commands.md', """
    admin run.job set.pins set.recovery set.xfer.access
  """),
+ # 19 Nov 26: set.stored.access (SOLO 81) is explained with the kept password on page 05, as Linux Solo's 06 row links it.
  ('GettingStarted', '05-account-types.md', """
-   set.password
+   set.password set.stored.access
  """),
  ('GettingStarted', '06b-operating-system-access.md', """
    set.os.access tool.gates
