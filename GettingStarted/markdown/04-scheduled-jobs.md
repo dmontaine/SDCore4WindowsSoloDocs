@@ -73,8 +73,9 @@ prompt, so it registers the clock, and SD itself decides which job is due.
 approves it, the clock cannot be registered for you, the installer's last
 page says *SCHEDULED JOBS : NOT running*, and no job runs until you install
 again and approve the prompt yourself. The folder `\SD Core Solo Jobs` can be
-changed only by SYSTEM and Administrators; the clock lets you read and start
-it, not change it.
+changed only by SYSTEM and Administrators. You may read the folder, so that
+`set.job run` can start the clock at once, and the clock lets you read and
+start it; you cannot change either, or make a task there.
 
 **While jobs are off** the clock still ticks every minute, and stops before it
 signs in: nothing is run and nothing is written to the audit trail. While they
