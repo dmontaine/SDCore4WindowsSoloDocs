@@ -114,6 +114,24 @@ powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\api-firewall.
 powershell -ExecutionPolicy Bypass -File "%USERPROFILE%\SDCoreSolo\api-firewall.ps1" -Show
 ```
 
+**A Windows firewall Block rule wins over Solo's own rule, and Solo reports one but never removes
+it.** Windows makes such a rule when somebody presses Cancel at its "allow this program through
+the firewall?" alert for `sdwind.exe`, and you or another tool may make one on purpose. While an
+enabled inbound Block rule covers Solo's `sdwind.exe` (the program the API listens in) or TCP port
+4249, other computers cannot connect, whatever `remote.api open` set. So `remote.api open`,
+`remote.api` with no word, `-Show` above and the `tool.remote` page each name the rule:
+
+```
+WARNING - the Windows firewall rule "<display name>" (<name>) BLOCKS the API,
+so other computers cannot connect until it is disabled or removed
+```
+
+Solo leaves the rule alone because it may be somebody's deliberate choice. To let other computers
+in, disable or remove it in Windows Defender Firewall with Advanced Security (`wf.msc`, Inbound
+Rules), or from an elevated PowerShell with the name the warning gives:
+`Disable-NetFirewallRule -Name "<name>"`. Doing so opens the API port to every computer the network
+lets reach this one, subject to Solo's own rule and its sign-in.
+
 `-Open` allows any address, `-Restrict` this computer only, and `-Show`
 reports without changing anything (and needs no elevation). It exits `0`
 applied, `1` failed, `2` refused.
