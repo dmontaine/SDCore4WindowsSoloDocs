@@ -16,9 +16,8 @@ Windows user.
 ```
 
 (or on the gates page, `tool.gates`, the row *Scheduled jobs*). While they are
-off, no job can be made or started, and every job is refused at its next run;
-`set.jobs.access off` stops them all that way. Their tasks stay until you
-delete the jobs.
+off, no job can be made or started, and no job runs; `set.jobs.access off`
+stops them all. The jobs stay defined until you delete them.
 
 **Make a job** with its name, its schedule and the command, as you would type
 the command at the prompt:
@@ -26,7 +25,6 @@ the command at the prompt:
 ```
 :set.job add nightly daily 02:30 my.report
 Password:
-The doors helper is changing the job's task (a few seconds)...
 Job nightly is scheduled: daily 02:30
 ```
 
@@ -37,65 +35,77 @@ gave it.
 
 | Command | Does |
 |---|---|
-| `set.job` | lists your jobs, each with its schedule, its command, when it runs next and how its last run ended |
+| `set.job` | lists your jobs, each with its schedule, its command, when it runs next and when it last ran |
 | `set.job add` *name* *schedule* *command* | makes a job (refused if one of that name exists) |
 | `set.job change` *name* *schedule* *command* | changes one |
-| `set.job delete` *name* | stops and removes one |
-| `set.job run` *name* | starts one now, as its task would |
+| `set.job delete` *name* | removes one |
+| `set.job run` *name* | starts one now, through the job clock |
 | `tool.jobs` | the same on a full-screen page: N, C, D and R; its form has a masked field for the password |
 
 *name* is 1 to 32 characters: a lower-case letter first, then lower-case
 letters, digits and dashes. *schedule* is one of `every 5 minutes` (or 10, 15,
 20, 30), `hourly`, `daily hh:mm`, `weekly mon hh:mm` (mon to sun), `monthly 1
-hh:mm` (day 1 to 28), in the computer's time. A run missed while the computer
-was off is not made up, and a run still going when the next is due is not
-started twice.
+hh:mm` (day 1 to 28), in the computer's time, with two digits for the hour
+(`09:30`). A run missed while the computer was off, or more than five minutes
+late, is not made up.
 
-**What a job is.** A Windows Task Scheduler task, in the folder
-`\SD Core Solo Jobs`, named `sd-solo-job-<name>`. It runs
-`%USERPROFILE%\SDCoreSolo\usr\bin\sd-solo.exe run.job <name>` as your Windows
+**What a job is.** Its definition in SD
+(`%USERPROFILE%\SDCoreSolo\sdsys\$jobs`): the schedule, the command, and when
+it last ran. **The job clock** runs them: one Windows Task Scheduler task, in
+the folder `\SD Core Solo Jobs`, named `sd-solo-jobs-clock`, which the
+installer registers. Every minute it runs
+`%USERPROFILE%\SDCoreSolo\usr\bin\sd-solo.exe run.jobs.due` as your Windows
 user, **whether you are signed in or not, without a stored password** (Task
-Scheduler's "Do not store password"). `run.job` signs in, reads the command
-from the job's definition and runs it; SD keeps the command, never the task.
-The audit trail (`%USERPROFILE%\SDCoreSolo\sdsys\audit`) has a `run.job start`
-and a `run.job end` line for every run. A job's output goes nowhere unless its
-command sends it somewhere. Jobs need SD running, which its startup task does
-at boot. Change a job with `set.job`, not in Task Scheduler.
+Scheduler's "Do not store password"). `run.jobs.due` starts each job whose
+time has come through `run.job`, which reads the command from the job's
+definition and runs it; SD keeps the command, never the task. The audit trail
+(`%USERPROFILE%\SDCoreSolo\sdsys\audit`) has a `run.job start` and a
+`run.job end` line for every run, the end with the command's status. A job's
+output goes nowhere unless its command sends it somewhere. Jobs need SD
+running, which its startup task does at boot.
 
-**Why the installer's helper makes the task.** Only an administrator can make
-a task that runs while you are signed out, and SD's sessions are not elevated.
-So `set.job` hands the change to the helper the installer registered, the
-*SD Core Solo Doors* task, which runs as SYSTEM and which only you may start.
-It is told only the job's name and schedule, with a proof made from the
-password you just typed; it never sees the command, and the program the task
-runs and the user it runs as are fixed by the helper, not by the request.
-The folder `\SD Core Solo Jobs` can be changed only by SYSTEM and
-Administrators.
+**Why one clock and not a task for each job.** Only you, elevated, can register
+a task that runs as you while you are signed out: Windows refuses everyone
+else, even SYSTEM. SD's sessions are not elevated, so they cannot register a
+task when you make a job. The installer can, once, when you approve its
+prompt, so it registers the clock, and SD itself decides which job is due.
+**Approve the installer's prompt as yourself.** If another administrator
+approves it, the clock cannot be registered for you, the installer's last
+page says *SCHEDULED JOBS : NOT running*, and no job runs until you install
+again and approve the prompt yourself. The folder `\SD Core Solo Jobs` can be
+changed only by SYSTEM and Administrators; the clock lets you read and start
+it, not change it.
 
-**How a job signs in while you are signed out.** `run.job` normally signs in
-with the copy of your account password Windows keeps for you (as delivered, only
-`run.job` and the MCP door's `mcp.call` may use it).
-While you are signed out, Windows will not open that copy for a task that has
-no stored password. So `run.job`, and only `run.job` given exactly one job
-name, signs in instead by being your own Windows user: SD checks that the
-process runs as the Windows user who owns SD's password folder
-(`sdsys\$cred`), and that nobody else may use that folder. `run.job` then runs
-only a job that is defined, and only while jobs are on.
+**While jobs are off** the clock still ticks every minute, and stops before it
+signs in: nothing is run and nothing is written to the audit trail. While they
+are on, every tick signs in, and the audit trail has a sign-in line for it each
+minute.
+
+**How the clock signs in while you are signed out.** `run.jobs.due` and
+`run.job` normally sign in with the copy of your account password Windows
+keeps for you (as delivered, only `run.job`, `run.jobs.due` and the MCP door's
+`mcp.call` may use it). While you are signed out, Windows will not open that
+copy for a task that has no stored password. So `run.jobs.due`, and `run.job`
+given exactly one job name, and nothing else, sign in instead by being your
+own Windows user: SD checks that the process runs as the Windows user who owns
+SD's password folder (`sdsys\$cred`), and that nobody else may use that
+folder. `run.job` then runs only a job that is defined, and only while jobs are
+on.
 
 **What that means for security, in plain words.** It adds no way in. While you
 are signed in, any program of yours can already ask Windows to open the kept
 copy of the password, and sign in with it. While you are signed
-out, a program can run as you only from a task that an administrator
-registered. What a job runs was fixed by someone who typed the account
+out, a program can run as you only from a task registered with administrator
+rights. What a job runs was fixed by someone who typed the account
 password when the job was made. The limit is the same as for the doors: the
 definitions (`%USERPROFILE%\SDCoreSolo\sdsys\$jobs`) and the password records
 are files in your own folder, so a program that already runs as you could
 change them; this is not a wall against you, and it is not meant to be.
 
-**Uninstalling** removes the tasks. When you keep your data, the job
-definitions are kept with it, and a new install that reloads the data gives
-the jobs their tasks back. The register's switch is not kept: turn jobs on
-again with `set.jobs.access on`.
+**Uninstalling** removes the job clock. When you keep your data, the job
+definitions are kept with it, and a new install that reloads the data runs
+them again. The register's switch is not kept: turn jobs on again with
+`set.jobs.access on`.
 
 ## A task of your own
 

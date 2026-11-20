@@ -9,14 +9,14 @@ have forgotten its arguments, it is here. If you want to know what it
 braces an optional part, and a vertical bar separates alternatives. SD
 folds case, so any of this may be typed in either case.
 
-> This page lists every verb SD ships (**216** of them). The shapes come from the
+> This page lists every verb SD ships (**217** of them). The shapes come from the
 > subject documents, where each verb is described in full.
 
 **The list is the VOC, not an opinion.** It is taken from the
 vocabulary SD installs, so it says what the account actually gets.
 **A verb your account does not have is not refused — the
 name is simply not recognized.** Solo has one account, and it has all
-216 of them; whether a verb needs `admin` is in the GettingStarted set.
+217 of them; whether a verb needs `admin` is in the GettingStarted set.
 
 ## The verbs
 
@@ -163,7 +163,8 @@ name is simply not recognized.** Solo has one account, and it has all
 | **`restore.account`** | **`restore.account`** *zipfile* {*account* \| **`all`**} {**`no.query`**}  ·  **`restore.account latest`** {*account* \| **`all`**} {**`no.query`**} |
 | **`restore.voc`** | **`restore.voc`** *account* *id*  ·  **`restore.voc`** *account* **`all`**  —  put back the newest saved copy of a record the VOC update removed; never overwrites |
 | **`run`** | **`run`** {*file*} *record* {*arguments*} |
-| **`run.job`** | **`run.job`** *name*  —  what a job's task runs (the one-shot **`sd-solo.exe run.job`** *name*); refused anywhere else |
+| **`run.job`** | **`run.job`** *name*  —  runs one scheduled job's command; only as the one-shot **`sd-solo.exe run.job`** *name*, or from the job clock's **`run.jobs.due`**; refused anywhere else |
+| **`run.jobs.due`** | **`run.jobs.due`**  —  what the job clock runs every minute (the one-shot **`sd-solo.exe run.jobs.due`**): runs each scheduled job whose time has come; refused anywhere else |
 | **`save.list`** | **`save.list`** *list* {**`from`** *list.no*} |
 | **`save.stack`** | **`save.stack`** {*name*} |
 | **`scan`** | **`scan`** {**`dict`**} *file* {*selection*} {*id* …} {**`all`**} {**`no.case`**} {**`all.match`** \| **`no.match`**} {**`strings`** *file* *record*} **`for`** *"text"* … |
@@ -180,9 +181,8 @@ name is simply not recognized.** Solo has one account, and it has all
 | **`set.date`** | **`set.date`** *date* |
 | **`set.exit.status`** | **`set.exit.status`** *n* |
 | **`set.file`** | **`set.file`** *account* *file* *pointer* |
-| **`set.job`** | **`set.job`** \| **`set.job add`** *name* *schedule* *command* \| **`set.job change`** *name* *schedule* *command* \| **`set.job delete`** *name* \| **`set.job run`** *name*  —  your scheduled jobs, each a Task Scheduler task that runs signed in or not (*schedule* is **`every`** 5\\|10\\|15\\|20\\|30 **`minutes`**, **`hourly`**, **`daily`** *hh:mm*, **`weekly`** *day* *hh:mm* or **`monthly`** *1-28* *hh:mm*; **`add`** and **`change`** ask for the account password); without a word, lists them |
+| **`set.job`** | **`set.job`** \| **`set.job add`** *name* *schedule* *command* \| **`set.job change`** *name* *schedule* *command* \| **`set.job delete`** *name* \| **`set.job run`** *name*  —  your scheduled jobs, which the job clock runs signed in or not (*schedule* is **`every`** 5\\|10\\|15\\|20\\|30 **`minutes`**, **`hourly`**, **`daily`** *hh:mm*, **`weekly`** *day* *hh:mm* or **`monthly`** *1-28* *hh:mm*; **`add`** and **`change`** ask for the account password); without a word, lists them |
 | **`set.jobs.access`** | **`set.jobs.access`** \| **`set.jobs.access on`** \| **`set.jobs.access off`**  —  whether SD's scheduled jobs may be made and run (administrator; off as delivered, and off refuses every job at its next run); without a word, says which |
-| **`set.stored.access`** | **`set.stored.access`** \| **`set.stored.access on`** \| **`set.stored.access off`**  —  whether the kept copy of the account password signs in any one-shot command (administrator; off as delivered, when it signs in only `run.job` and `mcp.call`); without a word, says which |
 | **`set.mcp`** | **`set.mcp`** {**`on`** \| **`off`**}  ·  **`set.mcp write`** **`on`** \| **`off`**  —  whether an AI agent's MCP client may use the account through the MCP launcher, and whether it may also run a sentence (administrator; both off as delivered); without a word, says which |
 | **`set.net.access`** | **`set.net.access`** \| **`set.net.access on`** \| **`set.net.access off`** |
 | **`set.netlogin`** | **`set.netlogin`** *server* |
@@ -192,6 +192,7 @@ name is simply not recognized.** Solo has one account, and it has all
 | **`set.recovery`** | **`set.recovery`** {**`on`** \| **`off`**}  —  whether the IDE keeps a recovery copy of unsaved text (administrator; off as delivered); without a word, says which |
 | **`set.server`** | **`set.server`** *name* *host* *port* *account* {*pin* \| **`connect`**} {**`read`** \| **`write`**} {**`accounts`** *a*`,`*b*`,`…} {**`no.query`**} |
 | **`set.start.default`** | **`set.start.default`** {**`menu`** \| **`terminal`**}  —  where a session starts (the home screen is the delivered start); without a word, says what it is |
+| **`set.stored.access`** | **`set.stored.access`** \| **`set.stored.access on`** \| **`set.stored.access off`**  —  whether the kept copy of the account password signs in any one-shot command (administrator; off as delivered, when it signs in only `run.job`, the job clock's `run.jobs.due` and `mcp.call`); without a word, says which |
 | **`set.tile`** | **`set.tile`** {*account* *tile* **`on`** \| **`off`**}  —  turn a home screen tile off or on for the account (tiles are on as delivered; sign out cannot be turned off); without arguments, says what is off |
 | **`set.trigger`** | **`set.trigger`** *file* *name* {*modes*} |
 | **`set.viewer`** | **`set.viewer`** {{**`add`** \| **`remove`**} **`pdf`** *program*}  —  the programs that may be started without the **`os`** switch to show a document (none is allowed as delivered); *program* is a full path or a bare name this computer's App Paths knows (**`msedge`**); without arguments, lists them |

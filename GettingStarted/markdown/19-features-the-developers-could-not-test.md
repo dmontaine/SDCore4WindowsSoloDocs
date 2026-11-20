@@ -212,15 +212,16 @@ runs. See [Scheduled jobs](04-scheduled-jobs.html).
 
 ### An administrator's scheduled job
 
-**What to expect.** The run Task Scheduler makes of a job from `set.job`, with no
+**What to expect.** The job clock's run of a job from `set.job`, with no
 stored password, is recognized as [Scheduled jobs](04-scheduled-jobs.html)
-describes, and the next and last run that `set.job` shows come from Task
-Scheduler.
+describes, also while you are signed out, and the next and last run that
+`set.job` shows are worked out by SD from the job's schedule and its last run.
 
 **Check before relying on it.** Turn jobs on with `set.jobs.access on`, then
-`set.job add test daily 02:30 my.report` and `set.job run test`; read the audit
-trail for the `run.job start` and `run.job end` lines, then `set.job delete test`.
-Check that the uninstaller removes the jobs.
+`set.job add test daily hh:mm my.report` with a time two minutes ahead, sign
+out of Windows, sign back in after that time, and read the audit trail for the
+`run.job start` and `run.job end` lines; then `set.job delete test`. Check that
+the uninstaller removes the job clock.
 
 ## Account backup and restore
 
