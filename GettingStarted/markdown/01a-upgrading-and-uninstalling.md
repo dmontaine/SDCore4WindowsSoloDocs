@@ -147,9 +147,12 @@ files and the passwords, and is reinstalled over as it always was: nothing is
 asked and everything is kept.
 
 **What uninstalling leaves installed:** the OpenSSH server and Python, even if
-the SD installer put them there — other programs may use them — and Windows'
-own ssh firewall rule for port 22, which is Microsoft's and was never Solo's.
-Remove them from *Apps* if you no longer want them. Keep keeps your optional ssh
+the SD installer put them there — other programs may use them. Remove them from
+*Apps* if you no longer want them.
+
+**Port 22.** Solo uses only its own ports (4251 for ssh, 4249 for the API), and
+uninstalling removes what it opened on them. Port 22 is not Solo's, and
+uninstalling does not change it. Keep keeps your optional ssh
 key file and the server's host key, so a client that trusted the host key still
 does after a reinstall; Delete removes both, and a client then sees a new one.
 

@@ -89,7 +89,12 @@ another computer.
 
 **When Solo's ssh server is on,** it runs on port 4251 and starts with Windows.
 You sign in to it with your Windows account name and password, and it starts
-`sd-solo`. Windows' own ssh server and its port 22 are not changed. See
+`sd-solo`. **Port 22 is not opened by a Solo install**: Solo does not use it.
+When **Install the OpenSSH server** installs Microsoft's package, that package
+starts Windows' own ssh server on port 22 and opens a firewall rule for it;
+Solo then stops that server, sets it to Disabled and turns the rule off, since
+Solo's own server runs on 4251 from the same programs. If anything already had
+port 22 open before the install, Solo leaves port 22 exactly as it was. See
 [ssh access](08-ssh-access.html).
 
 **An SD Core server that manages the computer connects from elsewhere**, through
