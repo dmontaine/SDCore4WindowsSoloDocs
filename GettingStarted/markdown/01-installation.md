@@ -224,9 +224,9 @@ installer scripts - is `SDCore4WindowsSolo-source-<version>.zip` beside
 built from.
 
 **Uninstalling asks to keep or delete your data and configuration.** Keep leaves
-the account, `sd.conf`, the passwords, the audit trail, the TLS and ssh keys and
-your settings, and removes the system files, the deny list, `global.bp.out` and
-the logs; a new installation then offers them back, and a reload asks no
+the account, `sd.conf`, the passwords, the audit trail, the TLS and ssh keys, the
+deny list, the documentation PDFs and your settings, and removes the system files,
+`global.bp.out` and the logs; a new installation then offers them back, and a reload asks no
 password. See [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html).
 
 **The folder can be moved.** SD finds its files from where its programs are,
