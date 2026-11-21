@@ -105,6 +105,15 @@ first asks what to do with your data and configuration, and Keep comes first:
 
 **A silent uninstall never deletes your data**; it keeps, as above.
 
+**The API and ssh come back as they were.** Before the uninstaller removes the
+firewall rules and the ssh task, it reads the two doors and notes each as `off`,
+`local` or `open` in `doors.saved` in the Solo folder, which Keep leaves beside
+`sd.conf`. A reinstall that reloads your data takes those two words as its
+answers and does not ask: an API you had opened is open again, and ssh that was
+off stays off. A control file's `api=` or `ssh=` still answers for its door. A
+reinstall that does not reload, or finds no note, asks as before, and so does one
+after a door that could not be read. The closing page says what it took.
+
 It then stops SD and — after the one administrator consent prompt — removes:
 
 - first, every scheduled job's task (the folder **SD Core Solo Jobs**), so that
