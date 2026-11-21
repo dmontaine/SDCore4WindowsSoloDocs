@@ -11,7 +11,7 @@ computer, and there is no Windows service.
 | | |
 |---|---|
 | Windows | Windows 10 or 11, 64-bit |
-| Rights | an ordinary user account. The installer asks for administrator consent **once**, for the steps that change the computer rather than your profile |
+| Rights | an account that is a member of the Administrators group (signed in as an ordinary user is fine). The installer asks for administrator consent **once**, for the steps that change the computer rather than your profile. An account that is not an administrator is stopped at the start |
 | The package | the installer, with two folders beside it: `ssh-server\` holding Microsoft's OpenSSH server MSI, and `python\` holding python.org's Python installer (`python-3.x.x-amd64.exe`) |
 
 **The two folders are part of the package, every time.** If either is
@@ -176,8 +176,7 @@ account's user may read and follow links. Allow only a reader you trust.
 than yours:
 
 - registers the scheduled task **SD Core Solo**, which starts SD at every
-  Windows start-up, as you, whether or not you are signed in (a standard
-  account gets a different task, below);
+  Windows start-up, as you, whether or not you are signed in;
 - opens or restricts the firewall rules chosen above;
 - installs the OpenSSH MSI, when that was chosen;
 - when Solo's ssh server was chosen: makes the administrators-only folder
@@ -191,17 +190,14 @@ than yours:
 and Solo's ssh server and the firewall rules are not set up. The installer says
 which steps did not complete.
 
-**A standard Windows account** — one that is not an administrator — gets the
-same prompt, but Windows asks for an administrator's name and password in it
-instead of a click, and the installation goes on with them. Windows refuses the
-start-up task above for such an account ("Access is denied"), whoever sets it
-up, so the installer registers a task that starts SD, with no window, **when you
-sign in**. SD is therefore not running between a restart and your sign-in.
-Signing out ends SD, and leaves it marked as not shut down cleanly; the sign-in
-task clears that and starts SD again, and writes what it did to
-`solo-start.log` in the `SDCoreSolo` folder. Solo's ssh server and the firewall
-rules are set up as for any account, and `install-summary.log` says which of the
-two tasks was made.
+**A standard Windows account** — one that is not an administrator — is stopped
+at the start, before anything is written: Setup says *"SD Core Solo was not
+installed. Sign in with an Administrator account and run Setup again."* The
+elevation prompt comes near the end of the installation, after every page and the
+files, and Windows asks a standard account for an administrator's name and
+password in it; the installer refuses the account at the start rather than leave
+a user stuck at that prompt. Running Setup from an elevated window is not
+needed: signed in as an administrator, an ordinary window will do.
 ## What lands where
 
 Everything is under `%USERPROFILE%\SDCoreSolo`:
