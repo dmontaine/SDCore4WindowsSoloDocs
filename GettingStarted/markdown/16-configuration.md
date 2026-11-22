@@ -183,7 +183,10 @@ acts on it:
 | `unknown` | a name in the file that SD does not know |
 
 A row marked `*` is one where the file and the running SD disagree. The box at the foot says for that
-parameter that SD keeps the old value until it is restarted. **A name in the file
+parameter that SD keeps the old value until it is restarted. After `E` changes a `restart` parameter, a
+box says why a restart is needed, that a restart signs out everyone using SD and ends this session too,
+and offers **Restart** or **Not now** (the default): Restart runs `sd-solo -restart` at once, Not now
+leaves the change for SD's next start. **A name in the file
 that SD does not know is listed at the end as `unknown`, and the top of the page names it**: SD does
 not start with it (the section *A name SD does not recognize stops it starting* above). `D` shows only
 the rows where the file and SD disagree, and `S` only the parameters the file sets. The last column,
