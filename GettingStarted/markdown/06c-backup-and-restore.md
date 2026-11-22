@@ -137,7 +137,7 @@ its box says so and wants the word `restore` typed (in either case). The verb's 
 asked; it does not give it any other way. An archive that holds an account other than `sduser` is
 refused by the page, which names it. As at the prompt, the restore of the account you are using is prepared and
 happens the next time SD starts. Where a command cannot be done, the verb says why and the page
-shows its last line on the status line. `F5` reads the folder, the archives and the sessions again,
+shows its last message on the status line. `F5` reads the folder, the archives and the sessions again,
 `F1` explains the page and `Ctrl-Q` leaves. Opening the page writes the audit line `tool start app=tool.backups`.
 
 ## `settings.report`
