@@ -17,33 +17,29 @@ see *API access* in the GettingStarted set.
 The client library is written new for SD Core (a clean-room library under the
 Blue Oak Model License 1.0.0), so an application of any licence may link it; it
 is the same library for all four SD Core products. It is delivered as binaries
-in the release package's `clients` folder (`clients\Windows64` and
-`clients\Windows32`), and the installer copies it from there; its source is not
-published. Four DLLs are installed: each pair is the same code under two names,
-so the two files are not identical on disk but behave identically. An installer
-run without the `clients` folder beside it installs no client library; copy the
+in the release package's `clients` folder (`clients\Windows64`), and the
+installer copies it from there; its source is not published. Two 64-bit DLLs are
+installed, `sdclilib.dll` and `sdclient.dll`: the same code under two names, so
+the two files are not identical on disk but behave identically. An installer run
+without the `clients` folder beside it installs no client library; copy the
 files from a release package instead.
 
-| | |
-|---|---|
-| 64-bit | `sdclilib.dll` and `sdclient.dll` |
-| 32-bit | `qmclilib.dll` and `qmclient.dll` |
-
-The `*clilib` names are what existing applications ask for; the `*client` names
-are for new work. **Renaming one to the other does not work**: an import library
+`sdclilib.dll` is the name existing applications ask for; `sdclient.dll` is for
+new work. **Renaming one to the other does not work**: an import library
 records the DLL name its symbols come from, so an application built against
 `sdclilib` loads `sdclilib.dll` whatever you call the file on disk. That is why
 both names are delivered rather than one being a copy of the other.
 
-> **The architecture must match the application, not the machine.** A 32-bit
-> application on 64-bit Windows needs the 32-bit DLL. The 32-bit build is a
-> shipping deliverable rather than a testing convenience.
+> **There is no 32-bit client.** The architecture must match the application,
+> not the computer, so a 32-bit application cannot load these DLLs; it has to be
+> rebuilt as a 64-bit program. **A program written for QM does not work with SD
+> out of the box**: the login, the network session and the server's rules have
+> changed, so it needs changing.
 
 ### Where they are, and how to use them
 
 ```
 %USERPROFILE%\SDCoreSolo\usr\clients\client64\     sdclilib.dll  sdclient.dll
-%USERPROFILE%\SDCoreSolo\usr\clients\client32\     qmclilib.dll  qmclient.dll
 ```
 
 Copy the DLL your application needs either **beside the application's own
@@ -52,7 +48,7 @@ and either works.
 
 > **`%USERPROFILE%\SDCoreSolo\usr\bin` is on your PATH**, because the installer
 > adds it every time it runs — it is what makes `sd-solo` run from any directory.
-> **All four client DLLs live in that directory too**, so an application may find
+> **Both client DLLs live in that directory too**, so an application may find
 > one without your having copied anything. That is convenient, and it is not the
 > same as choosing which copy it loads: PATH order decides, and a stale copy
 > earlier on the PATH wins. **Put the DLL where your application will find it
@@ -63,7 +59,6 @@ files, GNU-style, for linking rather than loading:
 
 ```
 client64\     libsdclilib.dll.a  libsdclient.dll.a
-client32\     libqmclilib.dll.a  libqmclient.dll.a
 ```
 
 They sit beside the DLLs so that everything a client *build* needs is in one
@@ -71,9 +66,8 @@ place — apart from the header, which is elsewhere: **`sdclilib.h` is at
 `%USERPROFILE%\SDCoreSolo\sdsys\syscom\sdclilib.h`**, with the Gambas and
 PureBasic bindings, `sdclient.bas` and `sdclient.pb`, beside it.
 
-**All four DLLs also appear in `%USERPROFILE%\SDCoreSolo\usr\bin`, beside
-`sd-solo.exe`.** The 32-bit pair is there because `usr\bin` is on the PATH, and that
-is where a **32-bit utility** finds its client. Those copies are SD's own and
+**Both DLLs also appear in `%USERPROFILE%\SDCoreSolo\usr\bin`, beside
+`sd-solo.exe`.** Those copies are SD's own and
 are not the ones you should be taking. **The import libraries are deliberately
 not in `usr\bin`**: a linker input has no business in a directory that goes on
 the PATH.

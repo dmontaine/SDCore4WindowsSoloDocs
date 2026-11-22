@@ -267,9 +267,9 @@ folder outside the account is not opened.
 | | |
 |---|---|
 | 64-bit | `sdclilib.dll`, in `%USERPROFILE%\SDCoreSolo\usr\clients\client64` |
-| 32-bit | in `...\usr\clients\client32` |
+| 32-bit | none; a 32-bit application must be rebuilt as 64-bit |
 
-**Both must speak SCRAM.** A client library that sends the password in clear
+**The library must speak SCRAM.** A client library that sends the password in clear
 is refused by the server — check which one your application is actually
 loading. See [Client distribution](10-client-distribution.html).
 
