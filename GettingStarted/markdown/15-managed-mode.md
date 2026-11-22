@@ -196,6 +196,10 @@ deny.verbs set sh,copy           replace the list
 deny.verbs 2: sh,copy
 ```
 
+**How a name is typed and stored:** in any case. `who`, `WHO` and `Who` name the same command, in
+`deny.verbs` and at the prompt. The list is stored in lower case; one an older installation stored in
+capitals works as it did.
+
 **A command is denied under every name that runs it.** Some names that look
 different share one program: `edit` and `micro` both run SD's editor program,
 so denying one denies the other, and the answer says what else was taken
