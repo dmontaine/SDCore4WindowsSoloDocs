@@ -191,9 +191,16 @@ than yours:
 and Solo's ssh server and the firewall rules are not set up. The installer says
 which steps did not complete.
 
-**A standard Windows account** — one that is not an administrator — gets the
-same prompt, but Windows asks for an administrator's name and password in it
-instead of a click, and the installation goes on with them. Windows refuses the
+**A standard Windows account** — one that is not an administrator — is asked
+for an administrator's name and password **at the very start**, before Setup
+writes anything: Setup says *"Setup needs an administrator's name and password
+to finish. Windows asks for them next."* and Windows shows its prompt. If they
+are not given, Setup stops there (*"SD Core Solo was not installed. An
+administrator's name and password were not given."*) instead of failing at the
+end. Windows asks for them once more at the consent prompt near the end (one
+prompt cannot carry over to a second program), and the installation goes on
+with them. An administrator's own account is not asked at the start, and a
+silent install skips the early question. Windows refuses the
 start-up task above for such an account ("Access is denied"), whoever sets it
 up, so the installer registers a task that starts SD, with no window, **when you
 sign in**. SD is therefore not running between a restart and your sign-in.
