@@ -43,13 +43,13 @@ valid PROC and it is the interpreter that is gone.
 ### What the shipped VOC holds
 
 Counted directly from `newvoc` in the system directory — the VOC a new account
-starts with, 441 records, by each record's own field-1 type character (the type
+starts with, 442 records, by each record's own field-1 type character (the type
 is the first character; a record whose field 1 reads `Verb to ...` is `V`).
 Counted in this release:
 
 | Type | Count |
 |---|---|
-| `V` | 212 |
+| `V` | 213 |
 | `K` | 218 |
 | `F` | 7 |
 | `PA` | 1 |
@@ -59,7 +59,7 @@ Counted in this release:
 
 **The four keyword-verbs are among the 218 `K` records.** `break`, `count`,
 `display` and `off` are counted as keywords here and are also verbs, so Solo has
-212 + 4 = **216 verbs**, the number on the syntax card. No `R` record is shipped.
+213 + 4 = **217 verbs**, the number on the syntax card. No `R` record is shipped.
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
 is yours. The account and grant commands are not in it — see *Differences from

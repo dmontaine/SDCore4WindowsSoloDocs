@@ -204,8 +204,9 @@ DOCS = [
  """),
  # 17 Nov 26: the scheduled jobs verbs (SOLO 74) are explained on page 04; run.job and set.jobs.access
  # stand where Linux Solo's map puts them (run.job with the administrator's own verbs, below).
+ # 23 Nov 26: run.jobs.due (the job clock's verb, ec28567a) is explained on page 04 too; release.ps1's tclmap found it on no page.
  ('GettingStarted', '04-scheduled-jobs.md', """
-   set.job tool.jobs
+   set.job tool.jobs run.jobs.due
  """),
  ('GettingStarted', '16-configuration.md', """
    tool.config
