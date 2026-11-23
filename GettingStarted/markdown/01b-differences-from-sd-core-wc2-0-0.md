@@ -1,14 +1,14 @@
-Title: Differences from SD Core for Windows W2.0-0
+Title: Differences from SD Core for Windows WC2.0-0
 Subtitle: What SD Core Solo for Windows leaves out, adds and does differently.
 
 **SD Core Solo for Windows WS2.0-0 is the single-user edition of SD Core for
-Windows W2.0-0**, and the language, the query processor, the file system, the
+Windows WC2.0-0**, and the language, the query processor, the file system, the
 editors, the full-screen pages and nearly every command are the same. This page
 is for a reader who knows the multiuser product. The User set applies to both.
 
 ## One user, one account
 
-| SD Core for Windows W2.0-0 | Solo |
+| SD Core for Windows WC2.0-0 | Solo |
 |---|---|
 | many accounts, one per person, made by an administrator | **one account, `sduser`**, made by the installer. `who` and `@LOGNAME` say `sduser` on every computer, whatever the Windows user is called |
 | SDSYS, entered by signing in to Windows as the `sdsys` user | **SDSYS is never entered.** Nobody logs in to it; the administrator commands run from your own account |
@@ -17,7 +17,7 @@ is for a reader who knows the multiuser product. The User set applies to both.
 
 ## Passwords
 
-| SD Core for Windows W2.0-0 | Solo |
+| SD Core for Windows WC2.0-0 | Solo |
 |---|---|
 | a local sign-in asks for no password — Windows has authenticated you | **every session asks for the account password**: at the keyboard, over ssh, and through the API |
 | a command on the command line (`sd-solo LIST VOC`) needs an elevated window or a `batch.jobs` entry | it uses **a copy of the account password Windows keeps for you**, so scripts and scheduled jobs need no typing |
@@ -28,7 +28,7 @@ See [The account and its passwords](05-account-types.html).
 
 ## Administration
 
-| SD Core for Windows W2.0-0 | Solo |
+| SD Core for Windows WC2.0-0 | Solo |
 |---|---|
 | the administrator verbs are SDSYS's, and only SDSYS has them | the same verbs are in your account and **need `admin` first** — including eight that had no check of their own because only SDSYS had them: `config`, `listu`, `list.locks`, `list.readu`, `lock`, `clear.locks`, `set.date`, `clean.account` |
 | editing the VOC directly is any account's own business | `ed voc`, a program's `write` or `delete` to the VOC, `copy` into it, and saving or deleting a sentence with `.s` and `.d` **need `admin`**. What SD writes to the VOC as a side effect — `create.file`'s entry, the command stack — does not |
@@ -50,7 +50,7 @@ computers the same way. See [Managed mode](15-managed-mode.html).
 
 ## Installing and running
 
-| SD Core for Windows W2.0-0 | Solo |
+| SD Core for Windows WC2.0-0 | Solo |
 |---|---|
 | installed for the computer: `C:\Program Files\SD` and `C:\ProgramData\SD`, by an administrator | installed for one user, **all in `%USERPROFILE%\SDCoreSolo`**, by that user, with one administrator consent prompt |
 | a Windows service runs SD as LocalSystem | a **scheduled task** starts SD at Windows start-up **as you**, on an ordinary unelevated token — even when your Windows account is an administrator |

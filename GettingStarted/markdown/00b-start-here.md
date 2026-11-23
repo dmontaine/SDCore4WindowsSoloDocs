@@ -49,7 +49,7 @@ management features are added to SD Core for Linux.
 These pages describe changes, so **used to**, **no longer** and **now** run all
 through them. **The comparison is against the multiuser SD Core for Windows
 this product was made from** — what it does differently in this release is in
-[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)
+[Differences from SD Core for Windows WC2.0-0](01b-differences-from-sd-core-wc2-0-0.html)
 — and, behind it, upstream `sdb64`, ScarletDME and OpenQM 2.6.6.
 
 ## The pages
@@ -67,7 +67,7 @@ so on.
 | **00a** | [Copyright and license](00a-copyright-and-licence.html) | The copyright and the license for this set, in full and in one place |
 | **01** | [Installing](01-installation.html) | What the installer asks, what it puts where, and the control file for installing many computers |
 | **01a** | [Upgrading and uninstalling](01a-upgrading-and-uninstalling.html) | Installing a new release over an existing one, and taking SD off the machine |
-| **01b** | [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html) | What Solo leaves out, adds and does differently |
+| **01b** | [Differences from SD Core for Windows WC2.0-0](01b-differences-from-sd-core-wc2-0-0.html) | What Solo leaves out, adds and does differently |
 | **01c** | [Installing many computers](01c-installing-many-computers.html) | The control file, what the installer checks when it finishes, when a step fails, and changing any of it afterwards |
 | **02** | **[Your first thirty minutes](02-first-run.html)** | **Start here if you just want it working** |
 | **03** | [Running SD](03-running-sd.html) | How SD starts, stopping it, and the command line |
@@ -127,7 +127,7 @@ they work for the rest of that session. See
 **3. There is one account and you cannot make another.** It is called
 `sduser` on every computer, whatever your Windows name is. There is no
 `sdsys` sign-in and no groups to join. The account and grant commands are gone.
-See [Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
+See [Differences from SD Core for Windows WC2.0-0](01b-differences-from-sd-core-wc2-0-0.html).
 
 **4. Commands and names are lower case, completely.** Typing in upper case
 still works — SD converts it — but nothing can exist in two casings. See

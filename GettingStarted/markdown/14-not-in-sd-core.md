@@ -9,7 +9,7 @@ Everything here was in OpenQM, in ScarletDME, or in upstream `sdb64`, or in the
 multiuser SD Core for Windows this release was made from, and is not in SD Core
 Solo for Windows. **What the multiuser SD Core for Windows has and Solo does not —
 accounts, groups, `SDSYS`, the Windows service — is on
-[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)**,
+[Differences from SD Core for Windows WC2.0-0](01b-differences-from-sd-core-wc2-0-0.html)**,
 not here.
 
 > **If you had a use for any of these, say so.** Several were removed on the
@@ -29,7 +29,7 @@ not here.
 | Group accounts, suspending an account | there is nobody to suspend |
 
 The rest of what Solo leaves out, adds and does differently is on
-[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html).
+[Differences from SD Core for Windows WC2.0-0](01b-differences-from-sd-core-wc2-0-0.html).
 
 ## Editors
 

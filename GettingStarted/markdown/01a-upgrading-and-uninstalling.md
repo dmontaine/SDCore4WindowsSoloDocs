@@ -197,5 +197,5 @@ restores only to Solo (on Linux or on Windows), never onto the multi-user SD Cor
 
 ## Continued in
 
-[Differences from SD Core for Windows W2.0-0](01b-differences-from-sd-core-w2-0-0.html)
+[Differences from SD Core for Windows WC2.0-0](01b-differences-from-sd-core-wc2-0-0.html)
 — what Solo leaves out, adds, and does differently.

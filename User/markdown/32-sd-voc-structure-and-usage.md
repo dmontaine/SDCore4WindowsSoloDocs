@@ -63,7 +63,7 @@ Counted in this release:
 
 **Your account's VOC starts as a copy of exactly this**, and what you add to it
 is yours. The account and grant commands are not in it — see *Differences from
-SD Core for Windows W2.0-0* in the GettingStarted set. (SDSYS's own VOC,
+SD Core for Windows WC2.0-0* in the GettingStarted set. (SDSYS's own VOC,
 which nobody signs in to, is built from the larger `voc_template`.)
 
 > **Being in the VOC is not evidence a command works.** A record whose type
