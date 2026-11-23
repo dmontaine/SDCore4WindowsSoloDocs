@@ -145,7 +145,7 @@ segment.
 
 **In Solo every change to `sd.conf` waits for the next start.** SD reads the file
 once, when it starts, and keeps the settings in shared memory; a new session copies
-them from there and does not read the file itself. (The multiuser SD Core has each
+them from there and does not read the file itself. (The multiuser SD Core for Windows has each
 session read `sd.conf` when it starts, so there an edit reaches the sessions
 started after it.) So `tool.config` shows every parameter as `restart`, and
 `set.config` says the change takes effect when SD is next stopped and started: stop

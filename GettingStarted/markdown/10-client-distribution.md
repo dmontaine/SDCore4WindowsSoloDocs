@@ -1,7 +1,7 @@
 Title: Client distribution
 Subtitle: Which library an application needs, why there are two names, and the one file no installer can update.
 
-An application reaches SD Core through a client DLL. **The installer puts the
+An application reaches SD Core Solo for Windows through a client DLL. **The installer puts the
 clients on the computer**, in the folder below, and they are the same libraries
 whichever SD Core they connect to; there is no client-only package.
 

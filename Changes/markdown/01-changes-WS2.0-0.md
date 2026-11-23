@@ -54,7 +54,7 @@ the section at the end says what is Solo's own.
 
 **[REMOVED](#removed)**: what SD no longer has, and what to write instead.
 
-**[New Features Unique to SD Core Solo](#new-features-unique-to-sd-core-solo)**, not part of openQM:
+**[New Features Unique to SD Core Solo for Windows](#new-features-unique-to-sd-core-solo-for-windows)**, not part of openQM:
 [Administration](#administration) · [AI](#ai) · [API and client library](#api-and-client-library) ·
 [Commands](#commands) · [Data formats](#data-formats) · [Encryption](#encryption) · [Files](#files-1) · [Installer](#installer) ·
 [Screen library](#screen-library) · [SDNet](#sdnet) · [Security](#security) · [System](#system-1) ·
@@ -482,7 +482,7 @@ compiled with until it is compiled again; compiling it again stops with an error
 | VOC field 4 (multifile component list) | Removed | none; the field is ignored and the record is read as an ordinary F-pointer |
 | VOC record type M (menu) | Removed | the home screen is the menu system |
 
-## New Features Unique to SD Core Solo
+## New Features Unique to SD Core Solo for Windows
 
 Everything in this section is SD Core Solo's own or SD Core's own work that Solo shares. None of it is on the
 openQM list, so none of it has a row in the feature spreadsheet: the shell and operating system switches, the protection

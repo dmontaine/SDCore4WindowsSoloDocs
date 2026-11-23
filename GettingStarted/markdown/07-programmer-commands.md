@@ -1,7 +1,7 @@
 Title: Development and file commands
 Subtitle: Compiling, editing, and the verbs that maintain files, indexes and records in bulk.
 
-**Your account has all of these, from the moment it is installed.** SD Core used
+**Your account has all of these, from the moment it is installed.** SD Core Solo for Windows used
 to hold them back from a *standard* account; that split is gone, and Solo has one
 account — see [The account and its passwords](05-account-types.html). This page
 is a reference for what each of them does, not a list of what you have been
@@ -178,7 +178,7 @@ reporting** with the terminal you connected from.
 
 The removed full-screen editors are a different matter: `update.record` and
 `modify` are gone and are not coming back. See
-[Not in SD Core](14-not-in-sd-core.html).
+[Not in SD Core Solo for Windows](14-not-in-sd-core.html).
 
 ## Files
 

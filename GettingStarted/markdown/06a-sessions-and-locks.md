@@ -151,7 +151,7 @@ starts. The refusals, and `inhibit.login on` and `off` themselves, are on the
 audit trail.
 
 **On Solo the session that set it is the only one that can switch it off, and
-nobody new gets in, you included.** On the multiuser SD Core the administrator's
+nobody new gets in, you included.** On the multiuser SD Core for Windows the administrator's
 own new session is let in; on Solo the administrator is a state of a session (you
 type `admin` after signing on), so at the door no new session is one. That cannot
 lock you out: **if the session that set it ends or is killed, the inhibit is

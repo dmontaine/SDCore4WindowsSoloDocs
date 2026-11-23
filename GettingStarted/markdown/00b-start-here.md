@@ -87,7 +87,7 @@ so on.
 | **12** | [Security](12-security.html) | What protects the database, and what does not |
 | **12a** | [Security and the operating system](12a-security-and-the-operating-system.html) | Reaching the computer from inside SD, and the audit trail |
 | **13** | [Other hardening](13-hardening.html) | The global catalog, the logs, and the rest |
-| **14** | [Not in SD Core](14-not-in-sd-core.html) | What has been removed, and what to use instead |
+| **14** | [Not in SD Core Solo for Windows](14-not-in-sd-core.html) | What has been removed, and what to use instead |
 | **15** | [Managed mode](15-managed-mode.html) | What an SD Core for Linux server can do to a managed computer |
 | **16** | [Configuration](16-configuration.html) | `sd.conf` and its parameters |
 | **16a** | [System limits](16a-system-limits.html) | The sizes and counts SD works within |

@@ -1,4 +1,4 @@
-Title: SD Core - Introduction and Getting Started
+Title: SD Core Solo for Windows - Introduction and Getting Started
 Subtitle: What a multivalue database is, what SD is, the four components, and your first session.
 
 This page orients you to SD Core Solo for Windows: what a multivalue database

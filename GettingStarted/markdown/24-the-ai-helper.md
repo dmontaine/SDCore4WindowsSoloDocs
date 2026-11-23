@@ -24,7 +24,7 @@ SD adds nothing of the account, the session or the data. You can of course type 
 
 Nothing the AI returns is run, and the output of a command is never given back to it. A refusal writes one line to the audit trail (`ai refused why=request ...` or `ai refused why=origin ...`) and never the text. What you type or paste yourself is yours, and is in the preview.
 
-## What is weaker than in SD Core, said plainly
+## What is weaker than in SD Core for Windows
 
 SD Core for Windows runs the helper as a Windows service under an account of its own (`NT SERVICE\sd-ai`), with its key encrypted for that account in a folder only it and SYSTEM can open, and asks Windows who is calling. **Solo makes no Windows account and no service of its own** (that is what makes it a Solo), so none of that is possible. The helper runs **as your own Windows user**: SD starts it for each request, as a child of your session, and it ends when the request is answered. Its settings and keys are in your Solo folder (`sdsys\ai`), and each key is encrypted with Windows DPAPI for your Windows user.
 

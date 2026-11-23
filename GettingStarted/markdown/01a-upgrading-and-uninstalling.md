@@ -75,7 +75,7 @@ release listened on every address and left the firewall rule to keep other compu
 
 **Upgrading from a release before WS1.1-3 changes how ssh works**, and does it
 without asking: what the earlier release added to Windows' ssh settings is
-removed, the key the SD Core server added to `%USERPROFILE%\.ssh\authorized_keys`
+removed, the key the SD Core for Windows server added to `%USERPROFILE%\.ssh\authorized_keys`
 moves into Solo's own key file, and ssh to Solo is now on port 4251 instead of
 22. See [ssh access](08-ssh-access.html). **An upgrade does not open the
 firewall rule for 4251 to other computers**, not even on a managed computer

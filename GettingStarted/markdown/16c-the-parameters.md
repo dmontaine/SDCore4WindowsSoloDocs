@@ -111,7 +111,7 @@ reaches every path already. `NETDIRS` is asked last, after the account's own dir
 
 **Entries SD ignores.** An entry is left out, and named in the error log when SD starts, when
 it is not an absolute path, is not an existing directory, is the root of a drive or a share,
-or holds or lies inside the SD Core Solo folder, the SD system directory, the directory of
+or holds or lies inside the SD Core Solo for Windows folder, the SD system directory, the directory of
 `sd.conf`, the user or group accounts directory (`USRDIR`, `GRPDIR`), or the directory of any
 registered account. An account created later inside a listed directory closes that entry at
 once. At most 16 entries are taken, and an element longer than a pathname is dropped whole.

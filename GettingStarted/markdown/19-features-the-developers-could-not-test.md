@@ -110,7 +110,7 @@ at Windows start-up before anyone signs in, on port 4251. It checks a Windows
 password, or a key in Solo's key file, and starts the session as you. Whether
 another computer can reach port 4251 depends on the listen address (`127.0.0.1`
 for `local`, `0.0.0.0` for `open`, `::1` in both), the firewall rule and your network; with
-`local`, a connection to the computer's network address on 4251 is refused. SD Core Solo and SD Core can be installed together, each with its own
+`local`, a connection to the computer's network address on 4251 is refused. SD Core Solo for Windows and SD Core for Windows can be installed together, each with its own
 ports; the computer's own ssh server on port 22 lands in SD Core, not in Solo.
 
 **Check before relying on it.** Restart the computer, do not sign in, and connect

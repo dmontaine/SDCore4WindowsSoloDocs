@@ -134,7 +134,7 @@ The `ai request` line is written by the SD kernel **before** the helper is start
 | `The AI helper could not be reached: it is not running, or it is not installed` | SD could not start `usr\bin\sd-ai.exe` in your Solo folder: check that it is there; installing again puts it back |
 | `The AI is off: the administrator has not chosen a provider (tool.ai or set.ai)` | nothing is checked on the page (`set.ai provider ...`) |
 | `The AI is not turned on: the administrator can turn it on with set.ai gate on` | the gate is off |
-| `The AI is not set up for anthropic: the administrator has not set its key (tool.ai or set.ai)` (or, for Custom, `model`) | the provider is chosen but its key (or Custom's model) is missing; or a key is set and this session cannot open it (see [What is weaker](24-the-ai-helper.html#what-is-weaker-than-in-sd-core-said-plainly)) |
+| `The AI is not set up for anthropic: the administrator has not set its key (tool.ai or set.ai)` (or, for Custom, `model`) | the provider is chosen but its key (or Custom's model) is missing; or a key is set and this session cannot open it (see [What is weaker](24-the-ai-helper.html#what-is-weaker-than-in-sd-core-for-windows)) |
 | `The AI did not answer: refused (the provider refused the request (HTTP 400): ...)` | the provider's own words follow the status: often a model it does not have; choose one from its list with S |
 | `The AI did not answer: limit (...)` | one of the limits above is used up; wait, or raise it |
 | `The AI did not answer: net (...)` or `timeout` | the provider could not be reached; check the address, the certificate, the clock, and whether the machine needs a proxy to reach the internet (the helper uses none) |

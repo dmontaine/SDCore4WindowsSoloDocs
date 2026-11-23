@@ -1,5 +1,5 @@
 Title: SD Glossary
-Subtitle: Terms used in SD Core Solo documentation, from account to VOC.
+Subtitle: Terms used in SD Core Solo for Windows documentation, from account to VOC.
 
 This glossary defines the terms used throughout the SD Core Solo for Windows
 documentation set. Terms are listed in alphabetical order.

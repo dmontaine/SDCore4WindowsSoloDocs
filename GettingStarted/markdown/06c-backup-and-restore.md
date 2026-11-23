@@ -16,7 +16,7 @@ name, are still accepted). After `admin`, `backup.account` writes
 **one zip file**, named for the computer, the account and the time (for example
 `SD-office-sduser-20261001-144419.zip`), holding the account's files and a
 plain-text description of it. `restore.account archive` puts the account back, on
-this computer or another one. **A backup from another person's SD Core Solo
+this computer or another one. **A backup from another person's SD Core Solo for Windows
 replaces this account's data**, so it says what will be replaced and asks first
 (the default answer is no; `no.query` skips the question). A backup made here
 restores on SD Core Solo for Linux, and the other way round.

@@ -72,7 +72,7 @@ operating-system permission (see *The SED Screen Editor* in the User set);
 micro, and both come with SD. See
 [Development and file commands](07-programmer-commands.html#editors). The old
 full-screen editors `update.record` and `modify` are gone; see
-[Not in SD Core](14-not-in-sd-core.html).
+[Not in SD Core Solo for Windows](14-not-in-sd-core.html).
 
 In **`ed`**: `i` to insert, type your lines, a full stop on its own line to stop
 inserting, then `fi` to file and exit.

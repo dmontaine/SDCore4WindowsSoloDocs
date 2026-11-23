@@ -17,7 +17,7 @@ lock.tracer {user n} {lptr {n}} {no.page}
 ```
 
 While it is on, every lock any session takes or lets go is added, as one line, to
-the file **`locktrace` in the SD system folder** (`sdsys` in the SD Core Solo
+the file **`locktrace` in the SD system folder** (`sdsys` in the SD Core Solo for Windows
 folder). `on` empties that file
 first, so a log is one switching-on's worth. A link left in the file's place is
 refused, and the tracer will not start on it.

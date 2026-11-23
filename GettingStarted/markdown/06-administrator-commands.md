@@ -280,4 +280,4 @@ User documentation.
 ## Not here
 
 There are no `create.account`, `delete.account`, `modify.account`,
-`grant`, `revoke` or `list.grants` — see [Not in SD Core](14-not-in-sd-core.html).
+`grant`, `revoke` or `list.grants` — see [Not in SD Core Solo for Windows](14-not-in-sd-core.html).

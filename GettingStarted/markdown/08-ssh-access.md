@@ -1,7 +1,7 @@
 Title: ssh access
-Subtitle: Reaching SD on this computer over ssh, on SD Core Solo's own port, with your Windows account name and password.
+Subtitle: Reaching SD Core Solo for Windows on this computer over ssh, on its own port, with your Windows account name and password.
 
-**An ssh sign-in to port 4251 lands inside SD.** SD Core Solo runs an ssh server
+**An ssh sign-in to port 4251 lands inside SD.** SD Core Solo for Windows runs an ssh server
 of its own on port **4251**. You sign in with your Windows account name and its
 Windows password, as you would to any computer; then, instead of a Windows
 prompt, you get `sd-solo`, which asks for the SD account password.
